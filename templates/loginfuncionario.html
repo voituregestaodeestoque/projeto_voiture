@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Funcionário</title>
+    <link rel="stylesheet" href="../static/login.css">
+
+    <!-- Favicon -->
+     <link rel="shortcut icon" href="../static/images-lp/favicon.ico" type="image/x-icon">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Fonte moderna -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap">
+
+</head>
+<body>
+    <div class="container d-flex justify-content-end login-container">
+        
+        <div class="login-card text-center bg-white">
+            <h1>Login de Funcionário</h1>
+            <form class="mb-3" action="{{ url_for('login_funcionario') }}" method="POST">
+                <div class="mb-3 text-start">
+                    <label class="form-label text-white">Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary">
+                            <i class="bi bi-envelope text-white"></i>
+                        </span>
+                        <input type="email" name="funcionario_email" id="email" class="form-control" placeholder="Digite seu email" required>
+
+                    </div>
+                </div>
+                <div class="mb-3 text-start">
+                    <label class="form-label text-white">Senha</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary">
+                            <i class="bi bi-lock text-white"></i>
+                        </span>
+                        <input type="password" name="funcionario_senha" id="password" class="form-control" placeholder="Digite sua Senha" required>
+                    </div>
+                    <div class="mb-3 mt-3 form-options divider">
+                        <div class="divider-line"></div>
+                        <a href="#" class="forgot-password d-flex text-decoration-none">Esqueci minha senha</a>
+                        <div class="divider-line"></div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-login w-100 text-white mt-2">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

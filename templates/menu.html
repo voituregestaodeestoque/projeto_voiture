@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Lugar de exemplo para mostrar que passou da tela anterior</h1>
+
+    <a href="{{ url_for('cadastro_funcionario') }}">
+    <button>Ir para cadastro de funcionário</button></a>
+
+    <a href="{{ url_for('login_funcionario') }}">
+    <button>Ir para Login de funcionário</button></a>
+
+    <a href="{{ url_for('landingpage') }}">
+    <button>Ir para a Landing page</button></a>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Funcionário</title>
+    <link rel="stylesheet" href="../static/cadastrofuncionario.css">
+
+    <!-- Favicon -->
+     <link rel="shortcut icon" href="../static/images-lp/favicon.ico" type="image/x-icon">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Fonte moderna -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap">
+
+</head>
+<body>
+    <div class="container d-flex justify-content-end login-container">
+        
+        <div class="login-card text-center bg-white">
+            <h1>Cadastro de Funcionário</h1>
+            <form class="mb-3" action="{{ url_for('salvar_funcionario') }}" method="POST">
+                
+                <div class="mb-3 text-start">
+                    <label class="form-label text-white">Email</label>
+                    <input type="text" name="funcionario_nome" id="funcionario_nome" class="form-control" placeholder="Digite o nome" required>
+                    <input type="password" name="funcionario_senha" id="funcionario_senha" class="form-control" placeholder="Digite a senha" required>
+                    <input type="text" name="funcionario_cpf" id="funcionario_cpf" class="form-control" placeholder="Digite o cpf" required>
+                    <input type="text" name="funcionario_cep" id="funcionario_cep" class="form-control" placeholder="Digite o cep" required>
+                    <input type="email" name="funcionario_email" id="funcionario_email" class="form-control" placeholder="Digite o email" required>
+                    <input type="text" name="funcionario_ddi" id="funcionario_ddi" class="form-control" placeholder="Digite o ddi" required>
+                    <input type="text" name="funcionario_ddd" id="funcionario_ddd" class="form-control" placeholder="Digite o ddd" required>
+                    <input type="text" name="funcionario_telefone" id="funcionario_telefone" class="form-control" placeholder="Digite o telefone" required>
+                    <input type="text" name="funcionario_cargo" id="funcionario_cargo" class="form-control" placeholder="Digite o cargo" required>
+                    <button class="btn btn-primary" type="submit">Cadastrar no Banco</button>
+            </form>
+            
+        </div>
+    </div>
+
+</body>
+</html>
