@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+
+
+<!--Fornecedor-->
+
+<div id="template_fornecedor">
+
+    <h2 class=" bi bi-box">Cadastro de Fornecedor</h2>
+
+    <form id="form_fornecedor" action="{{ url_for('salvar_fornecedor')}}" method="POST">
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="fornecedor_nome" class="form-label">Nome</label>
+                <input name="fornecedor_nome" type="text" class="form-control" id="fornecedor_nome" placeholder="Nome do Representante" required>
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+                <label for="fornecedor_cnpj" class="form-label">CNPJ</label>
+                <input name="fornecedor_cnpj" type="text" class="form-control" id="fornecedor_cnpj" placeholder="00.000.000/0000-00" maxlength="18"
+                    inputmode="numeric" oninput="formatarCNPJ(this)">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="fornecedor_cep" class="form-label">CEP</label>
+                <input name="fornecedor_cep" type="number" class="form-control" id="fornecedor_cep" placeholder="00000-000" >
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="fornecedor_email" class="form-label">Email</label>
+                <input name="fornecedor_email" type="email" class="form-control" id="fornecedor_email" placeholder="Email de Contato" >
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <label for="fornecedor_ddi" class="form-label">DDI</label>
+                <input name="fornecedor_ddi" type="number" class="form-control" id="fornecedor_ddi" placeholder="Código Internacional" >
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <label for="fornecedor_ddd" class="form-label">DDD</label>
+                <input name="fornecedor_ddd" type="number" class="form-control" id="fornecedor_ddd" placeholder="Código Regional">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="fornecedor_telefone" class="form-label">Telefone</label>
+                <input name="fornecedor_telefone" type="tel" class="form-control" id="fornecedor_telefone" placeholder="Telefone de Contato" >
+            </div>
+
+            <div class="mb-3">
+                <label for="fornecedor_descricao" class="form-label">Descrição</label>
+                <textarea name="fornecedor_descricao" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+
+        </div>
+
+        <div id="btn-fornecedor">
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </div>
+
+
+    </form>
+
+</div>
+
+
+
+{% endblock %}

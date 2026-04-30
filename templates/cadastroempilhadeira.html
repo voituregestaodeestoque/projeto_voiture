@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+ {% block conteudo %}
+    <div class="login-card text-center bg-white">
+        <h1>Cadastro de Empilhadeira</h1>
+        
+            <form action="">
+                <div class="mb-3 text-start">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-dark border-secondary">
+                            <i class="bi bi-envelope text-white"></i>
+                        </span>
+                        <input type="text" name="empilhadeira_chassi" id="numero_chassi" class="form-control" placeholder="Número do Chassi::" required>
+
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-dark border-secondary">
+                            <i class="bi bi-envelope text-white"></i>
+                        </span>
+                        <input type="text" name="empilhadeira_marca" id="marca" class="form-control" placeholder="Marca:" required>
+
+                    </div>
+
+                    <div class=" text-start d-flex justify-content-between" style="gap: 5px" style="margin-top: 10px;">
+
+                        <div class="input-group mb-3" style="max-width: 100%;">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-envelope text-white"></i>
+                            </span>
+                            <input type="text" name="empilhadeira_modelo" id="modelo" class="form-control" placeholder="Modelo:" required>
+
+                        </div>
+
+
+                    <button class="btn btn-primary" style="max-width: 100%;" type="submit">Cadastrar</button>
+                </div>
+            </form>
+    </div>
+
+    {% endblock %}

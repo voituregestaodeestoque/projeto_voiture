@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+ {% block conteudo %}
+    <div class="mb-4">
+        <h2 class="titulo-pagina">
+            <i class="bi bi-person-fill"></i>
+            {{ 'Editar Cliente' if cliente and cliente.id else 'Cadastrar Cliente' }}
+        </h2>
+    </div>
+    <div class="container-fluid login-card text-center bg-white">
+        
+            <form action="">
+                <div class="mb-3 text-start">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-dark border-secondary">
+                            <i class="bi bi-envelope text-white"></i>
+                        </span>
+                        <input type="text" name="cliente_nome" id="cliente_nome" class="form-control" placeholder="Digite seu nome:" required>
+
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-dark border-secondary">
+                            <i class="bi bi-envelope text-white"></i>
+                        </span>
+                        <input type="email" name="cliente_email" id="cliente_email" class="form-control" placeholder="Digite seu email:" required>
+
+                    </div>
+
+                    <div class=" text-start d-flex justify-content-between" style="gap: 5px" style="margin-top: 10px;">
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-envelope text-white"></i>
+                            </span>
+                            <input type="text" name="cliente_cnpj" id="cliente_cnpj" class="form-control" placeholder="Digite seu CNPJ:" required>
+
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-envelope text-white"></i>
+                            </span>
+                            <input type="text" name="cliente_cep" id="cliente_cep" class="form-control" placeholder="Digite seu CEP:" required>
+
+                        </div>
+
+                    </div>
+
+                    <div class="text-start d-flex justify-content-between mb-3" style="gap: 5px">
+
+                        <div class="input-group" style = "max-width: 30%;">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-envelope text-white"></i>
+                            </span>
+                            <input type="text" name="cliente_ddi" id="cliente_ddi" class="form-control" placeholder="DDI:" required>
+
+                        </div>
+
+                        <div class="input-group" style = "max-width: 30%;">                                               
+                            <input type="text" name="cliente_ddd" id="cliente_ddd" class="form-control" placeholder="DDD:" required>
+
+                        </div>
+
+                        <div class="input-group">
+                            <input type="text" name="cliente_telefone" id="cliente_telefone" class="form-control" placeholder="Telefone:" required>
+
+                        </div>
+                    </div>
+
+                    <div class="input-group" style = "margin-bottom: 15px;">
+
+                        <input type="descricao" name="descricao" id="descricao" class="form-control" placeholder="Descrição:" required>
+
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Cadastrar</button>
+                </div>
+            </form>
+    </div>
+
+    {% endblock %}

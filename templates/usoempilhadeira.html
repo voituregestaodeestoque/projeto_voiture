@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+
+
+<!--Fornecedor-->
+
+<div id="template_uso_empilhadeira">
+
+    <h2 class=" bi bi-box">Uso de Empilhadeira</h2>
+
+    <form id="form_fornecedor" action="{{ url_for('salvar_uso_empilhadeira')}}" method="POST">
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="funcionario_id" class="form-label">Funcionário</label>
+                <input name="funcionario_id" type="text" class="form-control" id="funcionario_id" placeholder="ID do Funcionário" required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="empilhadeira_id" class="form-label">Empilhadeira</label>
+                <input name="empilhadeira_id" type="text" class="form-control" id="empilhadeira_id" placeholder="ID da Empilhadeira">
+            </div>
+
+
+        <div id="btn-fornecedor">
+            <button type="submit" class="btn btn-primary">Registrar</button>
+        </div>
+
+
+    </form>
+
+</div>
+
+
+
+{% endblock %}

@@ -30,8 +30,7 @@ class Funcionario(CrudBase):
     
     def validate(self):
         erros = [
-            Validator.validar_nome(self.funcionario_nome, "nome"),
-            
+            Validator.validar_nome(self.funcionario_nome, "nome"),            
             Validator.validar_ddi_ddd(self.funcionario_ddi, "ddi"),
             Validator.validar_ddi_ddd(self.funcionario_ddd, "ddd"),
             Validator.validar_telefone(self.funcionario_telefone, "telefone")
