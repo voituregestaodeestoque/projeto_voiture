@@ -15,9 +15,20 @@ def produtos():
 def cadastro_funcionario():
     return render_template('cadastrofuncionario.html')
 
+'''Login funcionário - Ryan Ribeiro'''
 @app.route('/loginfuncionario')
 def login_funcionario():
     return render_template('loginfuncionario.html')
+
+@app.route('/loginfunciona')
+def login():
+    email = request.form.get("funcionario_email")
+    senha = request.form.get("funcionario_senha")
+
+
+    sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
+
+    return redirect(url_for("base"))
 
 @app.route('/landingpage')
 def landingpage():
@@ -31,15 +42,7 @@ def tabelaempilhadeira():
         empilhadeiras=empilhadeiras
     )
 
-@app.route('/loginfunciona')
-def login():
-    email = request.form.get("funcionario_email")
-    senha = request.form.get("funcionario_senha")
 
-
-    sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
-
-    return redirect(url_for("base"))
 
 @app.route("/")
 def inicio():
