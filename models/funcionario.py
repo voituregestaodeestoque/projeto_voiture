@@ -49,4 +49,20 @@ class Funcionario(CrudBase):
             cursor.close()
             conexao.close()
 
-        
+    @classmethod
+    def login(cls, email, senha):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT * FROM funcionario WHERE funcionario_email = %s"
+            cursor.execute(sql, (email,))
+            usuario = cursor.fetchone()
+
+            if usuario and usuario['funcionario_senha'] == senha:
+                return usuario
+            
+            return None
+        finally:
+            cursor.close()
+            conexao.close()
+            
