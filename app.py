@@ -24,7 +24,11 @@ def loginfuncionario():
 def logarfuncionario():
     login=get_login_funcionario_form()
 
-    sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
+    return render_template(
+        'base.html',
+        login=login
+    )
+
 
     return redirect(url_for("base"))
 
