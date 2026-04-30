@@ -4,6 +4,8 @@ import datetime
 class Validator:
     @staticmethod
     def validar_telefone(value, field_name):
+
+        #Não pode ter letras
         tem_letra = False
         for caractere in (value):
             if caractere.isalpha():
@@ -41,16 +43,20 @@ class Validator:
         return None
 
 
-    '''============> validarÇÕES BASE EXTERNAS <============'''
+    '''============> VALIDAÇÕES BASE EXTERNAS <============'''
 
     #função:validação externa de CEP
-    '''@staticmethod
+    @staticmethod
     def validar_cep(value, field_name):
+
+        #Não pode ter letras
         for caractere in (value):
             if not(caractere.isdigit()):
-                return f"O campo {field_name} só pode haver números"
+                return {"valida":False,"mensagem":f"O campo {field_name} só pode ter números"}
+
+        #Limite de 8 dígitos
         if  not len(value) == 8:
-            return f"O campo {field_name} deve possuir 8 números"
+            return f"O campo {field_name} não suporta essa quantidade de caracteres"
         base_url = "https://api.invertexto.com/v1/cep"
         cep_encoded = urllib.parse.quote(value)
         url = f"{base_url}/{cep_encoded}"
@@ -60,7 +66,7 @@ class Validator:
             response.raise_for_status()
             retorno_cep = response.json()
             if retorno_cep:
-                return True
+                return {"valida":True}
         except requests.exceptions.HTTPError as errh:
             print("Erro HTTP:",errh)
         except requests.exceptions.ConnectionError as errc:
@@ -69,7 +75,7 @@ class Validator:
             print("Timeout:",errt)
         except requests.exceptions.RequestException as err:
             print("Erro:", err)
-        return False
+        return {"valida":False, "mensagem":"CEP inválido"}
 
 
     #função:validação externa de email
@@ -84,7 +90,7 @@ class Validator:
             response.raise_for_status()
             data = response.json()
             if data['valid_format'] and data['valid_mx'] and not data['disposable']:
-                return True
+                return {"valida":True}
         except requests.exceptions.HTTPError as errh:
             print("Erro HTTP:", errh)
         except requests.exceptions.ConnectionError as errc:
@@ -93,13 +99,12 @@ class Validator:
             print("Timeout:", errt)
         except requests.exceptions.RequestException as err:
             print("Erro", err)
-        return False
+        return{"valida": False,"mensagem":"Email inválido"}
 
 
-    #função:validação externa de CPF
-    #função:validação externa de CPF
+    #função:validação externa de CPF/CNPJ
     @staticmethod
-    def validar_cpf(value, field_name):
+    def validar_cpf_cnpj(value, field_name):
         url = "https://api.invertexto.com/v1/validator"
 
         params = {
@@ -113,7 +118,7 @@ class Validator:
 
             data = response.json()
             if data['valid'] and data['formatted']:
-                return True
+                return{"valida":True}
 
         except requests.exceptions.HTTPError as errh:
             print("Erro HTTP:", errh)
@@ -123,21 +128,25 @@ class Validator:
             print("Timeout:", errt)
         except requests.exceptions.RequestException as err:
             print("Erro", err)
-        return False
-'''
+        return {"valida":False,"mensagem":"CPF/CNPJ inválido"}
+
 
     '''============> Validações BASE INTERNAS <============'''
 
     #função:validação interna de nome
     @staticmethod
     def validar_nome(value, field_name):
+
+        #Nomes devem ter mais de 3 letras
         if len(value) < 3:
             return {"valida":False, "mensagem":f"{field_name}deve ter no mínimo 3 letras"}
 
+        #Nomes não podem ter números
         for caractere in (value):
             if caractere.isdigit():
                 return{"valida":False, "mensagem":f"O campo {field_name} não pode haver números"}
 
+        #O nome deve estar completo (nome e sobrenome)
         tem_espaco = False
         for caractere in (value):
             if caractere.isspace():
@@ -151,92 +160,65 @@ class Validator:
     #função:validação interna de quantidade
     @staticmethod
     def validar_quantidade(value, field_name):
-        tem_letra = True
+
+        #Não pode conter letras
+        tem_letra = False
         for caractere in (value):
             if caractere.isalpha():
-                tem_letra = False
+                tem_letra = True
                 break
-        if not tem_letra:
-            return f"O campo {field_name} não pode haver letras"
+        if tem_letra:
+            return{"valida":False, "mensagem":f"O campo {field_name} não pode haver letras"}
 
-        if int(value) < 0:
-            return f"O campo {field_name} não deve ser negativo "
-
-        if int(value) > 500:
-            return f"O campo {field_name} não pode ser mais de 500"
-
-        tem_numero = False
-        for caractere in (value):
-            if caractere.isdigit():
-                tem_numero = True
-                break
-        if not tem_numero:
-            return f"O campo {field_name} deve ser apenas números"
-        return True
+        return {"valida":True}
+        
 
 
     #função:validação interna de preço
     @staticmethod
     def validar_preco(value, field_name):
 
-        #Mínimo de quatro digitos
-        if len(value) < 4:
-            return f"O campo {field_name} precisa ter pelo menos 4 dígitos"
-
-        #Precisa conter números
-        tem_numero = False
-        for caractere in (value):
-            if caractere.isdigit():
-                tem_numero = True
-                break
-        if not tem_numero:
-            return f"O campo {field_name} deve ser apenas números"
-        
-        for caractere in (value):
-            if caractere.isalpha():
-                return f"O campo {field_name} não pode haver letras"
-        
-        return True
-
-
-    #função:validação interna de ID
-    def validar_id(id):
-        #O id não pode conter letras
+        #Não pode ter letras
         tem_letra = False
-        for caractere in id["id"]:
+        for caractere in (value):
             if caractere.isalpha():
                 tem_letra = True
                 break
-        if  tem_letra:
-            return  False
-        
-        #É necessário conter apenas quatro digitos
-        if not len(id["id"]) == 4:
-            return False
 
-        return True
-    
+        if tem_letra:
+            return{"valida":False, "mensagem":f"O campo {field_name} não pode haver letras"}
+        
+        return {"valida":True}
+
+
+    #função: validação interna de ddi e ddd
     @staticmethod
     def validar_ddi_ddd(value, field_name):
-        if not len(value) == 2:
-            return f"O campo {field_name} deve possuir apenas 2 caracteres"
+
+        #Máximo de 5 dígitos
+        if len(value) > 5:
+            return{"valida":False, "mensagem": f"Quantidade de caracteres em {field_name} é inválida"}
         
-        tem_letra_peso = False
+        #Não pode ter letras
+        tem_letra = False
         for caractere in (value):
             if caractere.isalpha():
-                tem_letra_peso = True
+                tem_letra = True
                 break
-        if tem_letra_peso:
-            return f"O campo {field_name} não pode haver letras"
+        if tem_letra:
+            return{"valida":False, "mensagem": f"O campo {field_name} não pode haver letras"}
         
-        return True
+        return {"valida":True}
 
+
+
+#JULIA CODOU ATÉ AQUI!!!!
 
     #função:validação interna de senha
     @staticmethod
     def validar_senha(value, field_name):
         if len(value) > 200:
-            return f"O campo {field_name} não pode haver mais de 200 caracteres"
+            return f"O campo {field_name} não pode ter mais de 200 caracteres"
 
         tem_numero = False
         for caractere in (value):

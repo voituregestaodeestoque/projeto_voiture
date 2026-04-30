@@ -16,8 +16,26 @@ def cadastro_funcionario():
     return render_template('cadastrofuncionario.html')
 
 @app.route('/loginfuncionario')
-def login_funcionario():
+def loginfuncionario():
     return render_template('loginfuncionario.html')
+
+@app.route('/logarfuncionario')
+def logarfuncionario():
+    login=get_login_funcionario_form()
+
+    return render_template(
+        'base.html',
+        login=login
+    )
+
+
+    return redirect(url_for("base"))
+
+def get_login_funcionario_form():
+    return {
+        "funcionario_email": request.form.get("funcionario_email", "").strip(),
+        "funcionario_senha": request.form.get("empilhadeira_senha", "").strip(),
+    }
 
 @app.route('/landingpage')
 def landingpage():
@@ -234,16 +252,16 @@ def salvar_fornecedor():
     
     if erros :
         for erro in erros:
-            flash(erro)
-        return render_template("cadastro_fornecedor.html", fornecedor=dados)
+            flash(erro,"erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
     
     try:
         fornecedor.insert()
         flash("Fornecedor cadastrado com sucesso.", "sucesso")
         return redirect(url_for("base"))
     except Exception as e:
-        flash(f"Erro ao cadastrar fornecedor teste: {e}", "erro")
-        return render_template("cadastro_fornecedor.html", fornecedor=dados)
+        flash(f"Erro ao cadastrar fornecedor: {e}", "erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
 
 #pedido de entrada e saida
 @app.route('/pedidoentrada')

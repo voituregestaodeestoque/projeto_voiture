@@ -28,7 +28,16 @@ class Fornecedor(CrudBase):
 
     def validate(self):
         erros = []
-        nome = Validator.validar_nome(self.fornecedor_nome, "fornecedor_nome")
-        if not nome["valida"]:
-            erros.append(nome["mensagem"])
+
+        validacoes = [
+            Validator.validar_nome(self.fornecedor_nome, "fornecedor_nome"),
+            Validator.validar_ddi_ddd(self.fornecedor_ddi, "fornecedor_ddi"),
+            Validator.validar_ddi_ddd(self.fornecedor_ddd, "fornecedor_ddd"),
+            Validator.validar_telefone(self.fornecedor_telefone, "fornecedor_telefone")
+        ]
+        
+        for itens in validacoes:
+            if not itens['valida']:
+                erros.append(itens["mensagem"])
+
         return erros
