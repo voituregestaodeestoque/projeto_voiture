@@ -17,18 +17,22 @@ def cadastro_funcionario():
 
 '''Login funcionário - Ryan Ribeiro'''
 @app.route('/loginfuncionario')
-def login_funcionario():
+def loginfuncionario():
     return render_template('loginfuncionario.html')
 
-@app.route('/loginfunciona')
-def login():
-    email = request.form.get("funcionario_email")
-    senha = request.form.get("funcionario_senha")
-
+@app.route('/logarfuncionario')
+def logarfuncionario():
+    login=get_login_funcionario_form()
 
     sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
 
     return redirect(url_for("base"))
+
+def get_login_funcionario_form():
+    return {
+        "funcionario_email": request.form.get("funcionario_email", "").strip(),
+        "funcionario_senha": request.form.get("empilhadeira_senha", "").strip(),
+    }
 
 @app.route('/landingpage')
 def landingpage():
