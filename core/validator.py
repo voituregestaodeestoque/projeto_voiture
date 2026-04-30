@@ -1,23 +1,13 @@
 import urllib.parse
 import datetime
+import requests
+
+#Validações revisadas pela Júlia em 30/04/2026
 
 class Validator:
-    @staticmethod
-    def validar_telefone(value, field_name):
-
-        #Não pode ter letras
-        tem_letra = False
-        for caractere in (value):
-            if caractere.isalpha():
-                tem_letra = True
-                break
-        if tem_letra:
-            return {"valida":False, "mensagem":f"O campo {field_name} não pode haver letras"}
-        
-        return {"valida":True}
-
         
 
+    #Validações não utilizadas por enquanto
     @staticmethod
     def required(value, field_name):
         if value is None or str(value).strip() == "":
@@ -133,6 +123,21 @@ class Validator:
 
     '''============> Validações BASE INTERNAS <============'''
 
+    #Função:validação de telefone
+    @staticmethod
+    def validar_telefone(value, field_name):
+
+        #Não pode ter letras
+        tem_letra = False
+        for caractere in (value):
+            if caractere.isalpha():
+                tem_letra = True
+                break
+        if tem_letra:
+            return {"valida":False, "mensagem":f"O campo {field_name} não pode haver letras"}
+        
+        return {"valida":True}
+
     #função:validação interna de nome
     @staticmethod
     def validar_nome(value, field_name):
@@ -210,79 +215,62 @@ class Validator:
         
         return {"valida":True}
 
-
-
-#JULIA CODOU ATÉ AQUI!!!!
-
     #função:validação interna de senha
     @staticmethod
     def validar_senha(value, field_name):
-        if len(value) > 200:
-            return f"O campo {field_name} não pode ter mais de 200 caracteres"
 
+        #Não pode ter mais de 200 caracteres
+        if len(value) > 200:
+            return{"valida":False,"mensagem":f"O campo {field_name} não pode ter mais de 200 caracteres"}
+
+        #Deve ter números
         tem_numero = False
         for caractere in (value):
             if caractere.isdigit():
                 tem_numero = True
                 break
         if not tem_numero:
-            return f"O campo {field_name} deve ter números"
+            return {"valida":False,"mensagem":f"O campo {field_name} deve ter números"}
 
+        #Deve ter maiúsculas
         tem_maiuscula = False
         for caractere in (value):
             if caractere.isupper():
                 tem_maiuscula = True
                 break
         if not tem_maiuscula:
-            return f"O campo {field_name} deve ter uma letra maiúscula"
+            return{"valida":False,"mensagem":f"O campo {field_name} deve ter letras maiúsculas"}
 
+        #Deve ter minúsculas
         tem_minuscula = False
         for caractere in (value):
             if caractere.islower():
                 tem_minuscula = True
                 break
         if not tem_minuscula:
-            return f"O campo {field_name} deve ter uma letra minúscula"
+            return{"valida":False,"mensagem":f"O campo {field_name} deve ter uma letra minúscula"}
 
-        return True
+        return {"valida":True}
 
 
     #função:validação interna de peso
     @staticmethod
     def validar_peso(value, field_name):
-        tem_letra_peso = False
+
+        #Não deve ter letras
+        tem_letra = False
         for caractere in (value):
             if caractere.isalpha():
-                tem_letra_peso = True
+                tem_letra = True
                 break
-        if tem_letra_peso:
-            return f"O campo {field_name} não pode haver letras"
+        if tem_letra:
+            return {"valida":False,"mensagem":f"O campo {field_name} não pode haver letras"}
         
+        #Não pode ter valores negativos
         if int(value) <= 0:
-            return f"O campo {field_name} deve ser maior que 0"
+            return {"valida":False,"mensagem":f"O campo {field_name} não aceita valores negativos"}
 
-        return True
-
-
-    #função:validação interna de data
-    @staticmethod
-    def validar_data(value, field_name):
-        value=datetime.datetimenow
-        
-        return True
+        return {"valida":True}
 
 
-    #função:validação de prateleira
-    @staticmethod
-    def validar_prateleira(value, field_name):
-        tem_maiuscula = False
-        for caractere in value:
-            if caractere.isupper():
-                tem_maiuscula = True
-                break
-        if not tem_maiuscula:
-            return f"A prateleira deve conter pelo menos uma letra maiúscula."
-        
-        if value != "A" or "B" or "C" or "D" or "E" or "F":
-            return f"A prateleira deve conter pelo menos uma letra maiúscula."
-        return True
+
