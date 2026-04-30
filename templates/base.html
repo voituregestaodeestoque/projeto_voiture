@@ -44,6 +44,11 @@
                 <i class="bi bi-box-seam-fill"></i> Pedido de entrada
             </a>
 
+            <a href="{{ url_for('pedidoentrada') }}" class="{% if request.endpoint == 'pedidoentrada' %}active{% endif %}">
+                <i class="bi bi-box-seam-fill"></i> Movimentação de entrada
+            </a>
+
+
             <a href="{{ url_for('pedidosaida') }}" class="{% if request.endpoint == 'pedidosaida' %}active{% endif %}">
                 <i class="bi bi-box-seam-fill"></i> Pedido de saida
             </a>
