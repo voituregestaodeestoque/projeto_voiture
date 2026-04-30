@@ -4,6 +4,8 @@ import datetime
 class Validator:
     @staticmethod
     def validar_telefone(value, field_name):
+
+        #Não pode ter letras
         tem_letra = False
         for caractere in (value):
             if caractere.isalpha():
@@ -41,16 +43,20 @@ class Validator:
         return None
 
 
-    '''============> validarÇÕES BASE EXTERNAS <============'''
+    '''============> VALIDAÇÕES BASE EXTERNAS <============'''
 
     #função:validação externa de CEP
-    '''@staticmethod
+    @staticmethod
     def validar_cep(value, field_name):
+
+        #Não pode ter letras
         for caractere in (value):
             if not(caractere.isdigit()):
-                return f"O campo {field_name} só pode haver números"
+                return {"valida":False,"mensagem":f"O campo {field_name} só pode ter números"}
+
+        #Limite de 8 dígitos
         if  not len(value) == 8:
-            return f"O campo {field_name} deve possuir 8 números"
+            return f"O campo {field_name} não suporta essa quantidade de caracteres"
         base_url = "https://api.invertexto.com/v1/cep"
         cep_encoded = urllib.parse.quote(value)
         url = f"{base_url}/{cep_encoded}"
@@ -60,7 +66,7 @@ class Validator:
             response.raise_for_status()
             retorno_cep = response.json()
             if retorno_cep:
-                return True
+                return {"valida":True}
         except requests.exceptions.HTTPError as errh:
             print("Erro HTTP:",errh)
         except requests.exceptions.ConnectionError as errc:
@@ -69,7 +75,7 @@ class Validator:
             print("Timeout:",errt)
         except requests.exceptions.RequestException as err:
             print("Erro:", err)
-        return False
+        return {"valida":False, "mensagem":"CEP inválido"}
 
 
     #função:validação externa de email
@@ -84,7 +90,7 @@ class Validator:
             response.raise_for_status()
             data = response.json()
             if data['valid_format'] and data['valid_mx'] and not data['disposable']:
-                return True
+                return {"valida":True}
         except requests.exceptions.HTTPError as errh:
             print("Erro HTTP:", errh)
         except requests.exceptions.ConnectionError as errc:
@@ -93,13 +99,12 @@ class Validator:
             print("Timeout:", errt)
         except requests.exceptions.RequestException as err:
             print("Erro", err)
-        return False
+        return{"valida": False,"mensagem":"Email inválido"}
 
 
-    #função:validação externa de CPF
-    #função:validação externa de CPF
+    #função:validação externa de CPF/CNPJ
     @staticmethod
-    def validar_cpf(value, field_name):
+    def validar_cpf_cnpj(value, field_name):
         url = "https://api.invertexto.com/v1/validator"
 
         params = {
@@ -113,7 +118,7 @@ class Validator:
 
             data = response.json()
             if data['valid'] and data['formatted']:
-                return True
+                return{"valida":True}
 
         except requests.exceptions.HTTPError as errh:
             print("Erro HTTP:", errh)
@@ -123,8 +128,8 @@ class Validator:
             print("Timeout:", errt)
         except requests.exceptions.RequestException as err:
             print("Erro", err)
-        return False
-'''
+        return {"valida":False,"mensagem":"CPF/CNPJ inválido"}
+
 
     '''============> Validações BASE INTERNAS <============'''
 

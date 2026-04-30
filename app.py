@@ -252,16 +252,16 @@ def salvar_fornecedor():
     
     if erros :
         for erro in erros:
-            flash(erro)
-        return render_template("cadastro_fornecedor.html", fornecedor=dados)
+            flash(erro,"erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
     
     try:
         fornecedor.insert()
         flash("Fornecedor cadastrado com sucesso.", "sucesso")
         return redirect(url_for("base"))
     except Exception as e:
-        flash(f"Erro ao cadastrar fornecedor teste: {e}", "erro")
-        return render_template("cadastro_fornecedor.html", fornecedor=dados)
+        flash(f"Erro ao cadastrar fornecedor: {e}", "erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
 
 #pedido de entrada e saida
 @app.route('/pedidoentrada')
