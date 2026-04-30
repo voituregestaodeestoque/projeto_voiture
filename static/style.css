@@ -157,3 +157,9 @@ form input {
 #form_fornecedor label{
     padding-left: 5px;
 }
+
+th{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
