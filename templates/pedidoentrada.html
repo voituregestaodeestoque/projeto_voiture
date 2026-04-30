@@ -7,6 +7,65 @@
 </div>
 
 <div class="d-flex justify-content-between">
+<<<<<<< Updated upstream
+
+    <!-- FORM -->
+    <div class="container-fluid pedidoentrada-container d-flex justify-content-between">
+
+        <div class="pedidoentrada-card text-dark" style="width: 100%;">
+
+            <!-- ⚠️ REMOVI action e submit direto -->
+            <form class="mb-3" id="formPedido">
+
+                <div class="row">
+
+                    <!-- PRODUTO -->
+                    <div class="col-md-12 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-box text-white"></i>
+                            </span>
+                            <input type="text" id="pedidoentrada_produto"
+                                class="form-control" placeholder="Digite o nome do produto" required>
+                        </div>
+                    </div>
+
+                    <!-- QUANTIDADE -->
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-basket2-fill text-white"></i>
+                            </span>
+                            <!-- ⚠️ corrigido -->
+                            <input type="number" id="pedidoentrada_quantidade"
+                                class="form-control" placeholder="Digite a quantidade" required>
+                        </div>
+                    </div>
+
+                    <!-- FORNECEDOR (agora global) -->
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-person-fill text-white"></i>
+                            </span>
+                            <input type="text" id="pedidoentrada_fornecedor"
+                                class="form-control" placeholder="Fornecedor" required>
+                        </div>
+                    </div>
+
+                    <!-- BOTÃO ADICIONAR -->
+                    <div class="col-md-12 d-flex mb-3 justify-content-end">
+                        <button type="button" class="btn btn-success produto-btn" onclick="adicionarItem()">
+                            Adicionar à lista
+                        </button>
+                    </div>
+
+                    <!-- BOTÃO FINAL -->
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <button type="button" class="btn btn-primary produto-btn" onclick="enviarPedido()">
+                            Cadastrar Pedido
+                        </button>
+=======
     <div class="container-fluid pedidoentrada-container d-flex justify-content-between">
 
         <div class="pedidoentrada-card text-dark" style="width: 100%;">
@@ -47,10 +106,39 @@
                     </div>
                     <div class="col-md-12 d-flex mb-3 justify-content-end">
                         <button type="submit" class="btn btn-primary produto-btn">Cadastrar</button>
+>>>>>>> Stashed changes
                     </div>
 
                 </div>
 
+<<<<<<< Updated upstream
+            </form>
+        </div>
+    </div>
+
+    <!-- LISTA -->
+    <div class="container-fluid info-container">
+
+        <div class="info-card text-dark"
+            style="background-color: #fff; border-radius: 20px; width: 100%;">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="listaItens">
+                    <!-- preenchido via JS -->
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+=======
         </div>
 
 
@@ -61,9 +149,9 @@
     <div class="container-fluid info-container">
 
         <div class="info-card text-dark"
-            style="background-color: #fff; border-radius: 20px; width: 100%; display: flex; justify-content: center;">
+            style="background-color: #fff; border-radius: 20px; padding: 20px; width: 100%;">
             <table>
-                <tr style="width: 100%;">
+                <tr>
                     <th>Produto</th>
                     <th>Quantidade</th>
                     <th>Fornecedor</th>
@@ -76,6 +164,110 @@
             </table>
         </div>
     </div>
+>>>>>>> Stashed changes
 </div>
+
+<script>
+    let itens = [];
+    
+    // 🔹 Adicionar item na lista
+    function adicionarItem() {
+        const produtoInput = document.getElementById("pedidoentrada_produto");
+        const quantidadeInput = document.getElementById("pedidoentrada_quantidade");
+    
+        const produto = produtoInput.value.trim();
+        const quantidade = quantidadeInput.value.trim();
+    
+        if (!produto || !quantidade) {
+            alert("Preencha produto e quantidade");
+            return;
+        }
+    
+        if (parseInt(quantidade) <= 0) {
+            alert("Quantidade inválida");
+            return;
+        }
+    
+        const item = {
+            produto: produto,
+            quantidade: parseInt(quantidade)
+        };
+    
+        itens.push(item);
+    
+        // limpa campos
+        produtoInput.value = "";
+        quantidadeInput.value = "";
+    
+        renderizarLista();
+    }
+    
+    // 🔹 Renderizar tabela
+    function renderizarLista() {
+        const lista = document.getElementById("listaItens");
+        lista.innerHTML = "";
+    
+        itens.forEach((item, index) => {
+            lista.innerHTML += `
+                <tr>
+                    <td>${item.produto}</td>
+                    <td>${item.quantidade}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="removerItem(${index})">
+                            Remover
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+    
+    // 🔹 Remover item
+    function removerItem(index) {
+        itens.splice(index, 1);
+        renderizarLista();
+    }
+    
+    // 🔹 Enviar pedido pro backend
+    function enviarPedido() {
+        const fornecedor = document.getElementById("pedidoentrada_fornecedor").value.trim();
+    
+        if (!fornecedor) {
+            alert("Informe o fornecedor");
+            return;
+        }
+    
+        if (itens.length === 0) {
+            alert("Adicione pelo menos um item");
+            return;
+        }
+    
+        const payload = {
+            fornecedor: fornecedor,
+            itens: itens
+        };
+    
+        fetch("/cadastrar_pedidoentrada_lote", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.mensagem);
+    
+            // reset
+            itens = [];
+            renderizarLista();
+            document.getElementById("pedidoentrada_fornecedor").value = "";
+        })
+        .catch(error => {
+            console.error(error);
+            alert("Erro ao enviar pedido");
+        });
+    }
+    </script>
 
 {% endblock %}

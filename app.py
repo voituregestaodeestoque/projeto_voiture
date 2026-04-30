@@ -15,27 +15,20 @@ def produtos():
 def cadastro_funcionario():
     return render_template('cadastrofuncionario.html')
 
+'''Login funcionário - Ryan Ribeiro'''
 @app.route('/loginfuncionario')
 def loginfuncionario():
     return render_template('loginfuncionario.html')
 
-@app.route('/logarfuncionario')
-def logarfuncionario():
-    login=get_login_funcionario_form()
+@app.route('/loginfunciona')
+def login():
+    email = request.form.get("funcionario_email")
+    senha = request.form.get("funcionario_senha")
 
-    return render_template(
-        'base.html',
-        login=login
-    )
 
+    sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
 
     return redirect(url_for("base"))
-
-def get_login_funcionario_form():
-    return {
-        "funcionario_email": request.form.get("funcionario_email", "").strip(),
-        "funcionario_senha": request.form.get("empilhadeira_senha", "").strip(),
-    }
 
 @app.route('/landingpage')
 def landingpage():
@@ -49,15 +42,7 @@ def tabelaempilhadeira():
         empilhadeiras=empilhadeiras
     )
 
-@app.route('/loginfunciona')
-def login():
-    email = request.form.get("funcionario_email")
-    senha = request.form.get("funcionario_senha")
 
-
-    sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
-
-    return redirect(url_for("base"))
 
 @app.route("/")
 def inicio():
@@ -323,6 +308,32 @@ def salvar_pedidosaida():
     except Exception as e:
         flash(f"Erro ao cadastrar pedido: {e}", "erro")
         return render_template("pedidosaida.html", pedido_saida=dados)
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+
+@app.route("/cadastrar_pedidoentrada_lote", methods=["POST"])
+def cadastrar_pedidoentrada_lote():
+    data = request.get_json()
+
+    fornecedor = data.get("fornecedor")
+    itens = data.get("itens", [])
+
+    try:
+        for item in itens:
+            pedido = Pedido_entrada(
+                pedidoentrada_produto=item["produto"],
+                pedidoentrada_quantidade=item["quantidade"],
+                pedidoentrada_fornecedor=fornecedor
+            )
+            pedido.insert()
+
+        return jsonify({"mensagem": "Pedido cadastrado com sucesso!"})
+
+    except Exception as e:
+        return jsonify({"mensagem": f"Erro: {str(e)}"})
 
 if __name__ == "__main__":
     app.run(debug=True)
