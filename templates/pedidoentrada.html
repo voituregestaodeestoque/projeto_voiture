@@ -7,6 +7,7 @@
 </div>
 
 <div class="d-flex justify-content-between">
+<<<<<<< Updated upstream
 
     <!-- FORM -->
     <div class="container-fluid pedidoentrada-container d-flex justify-content-between">
@@ -64,10 +65,53 @@
                         <button type="button" class="btn btn-primary produto-btn" onclick="enviarPedido()">
                             Cadastrar Pedido
                         </button>
+=======
+    <div class="container-fluid pedidoentrada-container d-flex justify-content-between">
+
+        <div class="pedidoentrada-card text-dark" style="width: 100%;">
+
+            <form class="mb-3" action="{{ url_for('salvar_pedidoentrada') }}" method="POST">
+                <div class="row">
+                    <div class="d-flex justify-content-between col-md-12 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-box text-white"></i>
+                            </span>
+                            <input type="text" name="pedidoentrada_produto" id="pedidoentrada_produto"
+                                class="form-control" placeholder="Digite o nome do produto" required>
+
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-basket2-fill text-white"></i>
+                            </span>
+                            <input type="int" name="pedidoentrada_quantidade" id="pedidoentrada_quantidade"
+                                class="form-control" placeholder="Digite a quantidade" required>
+
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between col-md-6 mb-3">
+                        <div class="input-group col-md-6">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-person-fill text-white"></i>
+                            </span>
+                            <input type="text" name="pedidoentrada_fornecedor" id="pedidoentrada_fornecedor"
+                                class="form-control" placeholder="Fornecedor" required>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12 d-flex mb-3 justify-content-end">
+                        <button type="submit" class="btn btn-primary produto-btn">Cadastrar</button>
+>>>>>>> Stashed changes
                     </div>
 
                 </div>
 
+<<<<<<< Updated upstream
             </form>
         </div>
     </div>
@@ -94,6 +138,33 @@
         </div>
     </div>
 
+=======
+        </div>
+
+
+
+
+    </div>
+
+    <div class="container-fluid info-container">
+
+        <div class="info-card text-dark"
+            style="background-color: #fff; border-radius: 20px; padding: 20px; width: 100%;">
+            <table>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Fornecedor</th>
+                </tr>
+                <tr>
+                    <td>Roda</td>
+                    <td>12</td>
+                    <td>Julia</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+>>>>>>> Stashed changes
 </div>
 
 <script>
