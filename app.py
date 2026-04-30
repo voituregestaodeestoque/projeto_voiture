@@ -17,7 +17,7 @@ def cadastro_funcionario():
 
 '''Login funcionário - Ryan Ribeiro'''
 @app.route('/loginfuncionario')
-def login_funcionario():
+def loginfuncionario():
     return render_template('loginfuncionario.html')
 
 @app.route('/loginfunciona')
