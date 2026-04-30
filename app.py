@@ -15,9 +15,20 @@ def produtos():
 def cadastro_funcionario():
     return render_template('cadastrofuncionario.html')
 
+'''Login funcionário - Ryan Ribeiro'''
 @app.route('/loginfuncionario')
 def login_funcionario():
     return render_template('loginfuncionario.html')
+
+@app.route('/loginfunciona')
+def login():
+    email = request.form.get("funcionario_email")
+    senha = request.form.get("funcionario_senha")
+
+
+    sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
+
+    return redirect(url_for("base"))
 
 @app.route('/landingpage')
 def landingpage():
@@ -31,15 +42,7 @@ def tabelaempilhadeira():
         empilhadeiras=empilhadeiras
     )
 
-@app.route('/loginfunciona')
-def login():
-    email = request.form.get("funcionario_email")
-    senha = request.form.get("funcionario_senha")
 
-
-    sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
-
-    return redirect(url_for("base"))
 
 @app.route("/")
 def inicio():
@@ -234,16 +237,16 @@ def salvar_fornecedor():
     
     if erros :
         for erro in erros:
-            flash(erro)
-        return render_template("cadastro_fornecedor.html", fornecedor=dados)
+            flash(erro,"erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
     
     try:
         fornecedor.insert()
         flash("Fornecedor cadastrado com sucesso.", "sucesso")
         return redirect(url_for("base"))
     except Exception as e:
-        flash(f"Erro ao cadastrar fornecedor teste: {e}", "erro")
-        return render_template("cadastro_fornecedor.html", fornecedor=dados)
+        flash(f"Erro ao cadastrar fornecedor: {e}", "erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
 
 #pedido de entrada e saida
 @app.route('/pedidoentrada')
@@ -305,6 +308,32 @@ def salvar_pedidosaida():
     except Exception as e:
         flash(f"Erro ao cadastrar pedido: {e}", "erro")
         return render_template("pedidosaida.html", pedido_saida=dados)
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+
+@app.route("/cadastrar_pedidoentrada_lote", methods=["POST"])
+def cadastrar_pedidoentrada_lote():
+    data = request.get_json()
+
+    fornecedor = data.get("fornecedor")
+    itens = data.get("itens", [])
+
+    try:
+        for item in itens:
+            pedido = Pedido_entrada(
+                pedidoentrada_produto=item["produto"],
+                pedidoentrada_quantidade=item["quantidade"],
+                pedidoentrada_fornecedor=fornecedor
+            )
+            pedido.insert()
+
+        return jsonify({"mensagem": "Pedido cadastrado com sucesso!"})
+
+    except Exception as e:
+        return jsonify({"mensagem": f"Erro: {str(e)}"})
 
 if __name__ == "__main__":
     app.run(debug=True)
