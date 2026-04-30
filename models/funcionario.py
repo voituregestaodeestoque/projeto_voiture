@@ -65,4 +65,3 @@ class Funcionario(CrudBase):
         finally:
             cursor.close()
             conexao.close()
-            

@@ -4,15 +4,15 @@ import datetime
 class Validator:
     @staticmethod
     def validar_telefone(value, field_name):
-        tem_letra = False
+        tem_letra_peso = False
         for caractere in (value):
             if caractere.isalpha():
-                tem_letra = True
+                tem_letra_peso = True
                 break
-        if tem_letra:
-            return {"valida":False, "mensagem":f"O campo {field_name} não pode haver letras"}
+        if tem_letra_peso:
+            return f"O campo {field_name} não pode haver letras"
         
-        return {"valida":True}
+        return True
 
         
 
@@ -126,26 +126,26 @@ class Validator:
         return False
 '''
 
-    '''============> Validações BASE INTERNAS <============'''
+    '''============> validarÇÕES BASE INTERNAS <============'''
 
     #função:validação interna de nome
     @staticmethod
     def validar_nome(value, field_name):
         if len(value) < 3:
-            return {"valida":False, "mensagem":f"{field_name}deve ter no mínimo 3 letras"}
+            return f"O campo {field_name} não deve ter menos de 3 letras"
 
         for caractere in (value):
             if caractere.isdigit():
-                return{"valida":False, "mensagem":f"O campo {field_name} não pode haver números"}
+                return f"O campo {field_name} não pode haver números"
 
         tem_espaco = False
         for caractere in (value):
             if caractere.isspace():
                 tem_espaco= True
                 break
-        if tem_espaco == False:
-            return{"valida":False,"mensagem":f"O campo {field_name} não pode ter somente o primeiro nome."}
-        return {"valida":True}
+        if tem_espaco == True:
+            return f"O campo {field_name} não pode haver espaço"
+        return True
 
 
     #função:validação interna de quantidade
