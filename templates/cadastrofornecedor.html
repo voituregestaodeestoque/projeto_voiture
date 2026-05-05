@@ -27,7 +27,7 @@
 
     <!--Formulário para cadastro de fornecedor-->
 
-    <form id="form_fornecedor" action="{% if fornecedor and fornecedor.id %}{{ url_for('atualizar_fornecedor', id=fornecedor.id) }}{% else %}{{ url_for('listagem_fornecedor') }}" method="POST">
+    <form id="form_fornecedor" action="{% if fornecedor and fornecedor.id %}{{ url_for('atualizar_fornecedor', id=fornecedor.id) }}{% else %}{{ url_for('listagem_fornecedor') }}{% endif %}" method="POST">
 
         <div class="row">
             <div class="col-md-6 mb-3">
@@ -52,8 +52,7 @@
                     <span class="input-group-text bg-dark border-secondary">
                         <i class="bi bi-person-vcard-fill text-white"></i>
                     </span>
-                    <input name="fornecedor_cnpj" type="text" class="form-control" id="fornecedor_cnpj" placeholder="00.000.000/0000-00" maxlength="18"
-                    inputmode="numeric" oninput="formatarCNPJ(this)" required value="{{ fornecedor.fornecedor_cnpj if fornecedor else '' }}" >
+                    <input name="fornecedor_cnpj" type="text" class="form-control" id="fornecedor_cnpj" placeholder="00.000.000/0000-00" required value="{{ fornecedor.fornecedor_cnpj if fornecedor else '' }}" >
                 </div>
             </div>
 
@@ -65,7 +64,7 @@
                     <span class="input-group-text bg-dark border-secondary">
                         <i class="bi bi-geo-alt text-white"></i>
                     </span>
-                    <input name="fornecedor_cep" type="number" class="form-control" id="fornecedor_cep" placeholder="00000-000" required value="{{ fornecedor.fornecedor_cep if fornecedor else '' }}" >
+                    <input name="fornecedor_cep" type="text" class="form-control" id="fornecedor_cep" placeholder="00000-000" required value="{{ fornecedor.fornecedor_cep if fornecedor else '' }}" >
                 </div>
             </div>
 
@@ -89,7 +88,7 @@
                     <span class="input-group-text bg-dark border-secondary">
                         <i class="bi bi-telephone-fill text-white"></i>
                     </span>
-                    <input name="fornecedor_ddi" type="number" class="form-control" id="fornecedor_ddi" placeholder="Código Internacional" required value="{{ fornecedor.fornecedor_ddi if fornecedor else '' }}"  >
+                    <input name="fornecedor_ddi" type="text" class="form-control" id="fornecedor_ddi" placeholder="Código Internacional" required value="{{ fornecedor.fornecedor_ddi if fornecedor else '' }}"  >
                 </div>
             </div>
 
@@ -101,7 +100,7 @@
                     <span class="input-group-text bg-dark border-secondary">
                         <i class="bi bi-telephone-fill text-white"></i>
                     </span>
-                    <input name="fornecedor_ddd" type="number" class="form-control" id="fornecedor_ddd" placeholder="Código Regional" required value="{{ fornecedor.fornecedor_ddd if fornecedor else '' }}" >
+                    <input name="fornecedor_ddd" type="text" class="form-control" id="fornecedor_ddd" placeholder="Código Regional" required value="{{ fornecedor.fornecedor_ddd if fornecedor else '' }}" >
                 </div>
             </div>
 
@@ -138,5 +137,6 @@
 </div>
 
 
-
 {% endblock %}
+
+
