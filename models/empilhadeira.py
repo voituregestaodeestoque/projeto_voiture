@@ -29,11 +29,11 @@ class Empilhadeira(CrudBase):
             conexao.close()
 
     @classmethod
-    def tabelatudojunto(cls):
+    def empilhadeirasemuso(cls):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            sql = "select u.*, f.funcionario_nome, e.* from uso_empilhadeira as u inner join funcionario as f on u.funcionario_id = f.id inner join empilhadeira as e on u.empilhadeira_id= e.id ;"
+            sql = "SELECT e.* FROM empilhadeira as e LEFT JOIN uso_empilhadeira as u ON e.id = u.empilhadeira_id WHERE u.empilhadeira_id IS NULL;"
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
