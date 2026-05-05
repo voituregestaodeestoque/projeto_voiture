@@ -4,8 +4,7 @@ import requests
 
 #Validações revisadas pela Júlia em 30/04/2026
 
-class Validator:
-        
+class Validator:     
 
     #Validações não utilizadas por enquanto
     @staticmethod

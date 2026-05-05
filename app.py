@@ -43,9 +43,11 @@ def landingpage():
 
 @app.route('/tabelaempilhadeira')
 def tabelaempilhadeira():
-    empilhadeiras = Empilhadeira.tabelatudojunto()
+    uso = Empilhadeira.tabelatudojunto()
+    empilhadeiras=Empilhadeira.find_all()
     return render_template(
         'tabelaempilhadeira.html',
+        uso=uso,
         empilhadeiras=empilhadeiras
     )
 
