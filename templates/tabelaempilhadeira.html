@@ -26,7 +26,7 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            {% if empilhadeiras %}
+            {% if uso or empilhadeiras %}
 
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
@@ -45,7 +45,50 @@
                     </thead>
 
                     <tbody>
-                        {% for empilhadeira in empilhadeiras %}
+                        {% for usos in uso %}
+                        <td>{{ usos.id }}</td>
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ usos.empilhadeira_status }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ usos.funcionario_nome }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <strong>{{ usos.empilhadeira_chassi }}</strong>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ usos.empilhadeira_modelo }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ usos.empilhadeira_marca }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ usos.uso_empilhadeira_datahora }}
+                            </span>
+                        </td>
+
+                        
+
+                        
+
+                        {% endfor %}
+                    </tbody>
+                    {% for empilhadeira in empilhadeiras %}
                         <td>{{ empilhadeira.id }}</td>
 
                         <td>
