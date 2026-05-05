@@ -1,3 +1,6 @@
+
+#Editado por Júlia em 05/05/2026 às 13h55
+
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
 from models.empilhadeira import Empilhadeira
@@ -211,12 +214,17 @@ def salvar_cliente():
         flash(f"Erro ao cadastrar cliente: {e}", "erro")
         return render_template("cliente.html", cliente=dados)
 
-#Fornecedor
+
+
+#-----> Início: Fornecedor
+
+#Rota para a tela de cadastro de fornecedor
 @app.route('/fornecedor')
 def fornecedor():
     return render_template('cadastrofornecedor.html')
 
 
+#Resgate das informações do formulário de cadastro de fornecedor
 def get_fornecedor_form():
     return {
         "fornecedor_nome": request.form.get("fornecedor_nome", "").strip(),
@@ -229,12 +237,13 @@ def get_fornecedor_form():
         "fornecedor_descricao": request.form.get("fornecedor_descricao", "").strip(),
     }
 
-
-
+#Registro do fornecedor no banco de dados
 @app.route("/salvar_fornecedor", methods=["POST"])
 def salvar_fornecedor():
     dados = get_fornecedor_form()
     fornecedor = Fornecedor(**dados)
+
+    #Validação
     erros = fornecedor.validate()
     
     if erros :
@@ -242,6 +251,7 @@ def salvar_fornecedor():
             flash(erro,"erro")
         return render_template("cadastrofornecedor.html", fornecedor=dados)
     
+    #Cadastro
     try:
         fornecedor.insert()
         flash("Fornecedor cadastrado com sucesso.", "sucesso")
@@ -249,6 +259,21 @@ def salvar_fornecedor():
     except Exception as e:
         flash(f"Erro ao cadastrar fornecedor: {e}", "erro")
         return render_template("cadastrofornecedor.html", fornecedor=dados)
+    
+
+#Listagem de fornecedores cadastrados
+@app.route('/listagem_fornecedor')
+def listagem_fornecedor():
+    fornecedores = Fornecedor.listagem()
+    return render_template(
+        'listagem_fornecedor.html',
+        fornecedores=fornecedores
+    )
+
+#-----> Fim: Fornecedor
+
+
+
 
 #pedido de entrada e saida
 @app.route('/pedidoentrada')
