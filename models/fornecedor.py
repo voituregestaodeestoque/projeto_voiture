@@ -1,10 +1,15 @@
+
+#Editado por Júlia em 05/05/2026 às 13h55
+
 from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
 
 
+#-----> Classe: Fornecedor
 
 class Fornecedor(CrudBase):
+    #Definição da tabela e campos
     table='fornecedor'
     fields=[
         'fornecedor_nome',
@@ -17,6 +22,8 @@ class Fornecedor(CrudBase):
         'fornecedor_descricao'
     ]
 
+
+    #Definição dos valores para cada campo
     def __init__(self, fornecedor_nome,fornecedor_cnpj,fornecedor_cep,fornecedor_email,fornecedor_ddi,fornecedor_ddd,fornecedor_telefone,fornecedor_descricao):
         self.fornecedor_nome = fornecedor_nome
         self.fornecedor_cnpj = fornecedor_cnpj
@@ -27,6 +34,8 @@ class Fornecedor(CrudBase):
         self.fornecedor_telefone = fornecedor_telefone
         self.fornecedor_descricao = fornecedor_descricao
 
+
+    #Função para validar os campos da tabela 
     def validate(self):
         erros = []
 
@@ -45,3 +54,19 @@ class Fornecedor(CrudBase):
                 erros.append(itens["mensagem"])
 
         return erros
+    
+    
+    #Função para listar todos os fornecedores registrados
+    @classmethod
+    def listagem(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT * FROM fornecedor"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
+
+    

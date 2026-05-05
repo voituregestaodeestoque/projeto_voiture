@@ -12,18 +12,50 @@ class Empilhadeira(CrudBase):
 
     def __init__(self, empilhadeira_chassi, empilhadeira_status, empilhadeira_modelo, empilhadeira_marca):
         self.empilhadeira_chassi = empilhadeira_chassi
-        self.empilhadeira_status = empilhadeira_status
+        self.empilhadeira_status = "INATIVO"
         self.empilhadeira_modelo = empilhadeira_modelo
         self.empilhadeira_marca = empilhadeira_marca
+
+    #Função para validar os campos da tabela 
+    def validate(self):
+        erros = []
+
+        validacoes = [
+            Validator.validar_nome(self.fornecedor_nome, "fornecedor_nome"),
+            Validator.validar_cpf_cnpj(self.fornecedor_cnpj, "fornecedor_cnpj"),
+            Validator.validar_cep(self.fornecedor_cep, "fornecedor_cep")
+        ]
+        
+        for itens in validacoes:
+            if not itens['valida']:
+                erros.append(itens["mensagem"])
+
+        return erros
 
     @classmethod
     def tabelatudojunto(cls):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            sql = "select u.*, f.funcionario_nome, e.* from uso_empilhadeira as u inner join funcionario as f on u.funcionario_id = f.id inner join empilhadeira as e on u.empilhadeira_id= e.id;"
+            sql = "select u.*, f.funcionario_nome, e.* from uso_empilhadeira as u inner join funcionario as f on u.funcionario_id = f.id inner join empilhadeira as e on u.empilhadeira_id= e.id ;"
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
             cursor.close()
             conexao.close()
+
+    @classmethod
+    def empilhadeirasemuso(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT e.* FROM empilhadeira as e LEFT JOIN uso_empilhadeira as u ON e.id = u.empilhadeira_id WHERE u.empilhadeira_id IS NULL;"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
+
+
+
+

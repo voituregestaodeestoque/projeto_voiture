@@ -1,3 +1,6 @@
+
+#Editado por Júlia em 05/05/2026 às 13h55
+
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
 from models.empilhadeira import Empilhadeira
@@ -16,39 +19,103 @@ def cadastro_funcionario():
     return render_template('cadastrofuncionario.html')
 
 '''Login funcionário - Ryan Ribeiro'''
-
 @app.route('/loginfuncionario')
 def loginfuncionario():
     return render_template('loginfuncionario.html')
 
-@app.route('/logarfuncionario', methods=["POST"])
-def logarfuncionario():
-    logar=get_login_funcionario_form()
-    sim=Funcionario.login(
-        logar['funcionario_email'],
-        logar['funcionario_senha']
-        )
-    print(sim)
-    return redirect(url_for("base"))
+@app.route('/loginfunciona')
+def login():
+    email = request.form.get("funcionario_email")
+    senha = request.form.get("funcionario_senha")
 
-def get_login_funcionario_form():
-    return {
-        "funcionario_email": request.form.get("funcionario_email", "").strip(),
-        "funcionario_senha": request.form.get("funcionario_senha", "").strip(),
-    }
+
+    sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
+
+    return redirect(url_for("base"))
 
 @app.route('/landingpage')
 def landingpage():
     return render_template('lp.html')
 
+'''Empilhadeira Ryan Ribeiro'''
+
+def get_empilhadeira_form():
+    return {
+        "empilhadeira_chassi": request.form.get("empilhadeira_chassi", "").strip(),
+        "empilhadeira_modelo": request.form.get("empilhadeira_modelo", "").strip(),
+        "empilhadeira_marca": request.form.get("empilhadeira_marca", "").strip(),
+    }
+
+#Registro do fornecedor no banco de dados
+@app.route("/tabelaempilhadeira/salvar", methods=["POST"])
+def salvar_empilhadeira():
+    dados = get_empilhadeira_form()
+    empilhadeira = Empilhadeira(**dados)
+
+    #Validação
+    erros = Empilhadeira.validate()
+    
+    if erros :
+        for erro in erros:
+            flash(erro,"erro")
+        return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
+    
+    #Cadastro
+    try:
+        fornecedor.insert()
+        flash("Empilhadeira cadastrada com sucesso.", "sucesso")
+        return redirect(url_for("base"))
+    except Exception as e:
+        flash(f"Erro ao cadastrar empilhadeira: {e}", "erro")
+        return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
+    
+
+
 @app.route('/tabelaempilhadeira')
 def tabelaempilhadeira():
-    empilhadeiras = Empilhadeira.tabelatudojunto()
+    uso = Empilhadeira.tabelatudojunto()
+    empilhadeiras=Empilhadeira.empilhadeirasemuso()
     return render_template(
         'tabelaempilhadeira.html',
+        uso=uso,
         empilhadeiras=empilhadeiras
     )
 
+@app.route("/produto/editar/<int:id>")
+def editar_produto(id):
+    produto = Produto.find_by_id(id)
+    if not produto:
+        flash("Produto não encontrado.", "erro")
+        return redirect(url_for("produtos"))
+    return render_template("formulario_produto.html", produto=produto)
+
+
+@app.route("/produto/atualizar/<int:id>", methods=["POST"])
+def atualizar_produto(id):
+    dados = get_produto_form()
+    produto = Produto(**dados)
+    erros = produto.validate()
+
+    if erros:
+        for erro in erros:
+            flash(erro, "erro")
+        dados["id"] = id
+        return render_template("formulario_produto.html", produto=dados)
+
+    try:
+        if not Produto.find_by_id(id):
+            flash("Produto não encontrado.", "erro")
+            return redirect(url_for("produtos"))
+
+        produto.update(id)
+        flash("Produto atualizado com sucesso.", "sucesso")
+        return redirect(url_for("produtos"))
+    except Exception as e:
+        dados["id"] = id
+        flash(f"Erro ao atualizar produto: {e}", "erro")
+        return render_template("formulario_produto.html", produto=dados)
+
+'''=================================='''
 
 
 @app.route("/")
@@ -216,12 +283,17 @@ def salvar_cliente():
         flash(f"Erro ao cadastrar cliente: {e}", "erro")
         return render_template("cliente.html", cliente=dados)
 
-#Fornecedor
+
+
+#-----> Início: Fornecedor
+
+#Rota para a tela de cadastro de fornecedor
 @app.route('/fornecedor')
 def fornecedor():
     return render_template('cadastrofornecedor.html')
 
 
+#Resgate das informações do formulário de cadastro de fornecedor
 def get_fornecedor_form():
     return {
         "fornecedor_nome": request.form.get("fornecedor_nome", "").strip(),
@@ -234,12 +306,13 @@ def get_fornecedor_form():
         "fornecedor_descricao": request.form.get("fornecedor_descricao", "").strip(),
     }
 
-
-
+#Registro do fornecedor no banco de dados
 @app.route("/salvar_fornecedor", methods=["POST"])
 def salvar_fornecedor():
     dados = get_fornecedor_form()
     fornecedor = Fornecedor(**dados)
+
+    #Validação
     erros = fornecedor.validate()
     
     if erros :
@@ -247,6 +320,7 @@ def salvar_fornecedor():
             flash(erro,"erro")
         return render_template("cadastrofornecedor.html", fornecedor=dados)
     
+    #Cadastro
     try:
         fornecedor.insert()
         flash("Fornecedor cadastrado com sucesso.", "sucesso")
@@ -254,6 +328,21 @@ def salvar_fornecedor():
     except Exception as e:
         flash(f"Erro ao cadastrar fornecedor: {e}", "erro")
         return render_template("cadastrofornecedor.html", fornecedor=dados)
+    
+
+#Listagem de fornecedores cadastrados
+@app.route('/listagem_fornecedor')
+def listagem_fornecedor():
+    fornecedores = Fornecedor.listagem()
+    return render_template(
+        'listagem_fornecedor.html',
+        fornecedores=fornecedores
+    )
+
+#-----> Fim: Fornecedor
+
+
+
 
 #pedido de entrada e saida
 @app.route('/pedidoentrada')

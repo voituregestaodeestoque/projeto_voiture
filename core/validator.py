@@ -4,8 +4,7 @@ import requests
 
 #Validações revisadas pela Júlia em 30/04/2026
 
-class Validator:
-        
+class Validator:     
 
     #Validações não utilizadas por enquanto
     @staticmethod
@@ -271,6 +270,11 @@ class Validator:
             return {"valida":False,"mensagem":f"O campo {field_name} não aceita valores negativos"}
 
         return {"valida":True}
+
+    #Validações adicionadas dia 05/05/2026
+    def validar_modelo(value, field_name):
+        
+
 
 
 
