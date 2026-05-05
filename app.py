@@ -37,6 +37,40 @@ def login():
 def landingpage():
     return render_template('lp.html')
 
+'''Empilhadeira Ryan Ribeiro'''
+
+def get_empilhadeira_form():
+    return {
+        "empilhadeira_chassi": request.form.get("empilhadeira_chassi", "").strip(),
+        "empilhadeira_modelo": request.form.get("empilhadeira_modelo", "").strip(),
+        "empilhadeira_marca": request.form.get("empilhadeira_marca", "").strip(),
+    }
+
+#Registro do fornecedor no banco de dados
+@app.route("/tabelaempilhadeira/salvar", methods=["POST"])
+def salvar_empilhadeira():
+    dados = get_empilhadeira_form()
+    empilhadeira = Empilhadeira(**dados)
+
+    #Validação
+    erros = Empilhadeira.validate()
+    
+    if erros :
+        for erro in erros:
+            flash(erro,"erro")
+        return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
+    
+    #Cadastro
+    try:
+        fornecedor.insert()
+        flash("Empilhadeira cadastrada com sucesso.", "sucesso")
+        return redirect(url_for("base"))
+    except Exception as e:
+        flash(f"Erro ao cadastrar empilhadeira: {e}", "erro")
+        return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
+    
+
+
 @app.route('/tabelaempilhadeira')
 def tabelaempilhadeira():
     uso = Empilhadeira.tabelatudojunto()
@@ -47,6 +81,41 @@ def tabelaempilhadeira():
         empilhadeiras=empilhadeiras
     )
 
+@app.route("/produto/editar/<int:id>")
+def editar_produto(id):
+    produto = Produto.find_by_id(id)
+    if not produto:
+        flash("Produto não encontrado.", "erro")
+        return redirect(url_for("produtos"))
+    return render_template("formulario_produto.html", produto=produto)
+
+
+@app.route("/produto/atualizar/<int:id>", methods=["POST"])
+def atualizar_produto(id):
+    dados = get_produto_form()
+    produto = Produto(**dados)
+    erros = produto.validate()
+
+    if erros:
+        for erro in erros:
+            flash(erro, "erro")
+        dados["id"] = id
+        return render_template("formulario_produto.html", produto=dados)
+
+    try:
+        if not Produto.find_by_id(id):
+            flash("Produto não encontrado.", "erro")
+            return redirect(url_for("produtos"))
+
+        produto.update(id)
+        flash("Produto atualizado com sucesso.", "sucesso")
+        return redirect(url_for("produtos"))
+    except Exception as e:
+        dados["id"] = id
+        flash(f"Erro ao atualizar produto: {e}", "erro")
+        return render_template("formulario_produto.html", produto=dados)
+
+'''=================================='''
 
 
 @app.route("/")

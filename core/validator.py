@@ -271,5 +271,10 @@ class Validator:
 
         return {"valida":True}
 
+    #Validações adicionadas dia 05/05/2026
+    def validar_modelo(value, field_name):
+        
+
+
 
 

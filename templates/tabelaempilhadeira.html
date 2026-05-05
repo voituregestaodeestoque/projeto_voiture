@@ -95,6 +95,23 @@
                                 {{ usos.uso_empilhadeira_datahora }}
                             </span>
                         </td>
+
+                        <!-- AÇÕES -->
+                            <td class="text-end">
+
+                                <a href=""
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+                                <a href=""
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Deseja excluir este produto?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+
+                            </td>
+                        
                     </tr>
 
                         
@@ -102,7 +119,9 @@
                         
 
                         {% endfor %}
-                    </tbody>
+
+
+                    
                     {% for empilhadeira in empilhadeiras %}
                     <tr>
                         <td>{{ empilhadeira.id }}</td>
@@ -150,6 +169,23 @@
                                 {{ empilhadeira.uso_empilhadeira_datahora }}
                             </span>
                         </td>
+
+                        <!-- AÇÕES -->
+                            <td class="text-end">
+
+                                <a href=""
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+                                <a href=""
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Deseja excluir este produto?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+
+                            </td>
+
                     </tr>
                         
 

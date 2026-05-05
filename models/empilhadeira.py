@@ -12,9 +12,25 @@ class Empilhadeira(CrudBase):
 
     def __init__(self, empilhadeira_chassi, empilhadeira_status, empilhadeira_modelo, empilhadeira_marca):
         self.empilhadeira_chassi = empilhadeira_chassi
-        self.empilhadeira_status = empilhadeira_status
+        self.empilhadeira_status = "INATIVO"
         self.empilhadeira_modelo = empilhadeira_modelo
         self.empilhadeira_marca = empilhadeira_marca
+
+    #Função para validar os campos da tabela 
+    def validate(self):
+        erros = []
+
+        validacoes = [
+            Validator.validar_nome(self.fornecedor_nome, "fornecedor_nome"),
+            Validator.validar_cpf_cnpj(self.fornecedor_cnpj, "fornecedor_cnpj"),
+            Validator.validar_cep(self.fornecedor_cep, "fornecedor_cep")
+        ]
+        
+        for itens in validacoes:
+            if not itens['valida']:
+                erros.append(itens["mensagem"])
+
+        return erros
 
     @classmethod
     def tabelatudojunto(cls):
