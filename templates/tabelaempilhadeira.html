@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+<!--Ryan Ribeiro atualizado 05/05/2026 14:22-->
+
 {% block conteudo %}
 <div class="container-fluid">
 
@@ -34,11 +36,12 @@
                     <thead class="table-light">
                         <tr>
                             <th>#</th>
-                            <th>Status</th>
-                            <th>ID do funcionário</th>
                             <th>Chassi</th>
                             <th>Modelo</th>
                             <th>Marca</th>
+                            <th>Ocupação</th>
+                            <th>ID do funcionário</th>
+                            <th>Status</th>
                             <th>Data e Hora</th>
                             <th class="text-end">Ações</th>
                         </tr>
@@ -46,19 +49,8 @@
 
                     <tbody>
                         {% for usos in uso %}
+                        <tr>
                         <td>{{ usos.id }}</td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ usos.empilhadeira_status }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ usos.funcionario_nome }}
-                            </span>
-                        </td>
 
                         <td>
                             <strong>{{ usos.empilhadeira_chassi }}</strong>
@@ -78,30 +70,61 @@
 
                         <td>
                             <span class="badge bg-secondary">
+                                OCUPADO
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ usos.funcionario_nome }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ usos.empilhadeira_status }}
+                            </span>
+                        </td>
+
+                        
+
+                        
+
+                        <td>
+                            <span class="badge bg-secondary">
                                 {{ usos.uso_empilhadeira_datahora }}
                             </span>
                         </td>
+
+                        <!-- AÇÕES -->
+                            <td class="text-end">
+
+                                <a href=""
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+                                <a href=""
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Deseja excluir este produto?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+
+                            </td>
+                        
+                    </tr>
 
                         
 
                         
 
                         {% endfor %}
-                    </tbody>
+
+
+                    
                     {% for empilhadeira in empilhadeiras %}
+                    <tr>
                         <td>{{ empilhadeira.id }}</td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ empilhadeira.empilhadeira_status }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ empilhadeira.funcionario_nome }}
-                            </span>
-                        </td>
 
                         <td>
                             <strong>{{ empilhadeira.empilhadeira_chassi }}</strong>
@@ -121,10 +144,49 @@
 
                         <td>
                             <span class="badge bg-secondary">
+                                DESOCUPADO
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ empilhadeira.funcionario_nome }}
+                            </span>
+                        </td>
+
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ empilhadeira.empilhadeira_status }}
+                            </span>
+                        </td>
+
+                      
+                        
+
+                        <td>
+                            <span class="badge bg-secondary">
                                 {{ empilhadeira.uso_empilhadeira_datahora }}
                             </span>
                         </td>
 
+                        <!-- AÇÕES -->
+                            <td class="text-end">
+
+                                <a href=""
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+                                <a href=""
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Deseja excluir este produto?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+
+                            </td>
+
+                    </tr>
                         
 
                         
