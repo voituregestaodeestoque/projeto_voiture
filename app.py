@@ -1,5 +1,5 @@
 
-# Editado por Júlia em 07/05/2026 às 12h13
+# Editado por Ryan em 07/05/2026 às alguma hora aí
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -133,6 +133,21 @@ def atualizar_empilhadeira(id):
         dados["id"] = id
         flash(f"Erro ao atualizar empilhadeira: {e}", "erro")
         return render_template("tabelaempilhadeira.html", empilhadeira=dados)
+
+# Deleta uma empilhadeira
+@app.route("/deletar_empilhadeira/<int:id>")
+def deletar_empilhadeira(id):
+    #Tenta deletar
+    try:
+        Empilhadeira.safe_delete(id)
+        flash("Empilhadeira excluída com sucesso.", "sucesso")
+    #Tratativa de erro
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao excluir empilhadeira: {e}", "erro")
+    return redirect(url_for("tabelaempilhadeira"))
+
 
 
 @app.route('/tabelaempilhadeira')
