@@ -145,39 +145,7 @@ def tabelaempilhadeira():
         empilhadeiras=empilhadeiras
     )
 
-@app.route("/produto/editar/<int:id>")
-def editar_produto(id):
-    produto = Produto.find_by_id(id)
-    if not produto:
-        flash("Produto não encontrado.", "erro")
-        return redirect(url_for("produtos"))
-    return render_template("formulario_produto.html", produto=produto)
 
-
-@app.route("/produto/atualizar/<int:id>", methods=["POST"])
-def atualizar_produto(id):
-    dados = get_produto_form()
-    produto = Produto(**dados)
-    erros = produto.validate()
-
-    if erros:
-        for erro in erros:
-            flash(erro, "erro")
-        dados["id"] = id
-        return render_template("formulario_produto.html", produto=dados)
-
-    try:
-        if not Produto.find_by_id(id):
-            flash("Produto não encontrado.", "erro")
-            return redirect(url_for("produtos"))
-
-        produto.update(id)
-        flash("Produto atualizado com sucesso.", "sucesso")
-        return redirect(url_for("produtos"))
-    except Exception as e:
-        dados["id"] = id
-        flash(f"Erro ao atualizar produto: {e}", "erro")
-        return render_template("formulario_produto.html", produto=dados)
 
 
 
@@ -226,16 +194,18 @@ def get_produto_form():
         "produto_descricao": request.form.get("produto_descricao", "").strip(),
     }
 
+@app.route("/listagem_produto")
+
 @app.route("/cadastrar_produto", methods=["POST"])
 def salvar_produto():
     dados = get_produto_form()
     produto = Produto(**dados)
 
-    '''erros = produto.validate()
+    erros = produto.validate()
     if erros :
         for erro in erros:
             flash(erro, "erro")
-        return render_template("cadastroproduto.html", produto=dados)'''
+        return render_template("cadastroproduto.html", produto=dados)
 
     try:
         produto.insert()
@@ -244,6 +214,41 @@ def salvar_produto():
     except Exception as e:
         flash(f"Erro ao cadastrar produto: {e}", "erro")
         return render_template("cadastroproduto.html", produto=dados)
+
+
+@app.route("/produto/editar/<int:id>")
+def editar_produto(id):
+    produto = Produto.find_by_id(id)
+    if not produto:
+        flash("Produto não encontrado.", "erro")
+        return redirect(url_for("produtos"))
+    return render_template("cadastroproduto.html", produto=produto)
+
+
+@app.route("/produto/atualizar/<int:id>", methods=["POST"])
+def atualizar_produto(id):
+    dados = get_produto_form()
+    produto = Produto(**dados)
+    erros = produto.validate()
+
+    if erros:
+        for erro in erros:
+            flash(erro, "erro")
+        dados["id"] = id
+        return render_template("formulario_produto.html", produto=dados)
+
+    try:
+        if not Produto.find_by_id(id):
+            flash("Produto não encontrado.", "erro")
+            return redirect(url_for("produtos"))
+
+        produto.update(id)
+        flash("Produto atualizado com sucesso.", "sucesso")
+        return redirect(url_for("produtos"))
+    except Exception as e:
+        dados["id"] = id
+        flash(f"Erro ao atualizar produto: {e}", "erro")
+        return render_template("formulario_produto.html", produto=dados)
 
 def get_funcionario_form():
     return {
@@ -418,7 +423,7 @@ def deletar_fornecedor(id):
 
     #Tenta deletar
     try:
-        Fornecedor.safe_delete(id)
+        fornecedor.safe_delete(id)
         flash("Fornecedor excluído com sucesso.", "sucesso")
 
     #Tratativa de erro
