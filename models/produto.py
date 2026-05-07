@@ -1,9 +1,11 @@
+#atualizado por clarinha 07/05 às 11h04
+
 from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
 
 class Produto(CrudBase):
-    table = "Produto"
+    table = "produto"
     fields = [
         'produto_nome',
         'produto_descricao', 
@@ -27,16 +29,38 @@ class Produto(CrudBase):
         self.produto_localizacao = produto_localizacao
 
 
-"""
     def validate(self):
-        erros = [
-            Validator.required(self.produto_nome, "nome"),
-            Validator.non_negative(self.produto_quantidade_minima, "quantidade minima"),
-            Validator.non_negative(self.produto_preco_custo, "preço de custo"),
-            Validator.non_negative(self.produto_preco_venda, "preço de venda")
-        ]
-        return [erro for erro in erros if erro]
+        erros = []
 
+        validacoes = [
+            Validator.required(self.produto_nome, "produto_nome"),
+            Validator.validar_quantidade(self.produto_quantidade_minima, "produto_quantidade_minima"),
+            Validator.validar_preco(self.produto_preco_custo, "produto_preco_custo"),
+            Validator.validar_preco(self.produto_preco_venda, "produto_preco_venda"),
+            Validator.validar_peso(self.produto_peso, "produto_peso"),
+            Validator.validar_localizacao(self.produto_localizacao, "produto_localizacao")
+        ]
+        
+        for itens in validacoes:
+            if not itens['valida']:
+                erros.append(itens["mensagem"])
+
+        return erros
+
+    @classmethod
+    def produto_listagem(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT * FROM produto"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
+
+    
+"""
     @classmethod
     def low_stock(cls):
         conexao = Database.connect()

@@ -1,21 +1,39 @@
+<!--atualizado por clarinha 07/05 às 09h49-->
+
 {% extends 'base.html' %}
 
 {% block conteudo %}
 
 <div class="mb-4">
-    <h2 class="titulo-pagina">
-        <i class="bi bi-box"></i>
-        {{ 'Editar Produto' if produto and produto.id else 'Cadastrar Produto' }}
-    </h2>
+    
+    <!--Título em caso de cadastro-->
+            {% if produto and produto.id %}
+            <h2 class="titulo-pagina" style="margin-left: 5px;margin-bottom: 10px;">Editar Produto</h2>
+
+            {%else%}
+            <h2 class="titulo-pagina" style="margin-left: 5px;margin-bottom: 10px;">Cadastrar Produto</h2>
+
+            {%endif%}
+
+            <div class="d-flex justify-content-end">
+                <a href="{{ url_for('listar_produto') }}" class="btn btn-success">
+                    <i></i>Visualizar produtos</a>
+            </div>
 </div>
 
 <div class="container-fluid produto-container d-flex justify-content-center" >
 
     <div class="produto-card text-dark"  >
 
-        <form class="mb-3" action="{{ url_for('login') }}" method="POST">
+        <form method="POST"
+              action="{% if produto and produto.id %}
+                        {{ url_for('atualizar_produto', id=produto.id) }}
+                      {% else %}
+                        {{ url_for('listar_produto') }}
+                      {% endif %}">
             <div class="row">
                 <div class="col-md-6 mb-3">
+                    <label for="produto_nome">Nome do produto</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-box text-white"></i>
@@ -25,6 +43,7 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
+                    <label for="produto_categoria">Categoria</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-box text-white"></i>
@@ -35,6 +54,7 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
+                    <label for="produto_localizacao">Localização</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-geo-alt-fill text-white"></i>
@@ -46,42 +66,46 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
+                    <label for="produto_quantidade_minima"> Estoque mínimo</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-basket2-fill text-white"></i>
                         </span>
-                        <input type="text" name="produto_quantidade_minima" class="form-control" id="produto_quantidade_minima" placeholder="Quantidade mínima do produto"
+                        <input type="text" name="produto_quantidade_minima" class="form-control" id="produto_quantidade_minima" placeholder="Estoque mínimo do produto"
                         required>
                     </div>
                     
                 </div>
 
                 <div class="col-md-4 mb-3">
+                    <label for="produto_peso">Peso</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-hammer text-white"></i>
                         </span>
-                        <input type="text" name="produto_peso" class="form-control" id="produto_peso" placeholder="Peso" required>
+                        <input type="text" name="produto_peso" class="form-control" id="produto_peso" placeholder="Peso em kg" required>
                     </div>
                 </div>
 
                 <div class="col-md-4 mb-3">
+                    <label for="produto_preco_custo">Preço de custo</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-gear-fill text-white"></i>
                         </span>
-                        <input type="text" name="produto_preco_custo" class="form-control" id="produto_preco_custo" placeholder="Preço de custo"
+                        <input type="text" name="produto_preco_custo" class="form-control" id="produto_preco_custo" placeholder="Preço de custo em R$"
                         required>
                     </div>
                     
                 </div>
 
                 <div class="col-md-4 mb-3">
+                    <label for="produto_preco_venda">Preço de venda</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-gear-fill text-white"></i>
                         </span>
-                        <input type="text" name="produto_preco_venda" class="form-control" id="produto_preco_venda" placeholder="Preço de venda"
+                        <input type="text" name="produto_preco_venda" class="form-control" id="produto_preco_venda" placeholder="Preço de venda em R$"
                         required>
                     </div>
                 </div>
@@ -91,11 +115,20 @@
                     <input type="text" name="produto_descricao" class="form-control" id="produto_descricao" required style="padding: 20px;">
                 </div>
 
-                <div class="col-md-12 d-flex mb-3 justify-content-end">
-                    <button type="submit" class="btn btn-primary produto-btn">Cadastrar</button>
+                <div id="btn-produto">
+
+                    <!--Botão que envia o formulário em caso de cadastro-->
+                    {% if produto and produto.id %}
+                    <button type="submit" class="btn btn-primary">Atualizar</button>
+        
+                    <!--Botão que envia o formulário em caso de atualização-->
+                    {%else%}
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+        
+                    {%endif%}
                 </div>
             </div>
-
+        </form>
     </div>
 
     {% endblock %}

@@ -1,6 +1,7 @@
 from datetime import datetime
 from core.crud_base import CrudBase
 from core.database import Database
+from core.validator import Validator
 
 class Empilhadeira(CrudBase):
     table = "empilhadeira"
@@ -10,9 +11,9 @@ class Empilhadeira(CrudBase):
         "empilhadeira_modelo",
         "empilhadeira_marca"]
 
-    def __init__(self, empilhadeira_chassi, empilhadeira_status, empilhadeira_modelo, empilhadeira_marca):
+    def __init__(self, empilhadeira_chassi, empilhadeira_status="PENDENTE", empilhadeira_modelo="", empilhadeira_marca=""):
         self.empilhadeira_chassi = empilhadeira_chassi
-        self.empilhadeira_status = "INATIVO"
+        self.empilhadeira_status = empilhadeira_status
         self.empilhadeira_modelo = empilhadeira_modelo
         self.empilhadeira_marca = empilhadeira_marca
 
@@ -21,9 +22,9 @@ class Empilhadeira(CrudBase):
         erros = []
 
         validacoes = [
-            Validator.validar_nome(self.fornecedor_nome, "fornecedor_nome"),
-            Validator.validar_cpf_cnpj(self.fornecedor_cnpj, "fornecedor_cnpj"),
-            Validator.validar_cep(self.fornecedor_cep, "fornecedor_cep")
+            Validator.validar_chassi(self.empilhadeira_chassi, "empilhadeira_chassi"),
+            Validator.validar_modelo(self.empilhadeira_modelo, "empilhadeira_modelo"),
+            Validator.validar_marca(self.empilhadeira_marca, "empilhadeira_marca")
         ]
         
         for itens in validacoes:
@@ -56,6 +57,32 @@ class Empilhadeira(CrudBase):
             cursor.close()
             conexao.close()
 
+    #Função para deletar com segurança
+    @classmethod
+    def safe_delete(cls, id):
+        print('delete', cls,id)
+        empilhadeira = cls.find_by_id(id)
+        if not empilhadeira:
+            raise ValueError("Empilhadeira não encontrada.")
+        if cls.has_related_records(id):
+            raise ValueError("Não é possível excluir a empilhadeira porque ele está vinculado a outros serviços.")
+        cls.delete(id)
 
+    @classmethod
+    def has_related_records(cls, id):
+        conexao = Database.connect()
+        cursor = conexao.cursor()
+        try:
+            queries = [
+                "SELECT COUNT(*) FROM pedido_entrada WHERE empilhadeira_id = %s"
+            ]
+            total = 0
+            for sql in queries:
+                cursor.execute(sql, (id,))
+                total += cursor.fetchone()[0]
+            return total > 0
+        finally:
+            cursor.close()
+            conexao.close()
 
 

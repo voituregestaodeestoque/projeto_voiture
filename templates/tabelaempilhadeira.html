@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-<!--Ryan Ribeiro atualizado 05/05/2026 14:22-->
+<!--Ryan Ribeiro atualizado 07/05/2026 11:24-->
 
 {% block conteudo %}
 <div class="container-fluid">
@@ -69,7 +69,7 @@
                         </td>
 
                         <td>
-                            <span class="badge bg-secondary">
+                            <span class="badge bg-danger">
                                 OCUPADO
                             </span>
                         </td>
@@ -96,21 +96,7 @@
                             </span>
                         </td>
 
-                        <!-- AÇÕES -->
-                            <td class="text-end">
-
-                                <a href=""
-                                    class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-
-                                <a href=""
-                                    class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Deseja excluir este produto?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-
-                            </td>
+                        
                         
                     </tr>
 
@@ -143,7 +129,7 @@
                         </td>
 
                         <td>
-                            <span class="badge bg-secondary">
+                            <span class="badge bg-success">
                                 DESOCUPADO
                             </span>
                         </td>
@@ -173,12 +159,14 @@
                         <!-- AÇÕES -->
                             <td class="text-end">
 
-                                <a href=""
+                                
+                                
+                                <a href="{{ url_for('editar_empilhadeira', id=empilhadeira.id) }}"
                                     class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
 
-                                <a href=""
+                                <a href="{{ url_for('deletar_empilhadeira', id=empilhadeira.id) }}"
                                     class="btn btn-sm btn-outline-danger"
                                     onclick="return confirm('Deseja excluir este produto?')">
                                     <i class="bi bi-trash"></i>
