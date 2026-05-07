@@ -271,9 +271,23 @@ class Validator:
 
         return {"valida":True}
 
-    #Validações adicionadas dia 05/05/2026
+    #Validações adicionadas dia 05/05/2026 ryan ribeiro
+    #atualizações e finalizações no dia 07/05/2025 
+    def validar_chassi(value, field_name):
+        #Não pode ter mais de 20 caracteres
+        if len(value) > 20:
+            return{"valida":False,"mensagem":f"O campo {field_name} não pode ter mais de 20 caracteres"}
+     
     def validar_modelo(value, field_name):
-        
+        #
+        if len(value) > 20:
+            return{"valida":False,"mensagem":f"O campo {field_name} não pode ter mais de 20 caracteres"}
+
+    def validar_marca(value, field_name):
+        #Não pode ter mais de 20 caracteres
+        if len(value) > 20:
+            return{"valida":False,"mensagem":f"O campo {field_name} não pode ter mais de 20 caracteres"}
+     
 
 
 

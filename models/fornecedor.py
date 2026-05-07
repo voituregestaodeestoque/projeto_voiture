@@ -68,3 +68,5 @@ class Fornecedor(CrudBase):
         finally:
             cursor.close()
             conexao.close()
+
+    

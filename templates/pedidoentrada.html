@@ -1,3 +1,5 @@
+<!--Atualizado por Clarinha 05/05 às 16h10-->
+
 {% extends 'base.html' %}
 
 {% block conteudo %}
@@ -7,32 +9,29 @@
 </div>
 
 <div class="d-flex justify-content-between">
-
-    <!-- FORM -->
     <div class="container-fluid pedidoentrada-container d-flex justify-content-between">
 
         <div class="pedidoentrada-card text-dark" style="width: 100%;">
-            <form class="mb-3" id="formPedido">
+            <form class="mb-3" id="formPedido" >
 
                 <div class="row">
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-3 mb-3">
+                        <label for="">ID</label>
                         <div class="input-group">
                             <span class="input-group-text bg-dark border-secondary">
                                 <i class="bi bi-box text-white"></i>
                             </span>
-                            <select id="pedidoentrada_produto" class="form-control" required>
-                                <option value="">Selecione um produto</option>
-                                {% for p in produtos %}
-                                <option value="{{ p.id }}">{{ p.produto_nome }}</option>
-                                {% endfor %}
-                            </select>
+                            <input type="text" class="form-control" name="pedido_id" id="pedido_id" readonly>
                         </div>
                     </div>
+
                     <div class="col-md-6 mb-3">
+                        <label for="">Fornecedor</label>
                         <div class="input-group">
                             <span class="input-group-text bg-dark border-secondary">
                                 <i class="bi bi-basket2-fill text-white"></i>
                             </span>
+
                             <select id="pedidoentrada_fornecedor" class="form-control" required>
                                 <option value="">Selecione um fornecedor</option>
                                 {% for f in fornecedores %}
@@ -42,164 +41,79 @@
                         </div>
                     </div>
 
-                    <!-- FORNECEDOR (agora global) -->
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-3 mb-3">
+                        <label for="">Status</label>
                         <div class="input-group">
                             <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-person-fill text-white"></i>
+                                <i class="bi bi-box text-white"></i>
                             </span>
-                            <input type="text" id="pedidoentrada_quantidade" class="form-control"
-                                placeholder="Quantidade" required>
+                            <input type="text" class="form-control" name="pedido_status" id="pedido_status">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <form class="mb-3" id="formItemPedido" action="{{url_for('salvar_pedidoentrada')}}">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="">Produto</label>
+
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-box text-white"></i>
+                            </span>
+                            <select id="pedidoentrada_produto" name="pedidoentrada_produto"class="form-control" required>
+                                <option value="">Selecione um produto</option>
+                                {% for p in produtos %}
+                                <option value="{{ p.id }}">{{ p.produto_nome }}</option>
+                                {% endfor %}
+                                <option value=1>produto1</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="">Quantidade</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-box text-white"></i>
+                            </span>
+                            <input type="text" class="form-control" name="pedidoentrada_quantidade" id="pedidoentrada_quantidade"
+                                required>
                         </div>
                     </div>
 
-                    <!-- BOTÃO ADICIONAR -->
-                    <div class="col-md-12 d-flex mb-3 justify-content-end">
-                        <button type="button" class="btn btn-success produto-btn" onclick="adicionarItem()">
-                            Adicionar à lista
+                    <div class="col-md-3 d-flex mb-3 justify-content-end" style="padding: 15px; margin-top: 15px;">
+                        <button type="submit" class="btn btn-success produto-btn" ">
+                            Incluir
                         </button>
                     </div>
-
-                    <!-- BOTÃO FINAL -->
-                    <div class="col-md-12 d-flex justify-content-end">
-                        <button type="button" class="btn btn-primary produto-btn" onclick="enviarPedido()">
-                            Cadastrar Pedido
-                        </button>
-                    </div>
-
                 </div>
-
             </form>
-        </div>
-    </div>
+            <div class="info-card text-dark d-flex justify-content-between"
+                style="background-color: #fff; border-radius: 20px; width: 100%; margin-top: 20px;">
 
-    <!-- LISTA -->
-    <div class="container-fluid info-container">
-
-        <div class="info-card text-dark" style="background-color: #fff; border-radius: 20px; width: 100%;">
-
-            <table class="table">
-                <thead>
+                <table class="table" style="width: 100%;">
                     <tr>
+                        <th>Item</th>
                         <th>Produto</th>
                         <th>Quantidade</th>
-                        <th>Ação</th>
+                        <th>Ações</th>
                     </tr>
-                </thead>
-                <tbody id="listaItens">
-                    <!-- preenchido via JS -->
-                </tbody>
-            </table>
+                    <tr>
+                        <td>item 1</td>
+                        <td>produto 1</td>
+                        <td>quntidade 1</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-success produto-btn" onclick="ola">Editar</button>
+                            <button type="button" class="btn btn-sm btn-danger produto-btn" onclick="adicionarItem()">Excluir</button>
+                        </td>
+                    </tr>
+                </table>
 
+            </div>
         </div>
     </div>
-
 </div>
 
-<script>
-    let itens = [];
 
-    // 🔹 Adicionar item na lista
-    function adicionarItem() {
-
-        const produtoSelect = document.getElementById("pedidoentrada_produto");
-        const quantidadeInput = document.getElementById("pedidoentrada_quantidade");
-
-        const produto_id = produtoSelect.value;
-        const produto_nome = produtoSelect.options[produtoSelect.selectedIndex].text;
-        const quantidade = quantidadeInput.value.trim();
-
-        if (!produto || !quantidade) {
-            alert("Preencha produto e quantidade");
-            return;
-        }
-
-        if (parseInt(quantidade) <= 0) {
-            alert("Quantidade inválida");
-            return;
-        }
-
-        const item = {
-            estoque_id: parseInt(produto_id),
-            produto_nome: produto_nome,
-            quantidade: parseInt(quantidade)
-        };
-
-        itens.push(item);
-
-        // limpa campos
-        produtoInput.value = "";
-        quantidadeInput.value = "";
-
-        renderizarLista();
-    }
-
-    // 🔹 Renderizar tabela
-    function renderizarLista() {
-        const lista = document.getElementById("listaItens");
-        lista.innerHTML = "";
-
-        itens.forEach((item, index) => {
-            lista.innerHTML += `
-                <tr>
-                    <td>${item.produto_nome}</td>
-                    <td>${item.quantidade}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" onclick="removerItem(${index})">
-                            Remover
-                        </button>
-                    </td>
-                </tr>
-            `;
-        });
-    }
-
-    // 🔹 Remover item
-    function removerItem(index) {
-        itens.splice(index, 1);
-        renderizarLista();
-    }
-
-    // 🔹 Enviar pedido pro backend
-    function enviarPedido() {
-        const fornecedor_id = document.getElementById("pedidoentrada_fornecedor").value;
-
-        if (!fornecedor) {
-            alert("Informe o fornecedor");
-            return;
-        }
-
-        if (itens.length === 0) {
-            alert("Adicione pelo menos um item");
-            return;
-        }
-
-        const payload = {
-            fornecedor_id: parseInt(fornecedor_id),
-            itens: itens
-        };
-
-        fetch("/cadastrar_pedidoentrada_lote", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.mensagem);
-
-                // reset
-                itens = [];
-                renderizarLista();
-                document.getElementById("pedidoentrada_fornecedor").value = "";
-            })
-            .catch(error => {
-                console.error(error);
-                alert("Erro ao enviar pedido");
-            });
-    }
-</script>
 
 {% endblock %}

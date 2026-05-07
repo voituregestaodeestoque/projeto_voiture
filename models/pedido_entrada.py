@@ -3,7 +3,7 @@ from core.database import Database
 from core.validator import Validator
 
 class Pedido_entrada(CrudBase):
-    table = "Pedido_entrada"
+    table = "pedido_entrada"
     fields = [
         'pedidoentrada_produto',
         'pedidoentrada_quantidade', 

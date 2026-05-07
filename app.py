@@ -1,5 +1,5 @@
 
-#Editado por Júlia em 05/05/2026 às 13h55
+# Editado por Clarinha em 05/05/2026 às 16h43
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -9,6 +9,23 @@ from models.fornecedor import Fornecedor
 
 app = Flask(__name__)
 app.secret_key = "chave_secreta"
+
+def to_int(value, default=0):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def to_float(value, default=0.0):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+@app.route("/")
+def inicio():
+    return redirect(url_for("base"))
 
 @app.route('/cadastroproduto')
 def produtos():
@@ -46,7 +63,7 @@ def get_empilhadeira_form():
         "empilhadeira_marca": request.form.get("empilhadeira_marca", "").strip(),
     }
 
-#Registro do fornecedor no banco de dados
+# Registro do fornecedor no banco de dados
 @app.route("/tabelaempilhadeira/salvar", methods=["POST"])
 def salvar_empilhadeira():
     dados = get_empilhadeira_form()
@@ -54,12 +71,12 @@ def salvar_empilhadeira():
 
     #Validação
     erros = Empilhadeira.validate()
-    
+
     if erros :
         for erro in erros:
             flash(erro,"erro")
         return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
-    
+
     #Cadastro
     try:
         fornecedor.insert()
@@ -68,7 +85,7 @@ def salvar_empilhadeira():
     except Exception as e:
         flash(f"Erro ao cadastrar empilhadeira: {e}", "erro")
         return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
-    
+
 
 
 @app.route('/tabelaempilhadeira')
@@ -115,18 +132,16 @@ def atualizar_produto(id):
         flash(f"Erro ao atualizar produto: {e}", "erro")
         return render_template("formulario_produto.html", produto=dados)
 
-'''=================================='''
 
 
-@app.route("/")
-def inicio():
-    return redirect(url_for("base"))
+
+
 
 @app.route("/base")
 def base():
     return render_template("dashboard.html")
 
-#Uso de Empilhadeira
+# Uso de Empilhadeira
 @app.route('/usoempilhadeira')
 def usoempilhadeira():
     return render_template('usoempilhadeira.html')
@@ -151,7 +166,7 @@ def salvar_uso_empilhadeira():
         flash(f"Erro ao cadastrar uso de empilhadeira{e}", "erro")
         return render_template("cadastro_uso_empilhadeira.html", fornecedor=dados)
 
-#cadastrodeempilhadeira
+# cadastrodeempilhadeira
 
 def get_cadastroempilhaderia_form():
         return {
@@ -168,13 +183,13 @@ def cadastroempilhadeira():
 def salvar_cadastroempilhadeira():
     dados = get_cadastroempilhadeira_form()
     cadastroempilhadeira = cadastroempilhadeira(**dados)
-    
+
     '''erros = cadastroempilhadeira.validate()
     if erros :
         for erro in erros:
             flash(erro, "erro")
         return render_template("cadastroempilhadeira.html", cadastroempilhadeira=dados)'''
-    
+
     try:
         cadastroempilhadeira.insert()
         flash("cadastro de empilhadeira cadastrado com sucesso.", "sucesso")
@@ -199,13 +214,13 @@ def get_produto_form():
 def salvar_produto():
     dados = get_produto_form()
     produto = Produto(**dados)
-    
+
     '''erros = produto.validate()
     if erros :
         for erro in erros:
             flash(erro, "erro")
         return render_template("cadastroproduto.html", produto=dados)'''
-    
+
     try:
         produto.insert()
         flash("Produto cadastrado com sucesso.", "sucesso")
@@ -231,13 +246,13 @@ def get_funcionario_form():
 def salvar_funcionario():
     dados = get_funcionario_form()
     funcionario = Funcionario(**dados)
-    
+
     erros = funcionario.validate()
     if erros :
         for erro in erros:
             flash(erro, "erro")
         return render_template("cadastrofuncionario.html", funcionario=dados)
-    
+
     try:
         funcionario.insert()
         flash("Funcionario cadastrado com sucesso.", "sucesso")
@@ -246,7 +261,7 @@ def salvar_funcionario():
         flash(f"Erro ao cadastrar funcionario: {e}", "erro")
         return render_template("cadastrofuncionario.html", funcionario=dados)
 
-#cliente
+# cliente
 
 def get_cliente_form():
         return {
@@ -268,13 +283,13 @@ def cliente():
 def salvar_cliente():
     dados = get_cliente_form()
     cliente = cliente(**dados)
-    
+
     '''erros = cliente.validate()
     if erros :
         for erro in erros:
             flash(erro, "erro")
         return render_template("cliente.html", cliente=dados)'''
-    
+
     try:
         cliente.insert()
         flash("cliente cadastrado com sucesso.", "sucesso")
@@ -285,15 +300,15 @@ def salvar_cliente():
 
 
 
-#-----> Início: Fornecedor
+# -----> Início: Fornecedor
 
-#Rota para a tela de cadastro de fornecedor
+# Rota para a tela de cadastro de fornecedor
 @app.route('/fornecedor')
 def fornecedor():
     return render_template('cadastrofornecedor.html')
 
 
-#Resgate das informações do formulário de cadastro de fornecedor
+# Resgate das informações do formulário de cadastro de fornecedor
 def get_fornecedor_form():
     return {
         "fornecedor_nome": request.form.get("fornecedor_nome", "").strip(),
@@ -306,7 +321,7 @@ def get_fornecedor_form():
         "fornecedor_descricao": request.form.get("fornecedor_descricao", "").strip(),
     }
 
-#Registro do fornecedor no banco de dados
+# Registro do fornecedor no banco de dados
 @app.route("/salvar_fornecedor", methods=["POST"])
 def salvar_fornecedor():
     dados = get_fornecedor_form()
@@ -314,12 +329,12 @@ def salvar_fornecedor():
 
     #Validação
     erros = fornecedor.validate()
-    
+
     if erros :
         for erro in erros:
             flash(erro,"erro")
         return render_template("cadastrofornecedor.html", fornecedor=dados)
-    
+
     #Cadastro
     try:
         fornecedor.insert()
@@ -328,9 +343,9 @@ def salvar_fornecedor():
     except Exception as e:
         flash(f"Erro ao cadastrar fornecedor: {e}", "erro")
         return render_template("cadastrofornecedor.html", fornecedor=dados)
-    
 
-#Listagem de fornecedores cadastrados
+
+# Listagem de fornecedores cadastrados
 @app.route('/listagem_fornecedor')
 def listagem_fornecedor():
     fornecedores = Fornecedor.listagem()
@@ -339,12 +354,12 @@ def listagem_fornecedor():
         fornecedores=fornecedores
     )
 
-#-----> Fim: Fornecedor
+# -----> Fim: Fornecedor
 
 
 
 
-#pedido de entrada e saida
+# pedido de entrada e saida
 @app.route('/pedidoentrada')
 def pedidoentrada():
     return render_template('pedidoentrada.html', pedido_entrada=None)
@@ -356,21 +371,25 @@ def pedidosaida():
 def get_pedidoentrada_form():
     return {
         "pedidoentrada_produto": request.form.get("pedidoentrada_produto", "").strip(),
-        "pedidoentrada_quantidade": request.form.get("pedidoentrada_quantidade", "").strip(),
-        "pedidoentrada_fornecedor": request.form.get("pedidoentrada_fornecedor", "").strip()
+        "pedidoentrada_quantidade": to_int(request.form.get("pedidoentrada_quantidade"))
     }
 
-@app.route("/cadastrar_pedidoentrada", methods=["POST"])
+@app.route("/cadastrar_pedidoentrada")
 def salvar_pedidoentrada():
+    print("ola clara")
+    
     dados = get_pedidoentrada_form()
-    pedidoentrada = Pedido_entrada(**dados)
+    print(dados)
+
+    return render_template("dashboard.html")
+    #pedidoentrada = Pedido_entrada(**dados)
     
     '''erros = produto.validate()
     if erros :
         for erro in erros:
             flash(erro, "erro")
         return render_template("cadastroproduto.html", produto=dados)'''
-    
+    '''
     try:
         pedidoentrada.insert()
         flash("Pedido cadastrado com sucesso.", "sucesso")
@@ -384,7 +403,7 @@ def get_pedidosaida_form():
         "pedidosaida_produto": request.form.get("pedidosaida_produto", "").strip(),
         "pedidosaida_quantidade": request.form.get("pedidosaida_quantidade", "").strip(),
         "pedidosaida_cliente": request.form.get("pedidosaida_cliente", "").strip()
-    }
+    }'''
 
 @app.route("/cadastrar_pedidosaida", methods=["POST"])
 def salvar_pedidosaida():
@@ -404,9 +423,6 @@ def salvar_pedidosaida():
     except Exception as e:
         flash(f"Erro ao cadastrar pedido: {e}", "erro")
         return render_template("pedidosaida.html", pedido_saida=dados)
-
-if __name__ == "__main__":
-    app.run(debug=True)
 
 
 
