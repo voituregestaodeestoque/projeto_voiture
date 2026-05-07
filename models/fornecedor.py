@@ -1,5 +1,5 @@
 
-#Editado por Júlia em 07/05/2026 às 12h
+#Editado por Júlia em 07/05/2026 às 12h26
 
 from core.crud_base import CrudBase
 from core.database import Database
@@ -73,7 +73,6 @@ class Fornecedor(CrudBase):
     #Função para deletar com segurança
     @classmethod
     def safe_delete(cls, id):
-        print('delete', cls,id)
         fornecedor = cls.find_by_id(id)
         if not fornecedor:
             raise ValueError("Fornecedor não encontrado.")
@@ -81,6 +80,7 @@ class Fornecedor(CrudBase):
             raise ValueError("Não é possível excluir o fornecedor porque ele está vinculado a outros serviços.")
         cls.delete(id)
 
+    #Procura se o fornecedor em questão está relacionado com algum pedido de entrada
     @classmethod
     def has_related_records(cls, id):
         conexao = Database.connect()
