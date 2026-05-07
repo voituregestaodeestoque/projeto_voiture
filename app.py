@@ -1,5 +1,5 @@
 
-# Editado por Júlia em 07/05/2026 às 11h05
+# Editado por Ryan em 07/05/2026 às 11h08
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -92,6 +92,15 @@ def salvar_empilhadeira():
     except Exception as e:
         flash(f"Erro ao cadastrar empilhadeira: {e}", "erro")
         return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
+
+#Edição de um fornecedor já cadastrado
+@app.route("/editar_empilhadeira/<int:id>")
+def editar_empilhadeira(id):
+    empilhadeira = Empilhadeira.find_by_id(id)
+    if not empilhadeira:
+        flash("Empilhadeira não encontrada.", "erro")
+        return redirect(url_for("taeblaempilhadeira"))
+    return render_template("cadastroempilhadeira.html", empilhadeira=empilhadeira)
 
 #Atualização do cadastro de uma empilhadeira
 @app.route("/atualizar_empilhadeira/<int:id>", methods=["POST"])
