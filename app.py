@@ -1,5 +1,5 @@
 
-# Editado por Clarinha em 07/05/2026 às 12h02
+# Editado por Clarinha em 07/05/2026 às 12h13
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -424,21 +424,21 @@ def atualizar_fornecedor(id):
         flash(f"Erro ao atualizar fornecedor: {e}", "erro")
         return render_template("cadastrofornecedor.html", fornecedor=dados)
 
-#Deleta um fornecedor
-@app.route("/deletar_fornecedor<int:id>")
-def deletar_fornecedor(id):
 
+# Deleta um fornecedor
+@app.route("/deletar_fornecedor/<int:id>")
+def deletar_fornecedor(id):
     #Tenta deletar
     try:
-        fornecedor.safe_delete(id)
+        Fornecedor.safe_delete(id)
         flash("Fornecedor excluído com sucesso.", "sucesso")
-
     #Tratativa de erro
     except ValueError as e:
         flash(str(e), "erro")
     except Exception as e:
         flash(f"Erro ao excluir fornecedor: {e}", "erro")
     return redirect(url_for("listagem_fornecedor"))
+
 
 # -----> Fim: Fornecedor
 
