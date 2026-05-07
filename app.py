@@ -57,6 +57,12 @@ def landingpage():
 
 '''Empilhadeira Ryan Ribeiro'''
 
+# cadastrodeempilhadeira
+
+@app.route('/cadastroempilhadeira')
+def cadastroempilhadeira():
+    return render_template('cadastroempilhadeira.html')
+
 def get_empilhadeira_form():
     return {
         "empilhadeira_chassi": request.form.get("empilhadeira_chassi", "").strip(),
@@ -87,6 +93,37 @@ def salvar_empilhadeira():
         flash(f"Erro ao cadastrar empilhadeira: {e}", "erro")
         return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
 
+#Atualização do cadastro de uma empilhadeira
+@app.route("/atualizar_empilhadeira/<int:id>", methods=["POST"])
+def atualizar_empilhadeira(id):
+    dados = get_empilhadeira_form()
+    empilhadeira = Empilhadeira(**dados)
+
+    #Validação dos campos
+    erros = empilhadeira.validate()
+
+    #Tratativa de erro
+    if erros:
+        for erro in erros:
+            flash(erro, "erro")
+        dados["id"] = id
+        return render_template("cadastroempilhadeira.html", empilhadeira=dados)
+
+    #Procura da empilhadeira por id
+    try:
+        #ID não encontrado
+        if not Empilhadeira.find_by_id(id):
+            flash("Empilhadeira não encontrada.", "erro")
+            return redirect(url_for("tabelaempilhadeira"))
+
+        #Id encontrado, atualização possível
+        empilhadeira.update(id)
+        flash("Empilhadeira atualizada com sucesso.", "sucesso")
+        return redirect(url_for("tabelaempilhadeira"))
+    except Exception as e:
+        dados["id"] = id
+        flash(f"Erro ao atualizar empilhadeira: {e}", "erro")
+        return render_template("tabelaempilhadeira.html", empilhadeira=dados)
 
 
 @app.route('/tabelaempilhadeira')
@@ -167,37 +204,6 @@ def salvar_uso_empilhadeira():
         flash(f"Erro ao cadastrar uso de empilhadeira{e}", "erro")
         return render_template("cadastro_uso_empilhadeira.html", fornecedor=dados)
 
-# cadastrodeempilhadeira
-
-def get_cadastroempilhaderia_form():
-        return {
-        "cadastroempilhadeira_numero_chassi": request.form.get("cadastroempilhadeira_numero_chassi", "").strip(),
-        "cadastroempilhadeira_marca": request.form.get("cadastroempilhadeira_marca", "").strip(),
-        "cadastroempilhadeira_modelo": request.form.get("cadastroempilhadeira_modelo", "").strip(),
-    }
-
-@app.route('/cadastroempilhadeira')
-def cadastroempilhadeira():
-    return render_template('cadastroempilhadeira.html')
-
-@app.route("/salvar_cadastroempilhadeira", methods=["POST"])
-def salvar_cadastroempilhadeira():
-    dados = get_cadastroempilhadeira_form()
-    cadastroempilhadeira = cadastroempilhadeira(**dados)
-
-    '''erros = cadastroempilhadeira.validate()
-    if erros :
-        for erro in erros:
-            flash(erro, "erro")
-        return render_template("cadastroempilhadeira.html", cadastroempilhadeira=dados)'''
-
-    try:
-        cadastroempilhadeira.insert()
-        flash("cadastro de empilhadeira cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("menu"))
-    except Exception as e:
-        flash(f"Erro ao cadastrar empilhadeira: {e}", "erro")
-        return render_template("cadastroempilhadeira.html", cadastroempilhadeira=dados)
 
 def get_produto_form():
     return {

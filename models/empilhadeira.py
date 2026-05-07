@@ -21,9 +21,9 @@ class Empilhadeira(CrudBase):
         erros = []
 
         validacoes = [
-            Validator.validar_nome(self.fornecedor_nome, "fornecedor_nome"),
-            Validator.validar_cpf_cnpj(self.fornecedor_cnpj, "fornecedor_cnpj"),
-            Validator.validar_cep(self.fornecedor_cep, "fornecedor_cep")
+            Validator.validar_chassi(self.empilhadeira_chassi, "empilhadeira_chassi"),
+            Validator.validar_modelo(self.empilhadeira_modelo, "empilhadeira_modelo"),
+            Validator.validar_marca(self.empilhadeira_marca, "empilhadeira_marca")
         ]
         
         for itens in validacoes:

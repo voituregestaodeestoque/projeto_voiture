@@ -3,6 +3,7 @@ import datetime
 import requests
 
 #Validações revisadas pela Júlia em 30/04/2026
+#ultimas atualizações dia 07/05/2026 às 8
 
 class Validator:     
 
@@ -272,7 +273,7 @@ class Validator:
         return {"valida":True}
 
     #Validações adicionadas dia 05/05/2026 ryan ribeiro
-    #atualizações e finalizações no dia 07/05/2025 
+    #atualizações e finalizações no dia 07/05/2026
     def validar_chassi(value, field_name):
         #Não pode ter mais de 20 caracteres
         if len(value) > 20:
@@ -287,7 +288,12 @@ class Validator:
         #Não pode ter mais de 20 caracteres
         if len(value) > 20:
             return{"valida":False,"mensagem":f"O campo {field_name} não pode ter mais de 20 caracteres"}
-     
+    
+    def validar_status(value, field_name):
+        #Não pode ter mais de 10 caracteres
+        if len(value) > 10:
+            return{"valida":False,"mensagem":f"O campo {field_name} não pode ter mais de 10 caracteres"}
+    
 
 
 
