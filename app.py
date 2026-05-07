@@ -1,11 +1,12 @@
 
-# Editado por Clarinha em 05/05/2026 às 16h43
+# Editado por Júlia em 07/05/2026 às 09h07
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
 from models.empilhadeira import Empilhadeira
 from models.uso_empilhadeira import Uso_empilhadeira
 from models.fornecedor import Fornecedor
+from models.produto import Produto
 
 app = Flask(__name__)
 app.secret_key = "chave_secreta"
@@ -353,6 +354,48 @@ def listagem_fornecedor():
         'listagem_fornecedor.html',
         fornecedores=fornecedores
     )
+
+
+#Edição de um fornecedor já cadastrado
+@app.route("/editar_fornecedor/<int:id>")
+def editar_fornecedor(id):
+    fornecedor = Fornecedor.find_by_id(id)
+    if not fornecedor:
+        flash("Fornecedor não encontrado.", "erro")
+        return redirect(url_for("listagem_fornecedor"))
+    return render_template("cadastrofornecedor.html", fornecedor=fornecedor)
+
+#Atualização do cadastro de um fornecedor
+@app.route("/atualizar_fornecedor/<int:id>", methods=["POST"])
+def atualizar_fornecedor(id):
+    dados = get_fornecedor_form()
+    fornecedor = Fornecedor(**dados)
+
+    #Validação dos campos
+    erros = fornecedor.validate()
+
+    #Tratativa de erro
+    if erros:
+        for erro in erros:
+            flash(erro, "erro")
+        dados["id"] = id
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
+
+    #Procura do fornecedor por id
+    try:
+        #ID não encontrado
+        if not Fornecedor.find_by_id(id):
+            flash("Fornecedor não encontrado.", "erro")
+            return redirect(url_for("listagem_fornecedor"))
+
+        #Id encontrado, atualização possível
+        fornecedor.update(id)
+        flash("Fornecedor atualizado com sucesso.", "sucesso")
+        return redirect(url_for("listagem_fornecedor"))
+    except Exception as e:
+        dados["id"] = id
+        flash(f"Erro ao atualizar fornecedor: {e}", "erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
 
 # -----> Fim: Fornecedor
 
