@@ -1,5 +1,5 @@
 
-# Editado por Clarinha em 07/05/2026 às 09h29
+# Editado por Ryan em 07/05/2026 às 10h52
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -67,17 +67,17 @@ def get_empilhadeira_form():
     return {
         "empilhadeira_chassi": request.form.get("empilhadeira_chassi", "").strip(),
         "empilhadeira_modelo": request.form.get("empilhadeira_modelo", "").strip(),
-        "empilhadeira_marca": request.form.get("empilhadeira_marca", "").strip(),
+        "empilhadeira_marca": request.form.get("empilhadeira_marca", "").strip()
     }
 
 # Registro do fornecedor no banco de dados
-@app.route("/tabelaempilhadeira/salvar", methods=["POST"])
+@app.route("/salvar_empilhadeira", methods=["POST"])
 def salvar_empilhadeira():
     dados = get_empilhadeira_form()
     empilhadeira = Empilhadeira(**dados)
 
     #Validação
-    erros = Empilhadeira.validate()
+    erros = empilhadeira.validate()
 
     if erros :
         for erro in erros:
