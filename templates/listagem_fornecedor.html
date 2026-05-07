@@ -1,5 +1,5 @@
 
-<!--Editado por Júlia em 07/05/2026 às 12h-->
+<!--Editado por Júlia em 07/05/2026 às 12h28-->
 
 {% extends 'base.html' %}
 
@@ -55,11 +55,13 @@
                             <td>{{ fornecedor.fornecedor_telefone}}</td>
                             <td>{{ fornecedor.fornecedor_descricao }}</td>
                             <td class="text-end">
+                                <!--Botão de edição-->
                                 <a href="{{ url_for('editar_fornecedor', id=fornecedor.id) }}"
                                     class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-pencil"></i>
+                                    <i class="bi bi-pencil-square"></i>
                                 </a>
 
+                                <!--Botão de deletar-->
                                 <a href="{{ url_for('deletar_fornecedor', id=fornecedor.id) }}"
                                     class="btn btn-sm btn-outline-danger"
                                     onclick="return confirm('Tem certeza que deseja EXCLUIR esse fornecedor?')">
