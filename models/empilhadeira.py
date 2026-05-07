@@ -1,6 +1,7 @@
 from datetime import datetime
 from core.crud_base import CrudBase
 from core.database import Database
+from core.validator import Validator
 
 class Empilhadeira(CrudBase):
     table = "empilhadeira"
@@ -10,9 +11,9 @@ class Empilhadeira(CrudBase):
         "empilhadeira_modelo",
         "empilhadeira_marca"]
 
-    def __init__(self, empilhadeira_chassi, empilhadeira_status, empilhadeira_modelo, empilhadeira_marca):
+    def __init__(self, empilhadeira_chassi, empilhadeira_status="PENDENTE", empilhadeira_modelo="", empilhadeira_marca=""):
         self.empilhadeira_chassi = empilhadeira_chassi
-        self.empilhadeira_status = "INATIVO"
+        self.empilhadeira_status = empilhadeira_status
         self.empilhadeira_modelo = empilhadeira_modelo
         self.empilhadeira_marca = empilhadeira_marca
 

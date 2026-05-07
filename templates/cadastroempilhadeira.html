@@ -4,7 +4,7 @@
     <div class="login-card text-center bg-white">
         <h1>Cadastro de Empilhadeira</h1>
         
-            <form action="{% if empilhadeira and empilhadeira.id %}{{ url_for('atualizar_empilhadeira', id=empilhadeira.id) }}{% else %}{{ url_for('tabelaempilhadeira/salvar') }}{% endif %}" method="POST">
+            <form action="{% if empilhadeira and empilhadeira.id %}{{ url_for('atualizar_empilhadeira', id=empilhadeira.id) }}{% else %}{{ url_for('salvar_empilhadeira') }}{% endif %}" method="POST">
                 <div class="mb-3 text-start">
                     <div class="input-group mb-3">
                         <span class="input-group-text bg-dark border-secondary">

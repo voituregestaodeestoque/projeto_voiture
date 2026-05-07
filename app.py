@@ -1,5 +1,5 @@
 
-# Editado por Clarinha em 07/05/2026 às 09h29
+# Editado por Júlia em 07/05/2026 às 11h05
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -67,28 +67,28 @@ def get_empilhadeira_form():
     return {
         "empilhadeira_chassi": request.form.get("empilhadeira_chassi", "").strip(),
         "empilhadeira_modelo": request.form.get("empilhadeira_modelo", "").strip(),
-        "empilhadeira_marca": request.form.get("empilhadeira_marca", "").strip(),
+        "empilhadeira_marca": request.form.get("empilhadeira_marca", "").strip()
     }
 
 # Registro do fornecedor no banco de dados
-@app.route("/tabelaempilhadeira/salvar", methods=["POST"])
+@app.route("/salvar_empilhadeira", methods=["POST"])
 def salvar_empilhadeira():
     dados = get_empilhadeira_form()
     empilhadeira = Empilhadeira(**dados)
 
     #Validação
-    erros = Empilhadeira.validate()
+    erros = empilhadeira.validate()
 
     if erros :
         for erro in erros:
             flash(erro,"erro")
-        return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
+        return render_template("cadastroempilhadeira.html", empilhadeiras=dados)
 
     #Cadastro
     try:
-        fornecedor.insert()
+        empilhadeira.insert()
         flash("Empilhadeira cadastrada com sucesso.", "sucesso")
-        return redirect(url_for("base"))
+        return redirect(url_for("tabelaempilhadeira"))
     except Exception as e:
         flash(f"Erro ao cadastrar empilhadeira: {e}", "erro")
         return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
@@ -402,6 +402,22 @@ def atualizar_fornecedor(id):
         dados["id"] = id
         flash(f"Erro ao atualizar fornecedor: {e}", "erro")
         return render_template("cadastrofornecedor.html", fornecedor=dados)
+
+#Deleta um fornecedor
+@app.route("/deletar_fornecedor<int:id>")
+def deletar_fornecedor(id):
+
+    #Tenta deletar
+    try:
+        Fornecedor.safe_delete(id)
+        flash("Fornecedor excluído com sucesso.", "sucesso")
+
+    #Tratativa de erro
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao excluir fornecedor: {e}", "erro")
+    return redirect(url_for("listagem_fornecedor"))
 
 # -----> Fim: Fornecedor
 
