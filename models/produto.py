@@ -5,7 +5,7 @@ from core.database import Database
 from core.validator import Validator
 
 class Produto(CrudBase):
-    table = "Produto"
+    table = "produto"
     fields = [
         'produto_nome',
         'produto_descricao', 
@@ -46,6 +46,18 @@ class Produto(CrudBase):
                 erros.append(itens["mensagem"])
 
         return erros
+
+    @classmethod
+    def produto_listagem(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT * FROM produto"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
 
     
 """

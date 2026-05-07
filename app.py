@@ -214,7 +214,7 @@ def listar_produto():
     produtos = Produto.produto_listagem()
     return render_template(
         'listagem_produto.html',
-        produtos=produtos)
+        produto=produtos)
 
 
 
