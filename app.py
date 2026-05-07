@@ -1,5 +1,5 @@
 
-# Editado por Ryan em 07/05/2026 às 11h08
+# Editado por Clarinha em 07/05/2026 às 12h02
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -195,6 +195,13 @@ def get_produto_form():
     }
 
 @app.route("/listagem_produto")
+def listar_produto():
+    produtos = Produto.produto_listagem()
+    return render_template(
+        'listagem_produto.html',
+        produtos=produtos)
+
+
 
 @app.route("/cadastrar_produto", methods=["POST"])
 def salvar_produto():
@@ -221,7 +228,7 @@ def editar_produto(id):
     produto = Produto.find_by_id(id)
     if not produto:
         flash("Produto não encontrado.", "erro")
-        return redirect(url_for("produtos"))
+        return redirect(url_for("listar_produto"))
     return render_template("cadastroproduto.html", produto=produto)
 
 
@@ -235,20 +242,20 @@ def atualizar_produto(id):
         for erro in erros:
             flash(erro, "erro")
         dados["id"] = id
-        return render_template("formulario_produto.html", produto=dados)
+        return render_template("cadastroproduto.html", produto=dados)
 
     try:
         if not Produto.find_by_id(id):
             flash("Produto não encontrado.", "erro")
-            return redirect(url_for("produtos"))
+            return redirect(url_for("listar_produto"))
 
         produto.update(id)
         flash("Produto atualizado com sucesso.", "sucesso")
-        return redirect(url_for("produtos"))
+        return redirect(url_for("listar_produto"))
     except Exception as e:
         dados["id"] = id
         flash(f"Erro ao atualizar produto: {e}", "erro")
-        return render_template("formulario_produto.html", produto=dados)
+        return render_template("cadastroproduto.html", produto=dados)
 
 def get_funcionario_form():
     return {
