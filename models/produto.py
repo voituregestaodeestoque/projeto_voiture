@@ -1,4 +1,4 @@
-#atualizado por clarinha 07/05 às 09h49
+#atualizado por clarinha 07/05 às 11h04
 
 from core.crud_base import CrudBase
 from core.database import Database
@@ -29,16 +29,23 @@ class Produto(CrudBase):
         self.produto_localizacao = produto_localizacao
 
 
-
     def validate(self):
-        erros = [
+        erros = []
+
+        validacoes = [
             Validator.required(self.produto_nome, "produto_nome"),
-            Validator.validar(self.produto_quantidade_minima, "produto_quantidade_minima"),
+            Validator.validar_quantidade(self.produto_quantidade_minima, "produto_quantidade_minima"),
             Validator.validar_preco(self.produto_preco_custo, "produto_preco_custo"),
             Validator.validar_preco(self.produto_preco_venda, "produto_preco_venda"),
-            Validator.validar_peso(self.produto_peso, "produto_peso")
+            Validator.validar_peso(self.produto_peso, "produto_peso"),
+            Validator.validar_localizacao(self.produto_localizacao, "produto_localizacao")
         ]
-        return [erro for erro in erros if erro]
+        
+        for itens in validacoes:
+            if not itens['valida']:
+                erros.append(itens["mensagem"])
+
+        return erros
 
     
 """

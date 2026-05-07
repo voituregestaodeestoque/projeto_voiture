@@ -1,3 +1,5 @@
+#atualizado por clarinha 07/05 às 11h04
+
 import urllib.parse
 import datetime
 import requests
@@ -11,8 +13,8 @@ class Validator:
     @staticmethod
     def required(value, field_name):
         if value is None or str(value).strip() == "":
-            return f"O campo {field_name} é obrigatório."
-        return None
+            return{"valida":False, "mensagem":f"o campo {field_name} é obrigatório"}
+        return {"valida": True}
 
     @staticmethod
     def non_negative(value, field_name):
@@ -298,6 +300,37 @@ class Validator:
         if len(value) > 10:
             return{"valida":False,"mensagem":f"O campo {field_name} não pode ter mais de 10 caracteres"}
     
+    @staticmethod
+    def validar_localizacao(value, field_name):
+        for caractere in (value):
+            if caractere.isdigit():
+                return{"valida":False, "mensagem":f"O campo {field_name} não pode haver números"}
+
+        tem_maiuscula = False
+        for caractere in (value):
+            if caractere.isupper():
+                tem_maiuscula = True
+                break
+        if not tem_maiuscula:
+            return{"valida":False,"mensagem":f"O campo {field_name} deve ter apenas letras maiúsculas"}
+
+        tem_minuscula = True
+        for caractere in (value):
+            if caractere.islower():
+                tem_minuscula = False
+                break
+        if tem_minuscula:
+            return{"valida": False, "mensagem":f"O campo {field_name} não deve ter letras minúsculas"}
+
+        return{"valida":True}
+
+
+
+        
+
+
+        
+
 
 
 
