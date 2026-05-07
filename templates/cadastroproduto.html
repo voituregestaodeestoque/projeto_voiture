@@ -1,4 +1,4 @@
-<!--Atualizado por clarinha às 09h11 do dia 07/05-->
+<!--atualizado por clarinha 07/05 às 09h49-->
 
 {% extends 'base.html' %}
 
@@ -18,6 +18,7 @@
         <form class="mb-3" action="{{ url_for('salvar_produto') }}" method="POST">
             <div class="row">
                 <div class="col-md-6 mb-3">
+                    <label for="produto_nome">Nome do produto</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-box text-white"></i>
@@ -27,6 +28,7 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
+                    <label for="produto_categoria">Categoria</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-box text-white"></i>
@@ -37,6 +39,7 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
+                    <label for="produto_localizacao">Localização</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-geo-alt-fill text-white"></i>
@@ -48,6 +51,7 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
+                    <label for="produto_quantidade_minima"> Estoque mínimo</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-basket2-fill text-white"></i>
@@ -59,31 +63,34 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
+                    <label for="produto_peso">Peso</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-hammer text-white"></i>
                         </span>
-                        <input type="text" name="produto_peso" class="form-control" id="produto_peso" placeholder="Peso" required>
+                        <input type="text" name="produto_peso" class="form-control" id="produto_peso" placeholder="Peso em kg" required>
                     </div>
                 </div>
 
                 <div class="col-md-4 mb-3">
+                    <label for="produto_preco_custo">Preço de custo</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-gear-fill text-white"></i>
                         </span>
-                        <input type="text" name="produto_preco_custo" class="form-control" id="produto_preco_custo" placeholder="Preço de custo"
+                        <input type="text" name="produto_preco_custo" class="form-control" id="produto_preco_custo" placeholder="Preço de custo em R$"
                         required>
                     </div>
                     
                 </div>
 
                 <div class="col-md-4 mb-3">
+                    <label for="produto_preco_venda">Preço de venda</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-gear-fill text-white"></i>
                         </span>
-                        <input type="text" name="produto_preco_venda" class="form-control" id="produto_preco_venda" placeholder="Preço de venda"
+                        <input type="text" name="produto_preco_venda" class="form-control" id="produto_preco_venda" placeholder="Preço de venda em R$"
                         required>
                     </div>
                 </div>
