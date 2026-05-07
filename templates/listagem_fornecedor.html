@@ -60,9 +60,9 @@
                                     <i class="bi bi-pencil"></i>
                                 </a>
 
-                                <a href=""
+                                <a href="{{ url_for('excluir_fornecedor', id=fornecedor.id) }}"
                                     class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Deseja excluir este produto?')">
+                                    onclick="return confirm('Tem certeza que deseja EXCLUIR esse fornecedor?')">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </td>

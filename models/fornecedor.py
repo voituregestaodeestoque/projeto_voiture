@@ -69,4 +69,15 @@ class Fornecedor(CrudBase):
             cursor.close()
             conexao.close()
 
+
+    #Função para deletar com segurança
+    @classmethod
+    def safe_delete(cls, id):
+        fornecedor = cls.find_by_id(id)
+        if not fornecedor:
+            raise ValueError("Fornecedor não encontrado.")
+        if cls.has_related_records(id):
+            raise ValueError("Não é possível excluir o fornecedor porque ele está vinculado a outros serviços.")
+        cls.delete(id)
+
     
