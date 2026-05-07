@@ -82,13 +82,13 @@ def salvar_empilhadeira():
     if erros :
         for erro in erros:
             flash(erro,"erro")
-        return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
+        return render_template("cadastroempilhadeira.html", empilhadeiras=dados)
 
     #Cadastro
     try:
-        fornecedor.insert()
+        empilhadeira.insert()
         flash("Empilhadeira cadastrada com sucesso.", "sucesso")
-        return redirect(url_for("base"))
+        return redirect(url_for("tabelaempilhadeira"))
     except Exception as e:
         flash(f"Erro ao cadastrar empilhadeira: {e}", "erro")
         return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
