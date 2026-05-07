@@ -1,5 +1,5 @@
 
-#Editado por Júlia em 05/05/2026 às 13h55
+#Editado por Júlia em 07/05/2026 às 12h
 
 from core.crud_base import CrudBase
 from core.database import Database
@@ -65,6 +65,35 @@ class Fornecedor(CrudBase):
             sql = "SELECT * FROM fornecedor"
             cursor.execute(sql)
             return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
+
+
+    #Função para deletar com segurança
+    @classmethod
+    def safe_delete(cls, id):
+        print('delete', cls,id)
+        fornecedor = cls.find_by_id(id)
+        if not fornecedor:
+            raise ValueError("Fornecedor não encontrado.")
+        if cls.has_related_records(id):
+            raise ValueError("Não é possível excluir o fornecedor porque ele está vinculado a outros serviços.")
+        cls.delete(id)
+
+    @classmethod
+    def has_related_records(cls, id):
+        conexao = Database.connect()
+        cursor = conexao.cursor()
+        try:
+            queries = [
+                "SELECT COUNT(*) FROM pedido_entrada WHERE fornecedor_id = %s"
+            ]
+            total = 0
+            for sql in queries:
+                cursor.execute(sql, (id,))
+                total += cursor.fetchone()[0]
+            return total > 0
         finally:
             cursor.close()
             conexao.close()
