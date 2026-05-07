@@ -1,105 +1,30 @@
+<!--Raica Gabriele de Lima - 05/05/2026 - 16:42 -->
 {% extends 'base.html' %}
 
 {% block conteudo %}
-<div class="container-fluid">
+<h2>Movimentação de Entrada</h2>
 
-    <!-- TÍTULO + BOTÃO -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="titulo-pagina">
-                <i class="bi bi-box-seam"></i> Movimentação de Entrada
-            </h2>
-        </div>
-
-
-        <a href="{{ url_for('cadastroempilhadeira') }}" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Cadastro de Movimentação
-        </a>
-
-    </div>
-
-    <!-- CARD -->
-    <div class="card shadow-sm">
-        <div class="card-body">
-
-            {% if empilhadeiras %}
-
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-
-                    <thead class="table-light">
-                        <tr>
-                            <th>#</th>
-                            <th>ID Produto</th>
-                            <th>ID Cliente</th>
-                            <th>ID Estoque</th>
-                            <th>Data de Entrada</th>
-                            <th>Produto</th>
-                            <th>Quantidade</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for empilhadeira in empilhadeiras %}
-                        <td>{{ empilhadeira.id }}</td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ empilhadeira.empilhadeira_status }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ empilhadeira.funcionario_nome }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <strong>{{ empilhadeira.empilhadeira_chassi }}</strong>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ empilhadeira.empilhadeira_modelo }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ empilhadeira.empilhadeira_marca }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ empilhadeira.uso_empilhadeira_datahora }}
-                            </span>
-                        </td>
-
-                        
-
-                        
-
-                        {% endfor %}
-                    </tbody>
-
-                </table>
-            </div>
-
-            {% else %}
-
-            <div class="alert alert-info mb-0">
-                <i class="bi bi-info-circle"></i>
-                Nenhum produto cadastrado.
-            </div>
-
-            {% endif %}
-
-        </div>
-    </div>
-
-</div>
-
+{% if produtos_baixo %}
+<table>
+    <tr>
+        <th>ID Produto</th>
+        <th>ID Fornecedor</th>
+        <th>ID Estoque</th>
+        <th>Data de Entrada</th>
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Status</th>
+    </tr>
+    {% for produto in produtos_baixo %}
+    <tr>
+        <td>{{ produto.nome }}</td>
+        <td>{{ produto.categoria }}</td>
+        <td>{{ produto.quantidade }}</td>
+        <td>{{ produto.estoque_minimo }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Nenhum produto com estoque baixo.</p>
+{% endif %}
 {% endblock %}
