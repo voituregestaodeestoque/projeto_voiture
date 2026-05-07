@@ -1,5 +1,5 @@
 
-# Editado por Júlia em 07/05/2026 às 09h07
+# Editado por Clarinha em 07/05/2026 às 09h29
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -225,7 +225,7 @@ def salvar_produto():
     try:
         produto.insert()
         flash("Produto cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("menu"))
+        return redirect(url_for("base"))
     except Exception as e:
         flash(f"Erro ao cadastrar produto: {e}", "erro")
         return render_template("cadastroproduto.html", produto=dados)
@@ -294,7 +294,7 @@ def salvar_cliente():
     try:
         cliente.insert()
         flash("cliente cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("menu"))
+        return redirect(url_for("base"))
     except Exception as e:
         flash(f"Erro ao cadastrar cliente: {e}", "erro")
         return render_template("cliente.html", cliente=dados)
