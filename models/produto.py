@@ -1,3 +1,5 @@
+#atualizado por clarinha 07/05 às 09h49
+
 from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
@@ -27,16 +29,19 @@ class Produto(CrudBase):
         self.produto_localizacao = produto_localizacao
 
 
-"""
+
     def validate(self):
         erros = [
-            Validator.required(self.produto_nome, "nome"),
-            Validator.non_negative(self.produto_quantidade_minima, "quantidade minima"),
-            Validator.non_negative(self.produto_preco_custo, "preço de custo"),
-            Validator.non_negative(self.produto_preco_venda, "preço de venda")
+            Validator.required(self.produto_nome, "produto_nome"),
+            Validator.validar(self.produto_quantidade_minima, "produto_quantidade_minima"),
+            Validator.validar_preco(self.produto_preco_custo, "produto_preco_custo"),
+            Validator.validar_preco(self.produto_preco_venda, "produto_preco_venda"),
+            Validator.validar_peso(self.produto_peso, "produto_peso")
         ]
         return [erro for erro in erros if erro]
 
+    
+"""
     @classmethod
     def low_stock(cls):
         conexao = Database.connect()

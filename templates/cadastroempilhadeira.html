@@ -4,13 +4,13 @@
     <div class="login-card text-center bg-white">
         <h1>Cadastro de Empilhadeira</h1>
         
-            <form action="">
+            <form action="{% if empilhadeira and empilhadeira.id %}{{ url_for('atualizar_empilhadeira', id=empilhadeira.id) }}{% else %}{{ url_for('tabelaempilhadeira/salvar') }}{% endif %}" method="POST">
                 <div class="mb-3 text-start">
                     <div class="input-group mb-3">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-envelope text-white"></i>
                         </span>
-                        <input type="text" name="empilhadeira_chassi" id="numero_chassi" class="form-control" placeholder="Número do Chassi::" required>
+                        <input type="text" name="empilhadeira_chassi" id="numero_chassi" class="form-control" placeholder="Número do Chassi::" required value="{{ empilhadeira.empilhadeira_chassi if empilhadeira else '' }}">
 
                     </div>
 
@@ -18,7 +18,7 @@
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-envelope text-white"></i>
                         </span>
-                        <input type="text" name="empilhadeira_marca" id="marca" class="form-control" placeholder="Marca:" required>
+                        <input type="text" name="empilhadeira_marca" id="marca" class="form-control" placeholder="Marca:" required value="{{ empilhadeira.empilhadeira_marca if empilhadeira else '' }}">
 
                     </div>
 
@@ -28,7 +28,7 @@
                             <span class="input-group-text bg-dark border-secondary">
                                 <i class="bi bi-envelope text-white"></i>
                             </span>
-                            <input type="text" name="empilhadeira_modelo" id="modelo" class="form-control" placeholder="Modelo:" required>
+                            <input type="text" name="empilhadeira_modelo" id="modelo" class="form-control" placeholder="Modelo:" required value="{{ empilhadeira.empilhadeira_modelo if empilhadeira else '' }}">
 
                         </div>
 
