@@ -382,7 +382,7 @@ def salvar_fornecedor():
     try:
         fornecedor.insert()
         flash("Fornecedor cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("base"))
+        return redirect(url_for("listagem_fornecedor"))
     except Exception as e:
         flash(f"Erro ao cadastrar fornecedor: {e}", "erro")
         return render_template("cadastrofornecedor.html", fornecedor=dados)

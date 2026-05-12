@@ -60,7 +60,6 @@ class Empilhadeira(CrudBase):
     #Função para deletar com segurança
     @classmethod
     def safe_delete(cls, id):
-        print('delete', cls,id)
         empilhadeira = cls.find_by_id(id)
         if not empilhadeira:
             raise ValueError("Empilhadeira não encontrada.")
@@ -74,7 +73,7 @@ class Empilhadeira(CrudBase):
         cursor = conexao.cursor()
         try:
             queries = [
-                "SELECT COUNT(*) FROM pedido_entrada WHERE empilhadeira_id = %s"
+                "SELECT COUNT(*) FROM uso_empilhadeira WHERE empilhadeira_id = %s"
             ]
             total = 0
             for sql in queries:
