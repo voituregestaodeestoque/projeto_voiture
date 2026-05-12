@@ -1,5 +1,5 @@
 
-# Editado por Ryan em 07/05/2026 às alguma hora aí
+# Editado por Ryan em 12/05/2026 às 11:50
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -7,6 +7,7 @@ from models.empilhadeira import Empilhadeira
 from models.uso_empilhadeira import Uso_empilhadeira
 from models.fornecedor import Fornecedor
 from models.produto import Produto
+from models.cliente import Cliente
 
 app = Flask(__name__)
 app.secret_key = "chave_secreta"
@@ -304,19 +305,28 @@ def salvar_funcionario():
         flash(f"Erro ao cadastrar funcionario: {e}", "erro")
         return render_template("cadastrofuncionario.html", funcionario=dados)
 
-# cliente
+#=====================================================================================#
+
+# cliente atualizado por Ryan dia 12/05/26 às 9:00
 
 def get_cliente_form():
         return {
         "cliente_nome": request.form.get("cliente_nome", "").strip(),
-        "cliente_senha": request.form.get("cliente_senha", "").strip(),
         "cliente_cnpj": request.form.get("cliente_cnpj", "").strip(),
         "cliente_cep": request.form.get("cliente_cep", "").strip(),
+        "cliente_email": request.form.get("cliente_email", "").strip(),
         "cliente_ddi": request.form.get("cliente_ddi", "").strip(),
         "cliente_ddd": request.form.get("cliente_ddi", "").strip(),
         "cliente_telefone": request.form.get("cliente_telefone", "").strip(),
         "cliente_descricao": request.form.get("funcionario_descricao", "").strip(),
     }
+
+@app.route("/listagem_cliente")
+def listagem_cliente():
+    clientes = Cliente.cliente_listagem()
+    return render_template(
+        'listagem_cliente.html',
+        clientes=clientes)
 
 @app.route('/cliente')
 def cliente():
@@ -325,21 +335,80 @@ def cliente():
 @app.route("/salvar_cliente", methods=["POST"])
 def salvar_cliente():
     dados = get_cliente_form()
-    cliente = cliente(**dados)
+    cliente = Cliente(**dados)
 
-    '''erros = cliente.validate()
+    erros = cliente.validate()
     if erros :
         for erro in erros:
             flash(erro, "erro")
-        return render_template("cliente.html", cliente=dados)'''
+        return render_template("cadastrocliente.html", cliente=dados)
 
     try:
         cliente.insert()
-        flash("cliente cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("base"))
+        flash("Cliente cadastrado com sucesso.", "sucesso")
+        return redirect(url_for("listagem_cliente"))
     except Exception as e:
         flash(f"Erro ao cadastrar cliente: {e}", "erro")
-        return render_template("cliente.html", cliente=dados)
+        return render_template("cadastrocliente.html", cliente=dados)
+
+#Edição de um cliente já cadastrado
+@app.route("/editar_cliente/<int:id>")
+def editar_cliente(id):
+    cliente = Cliente.find_by_id(id)
+    if not cliente:
+        flash("Cliente não encontrado.", "erro")
+        return redirect(url_for("listagem_cliente"))
+    return render_template("cadastrocliente.html", cliente=cliente)
+
+#Atualização do cadastro de um cliente
+@app.route("/atualizar_cliente/<int:id>", methods=["POST"])
+def atualizar_cliente(id):
+    dados = get_cliente_form()
+    cliente = Cliente(**dados)
+
+    #Validação dos campos
+    erros = cliente.validate()
+
+    #Tratativa de erro
+    if erros:
+        for erro in erros:
+            flash(erro, "erro")
+        dados["id"] = id
+        return render_template("cadastrocliente.html", cliente=dados)
+
+    #Procura do cliente por id
+    try:
+        #ID não encontrado
+        if not Cliente.find_by_id(id):
+            flash("Cliente não encontrado.", "erro")
+            return redirect(url_for("listagem_fornecedor"))
+
+        #Id encontrado, atualização possível
+        cliente.update(id)
+        flash("Cliente atualizado com sucesso.", "sucesso")
+        return redirect(url_for("listagem_cliente"))
+    except Exception as e:
+        dados["id"] = id
+        flash(f"Erro ao atualizar cliente: {e}", "erro")
+        return render_template("cadastrocliente.html", cliente=dados)
+
+
+# Deleta um cliente
+@app.route("/deletar_cliente/<int:id>")
+def deletar_cliente(id):
+    #Tenta deletar
+    try:
+        Cliente.safe_delete(id)
+        flash("Cliente excluído com sucesso.", "sucesso")
+    #Tratativa de erro
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao excluir cliente: {e}", "erro")
+    return redirect(url_for("listagem_cliente"))
+
+
+# -----> Fim: Cliente
 
 
 
