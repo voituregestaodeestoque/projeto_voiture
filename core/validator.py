@@ -324,6 +324,14 @@ class Validator:
 
         return{"valida":True}
 
+    @staticmethod
+    def validar_descricao(value, field_name):
+        #Não pode ter mais de 700 caracteres
+        if len(value) > 700:
+            return{"valida":False,"mensagem":f"O campo {field_name} atingiu o limite de caracteres"}
+
+        return{"valida":True}
+    
 
 
         
