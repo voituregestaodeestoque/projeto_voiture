@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 
  {% block conteudo %}
+ <div class="mb-4">
+    <h2 class="titulo-pagina">
+        <i class="bi bi-person-fill"></i>
+        {{ 'Editar Empilhadeira' if empilhadeira and empilhadeira.id else 'Cadastrar empilhadeira' }}
+    </h2>
+</div>
     <div class="login-card text-center bg-white">
-        <h1>Cadastro de Empilhadeira</h1>
-        
             <form action="{% if empilhadeira and empilhadeira.id %}{{ url_for('atualizar_empilhadeira', id=empilhadeira.id) }}{% else %}{{ url_for('salvar_empilhadeira') }}{% endif %}" method="POST">
                 <div class="mb-3 text-start">
                     <!--Campo Número de chassi-->
-                    <label for="empilhadeira_chassi" class="form-label">Número de Chassi:</label>
+                    <label for="empilhadeira_chassi" class="form-label">Número de Chassi</label>
                     <div class="input-group mb-3">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-envelope text-white"></i>
@@ -17,7 +21,7 @@
                     </div>
 
                     <!--Campo Marca da empilhadeira-->
-                    <label for="empilhadeira_marca" class="form-label">Marca da empilhadeira:</label>
+                    <label for="empilhadeira_marca" class="form-label">Marca da empilhadeira</label>
                     <div class="input-group mb-3">
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-envelope text-white"></i>
@@ -27,7 +31,7 @@
                     </div>
 
                     <!--Campo Modelo da empilhadeira-->
-                    <label for="empilhadeira_modelo" class="form-label">Modelo da empilhadeira:</label>
+                    <label for="empilhadeira_modelo" class="form-label">Modelo da empilhadeira</label>
 
                         <div class="input-group mb-3" style="max-width: 100%;">
                             <span class="input-group-text bg-dark border-secondary">

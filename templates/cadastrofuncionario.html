@@ -5,12 +5,12 @@
         <div class="mb-4">
             <h2 class="titulo-pagina">
                 <i class="bi bi-person"></i>
-                {{ 'Editar Funcionário' if produto and produto.id else 'Cadastrar Funcionário' }}
+                {{ 'Editar Funcionário' if funcionario and funcionario.id else 'Cadastrar Funcionário' }}
             </h2>
         </div>
         <div class="container-fluid Card-principal text-center bg-white rounded">
             
-            <form class="mb-3" action="{{ url_for('salvar_funcionario') }}" method="POST">
+            <form class="mb-3" action="{% if funcionario and funcionario.id %}{{ url_for('atualizar_funcionario', id=funcionario.id) }}{% else %}{{ url_for('salvar_funcionario') }}{% endif %}" method="POST">
                 <!--Campo Nome-->
                 <div class="mb-3 text-start">
                     <div class="input-group">
@@ -93,7 +93,7 @@
 
                     </div>
                 </div>
-                <button class="btn btn-primary w-100" type="submit">Cadastrar</button>
+                <button class="btn btn-primary w-100" type="submit">{{ 'Atualizar' if funcionario and funcionario.id else 'Cadastrar' }}</button>
             </form>
             
         </div>

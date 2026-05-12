@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     <!--favicon-->
-    <link rel="shortcut icon" href="../favicons do voiture/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicons do voiture/favicon.ico') }}" type="image/x-icon">
 
 </head>
 <body>
@@ -61,7 +61,7 @@
                 <i class="bi bi-person-fill"></i> Fornecedores
             </a>
 
-            <a href="{{ url_for('cadastro_funcionario') }}" class="{% if request.endpoint == 'cadastro_funcionario' %}active{% endif %}">
+            <a href="{{ url_for('listagem_funcionario') }}" class="{% if request.endpoint == 'cadastro_funcionario' or request.endpoint == 'listagem_funcionario' %}active{% endif %}">
                 <i class="bi bi-box-seam"></i> Gestão
             </a>
             <a href="{{ url_for('listar_produto') }}" class="{% if request.endpoint == 'produto' %}active{% endif %}">
