@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+<!--Editado por Ryan em 12/05/2026 às 14h28-->
+
+{% block conteudo %}
+
+<div class="container-fluid"> 
+
+    <!-- TÍTULO + BOTÃO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="titulo-pagina">Funcionário</h2>
+            <p class="text-muted mb-0">Gerencie os funcionários do sistema</p>
+        </div>
+
+        <a href="{{ url_for('cadastro_funcionario') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Novo Funcionário</a>
+    </div>
+
+    <!-- CARD -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <!--Criação de tabela em caso de funcionários cadastrados-->
+            <div class="table-responsive">
+                {% if funcionarios %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <!--Colunas da tabela-->
+                            <th scope="col">#</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Senha</th>
+                            <th scope="col">CPF</th>
+                            <th scope="col">CEP</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">DDI</th>
+                            <th scope="col">DDD</th>
+                            <th scope="col">Telefone</th>
+                            <th scope="col">Cargo</th>
+                            <th scope="col" class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for funcionario in funcionarios %}
+                        <tr>
+                            <!--Valores do banco que deverão aparecer-->
+                            <th scope="row">{{ funcionario.id }}</th>
+                            <td>{{ funcionario.funcionario_nome }}</td>
+                            <td>{{ funcionario.funcionario_senha }}</td>
+                            <td>{{ funcionario.funcionario_cpf }}</td>
+                            <td>{{ funcionario.funcionario_cep }}</td>
+                            <td>{{ funcionario.funcionario_email }}</td>
+                            <td>{{ funcionario.funcionario_ddi }}</td>
+                            <td>{{ funcionario.funcionario_ddd }}</td>
+                            <td>{{ funcionario.funcionario_telefone}}</td>
+                            <td>{{ funcionario.funcionario_cargo }}</td>
+                            <td class="text-end">
+                                <!--Botão de edição-->
+                                <a href="{{ url_for('editar_funcionario', id=funcionario.id) }}"
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+
+                                <!--Botão de deletar-->
+                                <a href="{{ url_for('deletar_funcionario', id=funcionario.id) }}"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Tem certeza que deseja EXCLUIR esse funcionario?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% else %}
+            
+            <!--Mensagem em caso de não ter funcionarios cadastrados-->
+            <div class="alert alert-info mb-0">
+                <i class="bi bi-info-circle"></i>
+                Nenhum funcionário cadastrado.
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
