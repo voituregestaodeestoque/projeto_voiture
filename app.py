@@ -1,5 +1,5 @@
 
-# Editado por Ryan em 12/05/2026 às 11:50
+# Editado por Clarinha em 14/05/2026 às 11h38
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -29,7 +29,7 @@ def to_float(value, default=0.0):
 def inicio():
     return redirect(url_for("base"))
 
-@app.route('/cadastroproduto')
+@app.route('/produtos')
 def produtos():
     return render_template('cadastroproduto.html')
 
@@ -210,15 +210,14 @@ def get_produto_form():
     }
 
 @app.route("/listagem_produto")
-def listar_produto():
+def listagem_produto():
     produtos = Produto.produto_listagem()
-    return render_template(
-        'listagem_produto.html',
+    return render_template('listagem_produto.html',
         produto=produtos)
 
 
 
-@app.route("/cadastrar_produto", methods=["POST"])
+@app.route("/salvar_produto", methods=["POST"])
 def salvar_produto():
     dados = get_produto_form()
     produto = Produto(**dados)
@@ -232,10 +231,12 @@ def salvar_produto():
     try:
         produto.insert()
         flash("Produto cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("base"))
+        return redirect(url_for("listagem_produto"))
     except Exception as e:
         flash(f"Erro ao cadastrar produto: {e}", "erro")
         return render_template("cadastroproduto.html", produto=dados)
+
+
 
 
 @app.route("/produto/editar/<int:id>")
@@ -243,7 +244,7 @@ def editar_produto(id):
     produto = Produto.find_by_id(id)
     if not produto:
         flash("Produto não encontrado.", "erro")
-        return redirect(url_for("listar_produto"))
+        return redirect(url_for("listagem_produto"))
     return render_template("cadastroproduto.html", produto=produto)
 
 
@@ -262,15 +263,29 @@ def atualizar_produto(id):
     try:
         if not Produto.find_by_id(id):
             flash("Produto não encontrado.", "erro")
-            return redirect(url_for("listar_produto"))
+            return redirect(url_for("listagem_produto"))
 
         produto.update(id)
         flash("Produto atualizado com sucesso.", "sucesso")
-        return redirect(url_for("listar_produto"))
+        return redirect(url_for("listagem_produto"))
     except Exception as e:
         dados["id"] = id
         flash(f"Erro ao atualizar produto: {e}", "erro")
         return render_template("cadastroproduto.html", produto=dados)
+
+
+@app.route("/deletar_produto/<int:id>")
+def deletar_produto(id):
+    #Tenta deletar
+    try:
+        Produto.safe_delete(id)
+        flash("Produto excluído com sucesso.", "sucesso")
+    #Tratativa de erro
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao excluir produto: {e}", "erro")
+    return redirect(url_for("listagem_produto"))
 
 #===================================================================================
 

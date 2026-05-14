@@ -64,8 +64,8 @@
             <a href="{{ url_for('listagem_funcionario') }}" class="{% if request.endpoint == 'cadastro_funcionario' or request.endpoint == 'listagem_funcionario' %}active{% endif %}">
                 <i class="bi bi-box-seam"></i> Gestão
             </a>
-            <a href="{{ url_for('listar_produto') }}" class="{% if request.endpoint == 'produto' %}active{% endif %}">
-                <i class="bi bi-box-seam"></i> Produtos
+            <a href="{{ url_for('listagem_produto') }}" class="{% if request.endpoint == 'produtos' or request.endpoint == 'listagem_produto'  %}active{% endif %}">
+                <i class="bi bi-box-fill"></i> Produtos
             </a>
 
         </nav>

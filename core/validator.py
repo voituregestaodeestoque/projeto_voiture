@@ -314,14 +314,6 @@ class Validator:
         if not tem_maiuscula:
             return{"valida":False,"mensagem":f"O campo {field_name} deve ter apenas letras maiúsculas"}
 
-        tem_minuscula = True
-        for caractere in (value):
-            if caractere.islower():
-                tem_minuscula = False
-                break
-        if tem_minuscula:
-            return{"valida": False, "mensagem":f"O campo {field_name} não deve ter letras minúsculas"}
-
         return{"valida":True}
 
     @staticmethod
