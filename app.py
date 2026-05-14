@@ -326,6 +326,18 @@ def salvar_funcionario():
             flash(erro, "erro")
         return render_template("cadastrofuncionario.html", funcionario=dados)
     
+    cpf=request.form.get("funcionario_cpf", "").strip()
+    cpf1=funcionario.cpf_existente(cpf)
+    if cpf1:
+        flash("CPF já cadastrado!","erro")
+        return render_template("cadastrofuncionario.html", funcionario=dados)
+
+    email=request.form.get("funcionario_email", "").strip()
+    email1=funcionario.email_existente(email)
+    if email1:
+        flash("Email já cadastrado!","erro")
+        return render_template("cadastrofuncionario.html", funcionario=dados)
+    
     try:
         funcionario.insert()
         flash("Funcionário cadastrado com sucesso.", "sucesso")

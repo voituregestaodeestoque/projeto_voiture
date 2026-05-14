@@ -1,3 +1,5 @@
+<!--Editado por Júlia em 14/05/2026 às 12h11-->
+
 {% extends 'base.html' %}
 
 {% block conteudo %}
@@ -15,12 +17,27 @@
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="funcionario_id" class="form-label">Funcionário</label>
-                <input name="funcionario_id" type="text" class="form-control" id="funcionario_id" placeholder="ID do Funcionário" required>
+                <div class="input-group">
+                    <input name="funcionario_id" type="text" class="form-control" id="funcionario_id" placeholder="ID do Funcionário" required>
+                </div>
+                
             </div>
 
             <div class="col-md-6 mb-3">
                 <label for="empilhadeira_id" class="form-label">Empilhadeira</label>
-                <input name="empilhadeira_id" type="text" class="form-control" id="empilhadeira_id" placeholder="ID da Empilhadeira">
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="bi bi-basket2-fill text-white"></i>
+                    </span>
+    
+                    <select id="empilhadeira_id"  name="empilhadeira_id"  class="form-control" required>
+                        <option value="">Selecione o Funcionário</option>
+                        {% for f in fornecedores %}
+                        <option value="{{ f.id }}">{{ f.id }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
             </div>
 
 
