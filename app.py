@@ -33,9 +33,6 @@ def inicio():
 def produtos():
     return render_template('cadastroproduto.html')
 
-@app.route('/cadastrofuncionario')
-def cadastro_funcionario():
-    return render_template('cadastrofuncionario.html')
 
 '''Login funcionário - Ryan Ribeiro'''
 @app.route('/loginfuncionario')
@@ -51,6 +48,8 @@ def login():
     sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
 
     return redirect(url_for("base"))
+
+#Landing Page
 
 @app.route('/landingpage')
 def landingpage():
@@ -273,6 +272,22 @@ def atualizar_produto(id):
         flash(f"Erro ao atualizar produto: {e}", "erro")
         return render_template("cadastroproduto.html", produto=dados)
 
+#===================================================================================
+
+#Funcionário
+
+
+@app.route('/cadastro_funcionario')
+def cadastro_funcionario():
+    return render_template('cadastrofuncionario.html')
+
+@app.route("/listagem_funcionario")
+def listagem_funcionario():
+    funcionario = Funcionario.funcionario_listagem()
+    return render_template(
+        'listagem_funcionario.html',
+        funcionarios=funcionario)
+
 def get_funcionario_form():
     return {
         "funcionario_nome": request.form.get("funcionario_nome", "").strip(),
@@ -290,20 +305,67 @@ def get_funcionario_form():
 def salvar_funcionario():
     dados = get_funcionario_form()
     funcionario = Funcionario(**dados)
-
     erros = funcionario.validate()
     if erros :
         for erro in erros:
             flash(erro, "erro")
         return render_template("cadastrofuncionario.html", funcionario=dados)
-
+    
     try:
         funcionario.insert()
-        flash("Funcionario cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("base"))
+        flash("Funcionário cadastrado com sucesso.", "sucesso")
+        return redirect(url_for("listagem_funcionario"))
     except Exception as e:
         flash(f"Erro ao cadastrar funcionario: {e}", "erro")
         return render_template("cadastrofuncionario.html", funcionario=dados)
+
+@app.route("/editar_funcionario/<int:id>")
+def editar_funcionario(id):
+    funcionario = Funcionario.find_by_id(id)
+    if not funcionario:
+        flash("Funcionário não encontrado.", "erro")
+        return redirect(url_for("listagem_funcionario"))
+    return render_template("cadastrofuncionario.html", funcionario=funcionario)
+
+
+@app.route("/atualizar_funcionario/<int:id>", methods=["POST"])
+def atualizar_funcionario(id):
+    dados = get_funcionario_form()
+    funcionario = Funcionario(**dados)
+    erros = funcionario.validate()
+
+    if erros:
+        for erro in erros:
+            flash(erro, "erro")
+        dados["id"] = id
+        return render_template("cadastrofuncionario.html", funcionario=dados)
+
+    try:
+        if not Funcionario.find_by_id(id):
+            flash("Funcionario não encontrado.", "erro")
+            return redirect(url_for("listagem_funcionario"))
+
+        funcionario.update(id)
+        flash("Funcionário atualizado com sucesso.", "sucesso")
+        return redirect(url_for("listagem_funcionario"))
+    except Exception as e:
+        dados["id"] = id
+        flash(f"Erro ao atualizar funcionário: {e}", "erro")
+        return render_template("cadastrofuncionario.html", funcionario=dados)
+
+# Deleta um funcionario
+@app.route("/deletar_funcionario/<int:id>")
+def deletar_funcionario(id):
+    #Tenta deletar
+    try:
+        Funcionario.safe_delete(id)
+        flash("Funcionário excluído com sucesso.", "sucesso")
+    #Tratativa de erro
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao excluir funcionário: {e}", "erro")
+    return redirect(url_for("listagem_funcionario"))
 
 #=====================================================================================#
 
