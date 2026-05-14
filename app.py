@@ -305,23 +305,12 @@ def get_funcionario_form():
 def salvar_funcionario():
     dados = get_funcionario_form()
     funcionario = Funcionario(**dados)
-    print(dados)
     erros = funcionario.validate()
     if erros :
         for erro in erros:
             flash(erro, "erro")
         return render_template("cadastrofuncionario.html", funcionario=dados)
     
-    cpf= funcionario.find_by_cpf(Funcionario.funcionario_cpf)
-    if cpf:
-        flash("CPF já cadastrado")
-        return redirect(url_for('cadastro_funcionario'))
-
-    email= funcionario.find_by_email(Funcionario.funcionario_email)
-    if cpf:
-        flash("Email já cadastrado")
-        return redirect(url_for('cadastro_funcionario'))
-
     try:
         funcionario.insert()
         flash("Funcionário cadastrado com sucesso.", "sucesso")

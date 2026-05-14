@@ -35,8 +35,11 @@ class Funcionario(CrudBase):
         validacoes = [
             Validator.validar_nome(self.funcionario_nome, "funcionario_nome"),
             Validator.validar_senha(self.funcionario_senha, "funcionario_senha"),
+            
             Validator.validar_cpf_cnpj(self.funcionario_cpf, "funcionario_cpf"),
             Validator.validar_cep(self.funcionario_cep, "funcionario_cep"),
+            Validator.validar_email(self.funcionario_email, "funcionario_email"),
+            
             Validator.validar_email(self.funcionario_email, "funcionario_email"),
             Validator.validar_ddi_ddd(self.funcionario_ddi, "funcionario_ddi"),
             Validator.validar_ddi_ddd(self.funcionario_ddd, "funcionario_ddd"),
