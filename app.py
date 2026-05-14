@@ -1,5 +1,5 @@
 
-# Editado por Clarinha em 14/05/2026 às 11h38
+# Editado por Clarinha em 14/05/2026 às 12h28
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -239,7 +239,7 @@ def salvar_produto():
 
 
 
-@app.route("/produto/editar/<int:id>")
+@app.route("/editar_produto/<int:id>")
 def editar_produto(id):
     produto = Produto.find_by_id(id)
     if not produto:
@@ -248,7 +248,7 @@ def editar_produto(id):
     return render_template("cadastroproduto.html", produto=produto)
 
 
-@app.route("/produto/atualizar/<int:id>", methods=["POST"])
+@app.route("/atualizar_produto/<int:id>", methods=["POST"])
 def atualizar_produto(id):
     dados = get_produto_form()
     produto = Produto(**dados)
