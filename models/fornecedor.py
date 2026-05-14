@@ -44,14 +44,10 @@ class Fornecedor(CrudBase):
             Validator.validar_nome(self.fornecedor_nome, "fornecedor_nome"),
             #cnpj válido
             Validator.validar_cpf_cnpj(self.fornecedor_cnpj, "fornecedor_cnpj"),
-            #cnpj existente
-            self.cnpj_existente(self.fornecedor_cnpj),
             #cep 
             Validator.validar_cep(self.fornecedor_cep, "fornecedor_cep"),
             #email válido
             Validator.validar_email(self.fornecedor_email, "fornecedor_email"),
-            #email existente
-            self.email_existente(self.fornecedor_email),
             #ddi
             Validator.validar_ddi_ddd(self.fornecedor_ddi, "fornecedor_ddi"),
             #ddd
@@ -118,7 +114,7 @@ class Fornecedor(CrudBase):
         try:
             sql = f"SELECT * FROM {cls.table} WHERE fornecedor_cnpj = %s"
             cursor.execute(sql, (cnpj,))
-            return cursor.fetchone() and {"valida":False, "mensagem":"CNPJ já existe no sistema"}
+            return cursor.fetchone()
         finally:
             cursor.close()
             conexao.close()
@@ -131,7 +127,7 @@ class Fornecedor(CrudBase):
         try:
             sql = f"SELECT * FROM {cls.table} WHERE fornecedor_email = %s"
             cursor.execute(sql, (email,))
-            return cursor.fetchone() and {"valida":False, "mensagem":"Email já existe no sistema"}
+            return cursor.fetchone()
         finally:
             cursor.close()
             conexao.close()

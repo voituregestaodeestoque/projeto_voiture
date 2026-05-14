@@ -536,6 +536,19 @@ def salvar_fornecedor():
             flash(erro,"erro")
         return render_template("cadastrofornecedor.html", fornecedor=dados)
 
+    cnpj = request.form.get("fornecedor_cnpj", "").strip()
+    cnpj_cadastrado = fornecedor.cnpj_existente(cnpj)
+    if cnpj_cadastrado:
+        flash("CNPJ já existe no sistema! ","erro")
+        return render_template("cadastrofornecedor.html",fornecedor=dados)
+
+    email = request.form.get("fornecedor_email", "").strip()
+    email_cadastrado = fornecedor.email_existente(email)
+
+    if email_cadastrado:
+        flash("Email já existe no sistema!","erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
+
     #Cadastro
     try:
         fornecedor.insert()
