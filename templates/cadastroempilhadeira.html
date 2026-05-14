@@ -16,7 +16,7 @@
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-envelope text-white"></i>
                         </span>
-                        <input type="text" name="empilhadeira_chassi" id="numero_chassi" class="form-control" placeholder="Número do Chassi:" required value="{{ empilhadeira.empilhadeira_chassi if empilhadeira else '' }}">
+                        <input type="text" name="empilhadeira_chassi" id="numero_chassi" class="form-control" placeholder="Número do Chassi:" maxlength="20" required value="{{ empilhadeira.empilhadeira_chassi if empilhadeira else '' }}">
 
                     </div>
 
