@@ -1,5 +1,5 @@
 
-#Editado por Júlia em 07/05/2026 às 12h26
+#Editado por Júlia em 14/05/2026 às 11h34
 
 from core.crud_base import CrudBase
 from core.database import Database
@@ -40,18 +40,29 @@ class Fornecedor(CrudBase):
         erros = []
 
         validacoes = [
+            #nome 
             Validator.validar_nome(self.fornecedor_nome, "fornecedor_nome"),
+            #cnpj existente
+            self.cnpj_existente(self.fornecedor_cnpj),
+            #cnpj válido
             Validator.validar_cpf_cnpj(self.fornecedor_cnpj, "fornecedor_cnpj"),
+            #cep 
             Validator.validar_cep(self.fornecedor_cep, "fornecedor_cep"),
+            #email existente
+            self.email_existente(self.fornecedor_email),
+            #email válido
             Validator.validar_email(self.fornecedor_email, "fornecedor_email"),
+            #ddi
             Validator.validar_ddi_ddd(self.fornecedor_ddi, "fornecedor_ddi"),
+            #ddd
             Validator.validar_ddi_ddd(self.fornecedor_ddd, "fornecedor_ddd"),
+            #telefone
             Validator.validar_telefone(self.fornecedor_telefone, "fornecedor_telefone")
         ]
         
-        for itens in validacoes:
-            if not itens['valida']:
-                erros.append(itens["mensagem"])
+        for item in validacoes:
+            if item is not None and not item['valida']:
+                erros.append(item["mensagem"])
 
         return erros
     
@@ -99,3 +110,28 @@ class Fornecedor(CrudBase):
             conexao.close()
 
     
+    #Procura no banco algum fornecedor com o mesmo CNPJ
+    @classmethod
+    def cnpj_existente(cls, cnpj):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True, buffered=True)
+        try:
+            sql = f"SELECT * FROM {cls.table} WHERE fornecedor_cnpj = %s"
+            cursor.execute(sql, (cnpj,))
+            return cursor.fetchone() and {"valida":False, "mensagem":"CNPJ já existe no sistema"}
+        finally:
+            cursor.close()
+            conexao.close()
+    
+    #Procura no banco algum fornecedor com o mesmo email
+    @classmethod
+    def email_existente(cls, email):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True, buffered=True)
+        try:
+            sql = f"SELECT * FROM {cls.table} WHERE fornecedor_email = %s"
+            cursor.execute(sql, (email,))
+            return cursor.fetchone() and {"valida":False, "mensagem":"Email já existe no sistema"}
+        finally:
+            cursor.close()
+            conexao.close()

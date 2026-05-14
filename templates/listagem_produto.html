@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+<div class="container-fluid">
+
+    <!-- TÍTULO + BOTÃO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="titulo-pagina">
+                <i class="bi bi-box-seam"></i> Produtos
+            </h2>
+            <p class="text-muted mb-0">Gerencie os produtos do estoque</p>
+        </div>
+
+        <a href="{{ url_for('produtos') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Novo Produto
+        </a>
+    </div>
+    <!-- CARD -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="table-responsive">
+                {% if produtos %}
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Produto</th>
+                            <th scope="col">Categoria</th>
+                            <th scope="col">Localização</th>
+                            <th scope="col">Estoque mínimo</th>
+                            <th scope="col">Peso</th>
+                            <th scope="col">Preço de custo</th>
+                            <th scope="col">Preço de venda</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for produto in produtos %}
+                        <tr>
+                            <!--Valores do banco que deverão aparecer-->
+                            <th scope="row">{{ produto.id }}</th>
+                            <td>{{ produto.produto_nome }}</td>
+                            <td>{{ produto.produto_categoria }}</td>
+                            <td>{{ produto.produto_localizacao}}</td>
+                            <td>{{ produto.produto_quantidade_minima }}</td>
+                            <td>{{ produto.produto_peso}}</td>
+                            <td>{{ produto.produto_preco_custo }}</td>
+                            <td>{{ produto.produto_preco_venda}}</td>
+                            <td class="text-end">
+                                <a href="{{ url_for('editar_produto', id=produto.id) }}"
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+                                <a href="{{ url_for('deletar_produto', id=produto.id) }}"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Tem certeza que deseja EXCLUIR esse produto?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {%else%}
+            <!--Mensagem em caso de não ter produtos cadastrados-->
+            <div class="alert alert-info mb-0">
+                <i class="bi bi-info-circle"></i>
+                Nenhum produto cadastrado.
+            </div>
+
+            {%endif%}
+        </div>
+    </div>
+</div>
+{% endblock %}
