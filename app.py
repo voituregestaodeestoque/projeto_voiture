@@ -1,5 +1,5 @@
 
-# Editado por Clarinha em 14/05/2026 às 11h38
+# Editado por Lipe em 14/05/2026 às 12h16
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -693,6 +693,10 @@ def cadastrar_pedidoentrada_lote():
 
     except Exception as e:
         return jsonify({"mensagem": f"Erro: {str(e)}"})
+
+@app.route('/enderecamento')
+def enderecamento():
+    return render_template('enderecamento.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

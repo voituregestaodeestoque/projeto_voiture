@@ -1,28 +1,13 @@
-<!--LipinhoGamer 07/05/2026 às 08h40-->
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enderecamento</title>
-    <link rel="stylesheet" href="enderecamento.css">
+<!--LipinhoGamer 014/05/2026 às 12h15-->
+{% extends 'base.html' %}
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Ícones -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-    <!-- Fonte moderna -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap">
-
-</head>
-<body style="background-color: #DCE3EE;">
+{% block conteudo %}  
+<body style="background-color: #ffffff;">
     <div class="papai text-center py-5 ">
         <div class="mb-5">
           <div class=" text-white mx-auto"
                style="width:100px; height:100px; font-size:40px;">
-               <img src="../static/images/Captura de tela 2026-04-30 134542.png" alt="imagem" >
+               <img src="../static/images/ponto_localizacao.png" alt="">
             
           </div>
         </div>
@@ -36,28 +21,17 @@
         </div>
 
         <section class="container_ende d-flex justify-content-center align-items-center">
-          <div class="cards_ende m-5" style="background-color: #193D60; border-radius: 10px ; color: white; width: 200px;" >
-            <h2>Produto</h2>
-            <p>ID</p>
-            <p>Rua </p>
-            <p> Prateleira</p>
+          <div class="cards_ende m-5" style="background-color: #d3d7da; border-radius: 10px ; color: white; width: 200px;" >
+           
+          </div>
+
+          <div class="cards_ende m-5" style="background-color: #d3d7da; border-radius: 10px; color: white; width: 200px;">
+       
 
           </div>
 
-          <div class="cards_ende m-5" style="background-color: #193D60; border-radius: 10px; color: white; width: 200px;">
-            <h2>Produto</h2>
-            <p>ID</p>
-            <p>Rua </p>
-            <p> Prateleira</p>
-
-          </div>
-
-          <div class="cards_ende m-5" style="background-color: #193D60; border-radius: 10px; color: white; width: 200px;">
-            <h2>Produto</h2>
-            <p>ID</p>
-            <p>Rua </p>
-            <p> Prateleira</p>
-
+          <div class="cards_ende m-5" style="background-color: #d3d7da; border-radius: 10px; color: white; width: 200px;">
+       
           </div>
         </section>
 
@@ -66,4 +40,4 @@
         
     
 </body>
-</html>
+{% endblock %}
