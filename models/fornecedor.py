@@ -1,5 +1,5 @@
 
-#Editado por Júlia em 07/05/2026 às 12h26
+#Editado por Júlia em 14/05/2026 às 11h34
 
 from core.crud_base import CrudBase
 from core.database import Database
