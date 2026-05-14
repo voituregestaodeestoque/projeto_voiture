@@ -1,3 +1,5 @@
+<!--Editado por Clarinha em 14/05/2026 às 13h42-->
+
 {% extends 'base.html' %}
 
 {% block conteudo %}
@@ -22,7 +24,7 @@
         <div class="card-body">
 
             <div class="table-responsive">
-                {% if produtos %}
+                {% if produto %}
                 <table class="table table-hover align-middle">
 
                     <thead class="table-light">
@@ -39,7 +41,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for produto in produtos %}
+                        {% for produto in produto %}
                         <tr>
                             <!--Valores do banco que deverão aparecer-->
                             <th scope="row">{{ produto.id }}</th>
