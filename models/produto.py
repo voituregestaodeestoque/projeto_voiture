@@ -1,4 +1,4 @@
-#atualizado por clarinha 07/05 às 11h04
+# Editado por Clarinha em 14/05/2026 às 12h28
 
 from core.crud_base import CrudBase
 from core.database import Database
@@ -59,6 +59,16 @@ class Produto(CrudBase):
             cursor.close()
             conexao.close()
 
+
+    @classmethod
+    def safe_delete(cls, id):
+        produto = cls.find_by_id(id)
+        if not produto:
+            raise ValueError("Produto não encontrado.")
+        """if cls.has_related_records(id):
+            raise ValueError("Não é possível excluir o produto porque ele está vinculado a outros serviços.")"""
+        cls.delete(id)
+
     
 """
     @classmethod
@@ -108,13 +118,4 @@ class Produto(CrudBase):
             return total > 0
         finally:
             cursor.close()
-            conexao.close()
-
-    @classmethod
-    def safe_delete(cls, id):
-        produto = cls.find_by_id(id)
-        if not produto:
-            raise ValueError("Produto não encontrado.")
-        if cls.has_related_records(id):
-            raise ValueError("Não é possível excluir o produto porque ele possui pedidos ou movimentações vinculadas.")
-        cls.delete(id)"""
+            conexao.close()"""

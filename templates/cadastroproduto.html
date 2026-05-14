@@ -37,7 +37,7 @@
                                 <i class="bi bi-box text-white"></i>
                             </span>
                             <input type="text" class="form-control" name="produto_nome" id="produto_nome"
-                                placeholder="Nome do produto" required>
+                                placeholder="Nome do produto" required value="{{ produto.produto_nome if produto else '' }}">
                         </div>
                     </div>
 
@@ -48,7 +48,7 @@
                                 <i class="bi bi-box text-white"></i>
                             </span>
                             <input type="text" name="produto_categoria" class="form-control" id="produto_categoria"
-                                placeholder="Categoria do produto" required>
+                                placeholder="Categoria do produto" required value="{{ produto.produto_categoria if produto else '' }}">
                         </div>
                     </div>
 
@@ -59,7 +59,7 @@
                                 <i class="bi bi-geo-alt-fill text-white"></i>
                             </span>
                             <input type="text" name="produto_localizacao" class="form-control" id="produto_localizacao"
-                                placeholder="Localização do produto" required>
+                                placeholder="Localização do produto" required value="{{ produto.produto_localizacao if produto else '' }}">
                         </div>
 
                     </div>
@@ -71,7 +71,7 @@
                                 <i class="bi bi-basket2-fill text-white"></i>
                             </span>
                             <input type="text" name="produto_quantidade_minima" class="form-control"
-                                id="produto_quantidade_minima" placeholder="Estoque mínimo do produto" required>
+                                id="produto_quantidade_minima" placeholder="Estoque mínimo do produto" required value="{{ produto.produto_quantidade_minima if produto else '' }}">
                         </div>
 
                     </div>
@@ -83,7 +83,7 @@
                                 <i class="bi bi-hammer text-white"></i>
                             </span>
                             <input type="text" name="produto_peso" class="form-control" id="produto_peso"
-                                placeholder="Peso em kg" required>
+                                placeholder="Peso em kg" required value="{{ produto.produto_peso if produto else '' }}">
                         </div>
                     </div>
 
@@ -94,7 +94,7 @@
                                 <i class="bi bi-gear-fill text-white"></i>
                             </span>
                             <input type="text" name="produto_preco_custo" class="form-control" id="produto_preco_custo"
-                                placeholder="Preço de custo em R$" required>
+                                placeholder="Preço de custo em R$" required value="{{ produto.produto_preco_custo if produto else '' }}">
                         </div>
 
                     </div>
@@ -106,13 +106,13 @@
                                 <i class="bi bi-gear-fill text-white"></i>
                             </span>
                             <input type="text" name="produto_preco_venda" class="form-control" id="produto_preco_venda"
-                                placeholder="Preço de venda em R$" required>
+                                placeholder="Preço de venda em R$" required value="{{ produto.produto_preco_venda if produto else '' }}">
                         </div>
                     </div>
 
                     <div class="col-md-12 mb-3">
                         <label for="produto_descricao" class="form-label">Descrição</label>
-                        <input type="text" name="produto_descricao" class="form-control" id="produto_descricao" required
+                        <input type="text" name="produto_descricao" class="form-control" id="produto_descricao" required value="{{ produto.produto_descricao if produto else '' }}"
                             style="padding: 20px;">
                     </div>
 
@@ -131,6 +131,5 @@
                 </div>
             </form>
         </div>
-    </div>
 </div>
 {% endblock %}
