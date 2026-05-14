@@ -41,17 +41,19 @@ class Fornecedor(CrudBase):
 
         validacoes = [
             Validator.validar_nome(self.fornecedor_nome, "fornecedor_nome"),
+            self.cnpj_existente(self.fornecedor_cnpj),
             Validator.validar_cpf_cnpj(self.fornecedor_cnpj, "fornecedor_cnpj"),
             Validator.validar_cep(self.fornecedor_cep, "fornecedor_cep"),
+            self.email_existente(self.fornecedor_email),
             Validator.validar_email(self.fornecedor_email, "fornecedor_email"),
             Validator.validar_ddi_ddd(self.fornecedor_ddi, "fornecedor_ddi"),
             Validator.validar_ddi_ddd(self.fornecedor_ddd, "fornecedor_ddd"),
             Validator.validar_telefone(self.fornecedor_telefone, "fornecedor_telefone")
         ]
         
-        for itens in validacoes:
-            if not itens['valida']:
-                erros.append(itens["mensagem"])
+        for item in validacoes:
+            if item is not None and not item['valida']:
+                erros.append(item["mensagem"])
 
         return erros
     
@@ -99,3 +101,28 @@ class Fornecedor(CrudBase):
             conexao.close()
 
     
+    #Procura no banco algum fornecedor com o mesmo CNPJ
+    @classmethod
+    def cnpj_existente(cls, cnpj):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True, buffered=True)
+        try:
+            sql = f"SELECT * FROM {cls.table} WHERE fornecedor_cnpj = %s"
+            cursor.execute(sql, (cnpj,))
+            return cursor.fetchone() and {"valida":False, "mensagem":"CNPJ já existe no sistema"}
+        finally:
+            cursor.close()
+            conexao.close()
+    
+    #Procura no banco algum fornecedor com o mesmo email
+    @classmethod
+    def email_existente(cls, email):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True, buffered=True)
+        try:
+            sql = f"SELECT * FROM {cls.table} WHERE fornecedor_email = %s"
+            cursor.execute(sql, (email,))
+            return cursor.fetchone() and {"valida":False, "mensagem":"Email já existe no sistema"}
+        finally:
+            cursor.close()
+            conexao.close()
