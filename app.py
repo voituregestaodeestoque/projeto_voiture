@@ -1,5 +1,5 @@
 
-# Editado por Clarinha em 14/05/2026 às 12h28
+# Editado por Júlia em 14/05/2026 às 15h54
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
