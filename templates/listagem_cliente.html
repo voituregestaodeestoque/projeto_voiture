@@ -1,0 +1,92 @@
+
+<!--Editado por Ryan em 12/05/2026 às 11h20-->
+
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+<div class="container-fluid"> 
+
+    <!-- TÍTULO + BOTÃO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="titulo-pagina">
+                <i class="bi bi-person-fill"></i>
+                Clientes</h2>
+            <p class="text-muted mb-0">Gerencie os Clientes do sistema</p>
+        </div>
+
+        <a href="{{ url_for('cliente') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Novo Cliente</a>
+    </div>
+
+    <!-- CARD -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <!--Criação de tabela em caso de fornecedores cadastrados-->
+            <div class="table-responsive">
+                {% if clientes %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <!--Colunas da tabela-->
+                            <th scope="col">#</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">CNPJ</th>
+                            <th scope="col">CEP</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">DDI</th>
+                            <th scope="col">DDD</th>
+                            <th scope="col">Telefone</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col" class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cliente in clientes %}
+                        <tr>
+                            <!--Valores do banco que deverão aparecer-->
+                            <th scope="row">{{ cliente.id }}</th>
+                            <td>{{ cliente.cliente_nome }}</td>
+                            <td>{{ cliente.cliente_cnpj }}</td>
+                            <td>{{ cliente.cliente_cep }}</td>
+                            <td>{{ cliente.cliente_email }}</td>
+                            <td>{{ cliente.cliente_ddi }}</td>
+                            <td>{{ cliente.cliente_ddd }}</td>
+                            <td>{{ cliente.cliente_telefone}}</td>
+                            <td>{{ cliente.cliente_descricao }}</td>
+                            <td class="text-end">
+                                <a href="{{ url_for('editar_cliente', id=cliente.id) }}"
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+                                <a href="{{ url_for('deletar_cliente', id=cliente.id) }}"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Deseja excluir este produto?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% else %}
+            
+            <!--Mensagem em caso de não ter clientes cadastrados-->
+            <div class="alert alert-info mb-0">
+                <i class="bi bi-info-circle"></i>
+                Nenhum Cliente cadastrado.
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
