@@ -40,14 +40,23 @@ class Fornecedor(CrudBase):
         erros = []
 
         validacoes = [
+            #nome 
             Validator.validar_nome(self.fornecedor_nome, "fornecedor_nome"),
+            #cnpj existente
             self.cnpj_existente(self.fornecedor_cnpj),
+            #cnpj válido
             Validator.validar_cpf_cnpj(self.fornecedor_cnpj, "fornecedor_cnpj"),
+            #cep 
             Validator.validar_cep(self.fornecedor_cep, "fornecedor_cep"),
+            #email existente
             self.email_existente(self.fornecedor_email),
+            #email válido
             Validator.validar_email(self.fornecedor_email, "fornecedor_email"),
+            #ddi
             Validator.validar_ddi_ddd(self.fornecedor_ddi, "fornecedor_ddi"),
+            #ddd
             Validator.validar_ddi_ddd(self.fornecedor_ddd, "fornecedor_ddd"),
+            #telefone
             Validator.validar_telefone(self.fornecedor_telefone, "fornecedor_telefone")
         ]
         
