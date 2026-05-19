@@ -1,5 +1,5 @@
 
-# Editado por Júlia em 14/05/2026 às 15h54
+# Editado por Júlia em 19/05/2026
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -29,9 +29,6 @@ def to_float(value, default=0.0):
 def inicio():
     return redirect(url_for("base"))
 
-@app.route('/produtos')
-def produtos():
-    return render_template('cadastroproduto.html')
 
 
 '''Login funcionário - Ryan Ribeiro'''
@@ -197,6 +194,13 @@ def salvar_uso_empilhadeira():
         return render_template("cadastro_uso_empilhadeira.html", fornecedor=dados)
 
 
+# -----> Início: Produto
+
+@app.route('/produtos')
+def produtos():
+    return render_template('cadastroproduto.html')
+
+
 def get_produto_form():
     return {
         "produto_nome": request.form.get("produto_nome", "").strip(),
@@ -209,8 +213,14 @@ def get_produto_form():
         "produto_descricao": request.form.get("produto_descricao", "").strip(),
     }
 
+def get_estoque_form():
+    return{
+        "estoque_quantidade":request.form.get("estoque_quantidade", "").strip()
+    }
+
 @app.route("/listagem_produto")
 def listagem_produto():
+
     produtos = Produto.produto_listagem()
     return render_template('listagem_produto.html',
         produto=produtos)
@@ -228,15 +238,26 @@ def salvar_produto():
             flash(erro, "erro")
         return render_template("cadastroproduto.html", produto=dados)
 
+    quantidade = get_estoque_form()
+    estoque = Estoque(**quantidade)
+
+    erros = estoque.validate()
+    if erros :
+        for erro in erros:
+            flash(erro, "erro")
+        return render_template("cadastroproduto.html", estoque = quantidade)
+
     try:
         produto.insert()
+        estoque.produto_id = produto.id
+        estoque.insert()
+        
         flash("Produto cadastrado com sucesso.", "sucesso")
         return redirect(url_for("listagem_produto"))
+
     except Exception as e:
         flash(f"Erro ao cadastrar produto: {e}", "erro")
         return render_template("cadastroproduto.html", produto=dados)
-
-
 
 
 @app.route("/editar_produto/<int:id>")
@@ -287,10 +308,12 @@ def deletar_produto(id):
         flash(f"Erro ao excluir produto: {e}", "erro")
     return redirect(url_for("listagem_produto"))
 
+
+# -----> Fim: Produto
 #===================================================================================
 
-#Funcionário
 
+# -----> Fim: Funcionário
 
 @app.route('/cadastro_funcionario')
 def cadastro_funcionario():
@@ -498,7 +521,6 @@ def deletar_cliente(id):
 
 
 # -----> Fim: Cliente
-
 
 
 # -----> Início: Fornecedor
@@ -718,6 +740,7 @@ def cadastrar_pedidoentrada_lote():
 
     except Exception as e:
         return jsonify({"mensagem": f"Erro: {str(e)}"})
+        
 
 if __name__ == "__main__":
     app.run(debug=True)
