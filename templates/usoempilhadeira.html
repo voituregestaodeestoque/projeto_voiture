@@ -12,15 +12,17 @@
 
     <h2 class=" bi bi-box">Uso de Empilhadeira</h2>
 
+
     <form id="form_fornecedor" action="{{ url_for('salvar_uso_empilhadeira')}}" method="POST">
 
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="funcionario_id" class="form-label">Funcionário</label>
                 <div class="input-group">
-                    <input name="funcionario_id" type="text" class="form-control" id="funcionario_id" placeholder="ID do Funcionário" required>
+                    <input name="funcionario_id" type="text" class="form-control" id="funcionario_id"
+                        placeholder="ID do Funcionário" required>
                 </div>
-                
+
             </div>
 
             <div class="col-md-6 mb-3">
@@ -29,21 +31,28 @@
                     <span class="input-group-text bg-dark border-secondary">
                         <i class="bi bi-basket2-fill text-white"></i>
                     </span>
-    
-                    <select id="empilhadeira_id"  name="empilhadeira_id"  class="form-control" required>
-                        <option value="">Selecione o Funcionário</option>
-                        {% for f in fornecedores %}
-                        <option value="{{ f.id }}">{{ f.id }}</option>
+
+                    <select id="empilhadeira">
+                        <option value="">Selecione</option>
+                        {% for empilhadeira in empilhadeiras %}
+                            <option 
+                                value="{{ empilhadeira.id }}"
+                                data-nome="{{ empilhadeira.chassi }}"
+                                data-preco="{{ empilhadeira.marca }}"
+                                data-estoque="{{ empilhadeira.modelo }}">
+                                {{ empilhadeira.empilhadeira_marca }} - Modelo: {{ empilhadeira.empilhadeira_modelo }} - Chassi: {{ empilhadeira.empilhadeira_chassi }}
+                            </option>
                         {% endfor %}
                     </select>
+
                 </div>
-                
+
             </div>
 
 
-        <div id="btn-fornecedor">
-            <button type="submit" class="btn btn-primary">Registrar</button>
-        </div>
+            <div id="btn-fornecedor">
+                <button type="submit" class="btn btn-primary">Registrar</button>
+            </div>
 
 
     </form>
