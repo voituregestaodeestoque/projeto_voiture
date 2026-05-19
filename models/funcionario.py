@@ -110,7 +110,7 @@ class Funcionario(CrudBase):
             cursor.close()
             conexao.close()
 
-    #Procura no banco algum fornecedor com o mesmo CPF
+    #Procura no banco algum funcionário com o mesmo CPF
     @classmethod
     def cpf_existente(cls, cpf):
         conexao = Database.connect()
@@ -118,12 +118,12 @@ class Funcionario(CrudBase):
         try:
             sql = f"SELECT * FROM {cls.table} WHERE funcionario_cpf = %s"
             cursor.execute(sql, (cpf,))
-            return cursor.fetchone() and {"valida":False, "mensagem":"CPF já existe no sistema"}
+            return cursor.fetchone()
         finally:
             cursor.close()
             conexao.close()
     
-    #Procura no banco algum fornecedor com o mesmo email
+    #Procura no banco algum funcionário com o mesmo email
     @classmethod
     def email_existente(cls, email):
         conexao = Database.connect()
@@ -131,7 +131,7 @@ class Funcionario(CrudBase):
         try:
             sql = f"SELECT * FROM {cls.table} WHERE funcionario_email = %s"
             cursor.execute(sql, (email,))
-            return cursor.fetchone() and {"valida":False, "mensagem":"Funcionário já existe no sistema"}
+            return cursor.fetchone()
         finally:
             cursor.close()
             conexao.close()
