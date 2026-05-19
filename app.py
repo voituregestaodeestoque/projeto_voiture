@@ -171,6 +171,11 @@ def tabelaempilhadeira():
 def base():
     return render_template("dashboard.html")
 
+# Enderecamento
+@app.route('/enderecamento')
+def enderecamento():
+    return render_template('enderecamento.html')
+
 # Uso de Empilhadeira
 @app.route('/usoempilhadeira')
 def usoempilhadeira():
