@@ -178,7 +178,7 @@ class Validator:
             return{"valida":False, "mensagem":f"O campo {field_name} não pode haver letras"}
 
         #não pode ter menos de 0 
-        if (value) < 0:
+        if int(value) < 0:
             return{"valida":False, "mensagem":f"O campo {field_name} não pode ser negativo"}
 
         return {"valida":True}
@@ -274,7 +274,7 @@ class Validator:
             return {"valida":False,"mensagem":f"O campo {field_name} não pode haver letras"}
         
         #Não pode ter valores negativos
-        if int(value) <= 0:
+        if float(value) <= 0:
             return {"valida":False,"mensagem":f"O campo {field_name} não aceita valores negativos"}
 
         return {"valida":True}
