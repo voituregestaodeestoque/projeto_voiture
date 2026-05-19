@@ -18,8 +18,8 @@
             <option 
                 value="{{ produto.produto_id }}"
                 data-nome="{{ produto.produto_nome }}"
-                data-estoque="{{ estoque.estoque_quantidade }}">
-                {{ produto.produto_nome }} - Estoque: {{ estoque.estoque_quantidade }}
+                data-estoque="{{ produto.estoque_quantidade }}">
+                {{ produto.produto_nome }} - Estoque: {{ produto.estoque_quantidade }}
             </option>
         {% endfor %}
     </select>
