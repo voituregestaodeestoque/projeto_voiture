@@ -662,7 +662,7 @@ def exibir_formulario():
     lista_empilhadeiras = empilhadeira.query.all() 
     return render_template('usoempilhadeira.html', empilhadeiras=lista_empilhadeiras)
         
-"""
+
 @app.route("/pedidoentrada")
 def pedidoentrada():
     return render_template(
@@ -688,7 +688,7 @@ def detalhes_entrada(pedido_entrada_id):
     )
 
 
-@app.route("entrada/<int:pedido_entrada_id>/adicionar", methods=["POST"])
+@app.route("/entrada/<int:pedido_entrada_id>/adicionar", methods=["POST"])
 
 def adicionar_item_entrada(pedido_entrada_id):
     produto_id = int(request.form.get("produto_id", 0))
@@ -779,8 +779,6 @@ def nova_entrada():
         pedido=None,
         produtos=Produto.find_all(order_by="nome")
     )
-"""
-
 '''Estoque'''
 
 @app.route("/listagem_estoque")
