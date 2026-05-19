@@ -1,3 +1,4 @@
+#atualizado por Ryan às 19/05/26 dia 16:29
 from datetime import datetime
 from core.crud_base import CrudBase
 from core.database import Database
@@ -9,7 +10,7 @@ class Estoque(CrudBase):
         "estoque_quantidade",
         "produto_id"]
 
-    def __init__(self, estoque_quantidade, produto_id):
+    def __init__(self, estoque_quantidade, produto_id=0):
         self.estoque_quantidade = estoque_quantidade
         self.produto_id = produto_id
 
@@ -27,6 +28,7 @@ class Estoque(CrudBase):
 
         return erros
 
+    @classmethod
     def card_estoque(cls):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)

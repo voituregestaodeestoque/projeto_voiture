@@ -28,29 +28,27 @@
             </div>
         </div>
     </div>
-    {%if estoque%}
-    {%for estoques in estoque%}
+
     <section class="container_papaizao d-flex justify-content-center align-items-center mt-5">
+        {%if estoque%}
+        {%for estoque_produto in estoque%}
         <div class="cards m-4" style="background-color: white; width: 400px; height: 400px; border-radius: 10px;">
-            <h2>Produto</h2>
-            <p>ID</p>
-            <p>Rua </p>
-            <p> Prateleira</p>
-
+            <h2>{{estoque_produto.produto_nome}}</h2>
+            <p>{{estoque_produto.produto_quantidade_minima}}</p>
+            <p>{{estoque_produto.estoque_quantidade}}</p>
+            <p>{{estoque_produto.produto_localizacao}}</p>
         </div>
-        <div class="cards1 m-4" style="background-color: white; width: 400px; height: 400px; border-radius: 10px;">
-            <h2>Produto</h2>
-            <p>ID</p>
-            <p>Rua </p>
-            <p> Prateleira</p>
+        {%endfor%}
+        
+        {%else%}
 
+        <!--Mensagem em caso de não ter estoque de produtos cadastrados-->
+        <div class="alert alert-info mb-0">
+            <i class="bi bi-info-circle"></i>
+            Nenhum funcionário cadastrado.
         </div>
-        <div class="cards2 m-4" style="background-color: white; width: 400px; height: 400px; border-radius: 10px;">
-            <h2>Produto</h2>
-            <p>ID</p>
-            <p>Rua </p>
-            <p> Prateleira</p>
 
-        </div>
+        {%endif%}
     </section>
+    
     {% endblock %}
