@@ -1,0 +1,146 @@
+<!--Atualizado por Clarinha 05/05 às 16h10-->
+
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<h2>Novo Pedido de Venda</h2>
+
+<form method="POST" action="{{ url_for('nova_entrada') }}" onsubmit="prepararEnvio()">
+    <label>Fornecedor:</label>
+    <input type="text" name="pedidoentrada_fornecedor" required>
+
+    <h3>Itens do Pedido</h3>
+
+    <label>Produto:</label>
+    <select id="produto">
+        <option value="">Selecione</option>
+        {% for produto in produto %}
+            <option 
+                value="{{ produto.produto_id }}"
+                data-nome="{{ produto.produto_nome }}"
+                data-estoque="{{ estoque.estoque_quantidade }}">
+                {{ produto.produto_nome }} - Estoque: {{ estoque.estoque_quantidade }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label>Quantidade:</label>
+    <input type="number" id="quantidade" min="1">
+
+    <button type="button" onclick="adicionarItem()">Adicionar Item</button>
+
+    <input type="hidden" name="itens_json" id="itens_json">
+
+    <table id="tabela-itens">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Subtotal</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h3>Total: R$ <span id="total">0.00</span></h3>
+
+    <button type="submit">Salvar Pedido</button>
+</form>
+
+<script>
+    let itens = [];
+
+    function adicionarItem() {
+        const selectProduto = document.getElementById("produto");
+        const quantidadeInput = document.getElementById("quantidade");
+
+        const produtoId = selectProduto.value;
+        const quantidade = parseInt(quantidadeInput.value);
+
+        if (!produtoId) {
+            alert("Selecione um produto.");
+            return;
+        }
+
+        if (!quantidade || quantidade <= 0) {
+            alert("Informe uma quantidade maior que zero.");
+            return;
+        }
+
+        const option = selectProduto.options[selectProduto.selectedIndex];
+        const nome = option.dataset.nome;
+        const preco = parseFloat(option.dataset.preco);
+        const estoque = parseInt(option.dataset.estoque);
+
+        if (quantidade > estoque) {
+            alert("Quantidade maior que o estoque disponível.");
+            return;
+        }
+
+        const itemExistente = itens.find(item => item.produto_id === produtoId);
+
+        if (itemExistente) {
+            const novaQuantidade = itemExistente.quantidade + quantidade;
+
+            if (novaQuantidade > estoque) {
+                alert("Quantidade total maior que o estoque disponível.");
+                return;
+            }
+
+            itemExistente.quantidade = novaQuantidade;
+            itemExistente.subtotal = novaQuantidade * preco;
+        } else {
+            itens.push({
+                produto_id: produtoId,
+                nome: nome,
+                quantidade: quantidade,
+                preco_unitario: preco,
+                subtotal: quantidade * preco
+            });
+        }
+
+        quantidadeInput.value = "";
+        selectProduto.value = "";
+
+        atualizarTabela();
+    }
+
+    function removerItem(index) {
+        itens.splice(index, 1);
+        atualizarTabela();
+    }
+
+    function atualizarTabela() {
+        const tbody = document.querySelector("#tabela-itens tbody");
+        tbody.innerHTML = "";
+
+        let total = 0;
+
+        itens.forEach((item, index) => {
+            total += item.subtotal;
+
+            const linha = `
+                <tr>
+                    <td>${item.nome}</td>
+                    <td>${item.quantidade}</td>
+                    <td>R$ ${item.preco_unitario.toFixed(2)}</td>
+                    <td>R$ ${item.subtotal.toFixed(2)}</td>
+                    <td>
+                        <button type="button" onclick="removerItem(${index})">Remover</button>
+                    </td>
+                </tr>
+            `;
+
+            tbody.innerHTML += linha;
+        });
+
+        document.getElementById("total").innerText = total.toFixed(2);
+    }
+
+    function prepararEnvio() {
+        document.getElementById("itens_json").value = JSON.stringify(itens);
+    }
+</script>
+{% endblock %}
