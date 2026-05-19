@@ -788,7 +788,8 @@ def nova_entrada():
 
 @app.route("/listagem_estoque")
 def listagem_estoque():
-    return render_template('estoque.html')
+    estoque=Estoque.card_estoque()
+    return render_template('estoque.html', estoque=estoque)
 
 if __name__ == "__main__":
     app.run(debug=True)
