@@ -662,7 +662,7 @@ def exibir_formulario():
     lista_empilhadeiras = empilhadeira.query.all() 
     return render_template('usoempilhadeira.html', empilhadeiras=lista_empilhadeiras)
         
-
+"""
 @app.route("/pedidoentrada")
 def pedidoentrada():
     return render_template(
@@ -779,7 +779,7 @@ def nova_entrada():
         pedido=None,
         produtos=Produto.find_all(order_by="nome")
     )
-
+"""
 
 '''Estoque'''
 
