@@ -1,5 +1,5 @@
 
-# Editado por Lipe em 14/05/2026 às 12h16
+# Editado por Júlia em 19/05/2026
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -29,9 +29,6 @@ def to_float(value, default=0.0):
 def inicio():
     return redirect(url_for("base"))
 
-@app.route('/produtos')
-def produtos():
-    return render_template('cadastroproduto.html')
 
 
 '''Login funcionário - Ryan Ribeiro'''
@@ -197,6 +194,13 @@ def salvar_uso_empilhadeira():
         return render_template("cadastro_uso_empilhadeira.html", fornecedor=dados)
 
 
+# -----> Início: Produto
+
+@app.route('/produtos')
+def produtos():
+    return render_template('cadastroproduto.html')
+
+
 def get_produto_form():
     return {
         "produto_nome": request.form.get("produto_nome", "").strip(),
@@ -209,8 +213,14 @@ def get_produto_form():
         "produto_descricao": request.form.get("produto_descricao", "").strip(),
     }
 
+def get_estoque_form():
+    return{
+        "estoque_quantidade":request.form.get("estoque_quantidade", "").strip()
+    }
+
 @app.route("/listagem_produto")
 def listagem_produto():
+
     produtos = Produto.produto_listagem()
     return render_template('listagem_produto.html',
         produto=produtos)
@@ -228,18 +238,29 @@ def salvar_produto():
             flash(erro, "erro")
         return render_template("cadastroproduto.html", produto=dados)
 
+    quantidade = get_estoque_form()
+    estoque = Estoque(**quantidade)
+
+    erros = estoque.validate()
+    if erros :
+        for erro in erros:
+            flash(erro, "erro")
+        return render_template("cadastroproduto.html", estoque = quantidade)
+
     try:
         produto.insert()
+        estoque.produto_id = produto.id
+        estoque.insert()
+        
         flash("Produto cadastrado com sucesso.", "sucesso")
         return redirect(url_for("listagem_produto"))
+
     except Exception as e:
         flash(f"Erro ao cadastrar produto: {e}", "erro")
         return render_template("cadastroproduto.html", produto=dados)
 
 
-
-
-@app.route("/produto/editar/<int:id>")
+@app.route("/editar_produto/<int:id>")
 def editar_produto(id):
     produto = Produto.find_by_id(id)
     if not produto:
@@ -248,7 +269,7 @@ def editar_produto(id):
     return render_template("cadastroproduto.html", produto=produto)
 
 
-@app.route("/produto/atualizar/<int:id>", methods=["POST"])
+@app.route("/atualizar_produto/<int:id>", methods=["POST"])
 def atualizar_produto(id):
     dados = get_produto_form()
     produto = Produto(**dados)
@@ -287,10 +308,12 @@ def deletar_produto(id):
         flash(f"Erro ao excluir produto: {e}", "erro")
     return redirect(url_for("listagem_produto"))
 
+
+# -----> Fim: Produto
 #===================================================================================
 
-#Funcionário
 
+# -----> Fim: Funcionário
 
 @app.route('/cadastro_funcionario')
 def cadastro_funcionario():
@@ -324,6 +347,18 @@ def salvar_funcionario():
     if erros :
         for erro in erros:
             flash(erro, "erro")
+        return render_template("cadastrofuncionario.html", funcionario=dados)
+    
+    cpf=request.form.get("funcionario_cpf", "").strip()
+    cpf1=funcionario.cpf_existente(cpf)
+    if cpf1:
+        flash("CPF já cadastrado!","erro")
+        return render_template("cadastrofuncionario.html", funcionario=dados)
+
+    email=request.form.get("funcionario_email", "").strip()
+    email1=funcionario.email_existente(email)
+    if email1:
+        flash("Email já cadastrado!","erro")
         return render_template("cadastrofuncionario.html", funcionario=dados)
     
     try:
@@ -488,7 +523,6 @@ def deletar_cliente(id):
 # -----> Fim: Cliente
 
 
-
 # -----> Início: Fornecedor
 
 # Rota para a tela de cadastro de fornecedor
@@ -522,6 +556,19 @@ def salvar_fornecedor():
     if erros :
         for erro in erros:
             flash(erro,"erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
+
+    cnpj = request.form.get("fornecedor_cnpj", "").strip()
+    cnpj_cadastrado = fornecedor.cnpj_existente(cnpj)
+    if cnpj_cadastrado:
+        flash("CNPJ já existe no sistema! ","erro")
+        return render_template("cadastrofornecedor.html",fornecedor=dados)
+
+    email = request.form.get("fornecedor_email", "").strip()
+    email_cadastrado = fornecedor.email_existente(email)
+
+    if email_cadastrado:
+        flash("Email já existe no sistema!","erro")
         return render_template("cadastrofornecedor.html", fornecedor=dados)
 
     #Cadastro
@@ -693,10 +740,7 @@ def cadastrar_pedidoentrada_lote():
 
     except Exception as e:
         return jsonify({"mensagem": f"Erro: {str(e)}"})
-
-@app.route('/enderecamento')
-def enderecamento():
-    return render_template('enderecamento.html')
+        
 
 if __name__ == "__main__":
     app.run(debug=True)
