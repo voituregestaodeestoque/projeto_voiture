@@ -1,6 +1,6 @@
 
 {% extends 'base.html' %}
-
+<!--Atualização dia 14/05/2026 às 13:59-->
 {% block conteudo %}  
         <div class="mb-4">
             <h2 class="titulo-pagina">
@@ -17,7 +17,7 @@
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-person-fill text-white"></i>
                         </span>
-                        <input type="text" name="funcionario_nome" id="funcionario_nome" class="form-control" placeholder="Digite o nome" required>
+                        <input type="text" name="funcionario_nome" id="funcionario_nome" class="form-control" placeholder="Digite o nome" required value="{{ funcionario.funcionario_nome if funcionario else '' }}">
 
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-envelope text-white"></i>
                         </span>
-                        <input type="email" name="funcionario_email" id="funcionario_email" class="form-control" placeholder="Digite o email" required>
+                        <input type="email" name="funcionario_email" id="funcionario_email" class="form-control" placeholder="Digite o email" required value="{{ funcionario.funcionario_email if funcionario else '' }}">
 
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-lock-fill text-white"></i>
                         </span>
-                        <input type="password" name="funcionario_senha" id="funcionario_senha" class="form-control" placeholder="Digite a senha" required>
+                        <input type="password" name="funcionario_senha" id="funcionario_senha" class="form-control" placeholder="Digite a senha" required value="{{ funcionario.funcionario_senha if funcionario else '' }}">
 
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-geo-fill text-white"></i>
                         </span>
-                        <input type="text" name="funcionario_cep" id="funcionario_cep" class="form-control" placeholder="Digite o cep" required>
+                        <input type="text" name="funcionario_cep" id="funcionario_cep" class="form-control" placeholder="Digite o cep" required value="{{ funcionario.funcionario_cep if funcionario else '' }}">
 
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-wallet text-white"></i>
                         </span>
-                        <input type="text" name="funcionario_cpf" id="funcionario_cpf" class="form-control" placeholder="Digite o cpf" required>
+                        <input type="text" name="funcionario_cpf" id="funcionario_cpf" class="form-control" placeholder="Digite o cpf" required value="{{ funcionario.funcionario_cpf if funcionario else '' }}">
 
                     </div>
                     <!--Cargo-->
@@ -66,7 +66,7 @@
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-person-vcard text-white"></i>
                         </span>
-                        <input type="text" name="funcionario_cargo" id="funcionario_cargo" class="form-control" placeholder="Digite o cargo" required>
+                        <input type="text" name="funcionario_cargo" id="funcionario_cargo" class="form-control" placeholder="Digite o cargo" required value="{{ funcionario.funcionario_cargo if funcionario else '' }}">
 
                     </div>
                 </div>
@@ -77,19 +77,19 @@
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-telephone-fill text-white"></i>
                         </span>
-                        <input type="text" name="funcionario_ddi" id="funcionario_ddi" class="form-control" placeholder="DDI" required>
+                        <input type="text" name="funcionario_ddi" id="funcionario_ddi" class="form-control" placeholder="DDI" required value="{{ funcionario.funcionario_ddi if funcionario else '' }}">
 
                     </div>
                     <!--DDD-->
                     <div class="input-group" style="max-width: 30%;">
                         
-                        <input type="text" name="funcionario_ddd" id="funcionario_ddd" class="form-control" placeholder="DDD" required>
+                        <input type="text" name="funcionario_ddd" id="funcionario_ddd" class="form-control" placeholder="DDD" required value="{{ funcionario.funcionario_ddd if funcionario else '' }}">
 
                     </div>
                     <!--Telefone-->
                     <div class="input-group">
                         
-                        <input type="text" name="funcionario_telefone" id="funcionario_telefone" class="form-control" placeholder="Telefone" required>
+                        <input type="text" name="funcionario_telefone" id="funcionario_telefone" class="form-control" placeholder="Telefone" required value="{{ funcionario.funcionario_telefone if funcionario else '' }}">
 
                     </div>
                 </div>

@@ -35,11 +35,9 @@ class Funcionario(CrudBase):
         validacoes = [
             Validator.validar_nome(self.funcionario_nome, "funcionario_nome"),
             Validator.validar_senha(self.funcionario_senha, "funcionario_senha"),
-            
             Validator.validar_cpf_cnpj(self.funcionario_cpf, "funcionario_cpf"),
             Validator.validar_cep(self.funcionario_cep, "funcionario_cep"),
             Validator.validar_email(self.funcionario_email, "funcionario_email"),
-            
             Validator.validar_email(self.funcionario_email, "funcionario_email"),
             Validator.validar_ddi_ddd(self.funcionario_ddi, "funcionario_ddi"),
             Validator.validar_ddi_ddd(self.funcionario_ddd, "funcionario_ddd"),
@@ -112,11 +110,11 @@ class Funcionario(CrudBase):
             cursor.close()
             conexao.close()
 
-    
+    #Procura no banco algum funcionário com o mesmo CPF
     @classmethod
-    def find_by_cpf(cls, cpf):
+    def cpf_existente(cls, cpf):
         conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
+        cursor = conexao.cursor(dictionary=True, buffered=True)
         try:
             sql = f"SELECT * FROM {cls.table} WHERE funcionario_cpf = %s"
             cursor.execute(sql, (cpf,))
@@ -124,11 +122,12 @@ class Funcionario(CrudBase):
         finally:
             cursor.close()
             conexao.close()
-
+    
+    #Procura no banco algum funcionário com o mesmo email
     @classmethod
-    def find_by_email(cls, email):
+    def email_existente(cls, email):
         conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
+        cursor = conexao.cursor(dictionary=True, buffered=True)
         try:
             sql = f"SELECT * FROM {cls.table} WHERE funcionario_email = %s"
             cursor.execute(sql, (email,))
