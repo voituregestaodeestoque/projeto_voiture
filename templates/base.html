@@ -59,10 +59,6 @@
                 <i class="bi bi-box-seam-fill"></i> Movimentação de entrada
             </a>-->
 
-<!--
-            <a href="{{ url_for('pedidosaida') }}" class="{% if request.endpoint == 'pedidosaida' %}active{% endif %}">
-                <i class="bi bi-box-seam-fill"></i> Pedido de saida
-            </a>-->
 
             <a href="{{ url_for('listagem_fornecedor') }}" class="{% if request.endpoint == 'fornecedor' or request.endpoint == 'listagem_fornecedor'  %}active{% endif %}">
                 <i class="bi bi-person-fill"></i> Fornecedores
