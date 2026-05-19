@@ -8,6 +8,7 @@ from models.uso_empilhadeira import Uso_empilhadeira
 from models.fornecedor import Fornecedor
 from models.produto import Produto
 from models.cliente import Cliente
+from models.estoque import Estoque
 
 app = Flask(__name__)
 app.secret_key = "chave_secreta"
