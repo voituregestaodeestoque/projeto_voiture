@@ -110,6 +110,17 @@
                         </div>
                     </div>
 
+                    <div class="col-md-4 mb-3">
+                        <label for="estoque_quantidade">Quantidade</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-layout-text-window-reverse"></i>
+                            </span>
+                            <input type="text" name="estoque_quantidade" class="form-control" id="estoque_quantidade"
+                                placeholder="Quantidade de Produtos" required value="{{ produto.estoque_quantidade if produto else '' }}">
+                        </div>
+                    </div>
+
                     <div class="col-md-12 mb-3">
                         <label for="produto_descricao" class="form-label">Descrição</label>
                         <input type="text" name="produto_descricao" class="form-control" id="produto_descricao" required value="{{ produto.produto_descricao if produto else '' }}"
