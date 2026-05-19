@@ -200,8 +200,7 @@ def salvar_uso_empilhadeira():
     except Exception as e:
         flash(f"Erro ao cadastrar uso de empilhadeira{e}", "erro")
         return render_template("cadastro_uso_empilhadeira.html", fornecedor=dados)
-
-
+        
 # -----> Início: Produto
 
 @app.route('/produtos')
@@ -788,7 +787,40 @@ def nova_entrada():
 
 @app.route("/listagem_estoque")
 def listagem_estoque():
-    return render_template('estoque.html')
+    estoque=Estoque.card_estoque()
+    return render_template('estoque.html', estoque=estoque)
+
+@app.route('/uso_empilhadeira')
+def uso_empilhadeira():
+    # Buscamos a lista do banco usando a sua Classe (com E maiúsculo!)
+    lista_de_maquinas = Empilhadeira.empilhadeirasemuso()
+    
+    # O nome que você coloca aqui antes do '=' é o que o HTML vai reconhecer
+    return render_template('usoempilhadeira.html', empilhadeiras=lista_de_maquinas)
+    
+    try:
+            uso_empilhadeira_id = uso_empilhadeira.insert()
+
+            for item in itens:
+                Itemuso_empilhadeira.adicionar_item(
+                    uso_empilhadeira_id=uso_empilhadeira_id,
+                    empilhadeira_id=int(item["empilhadeira_id"]),
+                    empilhadeira_chassi=int(item["empilhadeira_chassi"]),
+                    empilhadeira_modelo=item["empilhadeira_modelo"],
+                    mpilhadeira_marca=item["empilhadeira_marca"]
+                )
+
+            uso_empilhadeira.atualizar_total(uso_empilhadeira_id)
+
+    except Exception:
+            flash("Erro ao criar uso_empilhadeira.")
+            return render_template(
+                "usoempilhadeira.html",
+                uso_empilhadeira=uso_empilhadeira,
+                empilhadeira=empilhadeira.find_all(order_by="nome")
+            )
+
+        
 
 if __name__ == "__main__":
     app.run(debug=True)
