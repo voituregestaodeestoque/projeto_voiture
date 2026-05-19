@@ -33,10 +33,11 @@
         {%if estoque%}
         {%for estoque_produto in estoque%}
         <div class="cards m-4" style="background-color: white; width: 400px; height: 400px; border-radius: 10px;">
-            <h2>{{estoque_produto.produto_nome}}</h2>
-            <p>{{estoque_produto.produto_quantidade_minima}}</p>
-            <p>{{estoque_produto.estoque_quantidade}}</p>
-            <p>{{estoque_produto.produto_localizacao}}</p>
+            <img src="" alt="">
+            <p>{{estoque_produto.produto_nome}}</p>
+            <p>Estoque mínimo: {{estoque_produto.produto_quantidade_minima}}</p>
+            <p>Estoque atual: {{estoque_produto.estoque_quantidade}}</p>
+            <p>Localização: {{estoque_produto.produto_localizacao}}</p>
         </div>
         {%endfor%}
         
