@@ -4,7 +4,7 @@
 <h2>Pedidos de Venda</h2>
 
 <p>
-    <a href="{{ url_for('nova_venda') }}">Novo Pedido de Venda</a>
+    <a href="{{ url_for('nova_entrada') }}">Novo Pedido de Entrada</a>
 </p>
 
 <table>
@@ -25,7 +25,7 @@
         <td>{{ pedido.status }}</td>
         <td>R$ {{ pedido.valor_total }}</td>
         <td>
-            <a href="{{ url_for('detalhes_venda', pedido_id=pedido.id) }}">Abrir</a>
+            <a href="{{ url_for('detalhes_entrada', pedido_id=pedido.id) }}">Abrir</a>
         </td>
     </tr>
     {% endfor %}
