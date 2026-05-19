@@ -1,5 +1,3 @@
-# Editado por Júlia em 19/05/2026 às 12h13
-
 from datetime import datetime
 from core.crud_base import CrudBase
 from core.database import Database
@@ -11,7 +9,7 @@ class Estoque(CrudBase):
         "estoque_quantidade",
         "produto_id"]
 
-    def __init__(self, estoque_quantidade, produto_id = 0):
+    def __init__(self, estoque_quantidade, produto_id):
         self.estoque_quantidade = estoque_quantidade
         self.produto_id = produto_id
 

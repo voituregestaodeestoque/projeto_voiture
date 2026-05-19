@@ -1,5 +1,4 @@
-
-<!--atualizado por Júlia em 19/05/2026 às 12h10-->
+<!--atualizado por clarinha 07/05 às 09h49-->
 
 {% extends 'base.html' %}
 
@@ -92,7 +91,7 @@
                         <label for="produto_preco_custo">Preço de custo</label>
                         <div class="input-group">
                             <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-cash-stack text-white"></i>
+                                <i class="bi bi-gear-fill text-white"></i>
                             </span>
                             <input type="text" name="produto_preco_custo" class="form-control" id="produto_preco_custo"
                                 placeholder="Preço de custo em R$" required value="{{ produto.produto_preco_custo if produto else '' }}">
@@ -104,27 +103,23 @@
                         <label for="produto_preco_venda">Preço de venda</label>
                         <div class="input-group">
                             <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-cash-coin text-white"></i>
+                                <i class="bi bi-gear-fill text-white"></i>
                             </span>
                             <input type="text" name="produto_preco_venda" class="form-control" id="produto_preco_venda"
                                 placeholder="Preço de venda em R$" required value="{{ produto.produto_preco_venda if produto else '' }}">
                         </div>
                     </div>
 
-                    {% if produto and produto.id %}
-                    {%else%}
                     <div class="col-md-4 mb-3">
                         <label for="estoque_quantidade">Quantidade</label>
                         <div class="input-group">
                             <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-box text-white"></i>
+                                <i class="bi bi-layout-text-window-reverse"></i>
                             </span>
                             <input type="text" name="estoque_quantidade" class="form-control" id="estoque_quantidade"
-                                placeholder="Quantidade em estoque" required >
+                                placeholder="Quantidade de Produtos" required >
                         </div>
                     </div>
-
-                    {%endif%}
 
                     <div class="col-md-12 mb-3">
                         <label for="produto_descricao" class="form-label">Descrição</label>
