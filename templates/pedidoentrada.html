@@ -1,119 +1,33 @@
-<!--Atualizado por Clarinha 05/05 às 16h10-->
-
 {% extends 'base.html' %}
 
 {% block conteudo %}
+<h2>Pedidos de Venda</h2>
 
-<div class="mb-4">
-    <h2 class="titulo-pagina">Cadastro Pedido Entrada</h2>
-</div>
+<p>
+    <a href="{{ url_for('nova_venda') }}">Novo Pedido de Venda</a>
+</p>
 
-<div class="d-flex justify-content-between">
-    <div class="container-fluid pedidoentrada-container d-flex justify-content-between">
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Cliente</th>
+        <th>Data</th>
+        <th>Status</th>
+        <th>Valor Total</th>
+        <th>Ações</th>
+    </tr>
 
-        <div class="pedidoentrada-card text-dark" style="width: 100%;">
-            <form class="mb-3" id="formPedido" >
-
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <label for="">ID</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-box text-white"></i>
-                            </span>
-                            <input type="text" class="form-control" name="pedido_id" id="pedido_id" readonly>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="">Fornecedor</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-basket2-fill text-white"></i>
-                            </span>
-
-                            <select id="pedidoentrada_fornecedor" class="form-control" required>
-                                <option value="">Selecione um fornecedor</option>
-                                {% for f in fornecedores %}
-                                <option value="{{ f.id }}">{{ f.fornecedor_nome }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label for="">Status</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-box text-white"></i>
-                            </span>
-                            <input type="text" class="form-control" name="pedido_status" id="pedido_status">
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <form class="mb-3" id="formItemPedido" action="{{url_for('salvar_pedidoentrada')}}">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="">Produto</label>
-
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-box text-white"></i>
-                            </span>
-                            <select id="pedidoentrada_produto" name="pedidoentrada_produto"class="form-control" required>
-                                <option value="">Selecione um produto</option>
-                                {% for p in produtos %}
-                                <option value="{{ p.id }}">{{ p.produto_nome }}</option>
-                                {% endfor %}
-                                <option value=1>produto1</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="">Quantidade</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-box text-white"></i>
-                            </span>
-                            <input type="text" class="form-control" name="pedidoentrada_quantidade" id="pedidoentrada_quantidade"
-                                required>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 d-flex mb-3 justify-content-end" style="padding: 15px; margin-top: 15px;">
-                        <button type="submit" class="btn btn-success produto-btn" ">
-                            Incluir
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <div class="info-card text-dark d-flex justify-content-between"
-                style="background-color: #fff; border-radius: 20px; width: 100%; margin-top: 20px;">
-
-                <table class="table" style="width: 100%;">
-                    <tr>
-                        <th>Item</th>
-                        <th>Produto</th>
-                        <th>Quantidade</th>
-                        <th>Ações</th>
-                    </tr>
-                    <tr>
-                        <td>item 1</td>
-                        <td>produto 1</td>
-                        <td>quntidade 1</td>
-                        <td>
-                            <button type="button" class="btn btn-sm btn-success produto-btn" onclick="ola">Editar</button>
-                            <button type="button" class="btn btn-sm btn-danger produto-btn" onclick="adicionarItem()">Excluir</button>
-                        </td>
-                    </tr>
-                </table>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
+    {% for pedido in pedidos %}
+    <tr>
+        <td>{{ pedido.id }}</td>
+        <td>{{ pedido.cliente }}</td>
+        <td>{{ pedido.data_pedido }}</td>
+        <td>{{ pedido.status }}</td>
+        <td>R$ {{ pedido.valor_total }}</td>
+        <td>
+            <a href="{{ url_for('detalhes_venda', pedido_id=pedido.id) }}">Abrir</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}

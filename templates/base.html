@@ -33,7 +33,9 @@
 
             <a>Dashboard</a>
 
-            <a>Estoque</a>
+            <a href="{{ url_for('listagem_estoque') }}" class="{% if request.endpoint == 'listagem_estoque' or request.endpoint == 'cadastroempilhadeira' %}active{% endif %}">
+                <i class="bi bi-box-seam"></i> Estoque
+            </a>
 
             <a href="{{ url_for('tabelaempilhadeira') }}" class="{% if request.endpoint == 'tabelaempilhadeira' or request.endpoint == 'cadastroempilhadeira' %}active{% endif %}">
                 <i class="bi bi-box-seam"></i> Empilhadeiras
@@ -48,7 +50,7 @@
                 <i class="bi bi-box-seam-fill"></i> Pedido de entrada
             </a>
 
-            <a href="">
+            <a href="{{ url_for('enderecamento') }}" class="{% if request.endpoint == 'enderecamento' %}active{% endif %}">
                 <i class="bi bi-box-seam-fill"></i> Enderecamento
             </a>
 
@@ -59,10 +61,6 @@
                 <i class="bi bi-box-seam-fill"></i> Movimentação de entrada
             </a>-->
 
-
-            <a href="{{ url_for('pedidosaida') }}" class="{% if request.endpoint == 'pedidosaida' %}active{% endif %}">
-                <i class="bi bi-box-seam-fill"></i> Pedido de saida
-            </a>
 
             <a href="{{ url_for('listagem_fornecedor') }}" class="{% if request.endpoint == 'fornecedor' or request.endpoint == 'listagem_fornecedor'  %}active{% endif %}">
                 <i class="bi bi-person-fill"></i> Fornecedores
