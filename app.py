@@ -8,12 +8,9 @@ from models.uso_empilhadeira import Uso_empilhadeira
 from models.fornecedor import Fornecedor
 from models.produto import Produto
 from models.cliente import Cliente
-<<<<<<< HEAD
 from models.pedido_entrada import Pedido_entrada
 from models.detalhe_entrada import Detalhe_entrada
-=======
 from models.estoque import Estoque
->>>>>>> 57782e327b400925d8c3cd4de289f7dc32800214
 
 app = Flask(__name__)
 app.secret_key = "chave_secreta"
