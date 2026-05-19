@@ -1,5 +1,5 @@
 
-# Editado por Clarinha em 14/05/2026 às 12h28
+# Editado por Lipe em 14/05/2026 às 12h16
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -239,7 +239,7 @@ def salvar_produto():
 
 
 
-@app.route("/editar_produto/<int:id>")
+@app.route("/produto/editar/<int:id>")
 def editar_produto(id):
     produto = Produto.find_by_id(id)
     if not produto:
@@ -248,7 +248,7 @@ def editar_produto(id):
     return render_template("cadastroproduto.html", produto=produto)
 
 
-@app.route("/atualizar_produto/<int:id>", methods=["POST"])
+@app.route("/produto/atualizar/<int:id>", methods=["POST"])
 def atualizar_produto(id):
     dados = get_produto_form()
     produto = Produto(**dados)
@@ -324,18 +324,6 @@ def salvar_funcionario():
     if erros :
         for erro in erros:
             flash(erro, "erro")
-        return render_template("cadastrofuncionario.html", funcionario=dados)
-    
-    cpf=request.form.get("funcionario_cpf", "").strip()
-    cpf1=funcionario.cpf_existente(cpf)
-    if cpf1:
-        flash("CPF já cadastrado!","erro")
-        return render_template("cadastrofuncionario.html", funcionario=dados)
-
-    email=request.form.get("funcionario_email", "").strip()
-    email1=funcionario.email_existente(email)
-    if email1:
-        flash("Email já cadastrado!","erro")
         return render_template("cadastrofuncionario.html", funcionario=dados)
     
     try:
@@ -705,6 +693,10 @@ def cadastrar_pedidoentrada_lote():
 
     except Exception as e:
         return jsonify({"mensagem": f"Erro: {str(e)}"})
+
+@app.route('/enderecamento')
+def enderecamento():
+    return render_template('enderecamento.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
