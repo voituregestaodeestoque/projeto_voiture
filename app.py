@@ -740,6 +740,11 @@ def cadastrar_pedidoentrada_lote():
 
     except Exception as e:
         return jsonify({"mensagem": f"Erro: {str(e)}"})
+
+@app.route('/seu-formulario')
+def exibir_formulario():
+    lista_empilhadeiras = empilhadeira.query.all() 
+    return render_template('usoempilhadeira.html', empilhadeiras=lista_empilhadeiras)
         
 
 if __name__ == "__main__":
