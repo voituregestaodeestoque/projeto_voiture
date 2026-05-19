@@ -8,6 +8,8 @@ from models.uso_empilhadeira import Uso_empilhadeira
 from models.fornecedor import Fornecedor
 from models.produto import Produto
 from models.cliente import Cliente
+from models.pedido_entrada import Pedido_entrada
+from models.detalhe_entrada import Detalhe_entrada
 
 app = Flask(__name__)
 app.secret_key = "chave_secreta"
@@ -248,9 +250,10 @@ def salvar_produto():
         return render_template("cadastroproduto.html", estoque = quantidade)
 
     try:
-        produto.insert()
-        estoque.produto_id = produto.id
-        estoque.insert()
+        prod_id = produto.insert()
+        estoque.produto_id = prod_id
+        if not prod_id == 0:
+            estoque.insert()
         
         flash("Produto cadastrado com sucesso.", "sucesso")
         return redirect(url_for("listagem_produto"))
@@ -653,99 +656,135 @@ def deletar_fornecedor(id):
 
 
 
-# pedido de entrada e saida
-@app.route('/pedidoentrada')
-def pedidoentrada():
-    return render_template('pedidoentrada.html', pedido_entrada=None)
-
-@app.route('/pedidosaida')
-def pedidosaida():
-    return render_template('pedidosaida.html', pedido_saida=None)
-
-def get_pedidoentrada_form():
-    return {
-        "pedidoentrada_produto": request.form.get("pedidoentrada_produto", "").strip(),
-        "pedidoentrada_quantidade": to_int(request.form.get("pedidoentrada_quantidade"))
-    }
-
-@app.route("/cadastrar_pedidoentrada")
-def salvar_pedidoentrada():
-    print("ola clara")
-    
-    dados = get_pedidoentrada_form()
-    print(dados)
-
-    return render_template("dashboard.html")
-    #pedidoentrada = Pedido_entrada(**dados)
-    
-    '''erros = produto.validate()
-    if erros :
-        for erro in erros:
-            flash(erro, "erro")
-        return render_template("cadastroproduto.html", produto=dados)'''
-    '''
-    try:
-        pedidoentrada.insert()
-        flash("Pedido cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("menu"))
-    except Exception as e:
-        flash(f"Erro ao cadastrar pedido: {e}", "erro")
-        return render_template("pedidoentrada.html", pedido_entrada=dados)
-
-def get_pedidosaida_form():
-    return {
-        "pedidosaida_produto": request.form.get("pedidosaida_produto", "").strip(),
-        "pedidosaida_quantidade": request.form.get("pedidosaida_quantidade", "").strip(),
-        "pedidosaida_cliente": request.form.get("pedidosaida_cliente", "").strip()
-    }'''
-
-@app.route("/cadastrar_pedidosaida", methods=["POST"])
-def salvar_pedidosaida():
-    dados = get_pedidosaida_form()
-    pedidosaida = Pedido_saida(**dados)
-    
-    '''erros = produto.validate()
-    if erros :
-        for erro in erros:
-            flash(erro, "erro")
-        return render_template("cadastroproduto.html", produto=dados)'''
-    
-    try:
-        pedidosaida.insert()
-        flash("Pedido cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("menu"))
-    except Exception as e:
-        flash(f"Erro ao cadastrar pedido: {e}", "erro")
-        return render_template("pedidosaida.html", pedido_saida=dados)
-
-
-
-@app.route("/cadastrar_pedidoentrada_lote", methods=["POST"])
-def cadastrar_pedidoentrada_lote():
-    data = request.get_json()
-
-    fornecedor = data.get("fornecedor")
-    itens = data.get("itens", [])
-
-    try:
-        for item in itens:
-            pedido = Pedido_entrada(
-                pedidoentrada_produto=item["produto"],
-                pedidoentrada_quantidade=item["quantidade"],
-                pedidoentrada_fornecedor=fornecedor
-            )
-            pedido.insert()
-
-        return jsonify({"mensagem": "Pedido cadastrado com sucesso!"})
-
-    except Exception as e:
-        return jsonify({"mensagem": f"Erro: {str(e)}"})
-
 @app.route('/seu-formulario')
 def exibir_formulario():
     lista_empilhadeiras = empilhadeira.query.all() 
     return render_template('usoempilhadeira.html', empilhadeiras=lista_empilhadeiras)
         
+
+@app.route("/pedidoentrada")
+def pedidoentrada():
+    return render_template(
+        "pedidoentrada.html",
+        pedidos=Pedido_entrada.find_all_ordered()
+    )
+
+
+
+@app.route("/entrada/<int:pedido_entrada_id>")
+def detalhes_entrada(pedido_entrada_id):
+    pedido = Pedido_entrada.find_by_id(pedido_entrada_id)
+
+    if not pedido:
+        flash("Pedido de entrada não encontrado.")
+        return redirect(url_for("pedidoentrada"))
+
+    return render_template(
+        "detalhes_entrada.html",
+        pedido=pedido,
+        itens=Detalhe_entrada.find_by_pedido(pedido_entrada_id),
+        produtos=Produto.find_all(order_by="nome")
+    )
+
+
+@app.route("entrada/<int:pedido_entrada_id>/adicionar", methods=["POST"])
+
+def adicionar_item_entrada(pedido_entrada_id):
+    produto_id = int(request.form.get("produto_id", 0))
+    quantidade = int(request.form.get("quantidade", 0) or 0)
+
+    mensagem = Detalhe_entrada.adicionar_item(
+        pedido_id=pedido_id,
+        produto_id=produto_id,
+        quantidade=quantidade
+    )
+
+    flash(mensagem)
+    return redirect(url_for("detalhes_entrada", pedido_id=pedido_id))
+
+
+@app.route("/entrada/item/remover/<int:detalhe_entrada_id>/<int:pedido_entrada_id>")
+
+def remover_item_etrada(detalhe_entrada_id, pedido_entrada_id):
+    mensagem = Detalhe_entrada.remover_item(detalhe_entrada_id)
+    flash(mensagem)
+    return redirect(url_for("detalhes_entrada", pedido__entrada_id=pedido__entrada_id))
+
+
+@app.route("/entrada/finalizar/<int:pedido_id>")
+def finalizar_venda(pedido_entrada_id):
+    mensagem = Pedido_entrada.finalizar(pedido_entrada_id)
+    flash(mensagem)
+    return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
+
+
+@app.route("/entrada/nova", methods=["GET", "POST"])
+#@login_required
+def nova_entrada():
+    if request.method == "POST":
+        fornecedor = request.form.get("forncedor", "").strip()
+        itens_json = request.form.get("itens_json", "[]")
+
+        try:
+            itens = json.loads(itens_json)
+        except Exception:
+            itens = []
+
+        pedido = Pedido_entrada(fornecedor=fornecedor)
+        erros = pedido_entrada.validate()
+
+        if not itens:
+            erros.append("Adicione pelo menos um item ao pedido.")
+
+        for item in itens:
+            if int(item["quantidade"]) <= 0:
+                erros.append("Todos os itens devem ter quantidade maior que zero.")
+
+        if erros:
+            for erro in erros:
+                flash(erro)
+
+            return render_template(
+                "listagem_pedidoentrada.html",
+                pedido=pedido,
+                produtos=Produto.find_all(order_by="nome")
+            )
+
+        try:
+            pedido_entrada_id = pedido_entrada.insert()
+
+            for item in itens:
+                ItemPedidoVenda.adicionar_item(
+                    pedido_entrada_id=pedido_entrada_id,
+                    produto_id=int(item["produto_id"]),
+                    quantidade=int(item["quantidade"])
+                )
+
+            Pedido_entrada.atualizar_total(pedido_entrada_id)
+
+            flash("Pedido de entrada criado com sucesso.")
+            return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
+
+        except Exception:
+            flash("Erro ao criar pedido de entrada.")
+            return render_template(
+                "listagem_produtoentrada.html",
+                pedido_entrada=pedido_entrada,
+                produtos=Produto.find_all(order_by="nome")
+            )
+
+    return render_template(
+        "listagem_pedidoentrada.html",
+        pedido=None,
+        produtos=Produto.find_all(order_by="nome")
+    )
+
+
+'''Estoque'''
+
+@app.route("/listagem_estoque")
+def listagem_estoque():
+    return render_template('estoque.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
