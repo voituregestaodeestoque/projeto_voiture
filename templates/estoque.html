@@ -1,15 +1,20 @@
-<!--Ryan em 21/05/2026 as 10h45-->
+<!--Ryan em 21/05/2026 as 14h20-->
 {% extends 'base.html' %}
 
 {% block conteudo %}
 
 <div>
-    <div class="papaizao d-flex justify-content">
-        <div class="pesquisa m-4" style=" height: 40px; width: 500px;">
-            <div class="d-flex">
-                <input type="text" class="form-control" placeholder="Procurar produto:">
-                <button class="btn btn-primary ">🔍</button>
+    <div>
+        <!--TOPO-->
+        <div style="width: 98%; margin-left: 10px;">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Pesquisa" >
+                <span class="input-group-text bg-dark border-secondary">
+                    <i class="bi bi-search text-white"></i>
+                </span>
+                
             </div>
+
             <select class="filtrar mt-3" style="border-radius: 5px;">
                 <option selected>filtrar</option>
                 <option value=""></option>
@@ -36,33 +41,68 @@
                 <div class="card mb-4" style="max-width: 100%;">
                     <img class="card-img-top" src="https://picsum.photos/300/200?random=8" alt="imagem">
                     <div class="card-body">
-                        <h5 class="card-title">{{estoque_produto.produto_nome}}</h5>
-                        <p class="card-text">Estoque mínimo: {{estoque_produto.produto_quantidade_minima}}</p>
-                        <p class="card-text">Estoque atual: {{estoque_produto.estoque_quantidade}}</p>
-                        <p class="card-text">Localização: {{estoque_produto.produto_localizacao}}</p>
-                        <!-- Botão do modal -->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#modal{{estoque_produto.produto_id}}">
+                        <h5 class="card-title"><strong>{{estoque_produto.produto_nome}}</strong></h5>
+                        <p class="card-text"><strong>Estoque mínimo:</strong> {{estoque_produto.produto_quantidade_minima}}</p>
+                        <p class="card-text"><strong>Estoque atual:</strong> {{estoque_produto.estoque_quantidade}}</p>
+                        <p class="card-text"><strong>Localização:</strong> {{estoque_produto.produto_localizacao}}</p>
+                        <!-- Botão pra ativar o modal -->
+                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal"
+                            data-bs-target="#modal{{estoque_produto.id}}">
                             Mais detalhes
                         </button>
 
                         <!-- Modal -->
-                        <div class="modal fade" id="modal{{estoque_produto.produto_id}}" tabindex="-1">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal fade" id="modal{{estoque_produto.id}}" tabindex="-1">
+                            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">{{estoque_produto.produto_nome}}</h5>
+                                        <h5 class="modal-title" id="exampleModalLongTitle">
+                                            <strong>{{estoque_produto.produto_nome}}</strong>
+                                        </h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close">
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        ...
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                        <section class="container d-flex justify-content-between"
+                                        style="background-color: #DCE3EE; width: 100%; height: 550px; border-radius: 10px;">
+                                            <!-- LADO ESQUERDO -->
+                                            <div class="d-flex flex-column gap-3 m-3">
+                                                <div class="bg-white" style="width: 300px; border-radius: 10px !important;">
+                                                    <img class="card-img-top" src="https://picsum.photos/300/200?random=8" style="border-radius: 10px !important;" alt="imagem">
+                                                </div>
+                                                <div class="bg-white w-100"
+                                                    style="height: 285px; border-radius: 10px;">
+                                                    <p style="margin: 15px;"><strong>Descrição:</strong> {{estoque_produto.produto_descricao}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-column m-3 mx-auto" style="width: 320px;">
+                                                <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
+                                                    style=" height: 70px; border-radius: 10px;">
+                                                    <p><strong>Nome:</strong> {{estoque_produto.produto_nome}}</p>
+                                                </div>
+                                                <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
+                                                    style="height: 70px; border-radius: 10px;">
+                                                    <p><strong>Categoria:</strong> {{estoque_produto.produto_categoria}}</p>
+                                                </div>
+                                                <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
+                                                    style="height: 70px; border-radius: 10px;">
+                                                    <p><strong>Preço de Venda:</strong> {{estoque_produto.produto_preco_venda}}</p>
+                                                </div>
+                                                <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
+                                                    style="height: 70px; border-radius: 10px;">
+                                                    <p><strong>Preço de Custo:</strong> {{estoque_produto.produto_preco_custo}}</p>
+                                                </div>
+                                                <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
+                                                    style="height: 70px; border-radius: 10px;">
+                                                    <p><strong>Quantidade atual:</strong> {{estoque_produto.produto_preco_venda}}</p>
+                                                </div>
+                                                <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
+                                                    style="height: 70px; border-radius: 10px;">
+                                                    <p><strong>Peso:</strong> {{estoque_produto.produto_peso}}</p>
+                                                </div>
+                                            </div>
+                                        </section>
                                     </div>
                                 </div>
                             </div>
@@ -88,4 +128,4 @@
         {%endif%}
     </section>
 </div>
-    {% endblock %}
+{% endblock %}
