@@ -1,9 +1,9 @@
-<!--Júlia em 21/05/2026 as 09h27-->
+<!--Ryan em 21/05/2026 as 10h45-->
 {% extends 'base.html' %}
 
 {% block conteudo %}
 
-<body>
+<div>
     <div class="papaizao d-flex justify-content">
         <div class="pesquisa m-4" style=" height: 40px; width: 500px;">
             <div class="d-flex">
@@ -33,16 +33,42 @@
             <div class="col-md-3">
 
                 <!--CARD-->
-                <div class="card" style="width: 18rem;" >
-                    <img class="card-img-top" src="../static/images/WIN_20260519_16_38_30_Pro.jpg" alt="imagem">
+                <div class="card mb-4" style="max-width: 100%;">
+                    <img class="card-img-top" src="https://picsum.photos/300/200?random=8" alt="imagem">
                     <div class="card-body">
                         <h5 class="card-title">{{estoque_produto.produto_nome}}</h5>
                         <p class="card-text">Estoque mínimo: {{estoque_produto.produto_quantidade_minima}}</p>
                         <p class="card-text">Estoque atual: {{estoque_produto.estoque_quantidade}}</p>
                         <p class="card-text">Localização: {{estoque_produto.produto_localizacao}}</p>
-                        <a href="#" class="btn btn-primary">Mais detalhes</a>
+                        <!-- Botão do modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#modal{{estoque_produto.produto_id}}">
+                            Mais detalhes
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modal{{estoque_produto.produto_id}}" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">{{estoque_produto.produto_nome}}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close">
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-        
+
                 </div>
 
             </div>
@@ -50,7 +76,7 @@
             {%endfor%}
 
         </div>
-    
+
         {%else%}
 
         <!--Mensagem em caso de não ter estoque de produtos cadastrados-->
@@ -61,5 +87,5 @@
 
         {%endif%}
     </section>
-
+</div>
     {% endblock %}

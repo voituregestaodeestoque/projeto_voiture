@@ -33,7 +33,7 @@ class Estoque(CrudBase):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            sql = "SELECT e.estoque_quantidade,p.produto_nome,p.produto_localizacao, p.produto_quantidade_minima FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id"
+            sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id"
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
