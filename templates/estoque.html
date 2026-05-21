@@ -1,15 +1,10 @@
-<!--LipinhoGamer 07/05/2026 as 13h56-->
+<!--Júlia em 21/05/2026 as 09h11-->
 {% extends 'base.html' %}
 
 {% block conteudo %}
 
 <body>
     <div class="papaizao d-flex justify-content">
-        <div class=" d-flex mb-3 ms-5" style="max-width: 20%;">
-            <div class="" style="width:100px; height:100px; font-size:40px; max-width: 20%;">
-                <img src="../static/images/caixas_estoque.png" alt="imagem">
-            </div>
-        </div>
         <div class="pesquisa m-4" style=" height: 40px; width: 500px;">
             <div class="d-flex">
                 <input type="text" class="form-control" placeholder="Procurar produto:">
@@ -22,34 +17,46 @@
                 <option value=""></option>
             </select>
         </div>
-        <div class=" d-flex mb-3" style="max-width: 20%; margin-left: 700px;">
-            <div class="logo" style="width:100px; height:100px; font-size:40px; max-width: 20%;">
-                <img src="../static/images/Captura de tela 2026-05-07 104456.png" alt="imagem">
-            </div>
-        </div>
+
     </div>
 
-    <section class="container_papaizao d-flex justify-content-center align-items-center mt-5">
+    <!--ESTOQUE-->
+    <section class="container mt-5">
         {%if estoque%}
-        {%for estoque_produto in estoque%}
-        <div class="card" style="width: 18rem;">
-            <img class="card-img-top" src="../static/images/WIN_20260519_16_38_30_Pro.jpg" alt="imagem">
-            <div class="card-body">
-                <p>{{estoque_produto.produto_nome}}</p>
-                <p>Estoque mínimo: {{estoque_produto.produto_quantidade_minima}}</p>
-                <p>Estoque atual: {{estoque_produto.estoque_quantidade}}</p>
-                <p>Localização: {{estoque_produto.produto_localizacao}}</p>
+
+        <!--LINHA-->
+        <div class="row">
+
+            {%for estoque_produto in estoque%}
+
+            <!--COLUNA-->
+            <div class="col-md-4">
+
+                <!--CARD-->
+                <div class="card" style="width: 18rem;" >
+                    <img class="card-img-top" src="../static/images/WIN_20260519_16_38_30_Pro.jpg" alt="imagem">
+                    <div class="card-body">
+                        <h5 class="card-title">{{estoque_produto.produto_nome}}</h5>
+                        <p class="card-text">Estoque mínimo: {{estoque_produto.produto_quantidade_minima}}</p>
+                        <p class="card-text">Estoque atual: {{estoque_produto.estoque_quantidade}}</p>
+                        <p class="card-text">Localização: {{estoque_produto.produto_localizacao}}</p>
+                        <a href="#" class="btn btn-primary">Mais detalhes</a>
+                    </div>
+        
+                </div>
+
             </div>
 
-        </div>
-        {%endfor%}
+            {%endfor%}
 
+        </div>
+    
         {%else%}
 
         <!--Mensagem em caso de não ter estoque de produtos cadastrados-->
         <div class="alert alert-info mb-0">
             <i class="bi bi-info-circle"></i>
-            Nenhum funcionário cadastrado.
+            Nenhum produto cadastrado.
         </div>
 
         {%endif%}
