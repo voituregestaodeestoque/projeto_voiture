@@ -688,12 +688,11 @@ def detalhes_entrada(pedido_entrada_id):
         "detalhes_entrada.html",
         pedido=pedido,
         itens=Detalhe_entrada.find_by_pedido(pedido_entrada_id),
-        produtos=Produto.find_all(order_by="nome")
+        produto=Produto.find_all()
     )
 
 
 @app.route("/entrada/<int:pedido_entrada_id>/adicionar", methods=["POST"])
-
 def adicionar_item_entrada(pedido_entrada_id):
     produto_id = int(request.form.get("produto_id", 0))
     quantidade = int(request.form.get("quantidade", 0) or 0)
@@ -727,8 +726,9 @@ def finalizar_venda(pedido_entrada_id):
 #@login_required
 def nova_entrada():
     if request.method == "POST":
-        fornecedor = request.form.get("forncedor", "").strip()
+        fornecedor = request.form.get("fornecedor", "").strip()
         itens_json = request.form.get("itens_json", "[]")
+
 
         try:
             itens = json.loads(itens_json)
@@ -752,7 +752,7 @@ def nova_entrada():
             return render_template(
                 "listagem_pedidoentrada.html",
                 pedido=pedido,
-                produtos=Produto.find_all(order_by="nome")
+                produto=Produto.find_all()
             )
 
         try:
@@ -775,13 +775,13 @@ def nova_entrada():
             return render_template(
                 "listagem_produtoentrada.html",
                 pedido_entrada=pedido_entrada,
-                produtos=Produto.find_all(order_by="nome")
+                produto=Produto.find_all()
             )
 
     return render_template(
         "listagem_pedidoentrada.html",
         pedido=None,
-        produtos=Produto.find_all(order_by="nome")
+        produto=Produto.find_all()
     )
 '''Estoque'''
 
