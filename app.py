@@ -37,7 +37,9 @@ def inicio():
 
 @app.route("/dashboard")
 def dashboard():
-    return render_template('dashboard.html')
+    estoque=Estoque.estoque_total()
+    
+    return render_template('dashboard.html', estoque=estoque)
 
 '''Login funcionário - Ryan Ribeiro'''
 @app.route('/loginfuncionario')

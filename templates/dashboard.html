@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 <!--Atualizado por ryan dia 26/05/2026 às 10:00-->
 {% block conteudo %}
-<div>
+<div class="container-fluid">
     <div class="mb-4">
         <h2 class="titulo-pagina">
             <i class="bi bi-graph-up-arrow"></i>
@@ -9,8 +9,21 @@
         </h2>
     </div>
     <section>
-        
-
+        <div class="row g-0 text-center">
+            <div class="col-sm-6 col-md-8">.col-sm-6 .col-md-8</div>
+            <div class="col-6 col-md-2">
+                <div class="card shadow-sm p-3">
+                    <h6 class="text-muted">Total de Produtos</h6>
+                    <h3>{{ quantidade_produto or 0 }}</h3>
+                </div>
+            </div>
+            <div class="col-6 col-md-2 ">
+                <div class="card shadow-sm p-3">
+                    <h6 class="text-muted">Total no estoque</h6>
+                    <h3>{{ quantidade_total or 0 }}</h3>
+                </div>
+            </div>
+        </div>
     </section>
 </div>
 {% endblock %}
