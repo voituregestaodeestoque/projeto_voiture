@@ -1,33 +1,49 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
-<h2>Pedidos de Entrada</h2>
 
-<p>
-    <a href="{{ url_for('nova_entrada') }}">Novo Pedido de Entrada</a>
-</p>
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="titulo-pagina">
+                <i class="bi bi-box-seam"></i> Pedidos
+            </h2>
+            <p class="text-muted mb-0">Gerencie os pedidos</p>
+        </div>
 
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Cliente</th>
-        <th>Data</th>
-        <th>Status</th>
-        <th>Valor Total</th>
-        <th>Ações</th>
-    </tr>
+        <a href="{{ url_for('nova_entrada') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Novo Pedido de Entrada
+        </a>
+    </div>
 
-    {% for pedido in pedidos %}
-    <tr>
-        <td>{{ pedido.id }}</td>
-        <td>{{ pedido.cliente }}</td>
-        <td>{{ pedido.data_pedido }}</td>
-        <td>{{ pedido.status }}</td>
-        <td>R$ {{ pedido.valor_total }}</td>
-        <td>
-            <a href="{{ url_for('detalhes_entrada', pedido_id=pedido.id) }}">Abrir</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <!--Colunas da tabela-->
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Fornecedor</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pedido in pedidos %}
+                <tr>
+                    <td>{{ pedido.id }}</td>
+                    <td>{{ pedido.cliente }}</td>
+                    <td>{{ pedido.data_pedido }}</td>
+                    <td>{{ pedido.status }}</td>
+                    <td>R$ {{ pedido.valor_total }}</td>
+                    <td>
+                        <a href="{{ url_for('detalhes_entrada', pedido_id=pedido.id) }}">Abrir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

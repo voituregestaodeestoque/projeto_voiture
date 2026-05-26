@@ -116,6 +116,7 @@ CREATE TABLE IF NOT EXISTS `estoque` (
   `estoque_quantidade` INT NOT NULL,
   `produto_id` INT NOT NULL,
   PRIMARY KEY (`id`),
+  INDEX `fk_estoque_produto_idx` (`produto_id` ASC) VISIBLE,
   CONSTRAINT `fk_estoque_produto`
     FOREIGN KEY (`produto_id`)
     REFERENCES `produto` (`id`)
@@ -134,6 +135,8 @@ CREATE TABLE IF NOT EXISTS `uso_empilhadeira` (
   `funcionario_id` INT NOT NULL,
   `empilhadeira_id` INT NOT NULL,
   PRIMARY KEY (`id`),
+  INDEX `fk_uso_empilhadeira_funcionario1_idx` (`funcionario_id` ASC) VISIBLE,
+  INDEX `fk_uso_empilhadeira_empilhadeira1_idx` (`empilhadeira_id` ASC) VISIBLE,
   CONSTRAINT `fk_uso_empilhadeira_funcionario1`
     FOREIGN KEY (`funcionario_id`)
     REFERENCES `funcionario` (`id`)
@@ -156,6 +159,7 @@ CREATE TABLE IF NOT EXISTS `pedido_entrada` (
   `status_pedido_entrada` VARCHAR(30) NOT NULL,
   `fornecedor_id` INT NOT NULL,
   PRIMARY KEY (`id`),
+  INDEX `fk_pedido_entrada_fornecedor1_idx` (`fornecedor_id` ASC) VISIBLE,
   CONSTRAINT `fk_pedido_entrada_fornecedor1`
     FOREIGN KEY (`fornecedor_id`)
     REFERENCES `fornecedor` (`id`)
@@ -173,6 +177,7 @@ CREATE TABLE IF NOT EXISTS `pedido_saida` (
   `status_pedido_saida` VARCHAR(30) NOT NULL,
   `cliente_id` INT NOT NULL,
   PRIMARY KEY (`id`),
+  INDEX `fk_pedido_saida_cliente1_idx` (`cliente_id` ASC) VISIBLE,
   CONSTRAINT `fk_pedido_saida_cliente1`
     FOREIGN KEY (`cliente_id`)
     REFERENCES `cliente` (`id`)
@@ -190,7 +195,10 @@ CREATE TABLE IF NOT EXISTS `detalhe_entrada` (
   `detalhe_entrada_quantidade` INT NOT NULL,
   `estoque_id` INT NOT NULL,
   `pedido_entrada_id` INT NOT NULL,
+  `detalhe_entrada_item` INT NOT NULL,
   PRIMARY KEY (`id`, `pedido_entrada_id`),
+  INDEX `fk_detalhe_entrada_estoque1_idx` (`estoque_id` ASC) VISIBLE,
+  INDEX `fk_detalhe_entrada_pedido_entrada1_idx` (`pedido_entrada_id` ASC) VISIBLE,
   CONSTRAINT `fk_detalhe_entrada_estoque1`
     FOREIGN KEY (`estoque_id`)
     REFERENCES `estoque` (`id`)
@@ -214,6 +222,7 @@ CREATE TABLE IF NOT EXISTS `movimentacao_entrada` (
   `detalhe_entrada_id` INT NOT NULL,
   `detalhe_entrada_pedido_entrada_id` INT NOT NULL,
   PRIMARY KEY (`id`),
+  INDEX `fk_movimentacao_entrada_detalhe_entrada1_idx` (`detalhe_entrada_id` ASC, `detalhe_entrada_pedido_entrada_id` ASC) VISIBLE,
   CONSTRAINT `fk_movimentacao_entrada_detalhe_entrada1`
     FOREIGN KEY (`detalhe_entrada_id` , `detalhe_entrada_pedido_entrada_id`)
     REFERENCES `detalhe_entrada` (`id` , `pedido_entrada_id`)
@@ -232,6 +241,8 @@ CREATE TABLE IF NOT EXISTS `detalhe_saida` (
   `pedido_saida_id` INT NOT NULL,
   `estoque_id` INT NOT NULL,
   PRIMARY KEY (`id`, `pedido_saida_id`),
+  INDEX `fk_detalhe_saida_pedido_saida1_idx` (`pedido_saida_id` ASC) VISIBLE,
+  INDEX `fk_detalhe_saida_estoque1_idx` (`estoque_id` ASC) VISIBLE,
   CONSTRAINT `fk_detalhe_saida_pedido_saida1`
     FOREIGN KEY (`pedido_saida_id`)
     REFERENCES `pedido_saida` (`id`)
@@ -255,6 +266,7 @@ CREATE TABLE IF NOT EXISTS `movimentacao_saida` (
   `detalhe_saida_id` INT NOT NULL,
   `detalhe_saida_pedido_saida_id` INT NOT NULL,
   PRIMARY KEY (`id`),
+  INDEX `fk_movimentacao_saida_detalhe_saida1_idx` (`detalhe_saida_id` ASC, `detalhe_saida_pedido_saida_id` ASC) VISIBLE,
   CONSTRAINT `fk_movimentacao_saida_detalhe_saida1`
     FOREIGN KEY (`detalhe_saida_id` , `detalhe_saida_pedido_saida_id`)
     REFERENCES `detalhe_saida` (`id` , `pedido_saida_id`)
