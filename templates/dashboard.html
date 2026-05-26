@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-<!--Atualizado por ryan dia 26/05/2026 às 10:00-->
+<!--Atualizado por ryan dia 26/05/2026 às 15:00-->
 {% block conteudo %}
 <div class="container-fluid">
     <div class="mb-4">
@@ -9,19 +9,43 @@
         </h2>
     </div>
     <section>
-        <div class="row g-0 text-center">
-            <div class="col-sm-6 col-md-8">.col-sm-6 .col-md-8</div>
-            <div class="col-6 col-md-2">
+        <div class="row text-center">
+            <div class="col">
                 <div class="card shadow-sm p-3">
                     <h6 class="text-muted">Total de Produtos</h6>
                     <h3>{{total_produto if total_produto else 0}}</h3>
                 </div>
             </div>
-            <div class="col-6 col-md-2 ">
+            <div class="col">
                 <div class="card shadow-sm p-3">
                     <h6 class="text-muted">Total no estoque</h6>
                     <h3>{{total_estoque if total_estoque else 0}}</h3>
                 </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm p-3">
+                    <h6 class="text-muted">Pedidos pendentes</h6>
+                    <h3>{{total_estoque if total_estoque else 0}}</h3>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm p-3">
+                    <h6 class="text-muted">Movimentações</h6>
+                    <h3>{{total_estoque if total_estoque else 0}}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div>
+
+                </div>
+                <div>
+
+                </div>
+            </div>
+            <div class="col-6">
+
             </div>
         </div>
     </section>
