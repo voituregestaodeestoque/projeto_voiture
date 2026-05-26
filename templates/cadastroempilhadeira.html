@@ -1,49 +1,55 @@
 {% extends 'base.html' %}
 
- {% block conteudo %}
- <div class="mb-4">
+{% block conteudo %}
+<div class="mb-4">
     <h2 class="titulo-pagina">
         <i class="bi bi-person-fill"></i>
         {{ 'Editar Empilhadeira' if empilhadeira and empilhadeira.id else 'Cadastrar empilhadeira' }}
     </h2>
 </div>
-    <div class="login-card text-center bg-white">
-            <form action="{% if empilhadeira and empilhadeira.id %}{{ url_for('atualizar_empilhadeira', id=empilhadeira.id) }}{% else %}{{ url_for('salvar_empilhadeira') }}{% endif %}" method="POST">
-                <div class="mb-3 text-start">
-                    <!--Campo Número de chassi-->
-                    <label for="empilhadeira_chassi" class="form-label">Número de Chassi</label>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-envelope text-white"></i>
-                        </span>
-                        <input type="text" name="empilhadeira_chassi" id="numero_chassi" class="form-control" placeholder="Número do Chassi:" maxlength="20" required value="{{ empilhadeira.empilhadeira_chassi if empilhadeira else '' }}">
+<div class="login-card text-center bg-white">
+    <form
+        action="{% if empilhadeira and empilhadeira.id %}{{ url_for('atualizar_empilhadeira', id=empilhadeira.id) }}{% else %}{{ url_for('salvar_empilhadeira') }}{% endif %}"
+        method="POST">
+        <div class="mb-3 text-start">
+            <!--Campo Número de chassi-->
+            <label for="empilhadeira_chassi" class="form-label">Número de Chassi</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text bg-dark border-secondary">
+                    <i class="bi bi-envelope text-white"></i>
+                </span>
+                <input type="text" name="empilhadeira_chassi" id="numero_chassi" class="form-control"
+                    placeholder="Número do Chassi:" maxlength="20" required
+                    value="{{ empilhadeira.empilhadeira_chassi if empilhadeira else '' }}">
 
-                    </div>
+            </div>
 
-                    <!--Campo Marca da empilhadeira-->
-                    <label for="empilhadeira_marca" class="form-label">Marca da empilhadeira</label>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-envelope text-white"></i>
-                        </span>
-                        <input type="text" name="empilhadeira_marca" id="marca" class="form-control" placeholder="Marca:" required value="{{ empilhadeira.empilhadeira_marca if empilhadeira else '' }}">
+            <!--Campo Marca da empilhadeira-->
+            <label for="empilhadeira_marca" class="form-label">Marca da empilhadeira</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text bg-dark border-secondary">
+                    <i class="bi bi-envelope text-white"></i>
+                </span>
+                <input type="text" name="empilhadeira_marca" id="marca" class="form-control" placeholder="Marca:"
+                    required value="{{ empilhadeira.empilhadeira_marca if empilhadeira else '' }}">
 
-                    </div>
+            </div>
 
-                    <!--Campo Modelo da empilhadeira-->
-                    <label for="empilhadeira_modelo" class="form-label">Modelo da empilhadeira</label>
+            <!--Campo Modelo da empilhadeira-->
+            <label for="empilhadeira_modelo" class="form-label">Modelo da empilhadeira</label>
 
-                        <div class="input-group mb-3" style="max-width: 100%;">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-envelope text-white"></i>
-                            </span>
-                            <input type="text" name="empilhadeira_modelo" id="modelo" class="form-control" placeholder="Modelo:" required value="{{ empilhadeira.empilhadeira_modelo if empilhadeira else '' }}">
+            <div class="input-group mb-3" style="max-width: 100%;">
+                <span class="input-group-text bg-dark border-secondary">
+                    <i class="bi bi-envelope text-white"></i>
+                </span>
+                <input type="text" name="empilhadeira_modelo" id="modelo" class="form-control" placeholder="Modelo:"
+                    required value="{{ empilhadeira.empilhadeira_modelo if empilhadeira else '' }}">
 
-                        </div>
+            </div>
 
 
-                        <button class="btn btn-primary w-100" style="max-width: 100%;" type="submit">Cadastrar</button>
-            </form>
-    </div>
+            <button class="btn btn-primary w-100" style="max-width: 100%;" type="submit">Cadastrar</button>
+    </form>
+</div>
 
-    {% endblock %}
+{% endblock %}
