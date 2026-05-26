@@ -1,5 +1,5 @@
 
-<!--Editado por Lipe em 14/05/2026 às 12h15-->
+<!--Editado por Lipe em 26/05/2026 às 10h00-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +31,9 @@
 
         <nav>
 
-            <a>Dashboard</a>
+            <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' or request.endpoint == 'dashboard' %}active{% endif %}">
+                <i class="bi bi-bar-chart"></i> Dashboard
+            </a>
 
             <a href="{{ url_for('listagem_estoque') }}" class="{% if request.endpoint == 'listagem_estoque' or request.endpoint == 'cadastroempilhadeira' %}active{% endif %}">
                 <i class="bi bi-box-seam"></i> Estoque

@@ -32,7 +32,12 @@ def to_float(value, default=0.0):
 def inicio():
     return redirect(url_for("base"))
 
+''' Dashboard '''
 
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template('dashboard.html')
 
 '''Login funcionário - Ryan Ribeiro'''
 @app.route('/loginfuncionario')
