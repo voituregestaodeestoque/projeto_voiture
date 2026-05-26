@@ -58,11 +58,33 @@
                                     <i class="bi bi-pencil"></i>
                                 </a>
 
-                                <a href="{{ url_for('deletar_produto', id=produto.id) }}"
-                                    class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Tem certeza que deseja EXCLUIR esse produto?')">
+                                <!-- Botão do modal pra excluir -->
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                    data-bs-target="#Modal{{produto.id}}">
                                     <i class="bi bi-trash"></i>
-                                </a>
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="Modal{{produto.id}}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja excluir esse produto?</strong></h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancelar</button>
+                                                <a href="{{ url_for('deletar_produto', id=produto.id) }}"
+                                                    class="btn btn-danger">
+                                                    <strong>Excluir</strong>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}
