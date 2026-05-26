@@ -1,4 +1,4 @@
-#Editado por Júlia em 26/05/2026 às 09h55
+#Editado por Júlia em 26/05/2026 às 11h01
 from datetime import datetime
 from core.crud_base import CrudBase
 from core.database import Database
@@ -51,3 +51,19 @@ class Estoque(CrudBase):
         finally:
             cursor.close()
             conexao.close()
+
+    @classmethod
+    def estoque_total(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT SUM(estoque_quantidade) as quantidade_total FROM estoque"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
+
+    
+
+    
