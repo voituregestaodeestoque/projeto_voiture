@@ -57,7 +57,7 @@ class Estoque(CrudBase):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            sql = "SELECT SUM(estoque_quantidade) FROM estoque"
+            sql = "SELECT SUM(estoque_quantidade) as quantidade_total FROM estoque"
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
