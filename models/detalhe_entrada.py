@@ -6,11 +6,15 @@ from models.pedido_entrada import Pedido_entrada
 class Detalhe_entrada(CrudBase):
     table = "detalhe_entrada"
     fields = [
-        'detalhe_entrada_quantidade'
+        'detalhe_entrada_quantidade',
+        'detalhe_entrada_estoque',
+        'detalhe_entrada_item'
     ]
 
     def __init__(self, detalhe_entrada_quantidade):
         self.detalhe_entrada_quantidade = detalhe_entrada_quantidade
+        self.detalhe_entrada_estoque = detalhe_entrada_estoque
+        self.detalhe_entrada_item = detalhe_entrada_item
 
     
     @classmethod
