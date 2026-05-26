@@ -14,13 +14,13 @@
             <div class="col-6 col-md-2">
                 <div class="card shadow-sm p-3">
                     <h6 class="text-muted">Total de Produtos</h6>
-                    <h3>{{ quantidade_produto or 0 }}</h3>
+                    <h3>{{total_produto if total_produto else 0}}</h3>
                 </div>
             </div>
             <div class="col-6 col-md-2 ">
                 <div class="card shadow-sm p-3">
                     <h6 class="text-muted">Total no estoque</h6>
-                    <h3>{{ quantidade_total or 0 }}</h3>
+                    <h3>{{total_estoque if total_estoque else 0}}</h3>
                 </div>
             </div>
         </div>

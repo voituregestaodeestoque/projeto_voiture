@@ -94,7 +94,7 @@ class Produto(CrudBase):
         try:
             sql = "SELECT COUNT(produto_nome) as quantidade_produto FROM produto"
             cursor.execute(sql)
-            return cursor.fetchall()
+            return cursor.fetchone()
         finally:
             cursor.close()
             conexao.close()
