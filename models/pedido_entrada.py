@@ -5,17 +5,13 @@ from core.validator import Validator
 class Pedido_entrada(CrudBase):
     table = "pedido_entrada"
     fields = [
-        'pedidoentrada_id',
-        'pedidoentrada_produto',
-        'pedidoentrada_quantidade', 
+        'pedidoentrada_status' 
         'pedidoentrada_fornecedor'
     ]
 
-    def __init__(self, pedidoentrada_id ,pedidoentrada_produto, pedidoentrada_quantidade, pedidoentrada_fornecedor):
-        self.pedidoentrada_produto = pedidoentrada_produto
-        self.pedidoentrada_quantidade = pedidoentrada_quantidade
+    def __init__(self, pedidoentrada_status, pedidoentrada_fornecedor):
+        self.pedidoentrada_produto = pedidoentrada_status
         self.pedidoentrada_fornecedor = pedidoentrada_fornecedor
-        self.pedidoentrada_id = pedidoentrada_id
 
     
     @classmethod
