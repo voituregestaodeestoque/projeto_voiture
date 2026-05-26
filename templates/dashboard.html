@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-<!--Atualizado por ryan dia 26/05/2026 às 15:00-->
+<!--Atualizado por Júlia dia 26/05/2026 às 16h44-->
 {% block conteudo %}
 <div class="container-fluid">
     <div class="mb-4">
@@ -9,7 +9,7 @@
         </h2>
     </div>
     <section>
-        <div class="row text-center">
+        <div class="row text-center mb-4">
             <div class="col">
                 <div class="card shadow-sm p-3">
                     <h6 class="text-muted">Total de Produtos</h6>
@@ -37,17 +37,59 @@
         </div>
         <div class="row">
             <div class="col-6">
-                <div>
+                <div class="card-body">
+                    <h4 class="text-center"><strong>Estoque Baixo</strong></h4>
 
+                    <!--Criação de tabela em caso de produtos com estoque baixo-->
+                    <div class="table-responsive">
+                        {% if baixo_estoque %}
+                        <table class="table">
+                            <thead>
+                                <tr class="table-active">
+                                    <!--Colunas da tabela-->
+                                    <th scope="col" class="ps-3">Nome</th>
+                                    <th scope="col" class="text-center">Qtd. mínima</th>
+                                    <th scope="col" class="text-center">Qtd. atual</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in baixo_estoque %}
+                                <tr>
+                                    <!--Valores do banco que deverão aparecer-->
+                                    <th scope="row" class="ps-3">{{ item.produto_nome }}</th>
+                                    <td class="text-center">{{ item.produto_quantidade_minima }}</td>
+
+                                    <!--Estoque maior que a quantidade mínima-->
+                                    {% if item.estoque_quantidade > item.produto_quantidade_minima %}
+                                    <td class="text-warning text-center"><strong>{{ item.estoque_quantidade }}</strong></td>
+
+                                    {% else %}
+                                    <td class="text-danger text-center"><strong >{{ item.estoque_quantidade }}</strong></td>
+
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {%else%}
+                        <!--Mensagem em caso de não ter fornecedores cadastrados-->
+                        <div class="alert alert-info mb-0">
+                            <i class="bi bi-info-circle"></i>
+                            Todos os produtos estão acima do estoque mínimo.
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <!--Tabela de pedidos pendentes-->
+                    </div>
                 </div>
-                <div>
 
+                <div class="col-6">
+                    <!--Gráfico de movimentações-->
                 </div>
             </div>
-            <div class="col-6">
-
-            </div>
-        </div>
     </section>
 </div>
 {% endblock %}
