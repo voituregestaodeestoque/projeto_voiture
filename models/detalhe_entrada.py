@@ -19,7 +19,22 @@ class Detalhe_entrada(CrudBase):
         self.pedido_entrada_id = pedido_entrada_id
         self.detalhe_entrada_item = detalhe_entrada_item
 
-    
+
+    def validate(self):
+        erros = []
+
+        validacoes = [
+            Validator.required(self.detalhe_entrada_quantidade, "detalhe_entrada_quantidade"),
+            Validator.required(self.estoque_id, "estoque_id"),
+            Validator.required(self.pedido_entrada_id, "pedido_entrada_id"),
+        ]
+
+        for itens in validacoes:
+            if not itens['valida']:
+                erros.append(itens["mensagem"])
+
+        return erros
+
     @classmethod
     def find_by_pedido(cls, pedido_entrada_id):
         conexao = Database.connect()

@@ -41,6 +41,12 @@ class Pedido_entrada(CrudBase):
             Validator.required(self.fornecedor_id, "fornecedor_id")
         ]
 
+        for itens in validacoes:
+            if not itens['valida']:
+                erros.append(itens["mensagem"])
+
+        return erros
+
     
     @classmethod
     def find_all_ordered(cls):

@@ -711,35 +711,34 @@ def adicionar_item_entrada(pedido_entrada_id):
     quantidade = int(request.form.get("quantidade", 0) or 0)
 
     mensagem = Detalhe_entrada.adicionar_item(
-        pedido_id=pedido_id,
+        pedido_id=pedido_entrada_id,
         produto_id=produto_id,
         quantidade=quantidade
     )
 
     flash(mensagem)
-    return redirect(url_for("detalhes_entrada", pedido_id=pedido_id))
+    return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
 
 
 @app.route("/entrada/item/remover/<int:detalhe_entrada_id>/<int:pedido_entrada_id>")
 
-def remover_item_etrada(detalhe_entrada_id, pedido_entrada_id):
+def remover_item_entrada(detalhe_entrada_id, pedido_entrada_id):
     mensagem = Detalhe_entrada.remover_item(detalhe_entrada_id)
     flash(mensagem)
-    return redirect(url_for("detalhes_entrada", pedido__entrada_id=pedido__entrada_id))
+    return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
 
 
-@app.route("/entrada/finalizar/<int:pedido_id>")
-def finalizar_venda(pedido_entrada_id):
+@app.route("/entrada/finalizar/<int:pedido_entrada_id>")
+def finalizar_entrada(pedido_entrada_id):
     mensagem = Pedido_entrada.finalizar(pedido_entrada_id)
     flash(mensagem)
     return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
 
 
 @app.route("/entrada/nova", methods=["GET", "POST"])
-#@login_required
 def nova_entrada():
     if request.method == "POST":
-        fornecedor = request.form.get("fornecedor", "").strip()
+        fornecedor_id = int(request.form.get("fornecedor_id", 0))
         itens_json = request.form.get("itens_json", "[]")
 
 
@@ -748,8 +747,8 @@ def nova_entrada():
         except Exception:
             itens = []
 
-        pedido = Pedido_entrada(fornecedor=fornecedor)
-        erros = pedido_entrada.validate()
+        pedido = Pedido_entrada(status_pedido_entrada="PENDENTE",fornecedor_id=fornecedor_id)
+        erros = pedido.validate()
 
         if not itens:
             erros.append("Adicione pelo menos um item ao pedido.")
@@ -769,10 +768,10 @@ def nova_entrada():
             )
 
         try:
-            pedido_entrada_id = pedido_entrada.insert()
+            pedido_entrada_id = pedido.insert()
 
             for item in itens:
-                ItemPedidoVenda.adicionar_item(
+                Detalhe_entrada.adicionar_item(
                     pedido_entrada_id=pedido_entrada_id,
                     produto_id=int(item["produto_id"]),
                     quantidade=int(item["quantidade"])
@@ -787,7 +786,7 @@ def nova_entrada():
             flash("Erro ao criar pedido de entrada.")
             return render_template(
                 "listagem_produtoentrada.html",
-                pedido_entrada=pedido_entrada,
+                pedidos=Pedido_entrada.find_all_ordered(),
                 produto=Produto.find_all()
             )
 

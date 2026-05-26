@@ -8,15 +8,15 @@
 
     <div class="pedido-card text-dark" style="width: 45%;">
 
-        <form id=" form_pedido" method="POST" action="{{ url_for('nova_entrada') }}" onsubmit="prepararEnvio()">
+        <form id="form_pedido" method="POST" action="{{ url_for('nova_entrada') }}" onsubmit="prepararEnvio()">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="fornecedor_nome">Fornecedor</label>
-                    <select id="fornecedor">
+                    <select id="fornecedor" name="fornecedor_id">
                         <option value="">Selecione</option>
                         {% for fornecedor in fornecedores %}
-                        <option value="{{ fornecedor.id }}" data-nome="{{ fornecedor.fornecedor_nome }}">
-                            {{ forncedor.fornecedor_nome }}
+                        <option value="{{ fornecedor.id }}">
+                            {{ fornecedor.fornecedor_nome }}
                         </option>
                         {% endfor %}
                     </select>
@@ -26,7 +26,7 @@
 
                 <div class=" mb-3">
                     <label for="produto">Produto</label>
-                    <select id="produto">
+                    <select id="produto" name="produto">
                         <option value="">Selecione</option>
                         {% for produto in produto %}
                         <option value="{{ produto.produto_id }}" data-nome="{{ produto.produto_nome }}"
@@ -45,11 +45,13 @@
                     </div>
                 </div>
 
-                <div id="btn-produto">
 
-                    <button type="submit" class="btn btn-primary">Adicionar item</button>
 
-                </div>
+                <button type="button" class="btn btn-primary" onclick="adicionarItem()">
+                    Adicionar item
+                </button>
+
+
                 <input type="hidden" name="itens_json" id="itens_json">
             </div>
         </form>
@@ -58,7 +60,7 @@
 
         <div class="table-responsive">
             <input type="hidden" name="itens_json" id="itens_json">
-            <table class="table table-hover align-middle">
+            <table id="tabela-itens" class="table table-hover align-middle">>
 
                 <thead class="table-light">
                     <tr>
@@ -69,19 +71,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-<!---
+
 <script>
     let itens = [];
 
     function adicionarItem() {
         const selectProduto = document.getElementById("produto");
-        const quantidadeInput = document.getElementById("quantidade");
+        const quantidadeInput = document.getElementById("produto_quantidade");
 
         const produtoId = selectProduto.value;
         const quantidade = parseInt(quantidadeInput.value);
@@ -169,5 +171,5 @@
     function prepararEnvio() {
         document.getElementById("itens_json").value = JSON.stringify(itens);
     }
-</script>-->
+</script>
 {% endblock %}
