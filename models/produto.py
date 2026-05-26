@@ -1,4 +1,4 @@
-# Editado por Clarinha em 14/05/2026 às 12h28
+# Editado por Júlia em 26/05/2026 às 11h18
 
 from core.crud_base import CrudBase
 from core.database import Database
@@ -65,51 +65,17 @@ class Produto(CrudBase):
         produto = cls.find_by_id(id)
         if not produto:
             raise ValueError("Produto não encontrado.")
-        """if cls.has_related_records(id):
-            raise ValueError("Não é possível excluir o produto porque ele está vinculado a outros serviços.")"""
+        if cls.has_related_records(id):
+            raise ValueError("Não é possível excluir o produto porque ele está vinculado a outros serviços.")
         cls.delete(id)
 
     
-"""
-    @classmethod
-    def low_stock(cls):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
-        try:
-            sql = "SELECT * FROM produto WHERE quantidade <= estoque_minimo ORDER BY nome"
-            cursor.execute(sql)
-            return cursor.fetchall()
-        finally:
-            cursor.close()
-            conexao.close()
-
-    @classmethod
-    def update_quantity(cls, id, nova_quantidade, connection=None):
-        conexao = connection or Database.connect()
-        cursor = conexao.cursor()
-        try:
-            sql = "UPDATE produto SET quantidade = %s WHERE id = %s"
-            cursor.execute(sql, (nova_quantidade, id))
-            if connection is None:
-                conexao.commit()
-            return cursor.rowcount
-        except Exception:
-            if connection is None:
-                conexao.rollback()
-            raise
-        finally:
-            cursor.close()
-            if connection is None:
-                conexao.close()
-
     @classmethod
     def has_related_records(cls, id):
         conexao = Database.connect()
         cursor = conexao.cursor()
         try:
             queries = [
-                "SELECT COUNT(*) FROM movimentacao WHERE produto_id = %s",
-                "SELECT COUNT(*) FROM pedido_movimentacao WHERE produto_id = %s"
             ]
             total = 0
             for sql in queries:
@@ -118,4 +84,17 @@ class Produto(CrudBase):
             return total > 0
         finally:
             cursor.close()
-            conexao.close()"""
+            conexao.close()
+
+
+    @classmethod
+    def produto_total(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT COUNT(produto_nome) as quantidade_produto FROM produto"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
