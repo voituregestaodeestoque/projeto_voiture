@@ -23,7 +23,7 @@ class Pedido_entrada(CrudBase):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            sql = "select f.fornecedor_nome, d.detalhe_entrada_quantidade, p.* from pedido_entrada as p inner join fornecedor as f on p.fornecedor_id = p.fornecedor_id inner join detalhe_entrada as d;"
+            sql = "select f.fornecedor_nome, d.detalhe_entrada_quantidade, d.detalhe_entrada_item, p.* from pedido_entrada as p inner join fornecedor as f on p.fornecedor_id = p.fornecedor_id inner join detalhe_entrada as d;"
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
@@ -55,34 +55,6 @@ class Pedido_entrada(CrudBase):
             cursor.close()
             conexao.close()
 
-    @classmethod
-    def atualizar_total(cls, pedidoentrada_id):
-        conexao = Database.connect()
-        cursor = conexao.cursor()
-
-        try:
-            sql_total = """
-            SELECT COALESCE(SUM(subtotal), 0)
-            FROM detalhe_entrada
-            WHERE pedidoentrada_id = %s
-            """
-            cursor.execute(sql_total, (pedidoentrada_id,))
-            total = cursor.fetchone()[0]
-
-            sql_update = """
-            UPDATE pedido_entrada
-            SET valor_total = %s
-            WHERE id = %s
-            """
-            cursor.execute(sql_update, (total, pedidoentrada_id))
-            conexao.commit()
-            return total
-        except Exception:
-            conexao.rollback()
-            raise
-        finally:
-            cursor.close()
-            conexao.close()
 
     @classmethod
     def finalizar(cls, pedidoentrada_id):
@@ -104,8 +76,8 @@ class Pedido_entrada(CrudBase):
                 return "Somente pedidos abertos podem ser finalizados."
 
             cursor.execute(
-                "SELECT * FROM item_pedido_venda WHERE pedido_venda_id = %s",
-                (pedido_id,)
+                "SELECT * FROM detalhe_entrada WHERE pedido_entrada_id = %s",
+                (pedidoentrada_id,)
             )
             itens = cursor.fetchall()
 
@@ -143,7 +115,7 @@ class Pedido_entrada(CrudBase):
 
             cursor.execute(
                 """
-                UPDATE pedido_venda
+                UPDATE pedido_entrada
                 SET status = %s
                 WHERE id = %s
                 """,
