@@ -38,12 +38,15 @@ def inicio():
 @app.route("/dashboard")
 def dashboard():
     dic_total=Estoque.estoque_total()
+
     pod_total=Produto.produto_total()
 
-    
+    baixo_estoque = Estoque.estoque_baixo()
+
     total_produto = pod_total['quantidade_produto']
     total_estoque = dic_total['quantidade_total']
-    return render_template('dashboard.html', total_estoque=total_estoque,total_produto=total_produto)
+    return render_template('dashboard.html', total_estoque=total_estoque,total_produto=total_produto, baixo_estoque=baixo_estoque)
+
 
 '''Login funcionário - Ryan Ribeiro'''
 @app.route('/loginfuncionario')
@@ -54,7 +57,6 @@ def loginfuncionario():
 def login():
     email = request.form.get("funcionario_email")
     senha = request.form.get("funcionario_senha")
-
 
     sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
 
