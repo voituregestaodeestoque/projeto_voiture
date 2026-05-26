@@ -750,7 +750,7 @@ def nova_entrada():
                 flash(erro)
 
             return render_template(
-                "listagem_pedidoentrada.html",
+                "formulario_pedidoentrada.html",
                 pedido=pedido,
                 produto=Produto.find_all()
             )
@@ -779,7 +779,7 @@ def nova_entrada():
             )
 
     return render_template(
-        "listagem_pedidoentrada.html",
+        "formulario_pedidoentrada.html",
         pedido=None,
         produto=Produto.find_all()
     )
