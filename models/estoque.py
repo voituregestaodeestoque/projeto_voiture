@@ -1,4 +1,4 @@
-#atualizado por Ryan às 19/05/26 dia 16:29
+#Editado por Júlia em 26/05/2026 às 09h55
 from datetime import datetime
 from core.crud_base import CrudBase
 from core.database import Database
@@ -34,6 +34,18 @@ class Estoque(CrudBase):
         cursor = conexao.cursor(dictionary=True)
         try:
             sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
+
+    @classmethod
+    def estoque_baixo(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT e.estoque_quantidade,p.produto_nome,p.produto_quantidade_minima FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id WHERE e.estoque_quantidade <= p.produto_quantidade_minima * 1.1;"
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
