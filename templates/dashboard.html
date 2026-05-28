@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-<!--Atualizado por Júlia dia 28/05/2026 às 09h18-->
+<!--Atualizado por Júlia dia 28/05/2026 às 12h29-->
 {% block conteudo %}
 <div class="container-fluid">
     <div class="mb-4">
@@ -12,24 +12,28 @@
         <div class="row text-center mb-4">
             <div class="col">
                 <div class="card shadow-sm p-3">
+                    <!--Quantidade de produtos cadastrados no sistema-->
                     <h6 class="text-muted">Total de Produtos</h6>
                     <h3>{{total_produto if total_produto else 0}}</h3>
                 </div>
             </div>
             <div class="col">
                 <div class="card shadow-sm p-3">
+                    <!--Quantidade total de produtos em estoque-->
                     <h6 class="text-muted">Total no estoque</h6>
                     <h3>{{total_estoque if total_estoque else 0}}</h3>
                 </div>
             </div>
             <div class="col">
                 <div class="card shadow-sm p-3">
+                    <!--Quantidade de pedidos pendentes-->
                     <h6 class="text-muted">Pedidos pendentes</h6>
                     <h3>{{total_estoque if total_estoque else 0}}</h3>
                 </div>
             </div>
             <div class="col">
                 <div class="card shadow-sm p-3">
+                    <!--Quantidade de movimentações efetuadas-->
                     <h6 class="text-muted">Movimentações</h6>
                     <h3>{{total_estoque if total_estoque else 0}}</h3>
                 </div>
@@ -38,14 +42,18 @@
         <div class="row">
             <div class="col-6 ">
                 <div class="card shadow-sm p-3 mb-4" style="height: 50%;">
+
+                    <!--Produtos com estoque baixo-->
                     <h4 class="text-center"><strong>Estoque Baixo</strong></h4>
 
                     <!--Criação de tabela em caso de produtos com estoque baixo-->
-                    <div class="table-responsive ">
+                    <div class="table-responsive">
                         {% if baixo_estoque %}
+
+                        <!--Tabela-->
                         <table class="table border-secondary">
-                            <thead >
-                                <tr class="table-active" >
+                            <thead>
+                                <tr class="table-active">
                                     <!--Colunas da tabela-->
                                     <th scope="col" class="ps-3">Nome</th>
                                     <th scope="col" class="text-center">Qtd. mínima</th>
@@ -75,7 +83,8 @@
                         </table>
 
                         {%else%}
-                        <!--Mensagem em caso de não ter fornecedores cadastrados-->
+
+                        <!--Mensagem em caso de não ter produtos com estoque baixo-->
                         <div class="alert alert-info mb-0">
                             <i class="bi bi-info-circle"></i>
                             Todos os produtos estão acima do estoque mínimo.
@@ -113,19 +122,23 @@
 
                     {%else%}
 
-                    <!--Mensagem em caso de não ter estoque de produtos cadastrados-->
+                    <!--Mensagem em caso de não ter pedidos pendentes-->
                     <div class="alert alert-info mb-0">
                         <i class="bi bi-info-circle"></i>
-                        Nenhum produto cadastrado.
+                        Nenhum pedido pendente no momento.
                     </div>
 
                     {%endif%}
                 </div>
+            </div>
 
+            <div class="col-6">
+                <!--Gráfico de movimentações-->
+                <div class="card shadow-sm p-3 mb-4" style="height: 106%;">
+                    <h4 class="text-center"><strong>Movimentações</strong></h4>
 
-                <div class="col-6">
-                    <!--Gráfico de movimentações-->
                 </div>
+    
             </div>
     </section>
 </div>
