@@ -33,12 +33,11 @@
                 {% for pedido in pedidos %}
                 <tr>
                     <td>{{ pedido.id }}</td>
-                    <td>{{ pedido.cliente }}</td>
+                    <td>{{ pedido.fornecedor_id}}</td>
                     <td>{{ pedido.data_pedido }}</td>
-                    <td>{{ pedido.status }}</td>
-                    <td>R$ {{ pedido.valor_total }}</td>
+                    <td>{{ pedido.status_pedido_entrada }}</td>
                     <td>
-                        <a href="{{ url_for('detalhes_entrada', pedido_id=pedido.id) }}">Abrir</a>
+                        <a href="{{ url_for('detalhes_entrada', pedido_entrada_id=pedido.id) }}">Abrir</a>
                     </td>
                 </tr>
                 {% endfor %}
