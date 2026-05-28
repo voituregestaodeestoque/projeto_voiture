@@ -30,7 +30,7 @@ def to_float(value, default=0.0):
 
 @app.route("/")
 def inicio():
-    return redirect(url_for("base"))
+    return redirect(url_for("loginfuncionario"))
 
 ''' Dashboard '''
 
@@ -53,14 +53,18 @@ def dashboard():
 def loginfuncionario():
     return render_template('loginfuncionario.html')
 
-@app.route('/loginfunciona')
+@app.route('/loginfunciona', methods=["POST"])
 def login():
     email = request.form.get("funcionario_email")
     senha = request.form.get("funcionario_senha")
 
-    sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
-
-    return redirect(url_for("base"))
+    funcionario=Funcionario.login(email,senha)
+    if funcionario:
+        return redirect(url_for("base"))
+    
+    mensagem = f"Login e/ou senha inválidos"
+    flash(mensagem,"erro")
+    return render_template("loginfuncionario.html")
 
 #Landing Page
 
