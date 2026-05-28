@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<h2>Pedido de Venda nº {{ pedido.id }}</h2>
+
+<div class="card-info">
+    <p><strong>Cliente:</strong> {{ pedido.fornecedor }}</p>
+    <p><strong>Data:</strong> {{ pedido.data_pedido }}</p>
+    <p><strong>Status:</strong> {{ pedido.status_pedido_entrada }}</p>
+</div>
+
+{% if pedido.status_pedido_entrada == 'PENDENTE' %}
+<h3>Adicionar Item</h3>
+
+<form method="POST" action="{{ url_for('adicionar_item_entrada', pedido_entrada_id=pedido.id) }}">
+    <label>Produto:</label>
+    <select name="produto_id" required>
+        <option value="">Selecione</option>
+        {% for produto in produto %}
+            <option value="{{ produto.id }}">
+                {{ produto.produto_nome }} - Estoque: {{ produto.estoque_quantidade }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label>Quantidade:</label>
+    <input type="number" name="quantidade" required>
+
+    <button type="submit">Adicionar Item</button>
+</form>
+{% endif %}
+
+<h3>Itens do Pedido</h3>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Ações</th>
+    </tr>
+
+    {% for item in itens %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.produto }}</td>
+        <td>{{ item.detalhe_entrada_quantidade }}</td>
+        <td>
+            {% if pedido.status == 'ABERTO' %}
+                <a href="{{ url_for('remover_item_entrada', detalhe_entrada_id=item.id, pedido_entrada_id=pedido.id) }}">Remover</a>
+            {% else %}
+                -
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if pedido.status_pedido_entrada == 'PENDENTE' %}
+<p>
+    <a href="{{ url_for('finalizar_entrada', pedido_entrada_id=pedido.id) }}">Finalizar Pedido de Venda</a>
+</p>
+{% endif %}
+
+<p>
+    <a href="{{ url_for('pedidoentrada') }}">Voltar para pedidos de entrada</a>
+</p>
+{% endblock %}
