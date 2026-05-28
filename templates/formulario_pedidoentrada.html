@@ -29,7 +29,7 @@
                     <select id="produto" name="produto">
                         <option value="">Selecione</option>
                         {% for produto in produto %}
-                        <option value="{{ produto.produto_id }}" data-nome="{{ produto.produto_nome }}"
+                        <option value="{{ produto.id }}" data-nome="{{ produto.produto_nome }}"
                             data-estoque="{{ produto.estoque_quantidade }}">
                             {{ produto.produto_nome }} - Estoque: {{ produto.estoque_quantidade }}
                         </option>
@@ -60,7 +60,7 @@
 
         <div class="table-responsive">
             <input type="hidden" name="itens_json" id="itens_json">
-            <table id="tabela-itens" class="table table-hover align-middle">>
+            <table id="tabela-itens" class="table table-hover align-middle">
 
                 <thead class="table-light">
                     <tr>
@@ -100,7 +100,6 @@
 
         const option = selectProduto.options[selectProduto.selectedIndex];
         const nome = option.dataset.nome;
-        const preco = parseFloat(option.dataset.preco);
         const estoque = parseInt(option.dataset.estoque);
 
         if (quantidade > estoque) {
@@ -119,14 +118,11 @@
             }
 
             itemExistente.quantidade = novaQuantidade;
-            itemExistente.subtotal = novaQuantidade * preco;
         } else {
             itens.push({
                 produto_id: produtoId,
                 nome: nome,
-                quantidade: quantidade,
-                preco_unitario: preco,
-                subtotal: quantidade * preco
+                quantidade: quantidade
             });
         }
 
@@ -145,17 +141,13 @@
         const tbody = document.querySelector("#tabela-itens tbody");
         tbody.innerHTML = "";
 
-        let total = 0;
-
         itens.forEach((item, index) => {
-            total += item.subtotal;
 
             const linha = `
                 <tr>
+                    <td>${item.detalhe_entrada_item}</td>
                     <td>${item.nome}</td>
-                    <td>${item.quantidade}</td>
-                    <td>R$ ${item.preco_unitario.toFixed(2)}</td>
-                    <td>R$ ${item.subtotal.toFixed(2)}</td>
+                    <td>${item.detalhe_entrada_quantidade}</td>
                     <td>
                         <button type="button" onclick="removerItem(${index})">Remover</button>
                     </td>
@@ -165,7 +157,6 @@
             tbody.innerHTML += linha;
         });
 
-        document.getElementById("total").innerText = total.toFixed(2);
     }
 
     function prepararEnvio() {

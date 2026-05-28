@@ -61,31 +61,30 @@ class Detalhe_entrada(CrudBase):
             conexao.close()
 
     @classmethod
-    def adicionar_item(cls, pedido_entrada_id, estoque_id, detalhe_entrada_quantidade, detalhe_entrada_item):
-        pedido = Pedido_entrada.find_by_id(pedidoentrada_id)
+    def adicionar_item(cls, detalhe_entrada_quantidade, pedido_entrada_id, produto_id, detalhe_entrada_item):
+        pedido = Pedido_entrada.find_by_id(pedido_entrada_id)
 
         if not pedido:
             return "Pedido não encontrado."
 
-        if pedido["status_pedido_entrada"] != "ABERTO":
+        if pedido["status_pedido_entrada"] != "PENDENTE":
             return "Não é possível alterar um pedido finalizado."
 
-        estoque = Estoque.find_by_id(estoque_id)
+        estoque = Estoque.encontrar_produto(produto_id)
 
         if not estoque:
             return "Produto não encontrado."
 
-        if quantidade <= 0:
+        if detalhe_entrada_quantidade <= 0:
             return "A quantidade deve ser maior que zero."
 
-        detalhe = cls( detalhe_entrada_quantidade, estoque_id, pedido_entrada_id,detalhe_entrada_item)
+        detalhe = cls( detalhe_entrada_quantidade, estoque["id"], pedido_entrada_id, produto_id)
 
-        erros = detalhe.Validator()
+        erros = detalhe.validate()
         if erros:
             return erros[0]
 
         detalhe.insert()
-        Pedido_entrada.atualizar_total(pedido_entrada_id)
 
         return "Item adicionado ao pedido."
 
@@ -104,15 +103,13 @@ class Detalhe_entrada(CrudBase):
             if not item:
                 return "Item não encontrado."
 
-            pedido_entrada_id = item["pedidoentrada_id"]
+            pedido_entrada_id = item["pedido_entrada_id"]
 
             cursor.execute(
                 "DELETE FROM detalhe_entrada WHERE id = %s",
                 (detalhe_entrada_id,)
             )
             conexao.commit()
-
-            Pedido_entrada.atualizar_total(pedido_entrada_id)
 
             return "Item removido com sucesso."
 
