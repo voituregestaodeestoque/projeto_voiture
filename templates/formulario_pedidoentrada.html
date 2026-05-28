@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="fornecedor_nome">Fornecedor</label>
-                    <select id="fornecedor" name="fornecedor_id">
+                    <select id="fornecedor" name="fornecedor_id" class="form-select" required>
                         <option value="">Selecione</option>
                         {% for fornecedor in fornecedores %}
                         <option value="{{ fornecedor.id }}">
@@ -26,12 +26,12 @@
 
                 <div class=" mb-3">
                     <label for="produto">Produto</label>
-                    <select id="produto" name="produto">
+                    <select id="produto" name="produto" class="form-select" required>
                         <option value="">Selecione</option>
                         {% for produto in produto %}
                         <option value="{{ produto.id }}" data-nome="{{ produto.produto_nome }}"
                             data-estoque="{{ produto.estoque_quantidade }}">
-                            {{ produto.produto_nome }} - Estoque: {{ produto.produto_id }}
+                            {{ produto.produto_nome }}
                         </option>
                         {% endfor %}
                     </select>
@@ -41,7 +41,7 @@
                     <label for="produto_quantidade">Quantidade</label>
                     <div class="input-group">
                         <input type="text" name="produto_quantidade" class="form-control" id="produto_quantidade"
-                            placeholder="Quantidade do produto">
+                            placeholder="Quantidade do produto" min="1">
                     </div>
                 </div>
 
@@ -75,7 +75,7 @@
                 </tbody>
                 
             </table>
-            <button type="button" class="btn btn-primary" onclick="prepararEnvio()">
+            <button type="submit" form="form_pedido" class="btn btn-primary" onclick="prepararEnvio()">
                 Salvar Pedido
             </button>
         </div>
@@ -103,13 +103,7 @@
         }
 
         const option = selectProduto.options[selectProduto.selectedIndex];
-        const nome = option.dataset.nome;
-        const estoque = parseInt(option.dataset.estoque);
-
-        if (quantidade > estoque) {
-            alert("Quantidade maior que o estoque disponível.");
-            return;
-        }
+        const nome = option.getAttribute("data-nome");
 
         const itemExistente = itens.find(item => item.produto_id === produtoId);
 

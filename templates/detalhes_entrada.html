@@ -44,7 +44,7 @@
     <tr>
         <td>{{ item.id }}</td>
         <td>{{ item.produto }}</td>
-        <td>{{ item.detalhe_entrada_quantidade }}</td>
+        <td>{{ item.detalhe_entrada_quantidade or item.produto_id}}</td>
         <td>
             {% if pedido.status == 'ABERTO' %}
                 <a href="{{ url_for('remover_item_entrada', detalhe_entrada_id=item.id, pedido_entrada_id=pedido.id) }}">Remover</a>

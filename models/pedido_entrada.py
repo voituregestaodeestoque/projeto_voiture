@@ -54,7 +54,17 @@ class Pedido_entrada(CrudBase):
         cursor = conexao.cursor(dictionary=True)
 
         try:
-            sql = "SELECT * FROM pedido_entrada"
+            sql = """SELECT 
+                    p.id, 
+                    p.status_pedido_entrada, 
+                    p.fornecedor_id, 
+                    MAX(m.datahora_movimentacao_entrada) AS data_processamento
+                FROM pedido_entrada p
+                LEFT JOIN detalhe_entrada de ON p.id = de.pedido_entrada_id
+                LEFT JOIN movimentacao_entrada m ON de.id = m.detalhe_entrada_id 
+                    AND de.pedido_entrada_id = m.detalhe_entrada_pedido_entrada_id
+                GROUP BY p.id, p.status_pedido_entrada, p.fornecedor_id
+                ORDER BY p.id DESC"""
             cursor.execute(sql)
             return cursor.fetchall()
         finally:

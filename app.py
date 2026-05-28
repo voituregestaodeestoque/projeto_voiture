@@ -1,5 +1,5 @@
 
-# Editado por Júlia em 19/05/2026
+# Editado por Clairnha em 28/05/2026
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -715,7 +715,7 @@ def adicionar_item_entrada(pedido_entrada_id):
     quantidade = int(request.form.get("quantidade", 0) or 0)
 
     mensagem = Detalhe_entrada.adicionar_item(
-        pedido_id=pedido_entrada_id,
+        pedido_entrada_id=pedido_entrada_id,
         produto_id=produto_id,
         quantidade=quantidade
     )
@@ -789,16 +789,17 @@ def nova_entrada():
         except Exception:
             flash("Erro ao criar pedido de entrada.")
             return render_template(
-                "pedidoentrada.html",
+                "formulario_pedidoentrada.html",
                 pedidos=Pedido_entrada.find_all_ordered(),
-                produto=Produto.find_all()
-
+                produto=Produto.find_all(),
+                fornecedores = Fornecedor.find_all()
             )
 
     return render_template(
         "formulario_pedidoentrada.html",
         pedido=None,
-        produto=Produto.find_all()
+        produto=Produto.find_all(),
+        fornecedores = Fornecedor.find_all()
     )
 '''Estoque'''
 
