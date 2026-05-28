@@ -97,9 +97,8 @@ class Pedido_entrada(CrudBase):
                 quantidade = item["detalhe_entrada_quantidade"]
 
                 cursor.execute(
-                "SELECT * FROM estoque WHERE produto_id = %s",
-                (produto_id,))
-                estoque = cursor.fetchone()
+                "SELECT * FROM estoque WHERE id = %s",
+                    (item["estoque_id"],))
 
                 if not estoque:
                     conexao.rollback()
@@ -109,19 +108,19 @@ class Pedido_entrada(CrudBase):
 
                 cursor.execute(
                 """ 
-                UPDATE estoque
-                SET estoque_quantidade = %s
-                WHERE produto_id = %s
-                """,
-                (nova_quantidade, produto_id) )
+                    UPDATE estoque
+                    SET estoque_quantidade = %s
+                    WHERE id = %s
+                    """,
+                    (nova_quantidade, item["estoque_id"]) )
 
                 cursor.execute(
                     """
                     INSERT INTO movimentacao_entrada 
-                    (produto_id, tipo_movimentacao, quantidade, data_movimentacao)
-                    VALUES (%s, %s, %s, %s)
+                    (datahora_movimentacao_entrada, detalhe_entrada_id, detalhe_entrada_pedido_entrada_id)
+                    VALUES (%s, %s, %s)
                     """,
-                    (produto_id, "ENTRADA", quantidade, datetime.now())
+                    (datetime.now(), item["id"], pedido_entrada_id)
                 )
 
             cursor.execute(
