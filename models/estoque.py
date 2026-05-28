@@ -64,6 +64,23 @@ class Estoque(CrudBase):
             cursor.close()
             conexao.close()
 
+    @classmethod
+    def encontrar_produto(cls, produto_id):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+
+        try:
+            cursor.execute(
+            "SELECT * FROM estoque WHERE produto_id = %s",
+            (produto_id,)
+        )
+
+            return cursor.fetchone()
+
+        finally:
+            cursor.close()
+            conexao.close()
+
     
 
     

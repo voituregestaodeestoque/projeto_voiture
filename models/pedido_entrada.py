@@ -101,7 +101,7 @@ class Pedido_entrada(CrudBase):
                 (produto_id,))
                 estoque = cursor.fetchone()
 
-                if not produto:
+                if not estoque:
                     conexao.rollback()
                     return "Produto não encontrado no pedido."
 

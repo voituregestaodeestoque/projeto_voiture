@@ -764,7 +764,8 @@ def nova_entrada():
             return render_template(
                 "formulario_pedidoentrada.html",
                 pedido=pedido,
-                produto=Produto.find_all()
+                produto=Produto.find_all(),
+                fornecedores=Fornecedor.find_all()
             )
 
         try:
@@ -777,7 +778,6 @@ def nova_entrada():
                     quantidade=int(item["quantidade"])
                 )
 
-            Pedido_entrada.atualizar_total(pedido_entrada_id)
 
             flash("Pedido de entrada criado com sucesso.")
             return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
@@ -785,9 +785,10 @@ def nova_entrada():
         except Exception:
             flash("Erro ao criar pedido de entrada.")
             return render_template(
-                "listagem_produtoentrada.html",
+                "pedidoentrada.html",
                 pedidos=Pedido_entrada.find_all_ordered(),
                 produto=Produto.find_all()
+
             )
 
     return render_template(
