@@ -36,16 +36,16 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-6">
-                <div class="card shadow-sm p-3">
+            <div class="col-6 ">
+                <div class="card shadow-sm p-3 mb-4" style="height: 50%;">
                     <h4 class="text-center"><strong>Estoque Baixo</strong></h4>
 
                     <!--Criação de tabela em caso de produtos com estoque baixo-->
-                    <div class="table-responsive  ">
+                    <div class="table-responsive ">
                         {% if baixo_estoque %}
                         <table class="table border-secondary">
-                            <thead>
-                                <tr class="table-active">
+                            <thead >
+                                <tr class="table-active" >
                                     <!--Colunas da tabela-->
                                     <th scope="col" class="ps-3">Nome</th>
                                     <th scope="col" class="text-center">Qtd. mínima</th>
@@ -61,10 +61,12 @@
 
                                     <!--Estoque maior que a quantidade mínima-->
                                     {% if item.estoque_quantidade > item.produto_quantidade_minima %}
-                                    <td class="text-warning text-center"><strong>{{ item.estoque_quantidade }}</strong></td>
+                                    <td class="text-warning text-center"><strong>{{ item.estoque_quantidade }}</strong>
+                                    </td>
 
                                     {% else %}
-                                    <td class="text-danger text-center"><strong >{{ item.estoque_quantidade }}</strong></td>
+                                    <td class="text-danger text-center"><strong>{{ item.estoque_quantidade }}</strong>
+                                    </td>
 
                                     {% endif %}
                                 </tr>
@@ -80,12 +82,46 @@
                         </div>
                         {% endif %}
                     </div>
-
-                    <div class="card shadow-sm p-3">
-                        
-                        <!--Tabela de pedidos pendentes-->
-                    </div>
                 </div>
+
+                <div class="card shadow-sm p-3" style="height: 50%;">
+                    <h4 class="text-center"><strong>Pedidos Pendentes</strong></h4>
+
+                    <!--Tabela de pedidos pendentes-->
+                    {%if pedidos%}
+                    <!--LINHA-->
+                    <div class="row">
+
+                        {%for pedido in pedidos%}
+
+                        <!--COLUNA-->
+                        <div class="col-md-3">
+
+                            <!--CARD-->
+                            <div class="card mb-4" style="max-width: 100%;">
+                                <div class="card-body">
+                                    <p class="card-text">Pedido {{pedido.id}}</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {%endfor%}
+
+                    </div>
+
+                    {%else%}
+
+                    <!--Mensagem em caso de não ter estoque de produtos cadastrados-->
+                    <div class="alert alert-info mb-0">
+                        <i class="bi bi-info-circle"></i>
+                        Nenhum produto cadastrado.
+                    </div>
+
+                    {%endif%}
+                </div>
+
 
                 <div class="col-6">
                     <!--Gráfico de movimentações-->
