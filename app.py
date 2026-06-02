@@ -73,7 +73,7 @@ def login():
 def landingpage():
     return render_template('lp.html')
 
-'''Empilhadeira Ryan Ribeiro'''
+'''Empilhadeira'''
 
 # cadastrodeempilhadeira
 
@@ -744,7 +744,7 @@ def adicionar_item_entrada(pedido_entrada_id):
     quantidade = int(request.form.get("quantidade", 0) or 0)
 
     mensagem = Detalhe_entrada.adicionar_item(
-        pedido_entrada_id=pedido_entrada_id,
+        pedido_id=pedido_entrada_id,
         produto_id=produto_id,
         quantidade=quantidade
     )
