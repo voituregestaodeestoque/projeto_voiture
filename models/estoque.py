@@ -33,7 +33,67 @@ class Estoque(CrudBase):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id"
+            sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id order by p.id DESC"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
+
+    @classmethod
+    def card_estoque_nome(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id order by produto_nome ASC"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
+    
+    @classmethod
+    def card_estoque_maior(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id order by estoque_quantidade DESC"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
+
+    @classmethod
+    def card_estoque_menor(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id order by estoque_quantidade ASC"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
+
+    @classmethod
+    def card_estoque_preco_maior(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id order by produto_preco_venda DESC"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
+    
+    @classmethod
+    def card_estoque_preco_menor(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id order by produto_preco_venda ASC"
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
@@ -57,9 +117,26 @@ class Estoque(CrudBase):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            sql = "SELECT SUM(estoque_quantidade) FROM estoque"
+            sql = "SELECT SUM(estoque_quantidade) as quantidade_total FROM estoque"
             cursor.execute(sql)
-            return cursor.fetchall()
+            return cursor.fetchone()
+        finally:
+            cursor.close()
+            conexao.close()
+
+    @classmethod
+    def encontrar_produto(cls, produto_id):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+
+        try:
+            cursor.execute(
+            "SELECT * FROM estoque WHERE produto_id = %s",
+            (produto_id,)
+        )
+
+            return cursor.fetchone()
+
         finally:
             cursor.close()
             conexao.close()

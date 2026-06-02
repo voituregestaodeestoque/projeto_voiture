@@ -61,13 +61,34 @@
                                     class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
-
-                                <!--Botão de deletar-->
-                                <a href="{{ url_for('deletar_funcionario', id=funcionario.id) }}"
-                                    class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Tem certeza que deseja EXCLUIR esse funcionario?')">
+                                
+                                <!-- Botão do modal pra excluir -->
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                    data-bs-target="#Modal{{funcionario.id}}">
                                     <i class="bi bi-trash"></i>
-                                </a>
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="Modal{{funcionario.id}}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja excluir esse funcionário?</strong></h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancelar</button>
+                                                <a href="{{ url_for('deletar_funcionario', id=funcionario.id) }}"
+                                                    class="btn btn-danger">
+                                                    <strong>Excluir</strong>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}

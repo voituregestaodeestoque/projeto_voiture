@@ -125,6 +125,11 @@ form {
     border-radius: 12px;
 }
 
+.form-card{
+    background: transparent;
+    padding: 0;
+}
+
 form label {
     font-weight: 500;
     margin-top: 10px;

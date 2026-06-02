@@ -1,5 +1,5 @@
 
-# Editado por Júlia em 19/05/2026
+# Editado por Clairnha em 28/05/2026
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -30,29 +30,41 @@ def to_float(value, default=0.0):
 
 @app.route("/")
 def inicio():
-    return redirect(url_for("base"))
+    return redirect(url_for("loginfuncionario"))
 
 ''' Dashboard '''
 
 
 @app.route("/dashboard")
 def dashboard():
-    return render_template('dashboard.html')
+    dic_total=Estoque.estoque_total()
+
+    pod_total=Produto.produto_total()
+
+    baixo_estoque = Estoque.estoque_baixo()
+
+    total_produto = pod_total['quantidade_produto']
+    total_estoque = dic_total['quantidade_total']
+    return render_template('dashboard.html', total_estoque=total_estoque,total_produto=total_produto, baixo_estoque=baixo_estoque)
+
 
 '''Login funcionário - Ryan Ribeiro'''
 @app.route('/loginfuncionario')
 def loginfuncionario():
     return render_template('loginfuncionario.html')
 
-@app.route('/loginfunciona')
+@app.route('/loginfunciona', methods=["POST"])
 def login():
     email = request.form.get("funcionario_email")
     senha = request.form.get("funcionario_senha")
 
-
-    sql="Select * from funcionario where funcionario_email = %s and funcionario_senha = %s"
-
-    return redirect(url_for("base"))
+    funcionario=Funcionario.login(email,senha)
+    if funcionario:
+        return redirect(url_for("base"))
+    
+    mensagem = f"Login e/ou senha inválidos"
+    flash(mensagem,"erro")
+    return render_template("loginfuncionario.html")
 
 #Landing Page
 
@@ -703,35 +715,34 @@ def adicionar_item_entrada(pedido_entrada_id):
     quantidade = int(request.form.get("quantidade", 0) or 0)
 
     mensagem = Detalhe_entrada.adicionar_item(
-        pedido_id=pedido_id,
+        pedido_entrada_id=pedido_entrada_id,
         produto_id=produto_id,
         quantidade=quantidade
     )
 
     flash(mensagem)
-    return redirect(url_for("detalhes_entrada", pedido_id=pedido_id))
+    return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
 
 
 @app.route("/entrada/item/remover/<int:detalhe_entrada_id>/<int:pedido_entrada_id>")
 
-def remover_item_etrada(detalhe_entrada_id, pedido_entrada_id):
+def remover_item_entrada(detalhe_entrada_id, pedido_entrada_id):
     mensagem = Detalhe_entrada.remover_item(detalhe_entrada_id)
     flash(mensagem)
-    return redirect(url_for("detalhes_entrada", pedido__entrada_id=pedido__entrada_id))
+    return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
 
 
-@app.route("/entrada/finalizar/<int:pedido_id>")
-def finalizar_venda(pedido_entrada_id):
+@app.route("/entrada/finalizar/<int:pedido_entrada_id>")
+def finalizar_entrada(pedido_entrada_id):
     mensagem = Pedido_entrada.finalizar(pedido_entrada_id)
     flash(mensagem)
     return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
 
 
 @app.route("/entrada/nova", methods=["GET", "POST"])
-#@login_required
 def nova_entrada():
     if request.method == "POST":
-        fornecedor = request.form.get("fornecedor", "").strip()
+        fornecedor_id = int(request.form.get("fornecedor_id", 0))
         itens_json = request.form.get("itens_json", "[]")
 
 
@@ -740,8 +751,8 @@ def nova_entrada():
         except Exception:
             itens = []
 
-        pedido = Pedido_entrada(fornecedor=fornecedor)
-        erros = pedido_entrada.validate()
+        pedido = Pedido_entrada(status_pedido_entrada="PENDENTE",fornecedor_id=fornecedor_id)
+        erros = pedido.validate()
 
         if not itens:
             erros.append("Adicione pelo menos um item ao pedido.")
@@ -757,20 +768,20 @@ def nova_entrada():
             return render_template(
                 "formulario_pedidoentrada.html",
                 pedido=pedido,
-                produto=Produto.find_all()
+                produto=Produto.find_all(),
+                fornecedores=Fornecedor.find_all()
             )
 
         try:
-            pedido_entrada_id = pedido_entrada.insert()
+            pedido_entrada_id = pedido.insert()
 
             for item in itens:
-                ItemPedidoVenda.adicionar_item(
+                Detalhe_entrada.adicionar_item(
                     pedido_entrada_id=pedido_entrada_id,
                     produto_id=int(item["produto_id"]),
                     quantidade=int(item["quantidade"])
                 )
 
-            Pedido_entrada.atualizar_total(pedido_entrada_id)
 
             flash("Pedido de entrada criado com sucesso.")
             return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
@@ -778,22 +789,44 @@ def nova_entrada():
         except Exception:
             flash("Erro ao criar pedido de entrada.")
             return render_template(
-                "listagem_produtoentrada.html",
-                pedido_entrada=pedido_entrada,
-                produto=Produto.find_all()
+                "formulario_pedidoentrada.html",
+                pedidos=Pedido_entrada.find_all_ordered(),
+                produto=Produto.find_all(),
+                fornecedores = Fornecedor.find_all()
             )
 
     return render_template(
         "formulario_pedidoentrada.html",
         pedido=None,
-        produto=Produto.find_all()
+        produto=Produto.find_all(),
+        fornecedores = Fornecedor.find_all()
     )
+
 '''Estoque'''
 
 @app.route("/listagem_estoque")
 def listagem_estoque():
-    estoque=Estoque.card_estoque()
-    return render_template('estoque.html', estoque=estoque)
+    filtro = request.args.get("filtro", "adc-recente")
+
+    if filtro == "nome":
+        estoque = Estoque.card_estoque_nome()
+    elif filtro == "maior":
+        estoque = Estoque.card_estoque_maior()
+    elif filtro == "menor":
+        estoque = Estoque.card_estoque_menor()
+    elif filtro == "preco-maior":
+        estoque = Estoque.card_estoque_preco_maior()
+    elif filtro == "preco-menor":
+        estoque = Estoque.card_estoque_preco_menor()
+    else:
+        estoque = Estoque.card_estoque()
+
+    return render_template(
+        "estoque.html",
+        estoque=estoque,
+        filtro=filtro
+    )
+
 
 @app.route('/uso_empilhadeira')
 def uso_empilhadeira():

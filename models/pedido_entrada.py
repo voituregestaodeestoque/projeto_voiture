@@ -1,21 +1,18 @@
 from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
+from datetime import datetime
 
 class Pedido_entrada(CrudBase):
     table = "pedido_entrada"
     fields = [
-        'pedidoentrada_id',
-        'pedidoentrada_produto',
-        'pedidoentrada_quantidade', 
-        'pedidoentrada_fornecedor'
+        'status_pedido_entrada', 
+        'fornecedor_id'
     ]
 
-    def __init__(self, pedidoentrada_id ,pedidoentrada_produto, pedidoentrada_quantidade, pedidoentrada_fornecedor):
-        self.pedidoentrada_produto = pedidoentrada_produto
-        self.pedidoentrada_quantidade = pedidoentrada_quantidade
-        self.pedidoentrada_fornecedor = pedidoentrada_fornecedor
-        self.pedidoentrada_id = pedidoentrada_id
+    def __init__(self, status_pedido_entrada, fornecedor_id):
+        self.status_pedido_entrada = status_pedido_entrada
+        self.fornecedor_id = fornecedor_id
 
     
     @classmethod
@@ -23,7 +20,11 @@ class Pedido_entrada(CrudBase):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            sql = "select f.fornecedor_nome, d.detalhe_entrada_quantidade, p.* from pedido_entrada as p inner join fornecedor as f on p.fornecedor_id = p.fornecedor_id inner join detalhe_entrada as d;"
+            sql = """select f.fornecedor_nome, d.detalhe_entrada_quantidade, d.detalhe_entrada_item, p.* from pedido_entrada as p 
+            INNER JOIN fornecedor as f 
+            ON p.fornecedor_id = f.id 
+            INNER JOIN detalhe_entrada d 
+            ON p.id = d.pedido_entrada_id;"""
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
@@ -36,10 +37,15 @@ class Pedido_entrada(CrudBase):
         erros = []
 
         validacoes = [
-            Validator.required(self.pedidoentrada_produto, "pedidoentrada_produto"),
-            Validator.required(self.pedidoentrada_fornecedor, "pedidoentrada_fornecedor"),
-            Validator.validar_quantidade(self.pedidoentrada_quantidade, "pedidoentrada_quantidade")
+            Validator.required(self.status_pedido_entrada, "status_pedido_entrada"),
+            Validator.required(self.fornecedor_id, "fornecedor_id")
         ]
+
+        for itens in validacoes:
+            if not itens['valida']:
+                erros.append(itens["mensagem"])
+
+        return erros
 
     
     @classmethod
@@ -48,64 +54,46 @@ class Pedido_entrada(CrudBase):
         cursor = conexao.cursor(dictionary=True)
 
         try:
-            sql = "SELECT * FROM pedido_entrada"
+            sql = """SELECT 
+                    p.id, 
+                    p.status_pedido_entrada, 
+                    p.fornecedor_id, 
+                    MAX(m.datahora_movimentacao_entrada) AS data_processamento
+                FROM pedido_entrada p
+                LEFT JOIN detalhe_entrada de ON p.id = de.pedido_entrada_id
+                LEFT JOIN movimentacao_entrada m ON de.id = m.detalhe_entrada_id 
+                    AND de.pedido_entrada_id = m.detalhe_entrada_pedido_entrada_id
+                GROUP BY p.id, p.status_pedido_entrada, p.fornecedor_id
+                ORDER BY p.id DESC"""
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
             cursor.close()
             conexao.close()
 
-    @classmethod
-    def atualizar_total(cls, pedidoentrada_id):
-        conexao = Database.connect()
-        cursor = conexao.cursor()
-
-        try:
-            sql_total = """
-            SELECT COALESCE(SUM(subtotal), 0)
-            FROM detalhe_entrada
-            WHERE pedidoentrada_id = %s
-            """
-            cursor.execute(sql_total, (pedidoentrada_id,))
-            total = cursor.fetchone()[0]
-
-            sql_update = """
-            UPDATE pedido_entrada
-            SET valor_total = %s
-            WHERE id = %s
-            """
-            cursor.execute(sql_update, (total, pedidoentrada_id))
-            conexao.commit()
-            return total
-        except Exception:
-            conexao.rollback()
-            raise
-        finally:
-            cursor.close()
-            conexao.close()
 
     @classmethod
-    def finalizar(cls, pedidoentrada_id):
+    def finalizar(cls, pedido_entrada_id):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
 
         try:
             conexao.start_transaction()
 
-            cursor.execute("SELECT * FROM pedido_entrada WHERE id = %s", (pedidoentrada_id,))
+            cursor.execute("SELECT * FROM pedido_entrada WHERE id = %s", (pedido_entrada_id,))
             pedido = cursor.fetchone()
 
             if not pedido:
                 conexao.rollback()
                 return "Pedido não encontrado."
 
-            if pedido["status"] != "ABERTO":
+            if pedido["status_pedido_entrada"] != "PENDENTE":
                 conexao.rollback()
                 return "Somente pedidos abertos podem ser finalizados."
 
             cursor.execute(
-                "SELECT * FROM item_pedido_venda WHERE pedido_venda_id = %s",
-                (pedido_id,)
+                "SELECT * FROM detalhe_entrada WHERE pedido_entrada_id = %s",
+                (pedido_entrada_id,)
             )
             itens = cursor.fetchall()
 
@@ -114,40 +102,44 @@ class Pedido_entrada(CrudBase):
                 return "Não é possível finalizar um pedido sem itens."
 
             for item in itens:
-                cursor.execute("SELECT * FROM produto WHERE id = %s", (item["produto_id"],))
-                produto = cursor.fetchone()
 
-                if not produto:
+                produto_id = item["detalhe_entrada_item"]
+                quantidade = item["detalhe_entrada_quantidade"]
+
+                cursor.execute(
+                "SELECT * FROM estoque WHERE id = %s",
+                    (item["estoque_id"],))
+
+                if not estoque:
                     conexao.rollback()
                     return "Produto não encontrado no pedido."
 
-                if item["quantidade"] > produto["quantidade"]:
-                    conexao.rollback()
-                    return f"Estoque insuficiente para o produto {produto['nome']}."
-
-                nova_quantidade = produto["quantidade"] - item["quantidade"]
+                nova_quantidade = estoque["estoque_quantidade"] + item["detalhe_entrada_quantidade"]
 
                 cursor.execute(
-                    "UPDATE produto SET quantidade = %s WHERE id = %s",
-                    (nova_quantidade, produto["id"])
-                )
+                """ 
+                    UPDATE estoque
+                    SET estoque_quantidade = %s
+                    WHERE id = %s
+                    """,
+                    (nova_quantidade, item["estoque_id"]) )
 
                 cursor.execute(
                     """
-                    INSERT INTO movimentacao 
-                    (produto_id, tipo_movimentacao, quantidade, data_movimentacao)
-                    VALUES (%s, %s, %s, %s)
+                    INSERT INTO movimentacao_entrada 
+                    (datahora_movimentacao_entrada, detalhe_entrada_id, detalhe_entrada_pedido_entrada_id)
+                    VALUES (%s, %s, %s)
                     """,
-                    (produto["id"], "SAIDA", item["quantidade"], datetime.now())
+                    (datetime.now(), item["id"], pedido_entrada_id)
                 )
 
             cursor.execute(
                 """
-                UPDATE pedido_venda
-                SET status = %s
+                UPDATE pedido_entrada
+                SET status_pedido_entrada = %s
                 WHERE id = %s
                 """,
-                ("FINALIZADO", pedido_id)
+                ("FINALIZADO", pedido_entrada_id)
             )
 
             conexao.commit()
