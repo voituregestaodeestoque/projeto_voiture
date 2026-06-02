@@ -38,7 +38,27 @@ class Empilhadeira(CrudBase):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            sql = "select u.*, f.funcionario_nome, e.* from uso_empilhadeira as u inner join funcionario as f on u.funcionario_id = f.id inner join empilhadeira as e on u.empilhadeira_id= e.id ;"
+            sql = sql = """SELECT
+    u.id AS uso_id,
+    u.uso_empilhadeira_datahora,
+    u.funcionario_id,
+    u.empilhadeira_id,
+
+    f.funcionario_nome,
+
+    e.id AS empilhadeira_id_real,
+    e.empilhadeira_chassi,
+    e.empilhadeira_modelo,
+    e.empilhadeira_marca,
+    e.empilhadeira_status
+
+FROM uso_empilhadeira u
+INNER JOIN funcionario f
+    ON u.funcionario_id = f.id
+INNER JOIN empilhadeira e
+    ON u.empilhadeira_id = e.id
+WHERE u.funcionario_id IS NOT NULL
+"""
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
@@ -50,7 +70,7 @@ class Empilhadeira(CrudBase):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            sql = "SELECT e.* FROM empilhadeira as e LEFT JOIN uso_empilhadeira as u ON e.id = u.empilhadeira_id WHERE u.empilhadeira_id IS NULL;"
+            sql = """ SELECT e.* FROM empilhadeira e LEFT JOIN uso_empilhadeira u ON e.id = u.empilhadeira_id AND u.funcionario_id IS NOT NULL WHERE u.id IS NULL """
             cursor.execute(sql)
             return cursor.fetchall()
         finally:

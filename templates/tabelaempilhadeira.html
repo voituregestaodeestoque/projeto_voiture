@@ -1,6 +1,8 @@
+#tabelaempilhadeira.html
+
 {% extends 'base.html' %}
 
-<!--Ryan Ribeiro atualizado 07/05/2026 11:24-->
+<!--Felipe atualizado 02/06/2026 13:45-->
 
 {% block conteudo %}
 <div class="container-fluid">
@@ -48,137 +50,134 @@
                     </thead>
 
                     <tbody>
-                        {% for usos in uso %}
+
+                        {% for uso in uso %}
                         <tr>
-                        <td>{{ usos.id }}</td>
+                            <td>{{ uso.uso_id }}</td>
 
-                        <td>
-                            <strong>{{ usos.empilhadeira_chassi }}</strong>
-                        </td>
+                            <td>
+                                <strong>{{ uso.empilhadeira_chassi }}</strong>
+                            </td>
 
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ usos.empilhadeira_modelo }}
-                            </span>
-                        </td>
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ uso.empilhadeira_modelo }}
+                                </span>
+                            </td>
 
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ usos.empilhadeira_marca }}
-                            </span>
-                        </td>
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ uso.empilhadeira_marca }}
+                                </span>
+                            </td>
 
-                        <td>
-                            <span class="badge bg-danger">
-                                OCUPADO
-                            </span>
-                        </td>
+                            <td>
+                                <span class="badge bg-danger">
+                                    OCUPADO
+                                </span>
+                            </td>
 
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ usos.funcionario_nome }}
-                            </span>
-                        </td>
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ uso.funcionario_nome }}
+                                </span>
+                            </td>
 
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ usos.empilhadeira_status }}
-                            </span>
-                        </td>
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ uso.empilhadeira_status }}
+                                </span>
+                            </td>
 
-                        
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ uso.uso_empilhadeira_datahora }}
+                                </span>
+                            </td>
 
-                        
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ usos.uso_empilhadeira_datahora }}
-                            </span>
-                        </td>
-
-                        
-                        
-                    </tr>
-
-                        
-
-                        
-
-                        {% endfor %}
-
-
-                    
-                    {% for empilhadeira in empilhadeiras %}
-                    <tr>
-                        <td>{{ empilhadeira.id }}</td>
-
-                        <td>
-                            <strong>{{ empilhadeira.empilhadeira_chassi }}</strong>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ empilhadeira.empilhadeira_modelo }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ empilhadeira.empilhadeira_marca }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-success">
-                                DESOCUPADO
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ empilhadeira.funcionario_nome }}
-                            </span>
-                        </td>
-
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ empilhadeira.empilhadeira_status }}
-                            </span>
-                        </td>
-
-                      
-                        
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                {{ empilhadeira.uso_empilhadeira_datahora }}
-                            </span>
-                        </td>
-
-                        <!-- AÇÕES -->
                             <td class="text-end">
 
-                                
-                                
+                                <a href="{{ url_for('desocupar_empilhadeira', id=uso.uso_id) }}"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Deseja desocupar esta empilhadeira?')">
+
+                                    <i class="bi bi-arrow-up-right-square"></i>
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                        
+                        {% for empilhadeira in empilhadeiras %}
+                        <tr>
+                            <td>{{ empilhadeira.id }}</td>
+
+                            <td>
+                                <strong>{{ empilhadeira.empilhadeira_chassi }}</strong>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ empilhadeira.empilhadeira_modelo }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ empilhadeira.empilhadeira_marca }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-success">
+                                    DESOCUPADO
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ empilhadeira.funcionario_nome }}
+                                </span>
+                            </td>
+
+
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ empilhadeira.empilhadeira_status }}
+                                </span>
+                            </td>
+
+
+
+
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ empilhadeira.uso_empilhadeira_datahora }}
+                                </span>
+                            </td>
+
+                            <!-- AÇÕES -->
+                            <td class="text-end">
+
+
+
                                 <a href="{{ url_for('editar_empilhadeira', id=empilhadeira.id) }}"
                                     class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
 
+
                                 <a href="{{ url_for('deletar_empilhadeira', id=empilhadeira.id) }}"
                                     class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Deseja excluir este produto?')">
+                                    onclick="return confirm('Deseja excluir esta empilhadeira?')">
                                     <i class="bi bi-trash"></i>
                                 </a>
 
                             </td>
 
-                    </tr>
-                        
-
-                        
-
+                        </tr>
                         {% endfor %}
                     </tbody>
 

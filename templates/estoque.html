@@ -6,26 +6,53 @@
 <div>
     <div>
         <!--TOPO-->
-        <div style="width: 98%; margin-left: 10px;">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Pesquisa" >
-                <span class="input-group-text bg-dark border-secondary">
-                    <i class="bi bi-search text-white"></i>
-                </span>
-                
-            </div>
+        <div style="width: 98%; margin-left: 10px;" class="d-flex">
+            <form action="" class="input-group form-card">
 
-            <form method="GET" class="">
+                <input type="text" class="form-control" placeholder="Pesquisa" >
+                <button class="input-group-text bg-dark border-secondary">
+                <i class="bi bi-search text-white"></i>
+                </button>
+                
+            </form>
+                
+
+            <form method="GET" class="form-card ms-3">
                 <select
                     name="filtro"
-                    class="filtrar mt-3"
+                    class="filtrar form-select"
                     onchange="this.form.submit()">
-                    <option value="adc-recente">
+            
+                    <option value="adc-recente"
+                        {{ 'selected' if filtro == 'adc-recente' else '' }}>
                         Adicionados recentemente
                     </option>
-                    <option value="nome">
+            
+                    <option value="nome"
+                        {{ 'selected' if filtro == 'nome' else '' }}>
                         Ordenar por nome
                     </option>
+            
+                    <option value="maior"
+                        {{ 'selected' if filtro == 'maior' else '' }}>
+                        Quantidade: Maior ao menor
+                    </option>
+            
+                    <option value="menor"
+                        {{ 'selected' if filtro == 'menor' else '' }}>
+                        Quantidade: Menor ao maior
+                    </option>
+
+                    <option value="preco-maior"
+                        {{ 'selected' if filtro == 'preco-maior' else '' }}>
+                        Preço: Maior ao menor
+                    </option>
+            
+                    <option value="preco-menor"
+                        {{ 'selected' if filtro == 'preco-menor' else '' }}>
+                        Preço: Menor ao maior
+                    </option>
+            
                 </select>
             </form>
         </div>

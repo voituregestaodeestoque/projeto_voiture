@@ -1,4 +1,4 @@
-<!--Editado por Júlia em 14/05/2026 às 12h11-->
+<!--Editado por Felipe em 02/06/2026 às 13h42-->
 
 {% extends 'base.html' %}
 
@@ -32,15 +32,12 @@
                         <i class="bi bi-basket2-fill text-white"></i>
                     </span>
 
-                    <select id="empilhadeira">
+                    <select id="empilhadeira_id" name="empilhadeira_id">
                         <option value="">Selecione</option>
                         {% for empilhadeira in empilhadeiras %}
                             <option 
-                                value="{{ empilhadeira.id }}"
-                                data-nome="{{ empilhadeira.chassi }}"
-                                data-preco="{{ empilhadeira.marca }}"
-                                data-estoque="{{ empilhadeira.modelo }}">
-                                {{ empilhadeira.empilhadeira_marca }} - Modelo: {{ empilhadeira.empilhadeira_modelo }} - Chassi: {{ empilhadeira.empilhadeira_chassi }}
+                                value="{{ empilhadeira.id }}">
+                                chassi {{ empilhadeira.empilhadeira_chassi }} - marca {{ empilhadeira.empilhadeira_marca }} - modelo {{ empilhadeira.empilhadeira_modelo }} - {{ empilhadeira.id }}
                             </option>
                         {% endfor %}
                     </select>
