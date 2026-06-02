@@ -806,20 +806,26 @@ def nova_entrada():
 
 @app.route("/listagem_estoque")
 def listagem_estoque():
-    estoque=Estoque.card_estoque()
-
-    filtro = request.args.get("filtro")
+    filtro = request.args.get("filtro", "adc-recente")
 
     if filtro == "nome":
         estoque = Estoque.card_estoque_nome()
-
-    elif filtro == "adc-recente":
-        estoque = Estoque.card_estoque()
-
+    elif filtro == "maior":
+        estoque = Estoque.card_estoque_maior()
+    elif filtro == "menor":
+        estoque = Estoque.card_estoque_menor()
+    elif filtro == "preco-maior":
+        estoque = Estoque.card_estoque_preco_maior()
+    elif filtro == "preco-menor":
+        estoque = Estoque.card_estoque_preco_menor()
     else:
         estoque = Estoque.card_estoque()
 
-    return render_template('estoque.html', estoque=estoque)
+    return render_template(
+        "estoque.html",
+        estoque=estoque,
+        filtro=filtro
+    )
 
 
 @app.route('/uso_empilhadeira')
