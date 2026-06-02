@@ -110,6 +110,7 @@ class Pedido_entrada(CrudBase):
                 "SELECT * FROM estoque WHERE id = %s",
                     (item["estoque_id"],))
 
+                estoque = cursor.fetchone()
                 if not estoque:
                     conexao.rollback()
                     return "Produto não encontrado no pedido."
@@ -148,6 +149,28 @@ class Pedido_entrada(CrudBase):
         except Exception:
             conexao.rollback()
             return "Erro ao finalizar pedido de entrada."
+        finally:
+            cursor.close()
+            conexao.close()
+
+    
+    @classmethod
+    def find_by_id(cls, pedido_entrada_id):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+
+        try:
+            # Faz o JOIN para trazer a coluna "fornecedor" que o seu HTML precisa
+            sql = """SELECT 
+                        p.id, 
+                        p.status_pedido_entrada, 
+                        p.fornecedor_id,
+                        f.fornecedor_nome AS fornecedor
+                    FROM pedido_entrada p
+                    INNER JOIN fornecedor f ON p.fornecedor_id = f.id
+                    WHERE p.id = %s"""
+            cursor.execute(sql, (pedido_entrada_id,))
+            return cursor.fetchone() # Retorna o pedido com o nome do fornecedor incluso
         finally:
             cursor.close()
             conexao.close()
