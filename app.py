@@ -11,6 +11,7 @@ from models.cliente import Cliente
 from models.pedido_entrada import Pedido_entrada
 from models.detalhe_entrada import Detalhe_entrada
 from models.estoque import Estoque
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "chave_secreta"
@@ -165,19 +166,31 @@ def deletar_empilhadeira(id):
         flash(f"Erro ao excluir empilhadeira: {e}", "erro")
     return redirect(url_for("tabelaempilhadeira"))
 
+@app.route("/desocupar_empilhadeira/<int:id>")
+def desocupar_empilhadeira(id):
+
+    try:
+        Uso_empilhadeira.desocupar(id)
+
+        flash("Empilhadeira desocupada com sucesso.", "sucesso")
+
+    except Exception as e:
+        flash(f"Erro ao desocupar empilhadeira: {e}", "erro")
+
+    return redirect(url_for("tabelaempilhadeira"))
+
 
 
 @app.route('/tabelaempilhadeira')
 def tabelaempilhadeira():
     uso = Empilhadeira.tabelatudojunto()
     empilhadeiras=Empilhadeira.empilhadeirasemuso()
+    print("render",empilhadeiras)
     return render_template(
         'tabelaempilhadeira.html',
         uso=uso,
         empilhadeiras=empilhadeiras
     )
-
-
 
 
 
@@ -196,27 +209,43 @@ def enderecamento():
 # Uso de Empilhadeira
 @app.route('/usoempilhadeira')
 def usoempilhadeira():
-    return render_template('usoempilhadeira.html')
+    #empilhadeira = Empilhadeira()
+    lista_empilhadeiras = empilhadeira.query.all()
+    return render_template('usoempilhadeira.html' ,empilhadeiras=lista_empilhadeiras)
 
 
 def get_uso_empilhadeira_form():
     return {
-        "funcionario_id": request.form.get("funcionario_id", "").strip(),
-        "empilhadeira_id": request.form.get("empilhadeira_id", "").strip(),
+        "uso_empilhadeira_datahora": datetime.now(),
+        "funcionario_id": to_int(request.form.get("funcionario_id")),
+        "empilhadeira_id": request.form.get("empilhadeira_id"),
     }
 
 @app.route("/salvar_uso_empilhadeira", methods=["POST"])
 def salvar_uso_empilhadeira():
+
     dados = get_uso_empilhadeira_form()
+    print("empilhadeira ",dados)
+
+    if not dados["empilhadeira_id"]:
+        flash("Selecione uma empilhadeira.", "erro")
+        return redirect(url_for("usoempilhadeira"))
+
+    if not dados["funcionario_id"]:
+        flash("Selecione um funcionário.", "erro")
+        return redirect(url_for("usoempilhadeira"))
+
     uso_empilhadeira = Uso_empilhadeira(**dados)
 
     try:
         uso_empilhadeira.insert()
-        flash("Uso  de Empilhadeira cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("base"))
+        flash("Uso de empilhadeira cadastrado com sucesso.", "sucesso")
+        return redirect(url_for("tabelaempilhadeira"))
+
     except Exception as e:
-        flash(f"Erro ao cadastrar uso de empilhadeira{e}", "erro")
-        return render_template("cadastro_uso_empilhadeira.html", fornecedor=dados)
+        flash(f"Erro ao cadastrar uso de empilhadeira: {e}", "erro")
+        return redirect(url_for("usoempilhadeira"))
+
         
 # -----> Início: Produto
 
@@ -830,10 +859,9 @@ def listagem_estoque():
 
 @app.route('/uso_empilhadeira')
 def uso_empilhadeira():
-    # Buscamos a lista do banco usando a sua Classe (com E maiúsculo!)
+    
     lista_de_maquinas = Empilhadeira.empilhadeirasemuso()
     
-    # O nome que você coloca aqui antes do '=' é o que o HTML vai reconhecer
     return render_template('usoempilhadeira.html', empilhadeiras=lista_de_maquinas)
     
     try:
@@ -857,6 +885,7 @@ def uso_empilhadeira():
                 uso_empilhadeira=uso_empilhadeira,
                 empilhadeira=empilhadeira.find_all(order_by="nome")
             )
+
 
         
 
