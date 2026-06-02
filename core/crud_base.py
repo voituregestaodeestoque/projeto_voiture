@@ -78,15 +78,4 @@ class CrudBase:
         finally:
             cursor.close()
             conexao.close()
-    
-    @classmethod
-    def find_search(campo, chave_pesquisa, cls, order_by="id"):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
-        try:
-            sql = f"SELECT * FROM {cls.table} WHERE {campo} LIKE '{chave_pesquisa}%' ORDER BY {order_by}"
-            cursor.execute(sql)
-            return cursor.fetchall()
-        finally:
-            cursor.close()
-            conexao.close()
+

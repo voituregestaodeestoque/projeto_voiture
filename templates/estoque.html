@@ -7,10 +7,10 @@
     <div>
         <!--TOPO-->
         <div style="width: 98%; margin-left: 10px;" class="d-flex">
-            <form action="" class="input-group form-card">
+            <form action="{{ url_for('listagem_estoque')}}" class="input-group form-card">
 
-                <input type="text" class="form-control" placeholder="Pesquisa" >
-                <button class="input-group-text bg-dark border-secondary">
+                <input name="chave_pesquisa" type="text" class="form-control" placeholder="Pesquisa" >
+                <button class="input-group-text bg-dark border-secondary" type="submit">
                 <i class="bi bi-search text-white"></i>
                 </button>
                 

@@ -141,6 +141,21 @@ class Estoque(CrudBase):
             cursor.close()
             conexao.close()
 
-    
+    @classmethod
+    def card_estoque_pesquisa(cls, chave_pesquisa):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
 
-    
+            busca = f"%{chave_pesquisa['chave_pesquisa']}%"
+            sql = f"SELECT e.estoque_quantidade, p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id WHERE p.produto_nome LIKE %s order by p.id"
+            cursor.execute(sql, busca)
+            return cursor.fetchall()
+        
+        except Exception:
+            conexao.rollback()
+            return
+
+        finally:
+            cursor.close()
+            conexao.close()

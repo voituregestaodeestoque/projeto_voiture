@@ -835,6 +835,15 @@ def nova_entrada():
 
 @app.route("/listagem_estoque")
 def listagem_estoque():
+
+    pesquisa = get_pesquisa_estoque_form()
+
+    if pesquisa:
+        estoque = Estoque.card_estoque_pesquisa(pesquisa)
+
+    else:
+        estoque = Estoque.card_estoque()
+
     filtro = request.args.get("filtro", "adc-recente")
 
     if filtro == "nome":
@@ -846,15 +855,18 @@ def listagem_estoque():
     elif filtro == "preco-maior":
         estoque = Estoque.card_estoque_preco_maior()
     elif filtro == "preco-menor":
-        estoque = Estoque.card_estoque_preco_menor()
-    else:
-        estoque = Estoque.card_estoque()
+        estoque = Estoque.card_estoque_preco_menor()        
 
     return render_template(
         "estoque.html",
         estoque=estoque,
         filtro=filtro
     )
+
+def get_pesquisa_estoque_form():
+    chave = {"chave_pesquisa": request.form.get("chave_pesquisa", "").strip()}
+    return chave
+
 
 
 @app.route('/uso_empilhadeira')
