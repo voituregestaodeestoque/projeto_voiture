@@ -15,12 +15,19 @@
                 
             </div>
 
-            <select class="filtrar mt-3" style="border-radius: 5px;">
-                <option selected>filtrar</option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-            </select>
+            <form method="GET" class="">
+                <select
+                    name="filtro"
+                    class="filtrar mt-3"
+                    onchange="this.form.submit()">
+                    <option value="adc-recente">
+                        Adicionados recentemente
+                    </option>
+                    <option value="nome">
+                        Ordenar por nome
+                    </option>
+                </select>
+            </form>
         </div>
 
     </div>

@@ -801,12 +801,26 @@ def nova_entrada():
         produto=Produto.find_all(),
         fornecedores = Fornecedor.find_all()
     )
+
 '''Estoque'''
 
 @app.route("/listagem_estoque")
 def listagem_estoque():
     estoque=Estoque.card_estoque()
+
+    filtro = request.args.get("filtro")
+
+    if filtro == "nome":
+        estoque = Estoque.card_estoque_nome()
+
+    elif filtro == "adc-recente":
+        estoque = Estoque.card_estoque()
+
+    else:
+        estoque = Estoque.card_estoque()
+
     return render_template('estoque.html', estoque=estoque)
+
 
 @app.route('/uso_empilhadeira')
 def uso_empilhadeira():
