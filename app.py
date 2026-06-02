@@ -73,7 +73,7 @@ def login():
 def landingpage():
     return render_template('lp.html')
 
-'''Empilhadeira Ryan Ribeiro'''
+'''Empilhadeira'''
 
 # cadastrodeempilhadeira
 
