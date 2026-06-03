@@ -1,5 +1,5 @@
 
-# Editado por Clairnha em 28/05/2026
+# Editado por Júlia em 02/06/2026 as 16h46
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -864,7 +864,7 @@ def listagem_estoque():
     )
 
 def get_pesquisa_estoque_form():
-    chave = {"chave_pesquisa": request.form.get("chave_pesquisa", "").strip()}
+    chave = {"chave_pesquisa": request.args.get("chave_pesquisa", "").strip()}
     return chave
 
 

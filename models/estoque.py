@@ -1,4 +1,5 @@
-#Editado por Júlia em 26/05/2026 às 11h01
+#Editado por Júlia em 02/06/2026 as 16h46
+
 from datetime import datetime
 from core.crud_base import CrudBase
 from core.database import Database
@@ -124,22 +125,6 @@ class Estoque(CrudBase):
             cursor.close()
             conexao.close()
 
-    @classmethod
-    def encontrar_produto(cls, produto_id):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
-
-        try:
-            cursor.execute(
-            "SELECT * FROM estoque WHERE produto_id = %s",
-            (produto_id,)
-        )
-
-            return cursor.fetchone()
-
-        finally:
-            cursor.close()
-            conexao.close()
 
     @classmethod
     def card_estoque_pesquisa(cls, chave_pesquisa):
@@ -149,12 +134,12 @@ class Estoque(CrudBase):
 
             busca = f"%{chave_pesquisa['chave_pesquisa']}%"
             sql = f"SELECT e.estoque_quantidade, p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id WHERE p.produto_nome LIKE %s order by p.id"
-            cursor.execute(sql, busca)
+            cursor.execute(sql, (busca,))
             return cursor.fetchall()
         
-        except Exception:
-            conexao.rollback()
-            return
+        except Exception as e:
+            print("ERRO:", e)
+            raise
 
         finally:
             cursor.close()
