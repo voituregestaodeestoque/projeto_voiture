@@ -2,7 +2,7 @@ from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
 
-#atualizado por Ryan dia 12/05/2026 às 10:10
+#atualizado por Ryan dia 04/06/2026 às 17:10
 
 class Cliente(CrudBase):
     table='cliente'
@@ -68,3 +68,28 @@ class Cliente(CrudBase):
             raise ValueError("Cliente não encontrado.")
         cls.delete(id)
 
+    #Procura no banco algum cliente com o mesmo CNPJ
+    @classmethod
+    def cnpj_existente(cls, cnpj):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True, buffered=True)
+        try:
+            sql = f"SELECT * FROM {cls.table} WHERE cliente_cnpj = %s"
+            cursor.execute(sql, (cnpj,))
+            return cursor.fetchone()
+        finally:
+            cursor.close()
+            conexao.close()
+    
+    #Procura no banco algum cliente com o mesmo email
+    @classmethod
+    def email_existente(cls, email):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True, buffered=True)
+        try:
+            sql = f"SELECT * FROM {cls.table} WHERE cliente_email = %s"
+            cursor.execute(sql, (email,))
+            return cursor.fetchone()
+        finally:
+            cursor.close()
+            conexao.close()

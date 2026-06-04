@@ -1,5 +1,5 @@
 
-# Editado por Júlia em 02/06/2026 as 16h46
+# Editado por Ryan em 04/06/2026 às 17:15 
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models.funcionario import Funcionario
@@ -101,6 +101,12 @@ def salvar_empilhadeira():
         for erro in erros:
             flash(erro,"erro")
         return render_template("cadastroempilhadeira.html", empilhadeiras=dados)
+
+    chassi = request.form.get("empilhadeira_chassi", "").strip()
+    chassi_cadastrado = Empilhadeira.chassi_existente(chassi)
+    if chassi_cadastrado:
+        flash("Chassi já existe no sistema! ","erro")
+        return render_template("cadastroempilhadeira.html",empilhadeiras=dados)
 
     #Cadastro
     try:
@@ -473,7 +479,7 @@ def deletar_funcionario(id):
 
 #=====================================================================================#
 
-# cliente atualizado por Ryan dia 12/05/26 às 9:00
+# cliente
 
 def get_cliente_form():
         return {
@@ -507,6 +513,18 @@ def salvar_cliente():
     if erros :
         for erro in erros:
             flash(erro, "erro")
+        return render_template("cadastrocliente.html", cliente=dados)
+
+    cnpj = request.form.get("cliente_cnpj", "").strip()
+    cnpj_cadastrado = Cliente.cnpj_existente(cnpj)
+    if cnpj_cadastrado:
+        flash("CNPJ já existe no sistema! ","erro")
+        return render_template("cadastrocliente.html", cliente=dados)
+
+    email = request.form.get("cliente_email", "").strip()
+    email_cadastrado = Cliente.email_existente(email)
+    if email_cadastrado:
+        flash("Email já existe no sistema!","erro")
         return render_template("cadastrocliente.html", cliente=dados)
 
     try:
@@ -613,14 +631,13 @@ def salvar_fornecedor():
         return render_template("cadastrofornecedor.html", fornecedor=dados)
 
     cnpj = request.form.get("fornecedor_cnpj", "").strip()
-    cnpj_cadastrado = fornecedor.cnpj_existente(cnpj)
+    cnpj_cadastrado = Fornecedor.cnpj_existente(cnpj)
     if cnpj_cadastrado:
         flash("CNPJ já existe no sistema! ","erro")
         return render_template("cadastrofornecedor.html",fornecedor=dados)
 
     email = request.form.get("fornecedor_email", "").strip()
-    email_cadastrado = fornecedor.email_existente(email)
-
+    email_cadastrado = Fornecedor.email_existente(email)
     if email_cadastrado:
         flash("Email já existe no sistema!","erro")
         return render_template("cadastrofornecedor.html", fornecedor=dados)

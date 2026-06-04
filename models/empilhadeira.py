@@ -104,4 +104,15 @@ WHERE u.funcionario_id IS NOT NULL
             cursor.close()
             conexao.close()
 
-
+    #Procura no banco alguma empilhadeira com o mesmo chassi
+    @classmethod
+    def chassi_existente(cls, chassi):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True, buffered=True)
+        try:
+            sql = f"SELECT * FROM {cls.table} WHERE empilhadeira_chassi = %s"
+            cursor.execute(sql, (chassi,))
+            return cursor.fetchone()
+        finally:
+            cursor.close()
+            conexao.close()
