@@ -1,7 +1,7 @@
 
 # Editado por Ryan em 04/06/2026 às 17:15 
 
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, json
 from models.funcionario import Funcionario
 from models.empilhadeira import Empilhadeira
 from models.uso_empilhadeira import Uso_empilhadeira
@@ -797,6 +797,7 @@ def nova_entrada():
         except Exception:
             itens = []
 
+   
         pedido = Pedido_entrada(status_pedido_entrada="PENDENTE",fornecedor_id=fornecedor_id)
         erros = pedido.validate()
 
@@ -817,18 +818,23 @@ def nova_entrada():
                 produto=Produto.find_all(),
                 fornecedores=Fornecedor.find_all()
             )
-
+        
         try:
+            
             pedido_entrada_id = pedido.insert()
-
+            cont = 0
+            teste = []
+            
             for item in itens:
+                cont += 1
                 Detalhe_entrada.adicionar_item(
                     pedido_entrada_id=pedido_entrada_id,
                     produto_id=int(item["produto_id"]),
-                    quantidade=int(item["quantidade"])
+                    detalhe_entrada_item = cont,
+                    detalhe_entrada_quantidade=int(item["quantidade"])
                 )
-
-
+            
+                print("check", teste)
             flash("Pedido de entrada criado com sucesso.")
             return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
 

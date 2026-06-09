@@ -13,11 +13,11 @@ class Detalhe_entrada(CrudBase):
         'pedido_entrada_id'
     ]
 
-    def __init__(self, detalhe_entrada_quantidade, estoque_id, pedido_entrada_id,detalhe_entrada_item):
+    def __init__(self, detalhe_entrada_quantidade, estoque_id, detalhe_entrada_item, pedido_entrada_id ):
         self.detalhe_entrada_quantidade = detalhe_entrada_quantidade
         self.estoque_id = estoque_id
-        self.pedido_entrada_id = pedido_entrada_id
         self.detalhe_entrada_item = detalhe_entrada_item
+        self.pedido_entrada_id = pedido_entrada_id
 
 
     def validate(self):
@@ -61,31 +61,36 @@ class Detalhe_entrada(CrudBase):
             conexao.close()
 
     @classmethod
-    def adicionar_item(cls, detalhe_entrada_quantidade, pedido_entrada_id, produto_id, detalhe_entrada_item):
+    def adicionar_item(cls, detalhe_entrada_quantidade, produto_id,  detalhe_entrada_item, pedido_entrada_id ):
         pedido = Pedido_entrada.find_by_id(pedido_entrada_id)
-
+        
         if not pedido:
+            print("01")
             return "Pedido não encontrado."
 
         if pedido["status_pedido_entrada"] != "PENDENTE":
+            print("02")
             return "Não é possível alterar um pedido finalizado."
 
         estoque = Estoque.encontrar_produto(produto_id)
-
+        
         if not estoque:
+            print("03")
             return "Produto não encontrado."
 
         if detalhe_entrada_quantidade <= 0:
+            print("04")
             return "A quantidade deve ser maior que zero."
 
-        detalhe = cls( detalhe_entrada_quantidade, estoque["id"], pedido_entrada_id, produto_id)
-
+        detalhe =  cls(detalhe_entrada_quantidade, estoque["id"], detalhe_entrada_item, pedido_entrada_id)
+        print("detalhe", detalhe)
         erros = detalhe.validate()
         if erros:
+            print("05")
             return erros[0]
-
+        
         detalhe.insert()
-
+        print("detalhe ok")
         return "Item adicionado ao pedido."
 
     @classmethod
