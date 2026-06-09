@@ -52,6 +52,8 @@ class CrudBase:
             marcadores = ", ".join(["%s"] * len(self.fields))
             valores = tuple(getattr(self, campo) for campo in self.fields)
             sql = f"INSERT INTO {self.table} ({colunas}) VALUES ({marcadores})"
+            print("sql i-",sql)
+            print("valores - ",valores)
             cursor.execute(sql, valores)
             conexao.commit()
             return cursor.lastrowid
