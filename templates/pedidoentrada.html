@@ -22,7 +22,6 @@
             <tr>
                 <th>ID</th>
                 <th>Produto</th>
-                <th>Tipo</th>
                 <th>Quantidade</th>
                 <th>Status</th>
                 <th>Data do pedido</th>
@@ -32,18 +31,16 @@
 
             {% for pedido in pedidos %}
             <tr>
-                <td>{{ pedido.id }}</td>
-                <td>{{ pedido.produto }}</td>
-                <td>{{ pedido.tipo }}</td>
-                <td>{{ pedido.quantidade }}</td>
+                <td>{{ pedido.pedido_entrada_id }}</td>
+                <td>{{ pedido.produto_nome }}</td>
+                <td>{{ pedido.detalhe_entrada_quantidade }}</td>
                 <td>{{ pedido.status_pedido_entrada }}</td>
-                <td>{{ pedido.observacao }}</td>
-                <td>{{ pedido.data_pedido }}</td>
+                <td>{{ pedido.data_pedido_entrada }}</td>
                 <td>{{ pedido.data_processamento or '-' }}</td>
                 <td class="acoes">
                     {% if pedido.status == 'PENDENTE' %}
-                    <a href="{{ url_for('processar_pedido', id=pedido.id) }}">Processar</a>
-                    <a href="{{ url_for('cancelar_pedido', id=pedido.id) }}">Cancelar</a>
+                    <a href="{{ url_for('processar_pedido', pedido_entrada_id=pedido.id) }}">Processar</a>
+                    <a href="{{ url_for('cancelar_pedido', pedido_entrada_id=pedido.id) }}">Cancelar</a>
                     {% else %}
                     -
                     {% endif %}
@@ -51,6 +48,7 @@
             </tr>
             {% endfor %}
         </table>
+        
+        </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
