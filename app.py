@@ -165,7 +165,7 @@ def atualizar_empilhadeira(id):
 def deletar_empilhadeira(id):
     #Tenta deletar
     try:
-        Empilhadeira.safe_delete(id)
+        Empilhadeira.delete(id)
         flash("Empilhadeira excluída com sucesso.", "sucesso")
     #Tratativa de erro
     except ValueError as e:
@@ -792,7 +792,7 @@ def remover_item_entrada(detalhe_entrada_id, pedido_entrada_id):
 def finalizar_entrada(pedido_entrada_id):
     mensagem = Pedido_entrada.finalizar(pedido_entrada_id)
     flash(mensagem)
-    return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
+    return redirect(url_for("pedidoentrada"))
 
 
 @app.route("/entrada/nova", methods=["GET", "POST"])
@@ -865,16 +865,27 @@ def nova_entrada():
     )
     
     
-@app.route("/pedido/processar/<int:id>")
-def processar_pedido(id):
+@app.route("/pedido/processar/<int:pedido_entrada_id>")
+def processar_pedido_entrada(pedido_entrada_id):
     try:
-        mensagem = PedidoMovimentacao.processar(id)
+        mensagem = Pedido_entrada.processar(pedido_entrada_id)
         flash(mensagem, "sucesso")
     except ValueError as e:
         flash(str(e), "erro")
     except Exception as e:
         flash(f"Erro ao processar pedido: {e}", "erro")
-    return redirect(url_for("pedidos"))
+    return redirect(url_for("pedidoentrada"))
+
+@app.route("/pedido/cancelar/<int:pedido_entrada_id>")
+def cancelar_pedido_entrada(pedido_entrada_id):
+    try:
+        mensagem = Pedido_entrada.cancelar(pedido_entrada_id)
+        flash(mensagem, "sucesso")
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao cancelar pedido: {e}", "erro")
+    return redirect(url_for("pedidoentrada"))
 
 
 '''Estoque'''
@@ -915,34 +926,18 @@ def get_pesquisa_estoque_form():
 
 
 
-@app.route('/uso_empilhadeira')
+@app.route('/uso_empilhadeira_estrangeiro')
 def uso_empilhadeira():
-    
-    lista_de_maquinas = Empilhadeira.empilhadeirasemuso()
-    
-    return render_template('usoempilhadeira.html', empilhadeiras=lista_de_maquinas)
-    
-    try:
-            uso_empilhadeira_id = uso_empilhadeira.insert()
 
-            for item in itens:
-                Itemuso_empilhadeira.adicionar_item(
-                    uso_empilhadeira_id=uso_empilhadeira_id,
-                    empilhadeira_id=int(item["empilhadeira_id"]),
-                    empilhadeira_chassi=int(item["empilhadeira_chassi"]),
-                    empilhadeira_modelo=item["empilhadeira_modelo"],
-                    mpilhadeira_marca=item["empilhadeira_marca"]
-                )
-
-            uso_empilhadeira.atualizar_total(uso_empilhadeira_id)
-
-    except Exception:
-            flash("Erro ao criar uso_empilhadeira.")
-            return render_template(
-                "usoempilhadeira.html",
-                uso_empilhadeira=uso_empilhadeira,
-                empilhadeira=empilhadeira.find_all(order_by="nome")
-            )
+    funcionarios = Funcionario.funcionario_listagem()
+    empilhadeiras = Empilhadeira.find_all()
+    
+    return render_template('usoempilhadeira.html',
+     funcionarios=funcionarios,
+     empilhadeiras=empilhadeiras
+)
+    
+    
 
 
         

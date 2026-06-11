@@ -204,3 +204,7 @@ form input {
     display: flex;
     justify-content: right;
 }
+
+select#funcionario_id {
+    width: 60% !important;
+}
