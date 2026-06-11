@@ -48,6 +48,7 @@ def login():
 
     if funcionario:
         session["usuario_id"] = funcionario["id"]
+        session["funcionario_nome"] = funcionario["funcionario_nome"]
         return redirect(url_for("base"))
     flash("Login e/ou senha inválidos","erro")
 
