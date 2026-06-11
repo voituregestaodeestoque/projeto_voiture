@@ -758,12 +758,19 @@ def detalhes_entrada(pedido_entrada_id):
 @app.route("/entrada/<int:pedido_entrada_id>/adicionar", methods=["POST"])
 def adicionar_item_entrada(pedido_entrada_id):
     produto_id = int(request.form.get("produto_id", 0))
-    quantidade = int(request.form.get("quantidade", 0) or 0)
+    detalhe_entrada_quantidade = int(request.form.get("quantidade", 0) or 0)
+    detalhe_entrada_item = request.form.get("detalhe_entrada_item", "")
 
+    # Buscamos quantos itens esse pedido já tem salvos no banco
+    itens_existentes = Detalhe_entrada.find_by_pedido(pedido_entrada_id)
+    # Ex: se o pedido já tem 2 itens, o próximo será o 3 (2 + 1)
+    proximo_item_numero = len(itens_existentes) + 1
+    
     mensagem = Detalhe_entrada.adicionar_item(
-        pedido_id=pedido_entrada_id,
+        pedido_entrada_id = pedido_entrada_id,
         produto_id=produto_id,
-        quantidade=quantidade
+        detalhe_entrada_quantidade=detalhe_entrada_quantidade,
+        detalhe_entrada_item= proximo_item_numero
     )
 
     flash(mensagem)
@@ -798,7 +805,7 @@ def nova_entrada():
             itens = []
 
    
-        pedido = Pedido_entrada(status_pedido_entrada="PENDENTE",fornecedor_id=fornecedor_id)
+        pedido = Pedido_entrada(status_pedido_entrada="PENDENTE",fornecedor_id=fornecedor_id, data_pedido_entrada=datetime.now())
         erros = pedido.validate()
 
         if not itens:
@@ -853,6 +860,19 @@ def nova_entrada():
         produto=Produto.find_all(),
         fornecedores = Fornecedor.find_all()
     )
+    
+    
+@app.route("/pedido/processar/<int:id>")
+def processar_pedido(id):
+    try:
+        mensagem = PedidoMovimentacao.processar(id)
+        flash(mensagem, "sucesso")
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao processar pedido: {e}", "erro")
+    return redirect(url_for("pedidos"))
+
 
 '''Estoque'''
 

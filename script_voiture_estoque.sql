@@ -54,6 +54,18 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8;
 
+insert into funcionario (
+funcionario_nome,
+funcionario_senha,
+funcionario_cpf,
+funcionario_cep,
+funcionario_email,
+funcionario_ddi,
+funcionario_ddd,
+funcionario_telefone,
+funcionario_cargo) VALUES (
+'maria clara', 'Mc123456', 45384752890, 13974270, 'maria.belli@aluno.senai.br', 55, 19, 999999999, 'dev');
+
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
@@ -158,6 +170,7 @@ CREATE TABLE IF NOT EXISTS `pedido_entrada` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `status_pedido_entrada` VARCHAR(30) NOT NULL,
   `fornecedor_id` INT NOT NULL,
+  `data_pedido_entrada` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_pedido_entrada_fornecedor1_idx` (`fornecedor_id` ASC) VISIBLE,
   CONSTRAINT `fk_pedido_entrada_fornecedor1`
@@ -166,6 +179,8 @@ CREATE TABLE IF NOT EXISTS `pedido_entrada` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+
 
 SHOW WARNINGS;
 
@@ -221,6 +236,7 @@ CREATE TABLE IF NOT EXISTS `movimentacao_entrada` (
   `datahora_movimentacao_entrada` DATETIME NOT NULL,
   `detalhe_entrada_id` INT NOT NULL,
   `detalhe_entrada_pedido_entrada_id` INT NOT NULL,
+  `data_pedido_entrada` TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_movimentacao_entrada_detalhe_entrada1_idx` (`detalhe_entrada_id` ASC, `detalhe_entrada_pedido_entrada_id` ASC) VISIBLE,
   CONSTRAINT `fk_movimentacao_entrada_detalhe_entrada1`
@@ -279,5 +295,3 @@ SHOW WARNINGS;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
-SELECT * FROM uso_empilhadeira;

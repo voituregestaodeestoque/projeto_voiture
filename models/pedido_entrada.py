@@ -7,12 +7,14 @@ class Pedido_entrada(CrudBase):
     table = "pedido_entrada"
     fields = [
         'status_pedido_entrada', 
-        'fornecedor_id'
+        'fornecedor_id',
+        'data_pedido_entrada'
     ]
 
-    def __init__(self, status_pedido_entrada, fornecedor_id):
+    def __init__(self, status_pedido_entrada, fornecedor_id, data_pedido_entrada):
         self.status_pedido_entrada = status_pedido_entrada
         self.fornecedor_id = fornecedor_id
+        self.data_pedido_entrada = data_pedido_entrada
 
     
     @classmethod
@@ -20,11 +22,13 @@ class Pedido_entrada(CrudBase):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            sql = """select f.fornecedor_nome, d.detalhe_entrada_quantidade, d.detalhe_entrada_item, p.* from pedido_entrada as p 
+            sql = """select f.fornecedor_nome, d.detalhe_entrada_quantidade, d.detalhe_entrada_item, me.datahora_movimentacao_entrada, p.* from pedido_entrada as p 
             INNER JOIN fornecedor as f 
             ON p.fornecedor_id = f.id 
             INNER JOIN detalhe_entrada d 
-            ON p.id = d.pedido_entrada_id;"""
+            ON p.id = d.pedido_entrada_id
+            INNER JOIN movimentacao_entrada me
+            ON p.id = me.detalhe_entrada_pedido_entrada_id;"""
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
@@ -55,10 +59,10 @@ class Pedido_entrada(CrudBase):
 
         try:
             sql = """SELECT p.id as detalhe_entrada_id, p.status_pedido_entrada, p.data_pedido_entrada, p.fornecedor_id, pr.produto_nome, de.detalhe_entrada_quantidade, 
-                    MAX(m.datahora_movimentacao_entrada) AS data_processamento
+                    MAX(me.datahora_movimentacao_entrada) AS data_processamento
                     FROM pedido_entrada p
                     LEFT JOIN detalhe_entrada de ON p.id = de.pedido_entrada_id
-                    LEFT JOIN movimentacao_entrada m ON de.id = m.detalhe_entrada_id AND de.pedido_entrada_id = m.detalhe_entrada_pedido_entrada_id
+                    LEFT JOIN movimentacao_entrada me ON de.id = me.detalhe_entrada_id AND de.pedido_entrada_id = me.detalhe_entrada_pedido_entrada_id
                     left join estoque es on es.id = de.estoque_id
                     LEFT JOIN produto pr ON pr.id = es.produto_id
                     GROUP BY p.id, p.status_pedido_entrada, p.fornecedor_id, pr.produto_nome, de.detalhe_entrada_quantidade
@@ -100,9 +104,6 @@ class Pedido_entrada(CrudBase):
                 return "Não é possível finalizar um pedido sem itens."
 
             for item in itens:
-
-                produto_id = item["detalhe_entrada_item"]
-                quantidade = item["detalhe_entrada_quantidade"]
 
                 cursor.execute(
                 "SELECT * FROM estoque WHERE id = %s",
@@ -161,7 +162,8 @@ class Pedido_entrada(CrudBase):
             # Faz o JOIN para trazer a coluna "fornecedor" que o seu HTML precisa
             sql = """SELECT 
                         p.id, 
-                        p.status_pedido_entrada, 
+                        p.status_pedido_entrada,
+                        p.data_pedido_entrada, 
                         p.fornecedor_id,
                         f.fornecedor_nome AS fornecedor
                     FROM pedido_entrada p
@@ -174,3 +176,70 @@ class Pedido_entrada(CrudBase):
             conexao.close()
 
     
+    @classmethod
+    def processar(cls, id):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            conexao.start_transaction()
+
+            cursor.execute("SELECT * FROM pedido_entrada WHERE id = %s FOR UPDATE", (id,))
+            pedido = cursor.fetchone()
+            if not pedido:
+                raise ValueError("Pedido não encontrado.")
+
+            if pedido["status_pedido_entrada"] != "PENDENTE":
+                raise ValueError("Somente pedidos pendentes podem ser processados.")
+
+            cursor.execute("SELECT * FROM produto WHERE id = %s FOR UPDATE", (pedido["produto_id"],))
+            produto = cursor.fetchone()
+            if not produto:
+                raise ValueError("Produto não encontrado.")
+
+            cursor.execute(
+                """
+                UPDATE pedido_entrada
+                SET status = %s, data_processamento = %s
+                WHERE id = %s
+                """,
+                ("CONCLUIDO", datetime.now(), id)
+            )
+
+            conexao.commit()
+            return "Pedido processado com sucesso."
+        except Exception:
+            conexao.rollback()
+            raise
+        finally:
+            cursor.close()
+            conexao.close()
+
+    @classmethod
+    def cancelar(cls, id):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            cursor.execute("SELECT * FROM pedido_movimentacao WHERE id = %s", (id,))
+            pedido = cursor.fetchone()
+            if not pedido:
+                raise ValueError("Pedido não encontrado.")
+            if pedido["status"] != "PENDENTE":
+                raise ValueError("Somente pedidos pendentes podem ser cancelados.")
+
+            cursor = conexao.cursor()
+            cursor.execute(
+                """
+                UPDATE pedido_movimentacao
+                SET status = %s, data_processamento = %s
+                WHERE id = %s
+                """,
+                ("CANCELADO", datetime.now(), id)
+            )
+            conexao.commit()
+            return "Pedido cancelado com sucesso."
+        except Exception:
+            conexao.rollback()
+            raise
+        finally:
+            cursor.close()
+            conexao.close()
