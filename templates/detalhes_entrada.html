@@ -1,79 +1,100 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
-<h2>Pedido de Entrada nº {{ pedido.id }}</h2>
+<h2></h2>
 
-<div class="card-info">
+<div>
+    <h2 class="titulo-pagina">
+        <i class="bi bi-box-seam"></i> Pedido de Entrada nº {{ pedido.id }}
+    </h2>
+
+</div>
+
+<div class="card-info"
+    style="padding: 10px; margin-left: 40px; margin-top: 30px; margin-bottom: 50px; background-color: #fff; border-radius: 10px; width: auto;">
     <p><strong>Fornecedor:</strong> {{ pedido.fornecedor }}</p>
     <p><strong>Data:</strong> {{ pedido.data_pedido_entrada }}</p>
     <p><strong>Status:</strong> {{ pedido.status_pedido_entrada }}</p>
 </div>
 
 {% if pedido.status_pedido_entrada == 'PENDENTE' %}
-<h3>Adicionar Item</h3>
 
-<div class="container-fluid produto-container d-flex justify-content-between">
+<div class="container-fluid detalhe-container d-flex justify-content-between">
 
-    <div class="pedido-card text-dark" style="width: 45%;">
+    <div class="pedido-card text-dark mb-4" style="width: 100%; display: flex; justify-content: space-around;">
+        <div class="form-itens" style="width: 45%;">
 
-        <form method="POST" action="{{ url_for('adicionar_item_entrada', pedido_entrada_id=pedido.id) }}">
-            <label>Produto:</label>
-            <select name="produto_id" required>
-                <option value="">Selecione</option>
-                {% for produto in produto %}
-                <option value="{{ produto.id }}">
-                    {{ produto.produto_nome }}
-                </option>
-                {% endfor %}
-            </select>
+            <h4>Adicionar Item</h4>
+            <form method="POST" action="{{ url_for('adicionar_item_entrada', pedido_entrada_id=pedido.id) }}">
 
-            <label>Quantidade:</label>
-            <input type="number" name="quantidade" required>
+                <div class="col-md-6 mb-3">
+                    <label>Produto:</label>
+                    <select name="produto_id" style="border-radius: 10px; padding: 5px;" required>
+                        <option value="">Selecione</option>
+                        {% for produto in produto %}
+                        <option value="{{ produto.id }}">
+                            {{ produto.produto_nome }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <button type="submit">Adicionar Item</button>
-        </form>
+                <div class="mb-3">
+                    <label>Quantidade:</label>
+                    <input type="number" name="quantidade" required>
+                </div>
+
+
+                <button type="submit" class="btn botao-add">Adicionar Item</button>
+            </form>
+        </div>
         {% endif %}
 
-        <h3>Itens do Pedido</h3>
 
-        <div class="table-responsive">
-            <table id="tabela-itens" class="table table-hover align-middle">
-                <tr>
-                    <th>ID</th>
-                    <th>Produto</th>
-                    <th>Quantidade</th>
-                    <th>Ações</th>
-                </tr>
 
-                {% for item in itens %}
-                <tr>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.produto }}</td>
-                    <td>{{ item.detalhe_entrada_quantidade}}</td>
-                    <td>
-                        {% if pedido.status_pedido_entrada == 'PENDENTE' %}
-                        <a
-                            href="{{ url_for('remover_item_entrada', detalhe_entrada_id=item.id, pedido_entrada_id=pedido.id) }}">Remover</a>
-                        {% else %}
-                        -
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
+        <div class="table-responsive" style="width: 45%; ">
+            <h3>Itens do pedido</h3>
+
+            <table id="tabela-movimentacao" class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in itens %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.produto }}</td>
+                        <td>{{ item.detalhe_entrada_quantidade}}</td>
+                        <td>
+                            {% if pedido.status_pedido_entrada == 'PENDENTE' %}
+                            <a
+                                href="{{ url_for('remover_item_entrada', detalhe_entrada_id=item.id, pedido_entrada_id=pedido.id) }}">Remover</a>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
+
+
         </div>
     </div>
 </div>
 
 {% if pedido.status_pedido_entrada == 'PENDENTE' %}
-<p>
-    <a href="{{ url_for('finalizar_entrada', pedido_entrada_id=pedido.id) }}">Finalizar Pedido de Venda</a>
-</p>
+<h2 style="margin-left: 40px;">
+    <a href="{{ url_for('finalizar_entrada', pedido_entrada_id=pedido.id) }}" class="btn btn-success">Finalizar
+        Pedido de Venda</a>
+</h2>
 {% endif %}
 
-<p>
-    <a href="{{ url_for('pedidoentrada') }}">Voltar para pedidos de entrada</a>
-</p>
 
 
 <script>
