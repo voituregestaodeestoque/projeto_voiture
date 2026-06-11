@@ -10,6 +10,7 @@ from models.produto import Produto
 from models.cliente import Cliente
 from models.pedido_entrada import Pedido_entrada
 from models.detalhe_entrada import Detalhe_entrada
+from models.pedido_saida import Pedido_saida
 from models.estoque import Estoque
 from datetime import datetime
 
@@ -937,6 +938,127 @@ def uso_empilhadeira():
      funcionarios=funcionarios,
      empilhadeiras=empilhadeiras
 )
+
+'''Pedido Saída'''
+# -----> Fim: Pedido Saída
+
+@app.route("/pedidosaida")
+def pedidosaida():
+    return render_template( 
+        "pedidosaida.html",
+        pedidos=Pedido_saida.find_all_ordered()
+    )
+
+@app.route("/saida/<int:pedido_saida_id>")
+def detalhes_saida(pedido_saida_id):
+    pedido = Pedido_saida.find_by_id(pedido_saida_id)
+
+    if not pedido:
+        flash("Pedido de saída não encontrado.")
+        return redirect(url_for("pedidosaida"))
+
+    return render_template(
+        "detalhes_saida.html",
+        pedido=pedido,
+        itens=Detalhe_saida.find_by_pedido(pedido_saida_id),
+        produto=Produto.find_all()
+    )
+
+
+@app.route("/saida/<int:pedido_saida_id>/adicionar", methods=["POST"])
+def adicionar_item_saida(pedido_saida_id):
+    produto_id = int(request.form.get("produto_id", 0))
+    quantidade = int(request.form.get("quantidade", 0) or 0)
+
+    mensagem = Detalhe_saida.adicionar_item(
+        pedido_id=pedido_saida_id,
+        produto_id=produto_id,
+        quantidade=quantidade
+    )
+
+    flash(mensagem)
+    return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
+
+
+@app.route("/saida/item/remover/<int:detalhe_saida_id>/<int:pedido_saida_id>")
+def remover_item_saida(detalhe_saida_id, pedido_saida_id):
+    mensagem = Detalhe_saida.remover_item(detalhe_saida_id)
+    flash(mensagem)
+    return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
+
+
+@app.route("/saida/finalizar/<int:pedido_saida_id>")
+def finalizar_saida(pedido_saida_id):
+    mensagem = Pedido_saida.finalizar(pedido_saida_id)
+    flash(mensagem)
+    return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
+
+
+@app.route("/saida/nova", methods=["GET", "POST"])
+def nova_saida():
+    if request.method == "POST":
+        cliente_id = int(request.form.get("cliente_id", 0))
+        itens_json = request.form.get("itens_json", "[]")
+
+        try:
+            itens = json.loads(itens_json)
+        except Exception:
+            itens = []
+
+        pedido = Pedido_saida(status_pedido_saida="PENDENTE", cliente_id=cliente_id)
+        erros = pedido.validate()
+
+        if not itens:
+            erros.append("Adicione pelo menos um item ao pedido.")
+
+        for item in itens:
+            if int(item["quantidade"]) <= 0:
+                erros.append("Todos os itens devem ter quantidade maior que zero.")
+
+        if erros:
+            for erro in erros:
+                flash(erro)
+
+            return render_template(
+                "formulario_pedidosaida.html",
+                pedido=pedido,
+                produto=Produto.find_all(),
+                clientes=Cliente.find_all()
+            )
+        
+        try:
+            pedido_saida_id = pedido.insert()
+            cont = 0
+            teste = []
+            
+            for item in itens:
+                cont += 1
+                Detalhe_saida.adicionar_item(
+                    pedido_saida_id=pedido_saida_id,
+                    produto_id=int(item["produto_id"]),
+                    detalhe_saida_item=cont,
+                    detalhe_saida_quantidade=int(item["quantidade"])
+                )
+            
+                print("check", teste)
+            flash("Pedido de saída criado com sucesso.")
+            return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
+
+        except Exception:
+            flash("Erro ao criar pedido de saída.")
+            return render_template(
+                "formulario_pedidosaida.html",
+                pedidos=Pedido_saida.find_all_ordered(),
+                produto=Produto.find_all(),
+                clientes=Cliente.find_all()
+            )
+
+    return render_template(
+        "formulario_pedidosaida.html",
+        pedido=None,
+        produto=Produto.find_all(),
+        clientes=Cliente.find_all()
+    )
     
     
 

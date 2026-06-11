@@ -39,14 +39,28 @@
                             {{ pedido.status_pedido_saida }}
                         </span>
                     </td>
-                    <td>{{ pedido.data_pedido_saida }}</td>
-                    <td>{{ pedido.data_processamento or '-' }}</td>
+                    
+                    <td>
+                        {% if pedido.data_pedido_entrada %}
+                            {{ pedido.data_pedido_entrada.strftime('%d/%m/%Y %H:%M') if pedido.data_pedido_entrada.strftime else pedido.data_pedido_entrada }}
+                        {% else %}
+                            <span class="text-muted">Não registrada</span>
+                        {% endif %}
+                    </td>
+                    
+                    <td>
+                        {% if pedido.data_processamento %}
+                            {{ pedido.data_processamento.strftime('%d/%m/%Y %H:%M') if pedido.data_processamento.strftime else pedido.data_processamento }}
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+
                     <td class="acoes">
                         {% if pedido.status_pedido_saida == 'PENDENTE' %}
-                        <a href="{{ url_for('processar_pedido', pedido_entrada_id=pedido.id) }}">Processar</a>
-                        <a href="{{ url_for('cancelar_pedido', pedido_entrada_id=pedido.id) }}">Cancelar</a>
+                        <a href="{{ url_for('processar_pedido', pedido_entrada_id=pedido.id) }}" class="btn btn-sm btn-outline-primary">Processar</a>
+                        <a href="{{ url_for('cancelar_pedido', pedido_entrada_id=pedido.id) }}" class="btn btn-sm btn-outline-danger">Cancelar</a>
                         {% else %}
-                        
                             <span class="text-muted">-</span>
                         {% endif %}
                     </td>
