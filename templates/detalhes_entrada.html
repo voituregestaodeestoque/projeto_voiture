@@ -45,7 +45,7 @@
                 </div>
 
 
-                <button type="submit" class="btn btn-primary">Adicionar Item</button>
+                <button type="submit" class="btn botao-add">Adicionar Item</button>
             </form>
         </div>
         {% endif %}
@@ -90,7 +90,7 @@
 
 {% if pedido.status_pedido_entrada == 'PENDENTE' %}
 <h2 style="margin-left: 40px;">
-    <a href="{{ url_for('finalizar_entrada', pedido_entrada_id=pedido.id) }}" class="btn btn-sm btn-success">Finalizar
+    <a href="{{ url_for('finalizar_entrada', pedido_entrada_id=pedido.id) }}" class="btn btn-success">Finalizar
         Pedido de Venda</a>
 </h2>
 {% endif %}
