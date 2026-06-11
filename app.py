@@ -865,16 +865,16 @@ def nova_entrada():
     )
     
     
-@app.route("/pedido/processar/<int:id>")
-def processar_pedido(id):
+@app.route("/pedido/processar/<int:pedido_entrada_id>")
+def processar_pedido_entrada(pedido_entrada_id):
     try:
-        mensagem = PedidoMovimentacao.processar(id)
+        mensagem = Pedido_entrada.processar(pedido_entrada_id)
         flash(mensagem, "sucesso")
     except ValueError as e:
         flash(str(e), "erro")
     except Exception as e:
         flash(f"Erro ao processar pedido: {e}", "erro")
-    return redirect(url_for("pedidos"))
+    return redirect(url_for("pedidoentrada"))
 
 
 '''Estoque'''
