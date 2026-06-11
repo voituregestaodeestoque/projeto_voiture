@@ -255,7 +255,38 @@ class Pedido_entrada(CrudBase):
             )
 
             conexao.commit()
-            return "Pedido processado com sucesso."
+            return "Pedido de entrada processado com sucesso."
+        except Exception:
+            conexao.rollback()
+            raise
+        finally:
+            cursor.close()
+            conexao.close()
+
+
+    @classmethod
+    def cancelar(cls, pedido_entrada_id):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            cursor.execute("SELECT * FROM pedido_entrada WHERE id = %s", (pedido_entrada_id,))
+            pedido = cursor.fetchone()
+            if not pedido:
+                raise ValueError("Pedido de entrada não encontrado.")
+            if pedido["status_pedido_entrada"] != "PENDENTE":
+                raise ValueError("Somente pedidos pendentes podem ser cancelados.")
+
+            cursor = conexao.cursor()
+            cursor.execute(
+                """
+                UPDATE pedido_entrada
+                SET status_pedido_entrada = %s
+                WHERE id = %s
+                """,
+                ("CANCELADO", pedido_entrada_id)
+            )
+            conexao.commit()
+            return "Pedido de entrada cancelado com sucesso."
         except Exception:
             conexao.rollback()
             raise

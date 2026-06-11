@@ -876,6 +876,17 @@ def processar_pedido_entrada(pedido_entrada_id):
         flash(f"Erro ao processar pedido: {e}", "erro")
     return redirect(url_for("pedidoentrada"))
 
+@app.route("/pedido/cancelar/<int:pedido_entrada_id>")
+def cancelar_pedido_entrada(pedido_entrada_id):
+    try:
+        mensagem = Pedido_entrada.cancelar(pedido_entrada_id)
+        flash(mensagem, "sucesso")
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao cancelar pedido: {e}", "erro")
+    return redirect(url_for("pedidoentrada"))
+
 
 '''Estoque'''
 
