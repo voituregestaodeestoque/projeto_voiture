@@ -48,6 +48,7 @@ def login():
 
     if funcionario:
         session["usuario_id"] = funcionario["id"]
+        session["funcionario_nome"] = funcionario["funcionario_nome"]
         return redirect(url_for("base"))
     flash("Login e/ou senha inválidos","erro")
 
@@ -165,7 +166,7 @@ def atualizar_empilhadeira(id):
 def deletar_empilhadeira(id):
     #Tenta deletar
     try:
-        Empilhadeira.safe_delete(id)
+        Empilhadeira.delete(id)
         flash("Empilhadeira excluída com sucesso.", "sucesso")
     #Tratativa de erro
     except ValueError as e:
@@ -926,34 +927,18 @@ def get_pesquisa_estoque_form():
 
 
 
-@app.route('/uso_empilhadeira')
+@app.route('/uso_empilhadeira_estrangeiro')
 def uso_empilhadeira():
-    
-    lista_de_maquinas = Empilhadeira.empilhadeirasemuso()
-    
-    return render_template('usoempilhadeira.html', empilhadeiras=lista_de_maquinas)
-    
-    try:
-            uso_empilhadeira_id = uso_empilhadeira.insert()
 
-            for item in itens:
-                Itemuso_empilhadeira.adicionar_item(
-                    uso_empilhadeira_id=uso_empilhadeira_id,
-                    empilhadeira_id=int(item["empilhadeira_id"]),
-                    empilhadeira_chassi=int(item["empilhadeira_chassi"]),
-                    empilhadeira_modelo=item["empilhadeira_modelo"],
-                    mpilhadeira_marca=item["empilhadeira_marca"]
-                )
-
-            uso_empilhadeira.atualizar_total(uso_empilhadeira_id)
-
-    except Exception:
-            flash("Erro ao criar uso_empilhadeira.")
-            return render_template(
-                "usoempilhadeira.html",
-                uso_empilhadeira=uso_empilhadeira,
-                empilhadeira=empilhadeira.find_all(order_by="nome")
-            )
+    funcionarios = Funcionario.funcionario_listagem()
+    empilhadeiras = Empilhadeira.find_all()
+    
+    return render_template('usoempilhadeira.html',
+     funcionarios=funcionarios,
+     empilhadeiras=empilhadeiras
+)
+    
+    
 
 
         

@@ -13,7 +13,7 @@
             <p class="text-muted mb-0">Gerencie os funcionários do sistema</p>
         </div>
 
-        <a href="{{ url_for('cadastro_funcionario') }}" class="btn btn-primary">
+        <a href="{{ url_for('cadastro_funcionario') }}" class="botao-add btn btn-primary">
             <i class="bi bi-plus-lg"></i> Novo Funcionário</a>
     </div>
 
@@ -30,7 +30,6 @@
                             <!--Colunas da tabela-->
                             <th scope="col">#</th>
                             <th scope="col">Nome</th>
-                            <th scope="col">Senha</th>
                             <th scope="col">CPF</th>
                             <th scope="col">CEP</th>
                             <th scope="col">Email</th>
@@ -47,7 +46,6 @@
                             <!--Valores do banco que deverão aparecer-->
                             <th scope="row">{{ funcionario.id }}</th>
                             <td>{{ funcionario.funcionario_nome }}</td>
-                            <td>{{ funcionario.funcionario_senha }}</td>
                             <td>{{ funcionario.funcionario_cpf }}</td>
                             <td>{{ funcionario.funcionario_cep }}</td>
                             <td>{{ funcionario.funcionario_email }}</td>

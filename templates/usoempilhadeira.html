@@ -16,11 +16,23 @@
     <form id="form_fornecedor" action="{{ url_for('salvar_uso_empilhadeira')}}" method="POST">
 
         <div class="row">
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-3" style=" max-width: 100%;">
                 <label for="funcionario_id" class="form-label">Funcionário</label>
-                <div class="input-group">
-                    <input name="funcionario_id" type="text" class="form-control" id="funcionario_id"
-                        placeholder="ID do Funcionário" required>
+                <div class="input-group"style="width: 800px;" >
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="bi bi-person-fill text-white"></i>
+                    </span>
+
+                    <select id="funcionario_id" name="funcionario_id">
+                        <option value="">Selecione</option>
+                        {% for funcionario in funcionarios %}
+                            <option 
+                                value="{{ funcionario.id }}">
+                                nome {{ funcionario.funcionario_nome }} - {{ funcionario.id }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
                 </div>
 
             </div>
