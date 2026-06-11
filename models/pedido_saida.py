@@ -1,84 +1,177 @@
 from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
+from datetime import datetime
 
 class Pedido_saida(CrudBase):
-    table = "Pedido_saida"
+    table = "pedido_saida"
     fields = [
-        'pedidosaida_produto',
-        'pedidosaida_quantidade', 
-        'pedidosaida_cliente'
+        'status_pedido_saida', 
+        'cliente_id',
+        'data_pedido_saida' 
     ]
 
-    def __init__(self, pedidosaida_produto, pedidosaida_quantidade, pedidosaida_fornecedor):
-        self.pedidosaida_produto = pedidosaida_produto
-        self.pedidosaida_quantidade = pedidosaida_quantidade
-        self.pedidosaida_cliente = pedidosaida_cliente
+    def __init__(self, status_pedido_saida, cliente_id):
+        self.status_pedido_saida = status_pedido_saida
+        self.cliente_id = cliente_id
 
-"""
-    def validate(self):
-        erros = [
-            Validator.required(self.produto_nome, "nome"),
-            Validator.non_negative(self.produto_quantidade_minima, "quantidade minima"),
-            Validator.non_negative(self.produto_preco_custo, "preço de custo"),
-            Validator.non_negative(self.produto_preco_venda, "preço de venda")
-        ]
-        return [erro for erro in erros if erro]
-
+    
     @classmethod
-    def low_stock(cls):
+    def pedido_saida_join(cls):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            sql = "SELECT * FROM produto WHERE quantidade <= estoque_minimo ORDER BY nome"
+            sql = """select c.cliente_nome, d.detalhe_saida_quantidade, d.detalhe_saida_item, p.* from pedido_saida as p 
+            INNER JOIN cliente as c 
+            ON p.cliente_id = c.id 
+            INNER JOIN detalhe_saida d 
+            ON p.id = d.pedido_saida_id;"""
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
             cursor.close()
             conexao.close()
 
-    @classmethod
-    def update_quantity(cls, id, nova_quantidade, connection=None):
-        conexao = connection or Database.connect()
-        cursor = conexao.cursor()
-        try:
-            sql = "UPDATE produto SET quantidade = %s WHERE id = %s"
-            cursor.execute(sql, (nova_quantidade, id))
-            if connection is None:
-                conexao.commit()
-            return cursor.rowcount
-        except Exception:
-            if connection is None:
-                conexao.rollback()
-            raise
-        finally:
-            cursor.close()
-            if connection is None:
-                conexao.close()
 
+    def validate(self):
+        erros = []
+
+        validacoes = [
+            Validator.required(self.status_pedido_saida, "status_pedido_saida"),
+            Validator.required(self.cliente_id, "cliente_id")
+        ]
+
+        for itens in validacoes:
+            if not itens['valida']:
+                erros.append(itens["mensagem"])
+
+        return erros
+
+    
     @classmethod
-    def has_related_records(cls, id):
+    def find_all_ordered(cls):
         conexao = Database.connect()
-        cursor = conexao.cursor()
+        cursor = conexao.cursor(dictionary=True)
+
         try:
-            queries = [
-                "SELECT COUNT(*) FROM movimentacao WHERE produto_id = %s",
-                "SELECT COUNT(*) FROM pedido_movimentacao WHERE produto_id = %s"
-            ]
-            total = 0
-            for sql in queries:
-                cursor.execute(sql, (id,))
-                total += cursor.fetchone()[0]
-            return total > 0
+            sql = """SELECT p.id as detalhe_saida_id, p.status_pedido_saida, p.data_pedido_saida, p.cliente_id, pr.produto_nome, de.detalhe_saida_quantidade, 
+                    MAX(m.datahora_movimentacao_saida) AS data_processamento
+                    FROM pedido_saida p
+                    LEFT JOIN detalhe_saida de ON p.id = de.pedido_saida_id
+                    LEFT JOIN movimentacao_saida m ON de.id = m.detalhe_saida_id AND de.pedido_saida_id = m.detalhe_saida_pedido_saida_id
+                    left join estoque es on es.id = de.estoque_id
+                    LEFT JOIN produto pr ON pr.id = es.produto_id
+                    GROUP BY p.id, p.status_pedido_saida, p.cliente_id, pr.produto_nome, de.detalhe_saida_quantidade
+                    ORDER BY p.id DESC"""
+            cursor.execute(sql)
+            return cursor.fetchall()
         finally:
             cursor.close()
             conexao.close()
 
+
     @classmethod
-    def safe_delete(cls, id):
-        produto = cls.find_by_id(id)
-        if not produto:
-            raise ValueError("Produto não encontrado.")
-        if cls.has_related_records(id):
-            raise ValueError("Não é possível excluir o produto porque ele possui pedidos ou movimentações vinculadas.")
-        cls.delete(id)"""
+    def finalizar(cls, pedido_saida_id):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+
+        try:
+            conexao.start_transaction()
+
+            cursor.execute("SELECT * FROM pedido_saida WHERE id = %s", (pedido_saida_id,))
+            pedido = cursor.fetchone()
+
+            if not pedido:
+                conexao.rollback()
+                return "Pedido não encontrado."
+
+            if pedido["status_pedido_saida"] != "PENDENTE":
+                conexao.rollback()
+                return "Somente pedidos abertos podem ser finalizados."
+
+            cursor.execute(
+                "SELECT * FROM detalhe_saida WHERE pedido_saida_id = %s",
+                (pedido_saida_id,)
+            )
+            itens = cursor.fetchall()
+
+            if not itens:
+                conexao.rollback()
+                return "Não é possível finalizar um pedido sem itens."
+
+            for item in itens:
+                cursor.execute(
+                    "SELECT * FROM estoque WHERE id = %s",
+                    (item["estoque_id"],)
+                )
+                estoque = cursor.fetchone()
+                
+                if not estoque:
+                    conexao.rollback()
+                    return "Produto não encontrado no pedido."
+
+                #Verificar se há estoque suficiente
+                if estoque["estoque_quantidade"] < item["detalhe_saida_quantidade"]:
+                    conexao.rollback()
+                    return f"Estoque insuficiente para o item ID {item['estoque_id']}."
+
+                
+                nova_quantidade = estoque["estoque_quantidade"] - item["detalhe_saida_quantidade"]
+
+                cursor.execute(
+                    """ 
+                    UPDATE estoque
+                    SET estoque_quantidade = %s
+                    WHERE id = %s
+                    """,
+                    (nova_quantidade, item["estoque_id"]) 
+                )
+
+                cursor.execute(
+                    """
+                    INSERT INTO movimentacao_saida 
+                    (datahora_movimentacao_saida, detalhe_saida_id, detalhe_saida_pedido_saida_id)
+                    VALUES (%s, %s, %s)
+                    """,
+                    (datetime.now(), item["id"], pedido_saida_id)
+                )
+
+            cursor.execute(
+                """
+                UPDATE pedido_saida
+                SET status_pedido_saida = %s
+                WHERE id = %s
+                """,
+                ("FINALIZADO", pedido_saida_id)
+            )
+
+            conexao.commit()
+            return "Pedido de saída finalizado com sucesso."
+
+        except Exception:
+            conexao.rollback()
+            return "Erro ao finalizar pedido de saída."
+        finally:
+            cursor.close()
+            conexao.close()
+
+    
+    @classmethod
+    def find_by_id(cls, pedido_saida_id):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+
+        try:
+            sql = """SELECT 
+                        p.id, 
+                        p.status_pedido_saida, 
+                        p.cliente_id,
+                        c.cliente_nome AS cliente
+                    FROM pedido_saida p
+                    INNER JOIN cliente c ON p.cliente_id = c.id
+                    WHERE p.id = %s"""
+            cursor.execute(sql, (pedido_saida_id,))
+            return cursor.fetchone()
+        finally:
+            cursor.close()
+            conexao.close()
