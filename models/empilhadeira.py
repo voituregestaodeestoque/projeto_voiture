@@ -11,7 +11,7 @@ class Empilhadeira(CrudBase):
         "empilhadeira_modelo",
         "empilhadeira_marca"]
 
-    def __init__(self, empilhadeira_chassi, empilhadeira_status="PENDENTE", empilhadeira_modelo="", empilhadeira_marca=""):
+    def __init__(self, empilhadeira_chassi, empilhadeira_status="INATIVA", empilhadeira_modelo="", empilhadeira_marca=""):
         self.empilhadeira_chassi = empilhadeira_chassi
         self.empilhadeira_status = empilhadeira_status
         self.empilhadeira_modelo = empilhadeira_modelo
@@ -116,3 +116,7 @@ WHERE u.funcionario_id IS NOT NULL
         finally:
             cursor.close()
             conexao.close()
+
+    @classmethod
+    def empilhadeira_listagem(cls):
+            return cls.find_all()
