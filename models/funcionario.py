@@ -1,6 +1,7 @@
 from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
+from core.security import gerar_hash_senha, verificar_senha
 
 
 class Funcionario(CrudBase):
@@ -51,19 +52,32 @@ class Funcionario(CrudBase):
 
         return erros
 
+    
+
     @classmethod
     def login(cls, email, senha):
+
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
+
         try:
-            sql = "SELECT * FROM funcionario WHERE funcionario_email = %s"
+            sql = """
+                SELECT *
+                FROM funcionario
+                WHERE funcionario_email = %s
+            """
+
             cursor.execute(sql, (email,))
             usuario = cursor.fetchone()
 
-            if usuario and usuario['funcionario_senha'] == senha:
+            if usuario and verificar_senha(
+                senha,
+                usuario["funcionario_senha"]
+            ):
                 return usuario
-            
+
             return None
+
         finally:
             cursor.close()
             conexao.close()
@@ -133,5 +147,63 @@ class Funcionario(CrudBase):
             cursor.execute(sql, (email,))
             return cursor.fetchone()
         finally:
+            cursor.close()
+            conexao.close()
+
+    
+    def inserir_funcionario(self):
+
+        self.funcionario_senha = gerar_hash_senha(
+            self.funcionario_senha
+        )
+
+        return self.insert()
+
+    def atualizar_funcionario(self, id_funcionario, dados):
+        senha = dados.get("funcionario_senha")
+
+        if senha:
+
+            dados["funcionario_senha"] = gerar_hash_senha(
+                senha
+            )
+
+        self.update(id_funcionario, dados)
+
+    @classmethod
+    def autenticar(cls, email, senha):
+        """
+        Verifica login do funcionário.
+        """
+
+        conexao = Database.connect()
+
+        cursor = conexao.cursor(dictionary=True)
+
+        try:
+
+            sql = f"""
+                SELECT *
+                FROM {cls.table}
+                WHERE funcionario_email = %s
+            """
+
+            cursor.execute(sql, (email,))
+            funcionario = cursor.fetchone()
+
+
+            if not funcionario:
+                return None
+
+            if verificar_senha(
+                senha,
+                funcionario["funcionario_senha"]
+            ):
+                return funcionario
+
+            return None
+
+        finally:
+
             cursor.close()
             conexao.close()

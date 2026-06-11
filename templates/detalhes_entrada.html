@@ -5,7 +5,7 @@
 
 <div class="card-info">
     <p><strong>Fornecedor:</strong> {{ pedido.fornecedor }}</p>
-    <p><strong>Data:</strong> {{ pedido.data_pedido }}</p>
+    <p><strong>Data:</strong> {{ pedido.data_pedido_entrada }}</p>
     <p><strong>Status:</strong> {{ pedido.status_pedido_entrada }}</p>
 </div>
 
@@ -49,7 +49,7 @@
                 <tr>
                     <td>{{ item.id }}</td>
                     <td>{{ item.produto }}</td>
-                    <td>{{ item.detalhe_entrada_quantidade or item.produto_id}}</td>
+                    <td>{{ item.detalhe_entrada_quantidade}}</td>
                     <td>
                         {% if pedido.status_pedido_entrada == 'PENDENTE' %}
                         <a
@@ -151,4 +151,3 @@
     }
 </script>
 {% endblock %}
-

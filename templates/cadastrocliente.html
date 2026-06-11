@@ -2,13 +2,21 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
-<div class="mb-4">
-    <h2 class="titulo-pagina">
-        <i class="bi bi-person-fill"></i>
-        {{ 'Editar Cliente' if cliente and cliente.id else 'Cadastrar Cliente' }}
-    </h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="titulo-pagina">
+            <i class="bi bi-person-fill"></i>
+            {{ 'Editar Cliente' if cliente and cliente.id else 'Cadastrar Cliente' }}
+        </h2>
+    </div>
+    <div>
+        <a href="{{ url_for('listagem_cliente') }}" class="btn btn-success">
+            <i></i>Visualizar Clientes</a>
+    </div>
 </div>
-<form action="{% if cliente and cliente.id %}{{ url_for('atualizar_cliente', id=cliente.id) }}{% else %}{{ url_for('salvar_cliente') }}{% endif %}" method="POST">
+<form
+    action="{% if cliente and cliente.id %}{{ url_for('atualizar_cliente', id=cliente.id) }}{% else %}{{ url_for('salvar_cliente') }}{% endif %}"
+    method="POST">
     <div class="row">
         <div class="col-md-6 mb-3">
 
@@ -19,7 +27,7 @@
                     <i class="bi bi-person-fill text-white"></i>
                 </span>
                 <input type="text" name="cliente_nome" id="cliente_nome" class="form-control"
-                    placeholder="Digite seu nome:" required value="{{ cliente.cliente_nome if cliente else '' }}">
+                    placeholder="Digite seu nome" required value="{{ cliente.cliente_nome if cliente else '' }}">
             </div>
 
         </div>
@@ -34,7 +42,7 @@
                     <i class="bi bi-person-vcard-fill text-white"></i>
                 </span>
                 <input type="text" name="cliente_cnpj" id="cliente_cnpj" class="form-control"
-                    placeholder="Digite seu CNPJ:" required value="{{ cliente.cliente_cnpj if cliente else '' }}">
+                    placeholder="Digite seu CNPJ" required value="{{ cliente.cliente_cnpj if cliente else '' }}">
             </div>
         </div>
 
@@ -46,8 +54,8 @@
                 <span class="input-group-text bg-dark border-secondary">
                     <i class="bi bi-geo-alt text-white"></i>
                 </span>
-                <input type="text" name="cliente_cep" id="cliente_cep" class="form-control"
-                    placeholder="Digite seu CEP:" required value="{{ cliente.cliente_cep if cliente else '' }}">
+                <input type="text" name="cliente_cep" id="cliente_cep" class="form-control" placeholder="Digite seu CEP"
+                    required value="{{ cliente.cliente_cep if cliente else '' }}">
             </div>
         </div>
 
@@ -60,7 +68,7 @@
                     <i class="bi bi-envelope text-white"></i>
                 </span>
                 <input type="email" name="cliente_email" id="cliente_email" class="form-control"
-                    placeholder="Digite seu email:" required value="{{ cliente.cliente_email if cliente else '' }}">
+                    placeholder="Digite seu email" required value="{{ cliente.cliente_email if cliente else '' }}">
             </div>
         </div>
 
@@ -72,7 +80,7 @@
                 <span class="input-group-text bg-dark border-secondary">
                     <i class="bi bi-telephone-fill text-white"></i>
                 </span>
-                <input type="text" name="cliente_ddi" id="cliente_ddi" class="form-control" placeholder="DDI:" required
+                <input type="text" name="cliente_ddi" id="cliente_ddi" class="form-control" placeholder="DDI" required
                     value="{{ cliente.cliente_ddi if cliente else '' }}">
             </div>
         </div>
@@ -85,7 +93,7 @@
                 <span class="input-group-text bg-dark border-secondary">
                     <i class="bi bi-telephone-fill text-white"></i>
                 </span>
-                <input type="text" name="cliente_ddd" id="cliente_ddd" class="form-control" placeholder="DDD:" required
+                <input type="text" name="cliente_ddd" id="cliente_ddd" class="form-control" placeholder="DDD" required
                     value="{{ cliente.cliente_ddd if cliente else '' }}">
             </div>
         </div>
@@ -99,7 +107,7 @@
                     <i class="bi bi-telephone-fill text-white"></i>
                 </span>
                 <input type="text" name="cliente_telefone" id="cliente_telefone" class="form-control"
-                    placeholder="Telefone:" required value="{{ cliente.cliente_telefone if cliente else '' }}">
+                    placeholder="Telefone" required value="{{ cliente.cliente_telefone if cliente else '' }}">
             </div>
         </div>
 
@@ -111,20 +119,16 @@
         </div>
 
     </div>
-
-    <div id="btn-fornecedor">
-
+    <div class="botao-direita">
         <!--Botão que envia o formulário em caso de cadastro-->
         {% if fornecedor and fornecedor.id %}
-        <button type="submit" class="btn btn-primary">Atualizar</button>
+        <button type="submit" class="btn btn-primary ">Atualizar</button>
 
         <!--Botão que envia o formulário em caso de atualização-->
         {%else%}
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
+        <button type="submit" class="btn btn-primary ">Cadastrar</button>
 
         {%endif%}
-
-
     </div>
 
 </form>
