@@ -155,12 +155,12 @@ form input {
 }
 
 /*Cadastro de fornecedor*/
-#btn-fornecedor{
-    display: flex;
-    justify-content: right;
-}
 
 #form_fornecedor label{
     padding-left: 5px;
 }
 
+.botao-direita{
+    display: flex;
+    justify-content: right;
+}

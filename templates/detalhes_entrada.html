@@ -49,7 +49,7 @@
                 <tr>
                     <td>{{ item.id }}</td>
                     <td>{{ item.produto }}</td>
-                    <td>{{ item.detalhe_entrada_quantidade or item.produto_id}}</td>
+                    <td>{{ item.detalhe_entrada_quantidade}}</td>
                     <td>
                         {% if pedido.status_pedido_entrada == 'PENDENTE' %}
                         <a

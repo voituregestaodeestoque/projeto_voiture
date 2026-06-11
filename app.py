@@ -1,7 +1,7 @@
 
-# Editado por Ryan em 04/06/2026 às 17:15 
+# Editado por Ryan em 11/06/2026 às 10:00 
 
-from flask import Flask, render_template, request, redirect, url_for, flash, json
+from flask import Flask, render_template, request, redirect, url_for, flash, json, session
 from models.funcionario import Funcionario
 from models.empilhadeira import Empilhadeira
 from models.uso_empilhadeira import Uso_empilhadeira
@@ -33,6 +33,26 @@ def to_float(value, default=0.0):
 def inicio():
     return redirect(url_for("loginfuncionario"))
 
+
+'''Login funcionário -'''
+@app.route('/loginfuncionario')
+def loginfuncionario():
+    return render_template('loginfuncionario.html')
+
+@app.route('/loginfunciona', methods=["POST"])
+def login():
+    email = request.form.get("funcionario_email")
+    senha = request.form.get("funcionario_senha")
+
+    funcionario = Funcionario.autenticar(email,senha)
+
+    if funcionario:
+        session["usuario_id"] = funcionario["id"]
+        return redirect(url_for("base"))
+    flash("Login e/ou senha inválidos","erro")
+
+    return render_template("loginfuncionario.html")
+
 ''' Dashboard '''
 
 
@@ -48,24 +68,6 @@ def dashboard():
     total_estoque = dic_total['quantidade_total']
     return render_template('dashboard.html', total_estoque=total_estoque,total_produto=total_produto, baixo_estoque=baixo_estoque)
 
-
-'''Login funcionário - Ryan Ribeiro'''
-@app.route('/loginfuncionario')
-def loginfuncionario():
-    return render_template('loginfuncionario.html')
-
-@app.route('/loginfunciona', methods=["POST"])
-def login():
-    email = request.form.get("funcionario_email")
-    senha = request.form.get("funcionario_senha")
-
-    funcionario=Funcionario.login(email,senha)
-    if funcionario:
-        return redirect(url_for("base"))
-    
-    mensagem = f"Login e/ou senha inválidos"
-    flash(mensagem,"erro")
-    return render_template("loginfuncionario.html")
 
 #Landing Page
 
@@ -373,7 +375,7 @@ def deletar_produto(id):
 #===================================================================================
 
 
-# -----> Fim: Funcionário
+# -----> Inicio: Funcionário
 
 @app.route('/cadastro_funcionario')
 def cadastro_funcionario():
@@ -404,30 +406,31 @@ def salvar_funcionario():
     dados = get_funcionario_form()
     funcionario = Funcionario(**dados)
     erros = funcionario.validate()
-    if erros :
+    if erros:
         for erro in erros:
             flash(erro, "erro")
-        return render_template("cadastrofuncionario.html", funcionario=dados)
-    
-    cpf=request.form.get("funcionario_cpf", "").strip()
-    cpf1=funcionario.cpf_existente(cpf)
-    if cpf1:
-        flash("CPF já cadastrado!","erro")
-        return render_template("cadastrofuncionario.html", funcionario=dados)
+        return render_template("cadastrofuncionario.html",funcionario=dados)
 
-    email=request.form.get("funcionario_email", "").strip()
-    email1=funcionario.email_existente(email)
+    cpf = request.form.get("funcionario_cpf","").strip()
+    cpf1 = funcionario.cpf_existente(cpf)
+    if cpf1:
+        flash("CPF já cadastrado!", "erro")
+        return render_template("cadastrofuncionario.html",funcionario=dados)
+
+    email = request.form.get("funcionario_email","").strip()
+    email1 = funcionario.email_existente(email)
     if email1:
-        flash("Email já cadastrado!","erro")
-        return render_template("cadastrofuncionario.html", funcionario=dados)
-    
+        flash("Email já cadastrado!", "erro")
+        return render_template("cadastrofuncionario.html",funcionario=dados)
+
     try:
-        funcionario.insert()
-        flash("Funcionário cadastrado com sucesso.", "sucesso")
+        funcionario.inserir_funcionario()
+        flash("Funcionário cadastrado com sucesso.","sucesso")
         return redirect(url_for("listagem_funcionario"))
+
     except Exception as e:
-        flash(f"Erro ao cadastrar funcionario: {e}", "erro")
-        return render_template("cadastrofuncionario.html", funcionario=dados)
+        flash(f"Erro ao cadastrar funcionário: {e}","erro")
+        return render_template("cadastrofuncionario.html",funcionario=dados)
 
 @app.route("/editar_funcionario/<int:id>")
 def editar_funcionario(id):
@@ -789,7 +792,7 @@ def remover_item_entrada(detalhe_entrada_id, pedido_entrada_id):
 def finalizar_entrada(pedido_entrada_id):
     mensagem = Pedido_entrada.finalizar(pedido_entrada_id)
     flash(mensagem)
-    return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
+    return redirect(url_for("pedidoentrada"))
 
 
 @app.route("/entrada/nova", methods=["GET", "POST"])
@@ -862,16 +865,27 @@ def nova_entrada():
     )
     
     
-@app.route("/pedido/processar/<int:id>")
-def processar_pedido(id):
+@app.route("/pedido/processar/<int:pedido_entrada_id>")
+def processar_pedido_entrada(pedido_entrada_id):
     try:
-        mensagem = PedidoMovimentacao.processar(id)
+        mensagem = Pedido_entrada.processar(pedido_entrada_id)
         flash(mensagem, "sucesso")
     except ValueError as e:
         flash(str(e), "erro")
     except Exception as e:
         flash(f"Erro ao processar pedido: {e}", "erro")
-    return redirect(url_for("pedidos"))
+    return redirect(url_for("pedidoentrada"))
+
+@app.route("/pedido/cancelar/<int:pedido_entrada_id>")
+def cancelar_pedido_entrada(pedido_entrada_id):
+    try:
+        mensagem = Pedido_entrada.cancelar(pedido_entrada_id)
+        flash(mensagem, "sucesso")
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao cancelar pedido: {e}", "erro")
+    return redirect(url_for("pedidoentrada"))
 
 
 '''Estoque'''

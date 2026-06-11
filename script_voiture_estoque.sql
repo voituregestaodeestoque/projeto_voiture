@@ -54,17 +54,6 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8;
 
-insert into funcionario (
-funcionario_nome,
-funcionario_senha,
-funcionario_cpf,
-funcionario_cep,
-funcionario_email,
-funcionario_ddi,
-funcionario_ddd,
-funcionario_telefone,
-funcionario_cargo) VALUES (
-'maria clara', 'Mc123456', 45384752890, 13974270, 'maria.belli@aluno.senai.br', 55, 19, 999999999, 'dev');
 
 SHOW WARNINGS;
 
@@ -136,7 +125,10 @@ CREATE TABLE IF NOT EXISTS `estoque` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
 SHOW WARNINGS;
+
+
 
 -- -----------------------------------------------------
 -- Table `uso_empilhadeira`
@@ -208,14 +200,14 @@ SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `detalhe_entrada` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `detalhe_entrada_quantidade` INT NOT NULL,
-  `estoque_id` INT NOT NULL,
+  `produto_id` INT NOT NULL,
   `pedido_entrada_id` INT NOT NULL,
   `detalhe_entrada_item` INT NOT NULL,
   PRIMARY KEY (`id`, `pedido_entrada_id`),
   INDEX `fk_detalhe_entrada_estoque1_idx` (`estoque_id` ASC) VISIBLE,
   INDEX `fk_detalhe_entrada_pedido_entrada1_idx` (`pedido_entrada_id` ASC) VISIBLE,
   CONSTRAINT `fk_detalhe_entrada_estoque1`
-    FOREIGN KEY (`estoque_id`)
+    FOREIGN KEY (`produto_id`)
     REFERENCES `estoque` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -225,6 +217,8 @@ CREATE TABLE IF NOT EXISTS `detalhe_entrada` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+
 
 SHOW WARNINGS;
 
@@ -236,7 +230,6 @@ CREATE TABLE IF NOT EXISTS `movimentacao_entrada` (
   `datahora_movimentacao_entrada` DATETIME NOT NULL,
   `detalhe_entrada_id` INT NOT NULL,
   `detalhe_entrada_pedido_entrada_id` INT NOT NULL,
-  `data_pedido_entrada` TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_movimentacao_entrada_detalhe_entrada1_idx` (`detalhe_entrada_id` ASC, `detalhe_entrada_pedido_entrada_id` ASC) VISIBLE,
   CONSTRAINT `fk_movimentacao_entrada_detalhe_entrada1`
@@ -295,3 +288,6 @@ SHOW WARNINGS;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+

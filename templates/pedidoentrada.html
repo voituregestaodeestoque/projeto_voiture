@@ -41,9 +41,9 @@
                     <td>{{ pedido.data_pedido_entrada }}</td>
                     <td>{{ pedido.data_processamento or '-' }}</td>
                     <td class="text-end">
-                        {% if pedido.status == 'PENDENTE' %}
-                        <a href="{{ url_for('processar_pedido', pedido_entrada_id=pedido.id) }}">Processar</a>
-                        <a href="{{ url_for('cancelar_pedido', pedido_entrada_id=pedido.id) }}">Cancelar</a>
+                        {% if pedido.status_pedido_entrada == 'PENDENTE' %}
+                        <a href="{{ url_for('processar_pedido_entrada', pedido_entrada_id=pedido.pedido_entrada_id) }}" class="btn btn-sm btn-success">Processar</a>
+                        <a href="{{ url_for('cancelar_pedido_entrada', pedido_entrada_id=pedido.pedido_entrada_id) }}" class="btn btn-sm btn-danger">Cancelar</a>
                         {% else %}
                         -
                         {% endif %}
