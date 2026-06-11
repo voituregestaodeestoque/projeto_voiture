@@ -1,100 +1,153 @@
-
 {% extends 'base.html' %}
 <!--Atualização dia 14/05/2026 às 13:59-->
-{% block conteudo %}  
-        <div class="mb-4">
-            <h2 class="titulo-pagina">
-                <i class="bi bi-person"></i>
-                {{ 'Editar Funcionário' if funcionario and funcionario.id else 'Cadastrar Funcionário' }}
-            </h2>
+{% block conteudo %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="titulo-pagina">
+            <i class="bi bi-person"></i>
+            {{ 'Editar Funcionário' if funcionario and funcionario.id else 'Cadastrar Funcionário' }}
+        </h2>
+    </div>
+    <div>
+        <a href="{{ url_for('listagem_funcionario') }}" class="btn btn-success">
+            <i></i>Visualizar Funcionários</a>
+    </div>
+</div>
+<div class="mb-4">
+
+</div>
+<div class="container-fluid Card-principal text-center bg-white rounded">
+
+    <form class="mb-3"
+        action="{% if funcionario and funcionario.id %}{{ url_for('atualizar_funcionario', id=funcionario.id) }}{% else %}{{ url_for('salvar_funcionario') }}{% endif %}"
+        method="POST">
+        <div class="row">
+            <!--Campo Nome-->
+            <div class="col-md-6 mb-3 text-start">
+                <label for="funcionario_nome" class="form-label">Nome</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="bi bi-person-fill text-white"></i>
+                    </span>
+                    <input type="text" name="funcionario_nome" id="funcionario_nome" class="form-control"
+                        placeholder="Digite o nome" required
+                        value="{{ funcionario.funcionario_nome if funcionario else '' }}">
+
+                </div>
+            </div>
+            <!--Campo Email-->
+            <div class="col-md-6 mb-3 text-start">
+                <label for="funcionario_email" class="form-label">Email</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="bi bi-envelope text-white"></i>
+                    </span>
+                    <input type="email" name="funcionario_email" id="funcionario_email" class="form-control"
+                        placeholder="Digite o Email" required
+                        value="{{ funcionario.funcionario_email if funcionario else '' }}">
+
+                </div>
+            </div>
+            <!--Campo Senha-->
+            <div class="col-md-6 mb-3 text-start">
+                <label for="funcionario_senha" class="form-label">Senha</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="bi bi-lock-fill text-white"></i>
+                    </span>
+                    <input type="password" name="funcionario_senha" id="funcionario_senha" class="form-control"
+                        placeholder="Digite a senha" required
+                        value="{{ funcionario.funcionario_senha if funcionario else '' }}">
+
+                </div>
+            </div>
+            <!--Campo CEP-->
+            <div class="col-md-6 mb-3 text-start">
+                <label for="funcionario_cep" class="form-label">CEP</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="bi bi-geo-fill text-white"></i>
+                    </span>
+                    <input type="text" name="funcionario_cep" id="funcionario_cep" class="form-control"
+                        placeholder="Digite o cep" required
+                        value="{{ funcionario.funcionario_cep if funcionario else '' }}">
+
+                </div>
+            </div>
+            <div class="col-md-6 mb-3 text-start">
+                <!--Cpf-->
+                <label for="funcionario_cpf" class="form-label">CPF</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="bi bi-wallet text-white"></i>
+                    </span>
+                    <input type="text" name="funcionario_cpf" id="funcionario_cpf" class="form-control"
+                        placeholder="Digite o cpf" required
+                        value="{{ funcionario.funcionario_cpf if funcionario else '' }}">
+
+                </div>
+            </div>
+            <div class="col-md-6 mb-3 text-start">
+                <!--Cargo-->
+                <label for="funcionario_cargo" class="form-label">Cargo</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="bi bi-person-vcard text-white"></i>
+                    </span>
+                    <input type="text" name="funcionario_cargo" id="funcionario_cargo" class="form-control"
+                        placeholder="Digite o cargo" required
+                        value="{{ funcionario.funcionario_cargo if funcionario else '' }}">
+
+                </div>
+            </div>
+            <div class="col-md-3 mb-3 text-start">
+
+                <!--Campo DDI-->
+                <label for="funcionario_ddi" class="form-label">DDI</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="bi bi-telephone-fill text-white"></i>
+                    </span>
+                    <input type="text" name="funcionario_ddi" id="funcionario_ddi" class="form-control"
+                        placeholder="Código Internacional" required value="{{ funcionario.funcionario_ddi if funcionario else '' }}">
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3 text-start">
+
+                <!--Campo DDD-->
+                <label for="funcionario_ddd" class="form-label">DDD</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="bi bi-telephone-fill text-white"></i>
+                    </span>
+                    <input type="text" name="funcionario_ddd" id="funcionario_ddd" class="form-control"
+                        placeholder="Código Regional" required value="{{ funcionario.funcionario_ddd if funcionario else '' }}">
+
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3 text-start">
+
+                <!--Campo Telefone-->
+                <label for="fornecedor_telefone" class="form-label">Telefone</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="bi bi-telephone-fill text-white"></i>
+                    </span>
+                    <input type="text" name="funcionario_telefone" id="funcionario_telefone" class="form-control"
+                        placeholder="Telefone de Contato" required
+                        value="{{ funcionario.funcionario_telefone if funcionario else '' }}">
+
+                </div>
+            </div>
         </div>
-        <div class="container-fluid Card-principal text-center bg-white rounded">
-            
-            <form class="mb-3" action="{% if funcionario and funcionario.id %}{{ url_for('atualizar_funcionario', id=funcionario.id) }}{% else %}{{ url_for('salvar_funcionario') }}{% endif %}" method="POST">
-                <!--Campo Nome-->
-                <div class="mb-3 text-start">
-                    <div class="input-group">
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-person-fill text-white"></i>
-                        </span>
-                        <input type="text" name="funcionario_nome" id="funcionario_nome" class="form-control" placeholder="Digite o nome" required value="{{ funcionario.funcionario_nome if funcionario else '' }}">
-
-                    </div>
-                </div>
-                <!--Campo Email-->
-                <div class="mb-3 text-start">
-                    <div class="input-group">
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-envelope text-white"></i>
-                        </span>
-                        <input type="email" name="funcionario_email" id="funcionario_email" class="form-control" placeholder="Digite o email" required value="{{ funcionario.funcionario_email if funcionario else '' }}">
-
-                    </div>
-                </div>
-                <!--Campo Senha-->
-                <div class="mb-3 text-start">
-                    <div class="input-group">
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-lock-fill text-white"></i>
-                        </span>
-                        <input type="password" name="funcionario_senha" id="funcionario_senha" class="form-control" placeholder="Digite a senha" required value="{{ funcionario.funcionario_senha if funcionario else '' }}">
-
-                    </div>
-                </div>
-                <!--Campo CEP-->
-                <div class="mb-3 text-start">
-                    <div class="input-group">
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-geo-fill text-white"></i>
-                        </span>
-                        <input type="text" name="funcionario_cep" id="funcionario_cep" class="form-control" placeholder="Digite o cep" required value="{{ funcionario.funcionario_cep if funcionario else '' }}">
-
-                    </div>
-                </div>
-                <!--Campo Cpf e Cargo-->
-                <div class="mb-3 text-start d-flex justify-content-between" style="gap: 5px">
-                    <!--Cpf-->
-                    <div class="input-group">
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-wallet text-white"></i>
-                        </span>
-                        <input type="text" name="funcionario_cpf" id="funcionario_cpf" class="form-control" placeholder="Digite o cpf" required value="{{ funcionario.funcionario_cpf if funcionario else '' }}">
-
-                    </div>
-                    <!--Cargo-->
-                    <div class="input-group">
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-person-vcard text-white"></i>
-                        </span>
-                        <input type="text" name="funcionario_cargo" id="funcionario_cargo" class="form-control" placeholder="Digite o cargo" required value="{{ funcionario.funcionario_cargo if funcionario else '' }}">
-
-                    </div>
-                </div>
-                <!--Campo DDI DDD e Telefone-->
-                <div class="mb-3 text-start d-flex justify-content-between" style="gap: 5px">
-                    <!--DDI-->
-                    <div class="input-group" style="max-width: 30%;">
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-telephone-fill text-white"></i>
-                        </span>
-                        <input type="text" name="funcionario_ddi" id="funcionario_ddi" class="form-control" placeholder="DDI" required value="{{ funcionario.funcionario_ddi if funcionario else '' }}">
-
-                    </div>
-                    <!--DDD-->
-                    <div class="input-group" style="max-width: 30%;">
-                        
-                        <input type="text" name="funcionario_ddd" id="funcionario_ddd" class="form-control" placeholder="DDD" required value="{{ funcionario.funcionario_ddd if funcionario else '' }}">
-
-                    </div>
-                    <!--Telefone-->
-                    <div class="input-group">
-                        
-                        <input type="text" name="funcionario_telefone" id="funcionario_telefone" class="form-control" placeholder="Telefone" required value="{{ funcionario.funcionario_telefone if funcionario else '' }}">
-
-                    </div>
-                </div>
-                <button class="btn btn-primary w-100" type="submit">{{ 'Atualizar' if funcionario and funcionario.id else 'Cadastrar' }}</button>
-            </form>
-            
+        <div class="botao-direita">
+            <button class="btn btn-primary" type="submit">{{ 'Atualizar' if funcionario and funcionario.id else
+                'Cadastrar' }}</button>
         </div>
-    {% endblock %}
+
+    </form>
+
+</div>
+{% endblock %}
