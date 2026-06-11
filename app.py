@@ -792,7 +792,7 @@ def remover_item_entrada(detalhe_entrada_id, pedido_entrada_id):
 def finalizar_entrada(pedido_entrada_id):
     mensagem = Pedido_entrada.finalizar(pedido_entrada_id)
     flash(mensagem)
-    return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
+    return redirect(url_for("pedidoentrada"))
 
 
 @app.route("/entrada/nova", methods=["GET", "POST"])
