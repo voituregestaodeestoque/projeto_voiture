@@ -95,14 +95,33 @@
                             </td>
 
                             <td class="text-end">
-
-                                <a href="{{ url_for('desocupar_empilhadeira', id=uso.uso_id) }}"
-                                    class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Deseja desocupar esta empilhadeira?')">
-
+                                <!-- Botão do modal pra desocupar -->
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                    data-bs-target="#Modal{{uso.uso_id}}">
                                     <i class="bi bi-arrow-up-right-square"></i>
+                                </button>
 
-                                </a>
+                                <!-- Modal -->
+                                <div class="modal fade" id="Modal{{uso.uso_id}}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja desocupar essa empilhadeira?</strong></h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancelar</button>
+                                                <a href="{{ url_for('desocupar_empilhadeira', id=uso.uso_id) }}"
+                                                    class="btn btn-danger">
+                                                    <strong>Desocupar</strong>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                             </td>
 
