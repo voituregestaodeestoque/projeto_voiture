@@ -21,18 +21,22 @@
 
 </head>
 
-<body>
+<body><!--imagem do fundo da tela de login está aqui pelo css-->
+    <!--card de toda a parte branca do site-->
     <div class="container d-flex justify-content-end login-container">
 
         <div class="login-card text-center bg-white">
             <h1>Login de Funcionário</h1>
 
-            <form class="mb-3" method="POST" action="{{ url_for('login') }}">
+
+            <form class="mb-3" method="POST" action="{{ url_for('login') }}"> <!--Ação que faz o login-->
                 <div class="mb-3 text-start mt-4">
                     <div class="input-group">
+                        <!--icone do lado do email-->
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-envelope text-white"></i>
                         </span>
+                        <!--campo pra digitar o email-->
                         <input type="email" name="funcionario_email" id="email" class="form-control"
                             placeholder="Digite seu email" required>
 
@@ -40,15 +44,17 @@
                 </div>
                 <div class="mb-3 text-start mt-4 mb-4">
                     <div class="input-group">
+                        <!--icone do lado do input-->
                         <span class="input-group-text bg-dark border-secondary">
                             <i class="bi bi-lock text-white"></i>
                         </span>
+                        <!--campo pra digitar a senha-->
                         <input type="password" name="funcionario_senha" id="password" class="form-control"
                             placeholder="Digite sua Senha" required>
                     </div>
 
                 </div>
-                <!-- MENSAGENS -->
+                <!-- MENSAGENS DE ERRO -->
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                 {% for category, message in messages %}
@@ -58,6 +64,7 @@
                 {% endfor %}
                 {% endif %}
                 {% endwith %}
+                <!--botão pra entrar no sistema-->
                 <button type="submit" class="btn btn-login w-100 text-white mt-2">Entrar</button>
             </form>
         </div>

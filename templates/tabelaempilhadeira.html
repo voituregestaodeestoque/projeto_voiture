@@ -1,7 +1,7 @@
 
 {% extends 'base.html' %}
 
-<!--Felipe atualizado 02/06/2026 13:45-->
+<!--Ryan atualizado 13/06/2026 18:00-->
 
 {% block conteudo %}
 <div class="container-fluid">
@@ -15,11 +15,11 @@
             <p class="text-muted mb-0">Gerencie as empilhadeiras do estoque</p>
         </div>
 
-
+        <!--rota para cadastrar nova empilhadeira-->
         <a href="{{ url_for('cadastroempilhadeira') }}" class="botao-add btn">
             <i class="bi bi-plus-lg"></i> Nova Empilhadeira
         </a>
-
+        <!--Rota pra usar uma empilhadeira-->
         <a href="{{ url_for('uso_empilhadeira') }}" class="botao-add btn">
             <i class="bi bi-plus-lg"></i> Uso da Empilhadeira
         </a>
@@ -33,7 +33,7 @@
 
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
-
+                    <!--topo da tabela onde mostra os campos-->
                     <thead class="table-light">
                         <tr>
                             <th>#</th>
@@ -47,26 +47,26 @@
                             <th class="text-end">Ações</th>
                         </tr>
                     </thead>
-
+                    <!--tabela divida em duas partes-->
                     <tbody>
-
+                        <!--campos das empilhadeiras que estão sendo utilizadas-->
                         {% for uso in uso %}
                         <tr>
-                            <td>{{ uso.uso_id }}</td>
+                            <td>{{ uso.uso_id }}</td><!--mostra o id-->
 
                             <td>
-                                <strong>{{ uso.empilhadeira_chassi }}</strong>
+                                <strong>{{ uso.empilhadeira_chassi }}</strong><!--mostra o chassi-->
                             </td>
 
                             <td>
                                 <span class="badge bg-secondary">
-                                    {{ uso.empilhadeira_modelo }}
+                                    {{ uso.empilhadeira_modelo }} <!--mostra o modelo-->
                                 </span>
                             </td>
 
                             <td>
                                 <span class="badge bg-secondary">
-                                    {{ uso.empilhadeira_marca }}
+                                    {{ uso.empilhadeira_marca }} <!--mostra a marca-->
                                 </span>
                             </td>
 
@@ -78,19 +78,19 @@
 
                             <td>
                                 <span class="badge bg-secondary">
-                                    {{ uso.funcionario_nome }}
+                                    {{ uso.funcionario_nome }} <!--mostra o nome de quem está utilizando-->
                                 </span>
                             </td>
 
                             <td>
                                 <span class="badge bg-secondary">
-                                    {{ uso.empilhadeira_status }}
+                                    {{ uso.empilhadeira_status }} <!--mostra o status da empilhadeira-->
                                 </span>
                             </td>
 
                             <td>
                                 <span class="badge bg-secondary">
-                                    {{ uso.uso_empilhadeira_datahora }}
+                                    {{ uso.uso_empilhadeira_datahora }} <!--mostra a data e hora de quando começou a utlizar-->
                                 </span>
                             </td>
 
@@ -114,6 +114,7 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Cancelar</button>
+                                                <!--Ação pra desocupar a empilhadeira-->
                                                 <a href="{{ url_for('desocupar_empilhadeira', id=uso.uso_id) }}"
                                                     class="btn btn-danger">
                                                     <strong>Desocupar</strong>
@@ -128,23 +129,24 @@
                         </tr>
                         {% endfor %}
                         
+                        <!--campos das empilhadeiras que não estão sendo utilizadas-->
                         {% for empilhadeira in empilhadeiras %}
                         <tr>
-                            <td>{{ empilhadeira.id }}</td>
+                            <td>{{ empilhadeira.id }}</td> <!--mostra o id-->
 
                             <td>
-                                <strong>{{ empilhadeira.empilhadeira_chassi }}</strong>
+                                <strong>{{ empilhadeira.empilhadeira_chassi }}</strong> <!--mostra o chassi-->
                             </td>
 
                             <td>
                                 <span class="badge bg-secondary">
-                                    {{ empilhadeira.empilhadeira_modelo }}
+                                    {{ empilhadeira.empilhadeira_modelo }} <!--mostra o modelo-->
                                 </span>
                             </td>
 
                             <td>
                                 <span class="badge bg-secondary">
-                                    {{ empilhadeira.empilhadeira_marca }}
+                                    {{ empilhadeira.empilhadeira_marca }} <!--mostra a marca-->
                                 </span>
                             </td>
 
@@ -156,14 +158,14 @@
 
                             <td>
                                 <span class="badge bg-secondary">
-                                    {{ empilhadeira.funcionario_nome }}
+                                    {{ empilhadeira.funcionario_nome }} <!--mostra o nome-->
                                 </span>
                             </td>
 
 
                             <td>
                                 <span class="badge bg-secondary">
-                                    {{ empilhadeira.empilhadeira_status }}
+                                    {{ empilhadeira.empilhadeira_status }} <!--mostra o status-->
                                 </span>
                             </td>
 
@@ -172,7 +174,7 @@
 
                             <td>
                                 <span class="badge bg-secondary">
-                                    {{ empilhadeira.uso_empilhadeira_datahora }}
+                                    {{ empilhadeira.uso_empilhadeira_datahora }} <!--mostra a data e hora-->
                                 </span>
                             </td>
 
@@ -180,7 +182,7 @@
                             <td class="text-end">
 
 
-
+                                <!--ação pra editar a empilhadeira-->
                                 <a href="{{ url_for('editar_empilhadeira', id=empilhadeira.id) }}"
                                     class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
@@ -205,6 +207,7 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Cancelar</button>
+                                                <!--ação pra excluir a empilhadeira-->
                                                 <a href="{{ url_for('deletar_empilhadeira', id=empilhadeira.id) }}"
                                                     class="btn btn-danger">
                                                     <strong>Excluir</strong>
@@ -222,7 +225,7 @@
 
                 </table>
             </div>
-
+            <!--se não tiver nenhuma empilhadeira cadastrada, cai no else-->
             {% else %}
 
             <div class="alert alert-info mb-0">

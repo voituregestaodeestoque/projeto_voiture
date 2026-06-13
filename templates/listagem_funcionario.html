@@ -13,6 +13,7 @@
             <p class="text-muted mb-0">Gerencie os funcionários do sistema</p>
         </div>
 
+        <!--botão/rota pra visuakizar os funcionários-->
         <a href="{{ url_for('cadastro_funcionario') }}" class="botao-add btn">
             <i class="bi bi-plus-lg"></i> Novo Funcionário</a>
     </div>
@@ -79,6 +80,7 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Cancelar</button>
+                                                <!--Ação para excluir o funcionário-->
                                                 <a href="{{ url_for('deletar_funcionario', id=funcionario.id) }}"
                                                     class="btn btn-danger">
                                                     <strong>Excluir</strong>
