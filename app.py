@@ -44,29 +44,41 @@ def landingpage():
 
 ############################################################################################################
 # -----> Início: Login
+
+#entra no sistema e já vai na primeira tela do sistema, LOGIN
 @app.route("/")
 def inicio():
-    return redirect(url_for("loginfuncionario"))
+    return redirect(url_for("loginfuncionario")) #direciona para o rota loginfuncionario
 
 
 @app.route('/loginfuncionario')
 def loginfuncionario():
     return render_template('loginfuncionario.html')
 
+
 @app.route('/loginfunciona', methods=["POST"])
 def login():
-    email = request.form.get("funcionario_email")
+    #pega o email e senha do usuario pra procurar no banco se já existe um funcionário com as informações
+    email = request.form.get("funcionario_email")   
     senha = request.form.get("funcionario_senha")
 
-    funcionario = Funcionario.autenticar(email,senha)
+    funcionario = Funcionario.autenticar(email,senha) #procura no banco um funcionário que bate com a senha e o email passado antes
 
-    if funcionario:
+    if funcionario: #se achar um funcionario, faz o login
+        #cria uma sessão no sistema para poder usar o site
         session["usuario_id"] = funcionario["id"]
         session["funcionario_nome"] = funcionario["funcionario_nome"]
-        return redirect(url_for("base"))
+        return redirect(url_for("base"))#retorna para o site
+    #se a senha ou email não bater
     flash("Login e/ou senha inválidos","erro")
-
     return render_template("loginfuncionario.html")
+
+#desloga do sistema
+@app.route("/logout")
+def logout():
+    session.clear() #apaga as informações de dentro do sessão
+    flash("Você saiu do sistema.", "info")
+    return redirect(url_for("login"))
 
 # -----> Fim: Login
 ############################################################################################################
@@ -77,7 +89,7 @@ def login():
 
 @app.route("/base")
 def base():
-    return render_template("dashboard.html")
+    return redirect(url_for("dashboard"))
 
 # -----> Fim: Base
 ############################################################################################################
@@ -551,10 +563,13 @@ def nova_saida():
 # -----> Início: Empilhadeira
 
 # cadastrodeempilhadeira
+
+#essa rota transfere o usuario pra tela de cadastro de empilhadeira
 @app.route('/cadastroempilhadeira')
 def cadastroempilhadeira():
     return render_template('cadastroempilhadeira.html')
-
+    
+#função que pega todos os dados do formulário da empilhadeira
 def get_empilhadeira_form():
     return {
         "empilhadeira_chassi": request.form.get("empilhadeira_chassi", "").strip(),
@@ -565,53 +580,53 @@ def get_empilhadeira_form():
 # Registro de empilhadeira no banco de dados
 @app.route("/salvar_empilhadeira", methods=["POST"])
 def salvar_empilhadeira():
-    dados = get_empilhadeira_form()
-    empilhadeira = Empilhadeira(**dados)
+    dados = get_empilhadeira_form() #pega os dados do formulário de empilhadeira e coloca dentro da variavel dados
+    empilhadeira = Empilhadeira(**dados) #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
 
     #Validação
     erros = empilhadeira.validate()
 
-    if erros :
-        for erro in erros:
+    if erros : #se tiver algum erro dentro do validate, ele cai nesse if
+        for erro in erros: #mostra erro por erro
             flash(erro,"erro")
-        return render_template("cadastroempilhadeira.html", empilhadeiras=dados)
+        return render_template("cadastroempilhadeira.html", empilhadeiras=dados) #volta os erros para a tela do formulario das empilhadeiras
 
-    chassi = request.form.get("empilhadeira_chassi", "").strip()
-    chassi_cadastrado = Empilhadeira.chassi_existente(chassi)
-    if chassi_cadastrado:
+    chassi = request.form.get("empilhadeira_chassi", "").strip() #pega só o chassi do formulario
+    chassi_cadastrado = Empilhadeira.chassi_existente(chassi) #faz a função que verifica se já existe uma empilhadeira com aquele chassi
+    if chassi_cadastrado: #se tiver alguma empilhadeira com aquele chassi, cai nesse if 
         flash("Chassi já existe no sistema! ","erro")
-        return render_template("cadastroempilhadeira.html",empilhadeiras=dados)
+        return render_template("cadastroempilhadeira.html",empilhadeiras=dados) #mostra o erro na tela
 
-    #Cadastro
+    #Cadastro - depois que passou de todas as validações, insere no banco
     try:
-        empilhadeira.insert()
+        empilhadeira.insert() #insere as informações no banco
         flash("Empilhadeira cadastrada com sucesso.", "sucesso")
-        return redirect(url_for("tabelaempilhadeira"))
-    except Exception as e:
-        flash(f"Erro ao cadastrar empilhadeira: {e}", "erro")
+        return redirect(url_for("tabelaempilhadeira")) #volta para a tela onde mostra as empilhadeiras 
+    except Exception as e: #se não conseguir inserir, é um erro diferente dos possiveis e cai aqui
+        flash(f"Erro ao cadastrar empilhadeira: {e}", "erro") #mostra o erro
         return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
 
 #Edição de uma empilhadeira já cadastrada
 @app.route("/editar_empilhadeira/<int:id>")
 def editar_empilhadeira(id):
-    empilhadeira = Empilhadeira.find_by_id(id)
-    if not empilhadeira:
+    empilhadeira = Empilhadeira.find_by_id(id) #procura o id da empilhadeira que você clicou 
+    if not empilhadeira: #se der algum erro e não achar
         flash("Empilhadeira não encontrada.", "erro")
-        return redirect(url_for("taeblaempilhadeira"))
-    return render_template("cadastroempilhadeira.html", empilhadeira=empilhadeira)
+        return redirect(url_for("tabelaempilhadeira"))
+    return render_template("cadastroempilhadeira.html", empilhadeira=empilhadeira) #mostra a tela de informações de uma empilhadeira já cadastrada
 
 #Atualização do cadastro de uma empilhadeira
 @app.route("/atualizar_empilhadeira/<int:id>", methods=["POST"])
 def atualizar_empilhadeira(id):
-    dados = get_empilhadeira_form()
-    empilhadeira = Empilhadeira(**dados)
+    dados = get_empilhadeira_form() #pega os dados do formulário de empilhadeira e coloca dentro da variavel dados
+    empilhadeira = Empilhadeira(**dados) #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
 
     #Validação dos campos
     erros = empilhadeira.validate()
 
     #Tratativa de erro
-    if erros:
-        for erro in erros:
+    if erros: #se tiver algum erro dentro do validate, ele cai nesse if
+        for erro in erros: #mostra erro por erro
             flash(erro, "erro")
         dados["id"] = id
         return render_template("cadastroempilhadeira.html", empilhadeira=dados)
@@ -619,17 +634,17 @@ def atualizar_empilhadeira(id):
     #Procura da empilhadeira por id
     try:
         #ID não encontrado
-        if not Empilhadeira.find_by_id(id):
+        if not Empilhadeira.find_by_id(id): #se não encontrar o id da empilhadeira
             flash("Empilhadeira não encontrada.", "erro")
             return redirect(url_for("tabelaempilhadeira"))
 
         #Id encontrado, atualização possível
-        empilhadeira.update(id)
+        empilhadeira.update(id) #encontrou a empilhadeira e atualiza os dados
         flash("Empilhadeira atualizada com sucesso.", "sucesso")
         return redirect(url_for("tabelaempilhadeira"))
-    except Exception as e:
+    except Exception as e: #se não conseguir inserir, é um erro diferente dos possiveis e cai aqui
         dados["id"] = id
-        flash(f"Erro ao atualizar empilhadeira: {e}", "erro")
+        flash(f"Erro ao atualizar empilhadeira: {e}", "erro") #mostra o erro
         return render_template("tabelaempilhadeira.html", empilhadeira=dados)
 
 # Deleta uma empilhadeira
@@ -637,7 +652,7 @@ def atualizar_empilhadeira(id):
 def deletar_empilhadeira(id):
     #Tenta deletar
     try:
-        Empilhadeira.delete(id)
+        Empilhadeira.delete(id) #deleta a empilhadeira com parametro do id
         flash("Empilhadeira excluída com sucesso.", "sucesso")
     #Tratativa de erro
     except ValueError as e:
@@ -648,9 +663,8 @@ def deletar_empilhadeira(id):
 
 @app.route('/tabelaempilhadeira')
 def tabelaempilhadeira():
-    uso = Empilhadeira.tabelatudojunto()
-    empilhadeiras=Empilhadeira.empilhadeirasemuso()
-    print("render",empilhadeiras)
+    uso = Empilhadeira.tabelatudojunto() #função select pra mostrar as empilhadeira que estão sendo utilizadas
+    empilhadeiras=Empilhadeira.empilhadeirasemuso() #função select pra mostrar as empilhadeira que não estão sendo utilizadas
     return render_template(
         'tabelaempilhadeira.html',
         uso=uso,
@@ -986,17 +1000,19 @@ def deletar_fornecedor(id):
 ############################################################################################################
 # -----> Início: Funcionário
 
+# essa rota transfere o usuario pra tela de cadastro de funcionario
 @app.route('/cadastro_funcionario')
 def cadastro_funcionario():
     return render_template('cadastrofuncionario.html')
 
 @app.route("/listagem_funcionario")
 def listagem_funcionario():
-    funcionario = Funcionario.funcionario_listagem()
+    funcionario = Funcionario.funcionario_listagem() #função select pra mostrar os funcionario cadastrados no sistema
     return render_template(
         'listagem_funcionario.html',
         funcionarios=funcionario)
 
+#função que pega todos os dados do formulário do funcionário
 def get_funcionario_form():
     return {
         "funcionario_nome": request.form.get("funcionario_nome", "").strip(),
@@ -1010,67 +1026,78 @@ def get_funcionario_form():
         "funcionario_cargo": request.form.get("funcionario_cargo", "").strip(),
     }
 
+# Registro de funcionário no banco de dados
 @app.route("/salvar_funcionario", methods=["POST"])
 def salvar_funcionario():
-    dados = get_funcionario_form()
-    funcionario = Funcionario(**dados)
-    erros = funcionario.validate()
-    if erros:
-        for erro in erros:
+    dados = get_funcionario_form() #pega os dados do formulário do funcionário e coloca dentro da variavel dados
+    funcionario = Funcionario(**dados) #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
+    #Validação
+    erros = funcionario.validate() 
+    if erros: #se tiver algum erro dentro do validate, ele cai nesse if
+        for erro in erros: #mostra erro por erro
             flash(erro, "erro")
         return render_template("cadastrofuncionario.html",funcionario=dados)
 
-    cpf = request.form.get("funcionario_cpf","").strip()
-    cpf1 = funcionario.cpf_existente(cpf)
-    if cpf1:
+    cpf = request.form.get("funcionario_cpf","").strip() #pega só o cpf do formulario
+    cpf_cadastrado = funcionario.cpf_existente(cpf) #faz a função que verifica se já existe um funcionario com aquele cpf
+    if cpf_cadastrado: #se tiver algum funcionario com o cpf, cai nesse if 
         flash("CPF já cadastrado!", "erro")
         return render_template("cadastrofuncionario.html",funcionario=dados)
 
-    email = request.form.get("funcionario_email","").strip()
-    email1 = funcionario.email_existente(email)
-    if email1:
+    email = request.form.get("funcionario_email","").strip() #pega só o email do formulario
+    email_cadastrado = funcionario.email_existente(email) #faz a função que verifica se já existe um funcionario com aquele email
+    if email_cadastrado: #se tiver algum funcionario com o email, cai nesse if 
         flash("Email já cadastrado!", "erro")
         return render_template("cadastrofuncionario.html",funcionario=dados)
 
+    #Cadastro - depois que passou de todas as validações, insere no banco
     try:
-        funcionario.inserir_funcionario()
+        funcionario.inserir_funcionario() #insere as informações no banco com a senha criptografada
         flash("Funcionário cadastrado com sucesso.","sucesso")
         return redirect(url_for("listagem_funcionario"))
 
-    except Exception as e:
+    except Exception as e: #se não conseguir inserir, é um erro diferente dos possiveis e cai aqui
         flash(f"Erro ao cadastrar funcionário: {e}","erro")
         return render_template("cadastrofuncionario.html",funcionario=dados)
 
+#Edição de um funcionário já cadastrada
 @app.route("/editar_funcionario/<int:id>")
 def editar_funcionario(id):
-    funcionario = Funcionario.find_by_id(id)
-    if not funcionario:
+    funcionario = Funcionario.find_by_id(id) #procura o id do funcionário que você clicou 
+    if not funcionario: #se não achar o id do funcionario
         flash("Funcionário não encontrado.", "erro")
         return redirect(url_for("listagem_funcionario"))
-    return render_template("cadastrofuncionario.html", funcionario=funcionario)
+    return render_template("cadastrofuncionario.html", funcionario=funcionario) #mostra a tela de informações de um funcionário já cadastrado
 
 
+#Atualização do cadastro de um funcionário
 @app.route("/atualizar_funcionario/<int:id>", methods=["POST"])
 def atualizar_funcionario(id):
-    dados = get_funcionario_form()
-    funcionario = Funcionario(**dados)
+    dados = get_funcionario_form() #pega os dados do formulário do funcionário e coloca dentro da variavel dados
+    funcionario = Funcionario(**dados) #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
+
+    #Validação dos campos
     erros = funcionario.validate()
 
-    if erros:
+    #Tratativa de erro
+    if erros: #se tiver algum erro dentro do validate, ele cai nesse if
         for erro in erros:
             flash(erro, "erro")
         dados["id"] = id
         return render_template("cadastrofuncionario.html", funcionario=dados)
 
+    #Procura da empilhadeira por id
     try:
-        if not Funcionario.find_by_id(id):
+        #ID não encontrado
+        if not Funcionario.find_by_id(id): #se não encontrar o id do funcionário
             flash("Funcionario não encontrado.", "erro")
             return redirect(url_for("listagem_funcionario"))
 
-        funcionario.update(id)
+        #Id encontrado, atualização possível
+        funcionario.update(id) #encontrou a empilhadeira e atualiza os dados
         flash("Funcionário atualizado com sucesso.", "sucesso")
         return redirect(url_for("listagem_funcionario"))
-    except Exception as e:
+    except Exception as e: #se não conseguir inserir, é um erro diferente dos possiveis e cai aqui
         dados["id"] = id
         flash(f"Erro ao atualizar funcionário: {e}", "erro")
         return render_template("cadastrofuncionario.html", funcionario=dados)
@@ -1080,7 +1107,7 @@ def atualizar_funcionario(id):
 def deletar_funcionario(id):
     #Tenta deletar
     try:
-        Funcionario.safe_delete(id)
+        Funcionario.safe_delete(id) #deleta o funcionario com parametro do id
         flash("Funcionário excluído com sucesso.", "sucesso")
     #Tratativa de erro
     except ValueError as e:
