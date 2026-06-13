@@ -1,6 +1,6 @@
 
 # Editado por Júlia em 13/06/2026 às 14h40
-
+from core.security import login_obrigatorio
 from flask import Flask, render_template, request, redirect, url_for, flash, json, session
 from models.funcionario import Funcionario
 from models.empilhadeira import Empilhadeira
@@ -48,6 +48,9 @@ def landingpage():
 #entra no sistema e já vai na primeira tela do sistema, LOGIN
 @app.route("/")
 def inicio():
+    if "usuario_id" in session: #se já estiver logado, não precisa de login
+        return redirect(url_for("base"))
+    
     return redirect(url_for("loginfuncionario")) #direciona para o rota loginfuncionario
 
 
@@ -78,7 +81,7 @@ def login():
 def logout():
     session.clear() #apaga as informações de dentro do sessão
     flash("Você saiu do sistema.", "info")
-    return redirect(url_for("login"))
+    return redirect(url_for("loginfuncionario"))
 
 # -----> Fim: Login
 ############################################################################################################
@@ -88,6 +91,7 @@ def logout():
 # -----> Início: Base
 
 @app.route("/base")
+@login_obrigatorio
 def base():
     return redirect(url_for("dashboard"))
 
@@ -99,6 +103,7 @@ def base():
 # -----> Início: Dashboard
 
 @app.route("/dashboard")
+@login_obrigatorio
 def dashboard():
     dic_total=Estoque.estoque_total()
 
@@ -118,6 +123,7 @@ def dashboard():
 # -----> Início: Estoque
 
 @app.route("/listagem_estoque")
+@login_obrigatorio
 def listagem_estoque():
 
     pesquisa = get_pesquisa_estoque_form()
@@ -159,6 +165,7 @@ def get_pesquisa_estoque_form():
 # -----> Início: Produto
 
 @app.route('/produtos')
+@login_obrigatorio
 def produtos():
     return render_template('cadastroproduto.html')
 
@@ -181,6 +188,7 @@ def get_estoque_form():
     }
 
 @app.route("/listagem_produto")
+@login_obrigatorio
 def listagem_produto():
 
     produtos = Produto.produto_listagem()
@@ -190,6 +198,7 @@ def listagem_produto():
 
 
 @app.route("/salvar_produto", methods=["POST"])
+@login_obrigatorio
 def salvar_produto():
     dados = get_produto_form()
     produto = Produto(**dados)
@@ -224,6 +233,7 @@ def salvar_produto():
 
 
 @app.route("/editar_produto/<int:id>")
+@login_obrigatorio
 def editar_produto(id):
     produto = Produto.find_by_id(id)
     if not produto:
@@ -233,6 +243,7 @@ def editar_produto(id):
 
 
 @app.route("/atualizar_produto/<int:id>", methods=["POST"])
+@login_obrigatorio
 def atualizar_produto(id):
     dados = get_produto_form()
     produto = Produto(**dados)
@@ -259,6 +270,7 @@ def atualizar_produto(id):
 
 
 @app.route("/deletar_produto/<int:id>")
+@login_obrigatorio
 def deletar_produto(id):
     #Tenta deletar
     try:
@@ -279,6 +291,7 @@ def deletar_produto(id):
 # -----> Início: Pedido de entrada
 
 @app.route("/pedidoentrada")
+@login_obrigatorio
 def pedidoentrada():
     return render_template(
         "pedidoentrada.html",
@@ -286,6 +299,7 @@ def pedidoentrada():
     )
 
 @app.route("/entrada/<int:pedido_entrada_id>")
+@login_obrigatorio
 def detalhes_entrada(pedido_entrada_id):
     pedido = Pedido_entrada.find_by_id(pedido_entrada_id)
 
@@ -302,6 +316,7 @@ def detalhes_entrada(pedido_entrada_id):
 
 
 @app.route("/entrada/<int:pedido_entrada_id>/adicionar", methods=["POST"])
+@login_obrigatorio
 def adicionar_item_entrada(pedido_entrada_id):
     produto_id = int(request.form.get("produto_id", 0))
     detalhe_entrada_quantidade = int(request.form.get("quantidade", 0) or 0)
@@ -324,7 +339,7 @@ def adicionar_item_entrada(pedido_entrada_id):
 
 
 @app.route("/entrada/item/remover/<int:detalhe_entrada_id>/<int:pedido_entrada_id>")
-
+@login_obrigatorio
 def remover_item_entrada(detalhe_entrada_id, pedido_entrada_id):
     mensagem = Detalhe_entrada.remover_item(detalhe_entrada_id)
     flash(mensagem)
@@ -332,6 +347,7 @@ def remover_item_entrada(detalhe_entrada_id, pedido_entrada_id):
 
 
 @app.route("/entrada/finalizar/<int:pedido_entrada_id>")
+@login_obrigatorio
 def finalizar_entrada(pedido_entrada_id):
     mensagem = Pedido_entrada.finalizar(pedido_entrada_id)
     flash(mensagem)
@@ -339,6 +355,7 @@ def finalizar_entrada(pedido_entrada_id):
 
 
 @app.route("/entrada/nova", methods=["GET", "POST"])
+@login_obrigatorio
 def nova_entrada():
     if request.method == "POST":
         fornecedor_id = int(request.form.get("fornecedor_id", 0))
@@ -409,6 +426,7 @@ def nova_entrada():
     
     
 @app.route("/pedido/processar/<int:pedido_entrada_id>")
+@login_obrigatorio
 def processar_pedido_entrada(pedido_entrada_id):
     try:
         mensagem = Pedido_entrada.processar(pedido_entrada_id)
@@ -420,6 +438,7 @@ def processar_pedido_entrada(pedido_entrada_id):
     return redirect(url_for("pedidoentrada"))
 
 @app.route("/pedido/cancelar/<int:pedido_entrada_id>")
+@login_obrigatorio
 def cancelar_pedido_entrada(pedido_entrada_id):
     try:
         mensagem = Pedido_entrada.cancelar(pedido_entrada_id)
@@ -438,6 +457,7 @@ def cancelar_pedido_entrada(pedido_entrada_id):
 # -----> Início: Pedido de saída
 
 @app.route("/pedidosaida")
+@login_obrigatorio
 def pedidosaida():
     return render_template( 
         "pedidosaida.html",
@@ -445,6 +465,7 @@ def pedidosaida():
     )
 
 @app.route("/saida/<int:pedido_saida_id>")
+@login_obrigatorio
 def detalhes_saida(pedido_saida_id):
     pedido = Pedido_saida.find_by_id(pedido_saida_id)
 
@@ -461,6 +482,7 @@ def detalhes_saida(pedido_saida_id):
 
 
 @app.route("/saida/<int:pedido_saida_id>/adicionar", methods=["POST"])
+@login_obrigatorio
 def adicionar_item_saida(pedido_saida_id):
     produto_id = int(request.form.get("produto_id", 0))
     quantidade = int(request.form.get("quantidade", 0) or 0)
@@ -476,6 +498,7 @@ def adicionar_item_saida(pedido_saida_id):
 
 
 @app.route("/saida/item/remover/<int:detalhe_saida_id>/<int:pedido_saida_id>")
+@login_obrigatorio
 def remover_item_saida(detalhe_saida_id, pedido_saida_id):
     mensagem = Detalhe_saida.remover_item(detalhe_saida_id)
     flash(mensagem)
@@ -483,6 +506,7 @@ def remover_item_saida(detalhe_saida_id, pedido_saida_id):
 
 
 @app.route("/saida/finalizar/<int:pedido_saida_id>")
+@login_obrigatorio
 def finalizar_saida(pedido_saida_id):
     mensagem = Pedido_saida.finalizar(pedido_saida_id)
     flash(mensagem)
@@ -490,6 +514,7 @@ def finalizar_saida(pedido_saida_id):
 
 
 @app.route("/saida/nova", methods=["GET", "POST"])
+@login_obrigatorio
 def nova_saida():
     if request.method == "POST":
         cliente_id = int(request.form.get("cliente_id", 0))
@@ -566,6 +591,7 @@ def nova_saida():
 
 #essa rota transfere o usuario pra tela de cadastro de empilhadeira
 @app.route('/cadastroempilhadeira')
+@login_obrigatorio
 def cadastroempilhadeira():
     return render_template('cadastroempilhadeira.html')
     
@@ -579,6 +605,7 @@ def get_empilhadeira_form():
 
 # Registro de empilhadeira no banco de dados
 @app.route("/salvar_empilhadeira", methods=["POST"])
+@login_obrigatorio
 def salvar_empilhadeira():
     dados = get_empilhadeira_form() #pega os dados do formulário de empilhadeira e coloca dentro da variavel dados
     empilhadeira = Empilhadeira(**dados) #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
@@ -608,6 +635,7 @@ def salvar_empilhadeira():
 
 #Edição de uma empilhadeira já cadastrada
 @app.route("/editar_empilhadeira/<int:id>")
+@login_obrigatorio
 def editar_empilhadeira(id):
     empilhadeira = Empilhadeira.find_by_id(id) #procura o id da empilhadeira que você clicou 
     if not empilhadeira: #se der algum erro e não achar
@@ -617,6 +645,7 @@ def editar_empilhadeira(id):
 
 #Atualização do cadastro de uma empilhadeira
 @app.route("/atualizar_empilhadeira/<int:id>", methods=["POST"])
+@login_obrigatorio
 def atualizar_empilhadeira(id):
     dados = get_empilhadeira_form() #pega os dados do formulário de empilhadeira e coloca dentro da variavel dados
     empilhadeira = Empilhadeira(**dados) #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
@@ -649,6 +678,7 @@ def atualizar_empilhadeira(id):
 
 # Deleta uma empilhadeira
 @app.route("/deletar_empilhadeira/<int:id>")
+@login_obrigatorio
 def deletar_empilhadeira(id):
     #Tenta deletar
     try:
@@ -662,6 +692,7 @@ def deletar_empilhadeira(id):
     return redirect(url_for("tabelaempilhadeira"))
 
 @app.route('/tabelaempilhadeira')
+@login_obrigatorio
 def tabelaempilhadeira():
     uso = Empilhadeira.tabelatudojunto() #função select pra mostrar as empilhadeira que estão sendo utilizadas
     empilhadeiras=Empilhadeira.empilhadeirasemuso() #função select pra mostrar as empilhadeira que não estão sendo utilizadas
@@ -679,6 +710,7 @@ def tabelaempilhadeira():
 # -----> Início: Uso de Empilhadeira
 
 @app.route("/desocupar_empilhadeira/<int:id>")
+@login_obrigatorio
 def desocupar_empilhadeira(id):
 
     try:
@@ -693,6 +725,7 @@ def desocupar_empilhadeira(id):
 
 
 @app.route('/usoempilhadeira')
+@login_obrigatorio
 def usoempilhadeira():
     #empilhadeira = Empilhadeira()
     lista_empilhadeiras = empilhadeira.query.all()
@@ -707,6 +740,7 @@ def get_uso_empilhadeira_form():
     }
 
 @app.route("/salvar_uso_empilhadeira", methods=["POST"])
+@login_obrigatorio
 def salvar_uso_empilhadeira():
 
     dados = get_uso_empilhadeira_form()
@@ -732,6 +766,7 @@ def salvar_uso_empilhadeira():
         return redirect(url_for("usoempilhadeira"))
     
 @app.route('/uso_empilhadeira_estrangeiro')
+@login_obrigatorio
 def uso_empilhadeira():
 
     funcionarios = Funcionario.funcionario_listagem()
@@ -744,6 +779,7 @@ def uso_empilhadeira():
 
 
 @app.route('/seu-formulario')
+@login_obrigatorio
 def exibir_formulario():
     lista_empilhadeiras = empilhadeira.query.all() 
     return render_template('usoempilhadeira.html', empilhadeiras=lista_empilhadeiras)
@@ -768,6 +804,7 @@ def get_cliente_form():
     }
 
 @app.route("/listagem_cliente")
+@login_obrigatorio
 def listagem_cliente():
     clientes = Cliente.cliente_listagem()
     return render_template(
@@ -775,10 +812,12 @@ def listagem_cliente():
         clientes=clientes)
 
 @app.route('/cliente')
+@login_obrigatorio
 def cliente():
     return render_template('cadastrocliente.html')
 
 @app.route("/salvar_cliente", methods=["POST"])
+@login_obrigatorio
 def salvar_cliente():
     dados = get_cliente_form()
     cliente = Cliente(**dados)
@@ -811,6 +850,7 @@ def salvar_cliente():
 
 #Edição de um cliente já cadastrado
 @app.route("/editar_cliente/<int:id>")
+@login_obrigatorio
 def editar_cliente(id):
     cliente = Cliente.find_by_id(id)
     if not cliente:
@@ -820,6 +860,7 @@ def editar_cliente(id):
 
 #Atualização do cadastro de um cliente
 @app.route("/atualizar_cliente/<int:id>", methods=["POST"])
+@login_obrigatorio
 def atualizar_cliente(id):
     dados = get_cliente_form()
     cliente = Cliente(**dados)
@@ -853,6 +894,7 @@ def atualizar_cliente(id):
 
 # Deleta um cliente
 @app.route("/deletar_cliente/<int:id>")
+@login_obrigatorio
 def deletar_cliente(id):
     #Tenta deletar
     try:
@@ -874,6 +916,7 @@ def deletar_cliente(id):
 
 # Rota para a tela de cadastro de fornecedor
 @app.route('/fornecedor')
+@login_obrigatorio
 def fornecedor():
     return render_template('cadastrofornecedor.html')
 
@@ -893,6 +936,7 @@ def get_fornecedor_form():
 
 # Registro do fornecedor no banco de dados
 @app.route("/salvar_fornecedor", methods=["POST"])
+@login_obrigatorio
 def salvar_fornecedor():
     dados = get_fornecedor_form()
     fornecedor = Fornecedor(**dados)
@@ -929,6 +973,7 @@ def salvar_fornecedor():
 
 # Listagem de fornecedores cadastrados
 @app.route('/listagem_fornecedor')
+@login_obrigatorio
 def listagem_fornecedor():
     fornecedores = Fornecedor.listagem()
     return render_template(
@@ -939,6 +984,7 @@ def listagem_fornecedor():
 
 #Edição de um fornecedor já cadastrado
 @app.route("/editar_fornecedor/<int:id>")
+@login_obrigatorio
 def editar_fornecedor(id):
     fornecedor = Fornecedor.find_by_id(id)
     if not fornecedor:
@@ -948,6 +994,7 @@ def editar_fornecedor(id):
 
 #Atualização do cadastro de um fornecedor
 @app.route("/atualizar_fornecedor/<int:id>", methods=["POST"])
+@login_obrigatorio
 def atualizar_fornecedor(id):
     dados = get_fornecedor_form()
     fornecedor = Fornecedor(**dados)
@@ -981,6 +1028,7 @@ def atualizar_fornecedor(id):
 
 # Deleta um fornecedor
 @app.route("/deletar_fornecedor/<int:id>")
+@login_obrigatorio
 def deletar_fornecedor(id):
     #Tenta deletar
     try:
@@ -1002,10 +1050,12 @@ def deletar_fornecedor(id):
 
 # essa rota transfere o usuario pra tela de cadastro de funcionario
 @app.route('/cadastro_funcionario')
+@login_obrigatorio
 def cadastro_funcionario():
     return render_template('cadastrofuncionario.html')
 
 @app.route("/listagem_funcionario")
+@login_obrigatorio
 def listagem_funcionario():
     funcionario = Funcionario.funcionario_listagem() #função select pra mostrar os funcionario cadastrados no sistema
     return render_template(
@@ -1028,6 +1078,7 @@ def get_funcionario_form():
 
 # Registro de funcionário no banco de dados
 @app.route("/salvar_funcionario", methods=["POST"])
+@login_obrigatorio
 def salvar_funcionario():
     dados = get_funcionario_form() #pega os dados do formulário do funcionário e coloca dentro da variavel dados
     funcionario = Funcionario(**dados) #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
@@ -1062,6 +1113,7 @@ def salvar_funcionario():
 
 #Edição de um funcionário já cadastrada
 @app.route("/editar_funcionario/<int:id>")
+@login_obrigatorio
 def editar_funcionario(id):
     funcionario = Funcionario.find_by_id(id) #procura o id do funcionário que você clicou 
     if not funcionario: #se não achar o id do funcionario
@@ -1072,6 +1124,7 @@ def editar_funcionario(id):
 
 #Atualização do cadastro de um funcionário
 @app.route("/atualizar_funcionario/<int:id>", methods=["POST"])
+@login_obrigatorio
 def atualizar_funcionario(id):
     dados = get_funcionario_form() #pega os dados do formulário do funcionário e coloca dentro da variavel dados
     funcionario = Funcionario(**dados) #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
@@ -1104,6 +1157,7 @@ def atualizar_funcionario(id):
 
 # Deleta um funcionario
 @app.route("/deletar_funcionario/<int:id>")
+@login_obrigatorio
 def deletar_funcionario(id):
     #Tenta deletar
     try:
