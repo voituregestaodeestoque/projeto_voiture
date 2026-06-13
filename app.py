@@ -1,5 +1,5 @@
 
-# Editado por Ryan em 11/06/2026 às 10:00 
+# Editado por Júlia em 13/06/2026 às 14h40
 
 from flask import Flask, render_template, request, redirect, url_for, flash, json, session
 from models.funcionario import Funcionario
@@ -30,12 +30,25 @@ def to_float(value, default=0.0):
     except (TypeError, ValueError):
         return default
 
+
+############################################################################################################
+# -----> Início: Landing Page
+
+@app.route('/landingpage')
+def landingpage():
+    return render_template('lp.html')
+
+# -----> Fim: Landing Page
+############################################################################################################
+
+
+############################################################################################################
+# -----> Início: Login
 @app.route("/")
 def inicio():
     return redirect(url_for("loginfuncionario"))
 
 
-'''Login funcionário -'''
 @app.route('/loginfuncionario')
 def loginfuncionario():
     return render_template('loginfuncionario.html')
@@ -55,8 +68,23 @@ def login():
 
     return render_template("loginfuncionario.html")
 
-''' Dashboard '''
+# -----> Fim: Login
+############################################################################################################
 
+
+############################################################################################################
+# -----> Início: Base
+
+@app.route("/base")
+def base():
+    return render_template("dashboard.html")
+
+# -----> Fim: Base
+############################################################################################################
+
+
+############################################################################################################
+# -----> Início: Dashboard
 
 @app.route("/dashboard")
 def dashboard():
@@ -70,193 +98,52 @@ def dashboard():
     total_estoque = dic_total['quantidade_total']
     return render_template('dashboard.html', total_estoque=total_estoque,total_produto=total_produto, baixo_estoque=baixo_estoque)
 
-
-#Landing Page
-
-@app.route('/landingpage')
-def landingpage():
-    return render_template('lp.html')
-
-'''Empilhadeira'''
-
-# cadastrodeempilhadeira
-
-@app.route('/cadastroempilhadeira')
-def cadastroempilhadeira():
-    return render_template('cadastroempilhadeira.html')
-
-def get_empilhadeira_form():
-    return {
-        "empilhadeira_chassi": request.form.get("empilhadeira_chassi", "").strip(),
-        "empilhadeira_modelo": request.form.get("empilhadeira_modelo", "").strip(),
-        "empilhadeira_marca": request.form.get("empilhadeira_marca", "").strip()
-    }
-
-# Registro do fornecedor no banco de dados
-@app.route("/salvar_empilhadeira", methods=["POST"])
-def salvar_empilhadeira():
-    dados = get_empilhadeira_form()
-    empilhadeira = Empilhadeira(**dados)
-
-    #Validação
-    erros = empilhadeira.validate()
-
-    if erros :
-        for erro in erros:
-            flash(erro,"erro")
-        return render_template("cadastroempilhadeira.html", empilhadeiras=dados)
-
-    chassi = request.form.get("empilhadeira_chassi", "").strip()
-    chassi_cadastrado = Empilhadeira.chassi_existente(chassi)
-    if chassi_cadastrado:
-        flash("Chassi já existe no sistema! ","erro")
-        return render_template("cadastroempilhadeira.html",empilhadeiras=dados)
-
-    #Cadastro
-    try:
-        empilhadeira.insert()
-        flash("Empilhadeira cadastrada com sucesso.", "sucesso")
-        return redirect(url_for("tabelaempilhadeira"))
-    except Exception as e:
-        flash(f"Erro ao cadastrar empilhadeira: {e}", "erro")
-        return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
-
-#Edição de um fornecedor já cadastrado
-@app.route("/editar_empilhadeira/<int:id>")
-def editar_empilhadeira(id):
-    empilhadeira = Empilhadeira.find_by_id(id)
-    if not empilhadeira:
-        flash("Empilhadeira não encontrada.", "erro")
-        return redirect(url_for("taeblaempilhadeira"))
-    return render_template("cadastroempilhadeira.html", empilhadeira=empilhadeira)
-
-#Atualização do cadastro de uma empilhadeira
-@app.route("/atualizar_empilhadeira/<int:id>", methods=["POST"])
-def atualizar_empilhadeira(id):
-    dados = get_empilhadeira_form()
-    empilhadeira = Empilhadeira(**dados)
-
-    #Validação dos campos
-    erros = empilhadeira.validate()
-
-    #Tratativa de erro
-    if erros:
-        for erro in erros:
-            flash(erro, "erro")
-        dados["id"] = id
-        return render_template("cadastroempilhadeira.html", empilhadeira=dados)
-
-    #Procura da empilhadeira por id
-    try:
-        #ID não encontrado
-        if not Empilhadeira.find_by_id(id):
-            flash("Empilhadeira não encontrada.", "erro")
-            return redirect(url_for("tabelaempilhadeira"))
-
-        #Id encontrado, atualização possível
-        empilhadeira.update(id)
-        flash("Empilhadeira atualizada com sucesso.", "sucesso")
-        return redirect(url_for("tabelaempilhadeira"))
-    except Exception as e:
-        dados["id"] = id
-        flash(f"Erro ao atualizar empilhadeira: {e}", "erro")
-        return render_template("tabelaempilhadeira.html", empilhadeira=dados)
-
-# Deleta uma empilhadeira
-@app.route("/deletar_empilhadeira/<int:id>")
-def deletar_empilhadeira(id):
-    #Tenta deletar
-    try:
-        Empilhadeira.delete(id)
-        flash("Empilhadeira excluída com sucesso.", "sucesso")
-    #Tratativa de erro
-    except ValueError as e:
-        flash(str(e), "erro")
-    except Exception as e:
-        flash(f"Erro ao excluir empilhadeira: {e}", "erro")
-    return redirect(url_for("tabelaempilhadeira"))
-
-@app.route("/desocupar_empilhadeira/<int:id>")
-def desocupar_empilhadeira(id):
-
-    try:
-        Uso_empilhadeira.desocupar(id)
-
-        flash("Empilhadeira desocupada com sucesso.", "sucesso")
-
-    except Exception as e:
-        flash(f"Erro ao desocupar empilhadeira: {e}", "erro")
-
-    return redirect(url_for("tabelaempilhadeira"))
+# -----> Fim: Dashboard
+############################################################################################################
 
 
+############################################################################################################
+# -----> Início: Estoque
 
-@app.route('/tabelaempilhadeira')
-def tabelaempilhadeira():
-    uso = Empilhadeira.tabelatudojunto()
-    empilhadeiras=Empilhadeira.empilhadeirasemuso()
-    print("render",empilhadeiras)
+@app.route("/listagem_estoque")
+def listagem_estoque():
+
+    pesquisa = get_pesquisa_estoque_form()
+
+    if pesquisa:
+        estoque = Estoque.card_estoque_pesquisa(pesquisa)
+
+    else:
+        estoque = Estoque.card_estoque()
+
+    filtro = request.args.get("filtro", "adc-recente")
+
+    if filtro == "nome":
+        estoque = Estoque.card_estoque_nome()
+    elif filtro == "maior":
+        estoque = Estoque.card_estoque_maior()
+    elif filtro == "menor":
+        estoque = Estoque.card_estoque_menor()
+    elif filtro == "preco-maior":
+        estoque = Estoque.card_estoque_preco_maior()
+    elif filtro == "preco-menor":
+        estoque = Estoque.card_estoque_preco_menor()        
+
     return render_template(
-        'tabelaempilhadeira.html',
-        uso=uso,
-        empilhadeiras=empilhadeiras
+        "estoque.html",
+        estoque=estoque,
+        filtro=filtro
     )
 
+def get_pesquisa_estoque_form():
+    chave = {"chave_pesquisa": request.args.get("chave_pesquisa", "").strip()}
+    return chave
 
-
-
-
-
-@app.route("/base")
-def base():
-    return render_template("dashboard.html")
-
-# Enderecamento
-@app.route('/enderecamento')
-def enderecamento():
-    return render_template('enderecamento.html')
-
-# Uso de Empilhadeira
-@app.route('/usoempilhadeira')
-def usoempilhadeira():
-    #empilhadeira = Empilhadeira()
-    lista_empilhadeiras = empilhadeira.query.all()
-    return render_template('usoempilhadeira.html' ,empilhadeiras=lista_empilhadeiras)
-
-
-def get_uso_empilhadeira_form():
-    return {
-        "uso_empilhadeira_datahora": datetime.now(),
-        "funcionario_id": to_int(request.form.get("funcionario_id")),
-        "empilhadeira_id": request.form.get("empilhadeira_id"),
-    }
-
-@app.route("/salvar_uso_empilhadeira", methods=["POST"])
-def salvar_uso_empilhadeira():
-
-    dados = get_uso_empilhadeira_form()
-    print("empilhadeira ",dados)
-
-    if not dados["empilhadeira_id"]:
-        flash("Selecione uma empilhadeira.", "erro")
-        return redirect(url_for("usoempilhadeira"))
-
-    if not dados["funcionario_id"]:
-        flash("Selecione um funcionário.", "erro")
-        return redirect(url_for("usoempilhadeira"))
-
-    uso_empilhadeira = Uso_empilhadeira(**dados)
-
-    try:
-        uso_empilhadeira.insert()
-        flash("Uso de empilhadeira cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("tabelaempilhadeira"))
-
-    except Exception as e:
-        flash(f"Erro ao cadastrar uso de empilhadeira: {e}", "erro")
-        return redirect(url_for("usoempilhadeira"))
+# -----> Fim: Estoque
+############################################################################################################
 
         
+############################################################################################################        
 # -----> Início: Produto
 
 @app.route('/produtos')
@@ -372,368 +259,12 @@ def deletar_produto(id):
         flash(f"Erro ao excluir produto: {e}", "erro")
     return redirect(url_for("listagem_produto"))
 
-
 # -----> Fim: Produto
-#===================================================================================
-
-
-# -----> Inicio: Funcionário
-
-@app.route('/cadastro_funcionario')
-def cadastro_funcionario():
-    return render_template('cadastrofuncionario.html')
-
-@app.route("/listagem_funcionario")
-def listagem_funcionario():
-    funcionario = Funcionario.funcionario_listagem()
-    return render_template(
-        'listagem_funcionario.html',
-        funcionarios=funcionario)
-
-def get_funcionario_form():
-    return {
-        "funcionario_nome": request.form.get("funcionario_nome", "").strip(),
-        "funcionario_senha": request.form.get("funcionario_senha", "").strip(),
-        "funcionario_cpf": request.form.get("funcionario_cpf", "").strip(),
-        "funcionario_cep": request.form.get("funcionario_cep", "").strip(),
-        "funcionario_email": request.form.get("funcionario_email", "").strip(),
-        "funcionario_ddi": request.form.get("funcionario_ddi", "").strip(),
-        "funcionario_ddd": request.form.get("funcionario_ddi", "").strip(),
-        "funcionario_telefone": request.form.get("funcionario_telefone", "").strip(),
-        "funcionario_cargo": request.form.get("funcionario_cargo", "").strip(),
-    }
-
-@app.route("/salvar_funcionario", methods=["POST"])
-def salvar_funcionario():
-    dados = get_funcionario_form()
-    funcionario = Funcionario(**dados)
-    erros = funcionario.validate()
-    if erros:
-        for erro in erros:
-            flash(erro, "erro")
-        return render_template("cadastrofuncionario.html",funcionario=dados)
-
-    cpf = request.form.get("funcionario_cpf","").strip()
-    cpf1 = funcionario.cpf_existente(cpf)
-    if cpf1:
-        flash("CPF já cadastrado!", "erro")
-        return render_template("cadastrofuncionario.html",funcionario=dados)
-
-    email = request.form.get("funcionario_email","").strip()
-    email1 = funcionario.email_existente(email)
-    if email1:
-        flash("Email já cadastrado!", "erro")
-        return render_template("cadastrofuncionario.html",funcionario=dados)
-
-    try:
-        funcionario.inserir_funcionario()
-        flash("Funcionário cadastrado com sucesso.","sucesso")
-        return redirect(url_for("listagem_funcionario"))
-
-    except Exception as e:
-        flash(f"Erro ao cadastrar funcionário: {e}","erro")
-        return render_template("cadastrofuncionario.html",funcionario=dados)
-
-@app.route("/editar_funcionario/<int:id>")
-def editar_funcionario(id):
-    funcionario = Funcionario.find_by_id(id)
-    if not funcionario:
-        flash("Funcionário não encontrado.", "erro")
-        return redirect(url_for("listagem_funcionario"))
-    return render_template("cadastrofuncionario.html", funcionario=funcionario)
-
-
-@app.route("/atualizar_funcionario/<int:id>", methods=["POST"])
-def atualizar_funcionario(id):
-    dados = get_funcionario_form()
-    funcionario = Funcionario(**dados)
-    erros = funcionario.validate()
-
-    if erros:
-        for erro in erros:
-            flash(erro, "erro")
-        dados["id"] = id
-        return render_template("cadastrofuncionario.html", funcionario=dados)
-
-    try:
-        if not Funcionario.find_by_id(id):
-            flash("Funcionario não encontrado.", "erro")
-            return redirect(url_for("listagem_funcionario"))
-
-        funcionario.update(id)
-        flash("Funcionário atualizado com sucesso.", "sucesso")
-        return redirect(url_for("listagem_funcionario"))
-    except Exception as e:
-        dados["id"] = id
-        flash(f"Erro ao atualizar funcionário: {e}", "erro")
-        return render_template("cadastrofuncionario.html", funcionario=dados)
-
-# Deleta um funcionario
-@app.route("/deletar_funcionario/<int:id>")
-def deletar_funcionario(id):
-    #Tenta deletar
-    try:
-        Funcionario.safe_delete(id)
-        flash("Funcionário excluído com sucesso.", "sucesso")
-    #Tratativa de erro
-    except ValueError as e:
-        flash(str(e), "erro")
-    except Exception as e:
-        flash(f"Erro ao excluir funcionário: {e}", "erro")
-    return redirect(url_for("listagem_funcionario"))
-
-#=====================================================================================#
-
-# cliente
-
-def get_cliente_form():
-        return {
-        "cliente_nome": request.form.get("cliente_nome", "").strip(),
-        "cliente_cnpj": request.form.get("cliente_cnpj", "").strip(),
-        "cliente_cep": request.form.get("cliente_cep", "").strip(),
-        "cliente_email": request.form.get("cliente_email", "").strip(),
-        "cliente_ddi": request.form.get("cliente_ddi", "").strip(),
-        "cliente_ddd": request.form.get("cliente_ddi", "").strip(),
-        "cliente_telefone": request.form.get("cliente_telefone", "").strip(),
-        "cliente_descricao": request.form.get("funcionario_descricao", "").strip(),
-    }
-
-@app.route("/listagem_cliente")
-def listagem_cliente():
-    clientes = Cliente.cliente_listagem()
-    return render_template(
-        'listagem_cliente.html',
-        clientes=clientes)
-
-@app.route('/cliente')
-def cliente():
-    return render_template('cadastrocliente.html')
-
-@app.route("/salvar_cliente", methods=["POST"])
-def salvar_cliente():
-    dados = get_cliente_form()
-    cliente = Cliente(**dados)
-
-    erros = cliente.validate()
-    if erros :
-        for erro in erros:
-            flash(erro, "erro")
-        return render_template("cadastrocliente.html", cliente=dados)
-
-    cnpj = request.form.get("cliente_cnpj", "").strip()
-    cnpj_cadastrado = Cliente.cnpj_existente(cnpj)
-    if cnpj_cadastrado:
-        flash("CNPJ já existe no sistema! ","erro")
-        return render_template("cadastrocliente.html", cliente=dados)
-
-    email = request.form.get("cliente_email", "").strip()
-    email_cadastrado = Cliente.email_existente(email)
-    if email_cadastrado:
-        flash("Email já existe no sistema!","erro")
-        return render_template("cadastrocliente.html", cliente=dados)
-
-    try:
-        cliente.insert()
-        flash("Cliente cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("listagem_cliente"))
-    except Exception as e:
-        flash(f"Erro ao cadastrar cliente: {e}", "erro")
-        return render_template("cadastrocliente.html", cliente=dados)
-
-#Edição de um cliente já cadastrado
-@app.route("/editar_cliente/<int:id>")
-def editar_cliente(id):
-    cliente = Cliente.find_by_id(id)
-    if not cliente:
-        flash("Cliente não encontrado.", "erro")
-        return redirect(url_for("listagem_cliente"))
-    return render_template("cadastrocliente.html", cliente=cliente)
-
-#Atualização do cadastro de um cliente
-@app.route("/atualizar_cliente/<int:id>", methods=["POST"])
-def atualizar_cliente(id):
-    dados = get_cliente_form()
-    cliente = Cliente(**dados)
-
-    #Validação dos campos
-    erros = cliente.validate()
-
-    #Tratativa de erro
-    if erros:
-        for erro in erros:
-            flash(erro, "erro")
-        dados["id"] = id
-        return render_template("cadastrocliente.html", cliente=dados)
-
-    #Procura do cliente por id
-    try:
-        #ID não encontrado
-        if not Cliente.find_by_id(id):
-            flash("Cliente não encontrado.", "erro")
-            return redirect(url_for("listagem_fornecedor"))
-
-        #Id encontrado, atualização possível
-        cliente.update(id)
-        flash("Cliente atualizado com sucesso.", "sucesso")
-        return redirect(url_for("listagem_cliente"))
-    except Exception as e:
-        dados["id"] = id
-        flash(f"Erro ao atualizar cliente: {e}", "erro")
-        return render_template("cadastrocliente.html", cliente=dados)
-
-
-# Deleta um cliente
-@app.route("/deletar_cliente/<int:id>")
-def deletar_cliente(id):
-    #Tenta deletar
-    try:
-        Cliente.safe_delete(id)
-        flash("Cliente excluído com sucesso.", "sucesso")
-    #Tratativa de erro
-    except ValueError as e:
-        flash(str(e), "erro")
-    except Exception as e:
-        flash(f"Erro ao excluir cliente: {e}", "erro")
-    return redirect(url_for("listagem_cliente"))
-
-
-# -----> Fim: Cliente
-
-
-# -----> Início: Fornecedor
-
-# Rota para a tela de cadastro de fornecedor
-@app.route('/fornecedor')
-def fornecedor():
-    return render_template('cadastrofornecedor.html')
-
-
-# Resgate das informações do formulário de cadastro de fornecedor
-def get_fornecedor_form():
-    return {
-        "fornecedor_nome": request.form.get("fornecedor_nome", "").strip(),
-        "fornecedor_cnpj": request.form.get("fornecedor_cnpj", "").strip(),
-        "fornecedor_cep": request.form.get("fornecedor_cep", "").strip(),
-        "fornecedor_email": request.form.get("fornecedor_email", "").strip(),
-        "fornecedor_ddi": request.form.get("fornecedor_ddi", "").strip(),
-        "fornecedor_ddd": request.form.get("fornecedor_ddd", "").strip(),
-        "fornecedor_telefone": request.form.get("fornecedor_telefone", "").strip(),
-        "fornecedor_descricao": request.form.get("fornecedor_descricao", "").strip(),
-    }
-
-# Registro do fornecedor no banco de dados
-@app.route("/salvar_fornecedor", methods=["POST"])
-def salvar_fornecedor():
-    dados = get_fornecedor_form()
-    fornecedor = Fornecedor(**dados)
-
-    #Validação
-    erros = fornecedor.validate()
-
-    if erros :
-        for erro in erros:
-            flash(erro,"erro")
-        return render_template("cadastrofornecedor.html", fornecedor=dados)
-
-    cnpj = request.form.get("fornecedor_cnpj", "").strip()
-    cnpj_cadastrado = Fornecedor.cnpj_existente(cnpj)
-    if cnpj_cadastrado:
-        flash("CNPJ já existe no sistema! ","erro")
-        return render_template("cadastrofornecedor.html",fornecedor=dados)
-
-    email = request.form.get("fornecedor_email", "").strip()
-    email_cadastrado = Fornecedor.email_existente(email)
-    if email_cadastrado:
-        flash("Email já existe no sistema!","erro")
-        return render_template("cadastrofornecedor.html", fornecedor=dados)
-
-    #Cadastro
-    try:
-        fornecedor.insert()
-        flash("Fornecedor cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("listagem_fornecedor"))
-    except Exception as e:
-        flash(f"Erro ao cadastrar fornecedor: {e}", "erro")
-        return render_template("cadastrofornecedor.html", fornecedor=dados)
-
-
-# Listagem de fornecedores cadastrados
-@app.route('/listagem_fornecedor')
-def listagem_fornecedor():
-    fornecedores = Fornecedor.listagem()
-    return render_template(
-        'listagem_fornecedor.html',
-        fornecedores=fornecedores
-    )
-
-
-#Edição de um fornecedor já cadastrado
-@app.route("/editar_fornecedor/<int:id>")
-def editar_fornecedor(id):
-    fornecedor = Fornecedor.find_by_id(id)
-    if not fornecedor:
-        flash("Fornecedor não encontrado.", "erro")
-        return redirect(url_for("listagem_fornecedor"))
-    return render_template("cadastrofornecedor.html", fornecedor=fornecedor)
-
-#Atualização do cadastro de um fornecedor
-@app.route("/atualizar_fornecedor/<int:id>", methods=["POST"])
-def atualizar_fornecedor(id):
-    dados = get_fornecedor_form()
-    fornecedor = Fornecedor(**dados)
-
-    #Validação dos campos
-    erros = fornecedor.validate()
-
-    #Tratativa de erro
-    if erros:
-        for erro in erros:
-            flash(erro, "erro")
-        dados["id"] = id
-        return render_template("cadastrofornecedor.html", fornecedor=dados)
-
-    #Procura do fornecedor por id
-    try:
-        #ID não encontrado
-        if not Fornecedor.find_by_id(id):
-            flash("Fornecedor não encontrado.", "erro")
-            return redirect(url_for("listagem_fornecedor"))
-
-        #Id encontrado, atualização possível
-        fornecedor.update(id)
-        flash("Fornecedor atualizado com sucesso.", "sucesso")
-        return redirect(url_for("listagem_fornecedor"))
-    except Exception as e:
-        dados["id"] = id
-        flash(f"Erro ao atualizar fornecedor: {e}", "erro")
-        return render_template("cadastrofornecedor.html", fornecedor=dados)
-
-
-# Deleta um fornecedor
-@app.route("/deletar_fornecedor/<int:id>")
-def deletar_fornecedor(id):
-    #Tenta deletar
-    try:
-        Fornecedor.safe_delete(id)
-        flash("Fornecedor excluído com sucesso.", "sucesso")
-    #Tratativa de erro
-    except ValueError as e:
-        flash(str(e), "erro")
-    except Exception as e:
-        flash(f"Erro ao excluir fornecedor: {e}", "erro")
-    return redirect(url_for("listagem_fornecedor"))
-
-
-# -----> Fim: Fornecedor
-
-
-
-
-@app.route('/seu-formulario')
-def exibir_formulario():
-    lista_empilhadeiras = empilhadeira.query.all() 
-    return render_template('usoempilhadeira.html', empilhadeiras=lista_empilhadeiras)
+############################################################################################################
         
+
+############################################################################################################
+# -----> Início: Pedido de entrada
 
 @app.route("/pedidoentrada")
 def pedidoentrada():
@@ -741,8 +272,6 @@ def pedidoentrada():
         "pedidoentrada.html",
         pedidos=Pedido_entrada.find_all_ordered()
     )
-
-
 
 @app.route("/entrada/<int:pedido_entrada_id>")
 def detalhes_entrada(pedido_entrada_id):
@@ -889,58 +418,12 @@ def cancelar_pedido_entrada(pedido_entrada_id):
         flash(f"Erro ao cancelar pedido: {e}", "erro")
     return redirect(url_for("pedidoentrada"))
 
-
-'''Estoque'''
-
-@app.route("/listagem_estoque")
-def listagem_estoque():
-
-    pesquisa = get_pesquisa_estoque_form()
-
-    if pesquisa:
-        estoque = Estoque.card_estoque_pesquisa(pesquisa)
-
-    else:
-        estoque = Estoque.card_estoque()
-
-    filtro = request.args.get("filtro", "adc-recente")
-
-    if filtro == "nome":
-        estoque = Estoque.card_estoque_nome()
-    elif filtro == "maior":
-        estoque = Estoque.card_estoque_maior()
-    elif filtro == "menor":
-        estoque = Estoque.card_estoque_menor()
-    elif filtro == "preco-maior":
-        estoque = Estoque.card_estoque_preco_maior()
-    elif filtro == "preco-menor":
-        estoque = Estoque.card_estoque_preco_menor()        
-
-    return render_template(
-        "estoque.html",
-        estoque=estoque,
-        filtro=filtro
-    )
-
-def get_pesquisa_estoque_form():
-    chave = {"chave_pesquisa": request.args.get("chave_pesquisa", "").strip()}
-    return chave
+# -----> Fim: Pedido de entrada
+############################################################################################################
 
 
-
-@app.route('/uso_empilhadeira_estrangeiro')
-def uso_empilhadeira():
-
-    funcionarios = Funcionario.funcionario_listagem()
-    empilhadeiras = Empilhadeira.find_all()
-    
-    return render_template('usoempilhadeira.html',
-     funcionarios=funcionarios,
-     empilhadeiras=empilhadeiras
-)
-
-'''Pedido Saída'''
-# -----> Fim: Pedido Saída
+############################################################################################################
+# -----> Início: Pedido Saída
 
 @app.route("/pedidosaida")
 def pedidosaida():
@@ -1060,10 +543,557 @@ def nova_saida():
         clientes=Cliente.find_all()
     )
     
+# -----> Fim: Pedido Saída
+############################################################################################################
+
+
+############################################################################################################
+# -----> Início: Empilhadeira
+
+# cadastrodeempilhadeira
+@app.route('/cadastroempilhadeira')
+def cadastroempilhadeira():
+    return render_template('cadastroempilhadeira.html')
+
+def get_empilhadeira_form():
+    return {
+        "empilhadeira_chassi": request.form.get("empilhadeira_chassi", "").strip(),
+        "empilhadeira_modelo": request.form.get("empilhadeira_modelo", "").strip(),
+        "empilhadeira_marca": request.form.get("empilhadeira_marca", "").strip()
+    }
+
+# Registro de empilhadeira no banco de dados
+@app.route("/salvar_empilhadeira", methods=["POST"])
+def salvar_empilhadeira():
+    dados = get_empilhadeira_form()
+    empilhadeira = Empilhadeira(**dados)
+
+    #Validação
+    erros = empilhadeira.validate()
+
+    if erros :
+        for erro in erros:
+            flash(erro,"erro")
+        return render_template("cadastroempilhadeira.html", empilhadeiras=dados)
+
+    chassi = request.form.get("empilhadeira_chassi", "").strip()
+    chassi_cadastrado = Empilhadeira.chassi_existente(chassi)
+    if chassi_cadastrado:
+        flash("Chassi já existe no sistema! ","erro")
+        return render_template("cadastroempilhadeira.html",empilhadeiras=dados)
+
+    #Cadastro
+    try:
+        empilhadeira.insert()
+        flash("Empilhadeira cadastrada com sucesso.", "sucesso")
+        return redirect(url_for("tabelaempilhadeira"))
+    except Exception as e:
+        flash(f"Erro ao cadastrar empilhadeira: {e}", "erro")
+        return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
+
+#Edição de uma empilhadeira já cadastrada
+@app.route("/editar_empilhadeira/<int:id>")
+def editar_empilhadeira(id):
+    empilhadeira = Empilhadeira.find_by_id(id)
+    if not empilhadeira:
+        flash("Empilhadeira não encontrada.", "erro")
+        return redirect(url_for("taeblaempilhadeira"))
+    return render_template("cadastroempilhadeira.html", empilhadeira=empilhadeira)
+
+#Atualização do cadastro de uma empilhadeira
+@app.route("/atualizar_empilhadeira/<int:id>", methods=["POST"])
+def atualizar_empilhadeira(id):
+    dados = get_empilhadeira_form()
+    empilhadeira = Empilhadeira(**dados)
+
+    #Validação dos campos
+    erros = empilhadeira.validate()
+
+    #Tratativa de erro
+    if erros:
+        for erro in erros:
+            flash(erro, "erro")
+        dados["id"] = id
+        return render_template("cadastroempilhadeira.html", empilhadeira=dados)
+
+    #Procura da empilhadeira por id
+    try:
+        #ID não encontrado
+        if not Empilhadeira.find_by_id(id):
+            flash("Empilhadeira não encontrada.", "erro")
+            return redirect(url_for("tabelaempilhadeira"))
+
+        #Id encontrado, atualização possível
+        empilhadeira.update(id)
+        flash("Empilhadeira atualizada com sucesso.", "sucesso")
+        return redirect(url_for("tabelaempilhadeira"))
+    except Exception as e:
+        dados["id"] = id
+        flash(f"Erro ao atualizar empilhadeira: {e}", "erro")
+        return render_template("tabelaempilhadeira.html", empilhadeira=dados)
+
+# Deleta uma empilhadeira
+@app.route("/deletar_empilhadeira/<int:id>")
+def deletar_empilhadeira(id):
+    #Tenta deletar
+    try:
+        Empilhadeira.delete(id)
+        flash("Empilhadeira excluída com sucesso.", "sucesso")
+    #Tratativa de erro
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao excluir empilhadeira: {e}", "erro")
+    return redirect(url_for("tabelaempilhadeira"))
+
+@app.route('/tabelaempilhadeira')
+def tabelaempilhadeira():
+    uso = Empilhadeira.tabelatudojunto()
+    empilhadeiras=Empilhadeira.empilhadeirasemuso()
+    print("render",empilhadeiras)
+    return render_template(
+        'tabelaempilhadeira.html',
+        uso=uso,
+        empilhadeiras=empilhadeiras
+    )
+
+# -----> Fim: Empilhadeira
+############################################################################################################
+
+
+############################################################################################################
+# -----> Início: Uso de Empilhadeira
+
+@app.route("/desocupar_empilhadeira/<int:id>")
+def desocupar_empilhadeira(id):
+
+    try:
+        Uso_empilhadeira.desocupar(id)
+
+        flash("Empilhadeira desocupada com sucesso.", "sucesso")
+
+    except Exception as e:
+        flash(f"Erro ao desocupar empilhadeira: {e}", "erro")
+
+    return redirect(url_for("tabelaempilhadeira"))
+
+
+@app.route('/usoempilhadeira')
+def usoempilhadeira():
+    #empilhadeira = Empilhadeira()
+    lista_empilhadeiras = empilhadeira.query.all()
+    return render_template('usoempilhadeira.html' ,empilhadeiras=lista_empilhadeiras)
+
+
+def get_uso_empilhadeira_form():
+    return {
+        "uso_empilhadeira_datahora": datetime.now(),
+        "funcionario_id": to_int(request.form.get("funcionario_id")),
+        "empilhadeira_id": request.form.get("empilhadeira_id"),
+    }
+
+@app.route("/salvar_uso_empilhadeira", methods=["POST"])
+def salvar_uso_empilhadeira():
+
+    dados = get_uso_empilhadeira_form()
+    print("empilhadeira ",dados)
+
+    if not dados["empilhadeira_id"]:
+        flash("Selecione uma empilhadeira.", "erro")
+        return redirect(url_for("usoempilhadeira"))
+
+    if not dados["funcionario_id"]:
+        flash("Selecione um funcionário.", "erro")
+        return redirect(url_for("usoempilhadeira"))
+
+    uso_empilhadeira = Uso_empilhadeira(**dados)
+
+    try:
+        uso_empilhadeira.insert()
+        flash("Uso de empilhadeira cadastrado com sucesso.", "sucesso")
+        return redirect(url_for("tabelaempilhadeira"))
+
+    except Exception as e:
+        flash(f"Erro ao cadastrar uso de empilhadeira: {e}", "erro")
+        return redirect(url_for("usoempilhadeira"))
     
+@app.route('/uso_empilhadeira_estrangeiro')
+def uso_empilhadeira():
+
+    funcionarios = Funcionario.funcionario_listagem()
+    empilhadeiras = Empilhadeira.find_all()
+    
+    return render_template('usoempilhadeira.html',
+     funcionarios=funcionarios,
+     empilhadeiras=empilhadeiras
+)
 
 
-        
+@app.route('/seu-formulario')
+def exibir_formulario():
+    lista_empilhadeiras = empilhadeira.query.all() 
+    return render_template('usoempilhadeira.html', empilhadeiras=lista_empilhadeiras)
+
+# -----> Fim: Uso de Empilhadeira
+############################################################################################################
+
+
+############################################################################################################
+# -----> Início: Cliente
+
+def get_cliente_form():
+        return {
+        "cliente_nome": request.form.get("cliente_nome", "").strip(),
+        "cliente_cnpj": request.form.get("cliente_cnpj", "").strip(),
+        "cliente_cep": request.form.get("cliente_cep", "").strip(),
+        "cliente_email": request.form.get("cliente_email", "").strip(),
+        "cliente_ddi": request.form.get("cliente_ddi", "").strip(),
+        "cliente_ddd": request.form.get("cliente_ddi", "").strip(),
+        "cliente_telefone": request.form.get("cliente_telefone", "").strip(),
+        "cliente_descricao": request.form.get("funcionario_descricao", "").strip(),
+    }
+
+@app.route("/listagem_cliente")
+def listagem_cliente():
+    clientes = Cliente.cliente_listagem()
+    return render_template(
+        'listagem_cliente.html',
+        clientes=clientes)
+
+@app.route('/cliente')
+def cliente():
+    return render_template('cadastrocliente.html')
+
+@app.route("/salvar_cliente", methods=["POST"])
+def salvar_cliente():
+    dados = get_cliente_form()
+    cliente = Cliente(**dados)
+
+    erros = cliente.validate()
+    if erros :
+        for erro in erros:
+            flash(erro, "erro")
+        return render_template("cadastrocliente.html", cliente=dados)
+
+    cnpj = request.form.get("cliente_cnpj", "").strip()
+    cnpj_cadastrado = Cliente.cnpj_existente(cnpj)
+    if cnpj_cadastrado:
+        flash("CNPJ já existe no sistema! ","erro")
+        return render_template("cadastrocliente.html", cliente=dados)
+
+    email = request.form.get("cliente_email", "").strip()
+    email_cadastrado = Cliente.email_existente(email)
+    if email_cadastrado:
+        flash("Email já existe no sistema!","erro")
+        return render_template("cadastrocliente.html", cliente=dados)
+
+    try:
+        cliente.insert()
+        flash("Cliente cadastrado com sucesso.", "sucesso")
+        return redirect(url_for("listagem_cliente"))
+    except Exception as e:
+        flash(f"Erro ao cadastrar cliente: {e}", "erro")
+        return render_template("cadastrocliente.html", cliente=dados)
+
+#Edição de um cliente já cadastrado
+@app.route("/editar_cliente/<int:id>")
+def editar_cliente(id):
+    cliente = Cliente.find_by_id(id)
+    if not cliente:
+        flash("Cliente não encontrado.", "erro")
+        return redirect(url_for("listagem_cliente"))
+    return render_template("cadastrocliente.html", cliente=cliente)
+
+#Atualização do cadastro de um cliente
+@app.route("/atualizar_cliente/<int:id>", methods=["POST"])
+def atualizar_cliente(id):
+    dados = get_cliente_form()
+    cliente = Cliente(**dados)
+
+    #Validação dos campos
+    erros = cliente.validate()
+
+    #Tratativa de erro
+    if erros:
+        for erro in erros:
+            flash(erro, "erro")
+        dados["id"] = id
+        return render_template("cadastrocliente.html", cliente=dados)
+
+    #Procura do cliente por id
+    try:
+        #ID não encontrado
+        if not Cliente.find_by_id(id):
+            flash("Cliente não encontrado.", "erro")
+            return redirect(url_for("listagem_fornecedor"))
+
+        #Id encontrado, atualização possível
+        cliente.update(id)
+        flash("Cliente atualizado com sucesso.", "sucesso")
+        return redirect(url_for("listagem_cliente"))
+    except Exception as e:
+        dados["id"] = id
+        flash(f"Erro ao atualizar cliente: {e}", "erro")
+        return render_template("cadastrocliente.html", cliente=dados)
+
+
+# Deleta um cliente
+@app.route("/deletar_cliente/<int:id>")
+def deletar_cliente(id):
+    #Tenta deletar
+    try:
+        Cliente.safe_delete(id)
+        flash("Cliente excluído com sucesso.", "sucesso")
+    #Tratativa de erro
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao excluir cliente: {e}", "erro")
+    return redirect(url_for("listagem_cliente"))
+
+# -----> Fim: Cliente
+############################################################################################################
+
+
+############################################################################################################
+# -----> Início: Fornecedor
+
+# Rota para a tela de cadastro de fornecedor
+@app.route('/fornecedor')
+def fornecedor():
+    return render_template('cadastrofornecedor.html')
+
+
+# Resgate das informações do formulário de cadastro de fornecedor
+def get_fornecedor_form():
+    return {
+        "fornecedor_nome": request.form.get("fornecedor_nome", "").strip(),
+        "fornecedor_cnpj": request.form.get("fornecedor_cnpj", "").strip(),
+        "fornecedor_cep": request.form.get("fornecedor_cep", "").strip(),
+        "fornecedor_email": request.form.get("fornecedor_email", "").strip(),
+        "fornecedor_ddi": request.form.get("fornecedor_ddi", "").strip(),
+        "fornecedor_ddd": request.form.get("fornecedor_ddd", "").strip(),
+        "fornecedor_telefone": request.form.get("fornecedor_telefone", "").strip(),
+        "fornecedor_descricao": request.form.get("fornecedor_descricao", "").strip(),
+    }
+
+# Registro do fornecedor no banco de dados
+@app.route("/salvar_fornecedor", methods=["POST"])
+def salvar_fornecedor():
+    dados = get_fornecedor_form()
+    fornecedor = Fornecedor(**dados)
+
+    #Validação
+    erros = fornecedor.validate()
+
+    if erros :
+        for erro in erros:
+            flash(erro,"erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
+
+    cnpj = request.form.get("fornecedor_cnpj", "").strip()
+    cnpj_cadastrado = Fornecedor.cnpj_existente(cnpj)
+    if cnpj_cadastrado:
+        flash("CNPJ já existe no sistema! ","erro")
+        return render_template("cadastrofornecedor.html",fornecedor=dados)
+
+    email = request.form.get("fornecedor_email", "").strip()
+    email_cadastrado = Fornecedor.email_existente(email)
+    if email_cadastrado:
+        flash("Email já existe no sistema!","erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
+
+    #Cadastro
+    try:
+        fornecedor.insert()
+        flash("Fornecedor cadastrado com sucesso.", "sucesso")
+        return redirect(url_for("listagem_fornecedor"))
+    except Exception as e:
+        flash(f"Erro ao cadastrar fornecedor: {e}", "erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
+
+
+# Listagem de fornecedores cadastrados
+@app.route('/listagem_fornecedor')
+def listagem_fornecedor():
+    fornecedores = Fornecedor.listagem()
+    return render_template(
+        'listagem_fornecedor.html',
+        fornecedores=fornecedores
+    )
+
+
+#Edição de um fornecedor já cadastrado
+@app.route("/editar_fornecedor/<int:id>")
+def editar_fornecedor(id):
+    fornecedor = Fornecedor.find_by_id(id)
+    if not fornecedor:
+        flash("Fornecedor não encontrado.", "erro")
+        return redirect(url_for("listagem_fornecedor"))
+    return render_template("cadastrofornecedor.html", fornecedor=fornecedor)
+
+#Atualização do cadastro de um fornecedor
+@app.route("/atualizar_fornecedor/<int:id>", methods=["POST"])
+def atualizar_fornecedor(id):
+    dados = get_fornecedor_form()
+    fornecedor = Fornecedor(**dados)
+
+    #Validação dos campos
+    erros = fornecedor.validate()
+
+    #Tratativa de erro
+    if erros:
+        for erro in erros:
+            flash(erro, "erro")
+        dados["id"] = id
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
+
+    #Procura do fornecedor por id
+    try:
+        #ID não encontrado
+        if not Fornecedor.find_by_id(id):
+            flash("Fornecedor não encontrado.", "erro")
+            return redirect(url_for("listagem_fornecedor"))
+
+        #Id encontrado, atualização possível
+        fornecedor.update(id)
+        flash("Fornecedor atualizado com sucesso.", "sucesso")
+        return redirect(url_for("listagem_fornecedor"))
+    except Exception as e:
+        dados["id"] = id
+        flash(f"Erro ao atualizar fornecedor: {e}", "erro")
+        return render_template("cadastrofornecedor.html", fornecedor=dados)
+
+
+# Deleta um fornecedor
+@app.route("/deletar_fornecedor/<int:id>")
+def deletar_fornecedor(id):
+    #Tenta deletar
+    try:
+        Fornecedor.safe_delete(id)
+        flash("Fornecedor excluído com sucesso.", "sucesso")
+    #Tratativa de erro
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao excluir fornecedor: {e}", "erro")
+    return redirect(url_for("listagem_fornecedor"))
+
+# -----> Fim: Fornecedor
+############################################################################################################
+
+
+############################################################################################################
+# -----> Início: Funcionário
+
+@app.route('/cadastro_funcionario')
+def cadastro_funcionario():
+    return render_template('cadastrofuncionario.html')
+
+@app.route("/listagem_funcionario")
+def listagem_funcionario():
+    funcionario = Funcionario.funcionario_listagem()
+    return render_template(
+        'listagem_funcionario.html',
+        funcionarios=funcionario)
+
+def get_funcionario_form():
+    return {
+        "funcionario_nome": request.form.get("funcionario_nome", "").strip(),
+        "funcionario_senha": request.form.get("funcionario_senha", "").strip(),
+        "funcionario_cpf": request.form.get("funcionario_cpf", "").strip(),
+        "funcionario_cep": request.form.get("funcionario_cep", "").strip(),
+        "funcionario_email": request.form.get("funcionario_email", "").strip(),
+        "funcionario_ddi": request.form.get("funcionario_ddi", "").strip(),
+        "funcionario_ddd": request.form.get("funcionario_ddi", "").strip(),
+        "funcionario_telefone": request.form.get("funcionario_telefone", "").strip(),
+        "funcionario_cargo": request.form.get("funcionario_cargo", "").strip(),
+    }
+
+@app.route("/salvar_funcionario", methods=["POST"])
+def salvar_funcionario():
+    dados = get_funcionario_form()
+    funcionario = Funcionario(**dados)
+    erros = funcionario.validate()
+    if erros:
+        for erro in erros:
+            flash(erro, "erro")
+        return render_template("cadastrofuncionario.html",funcionario=dados)
+
+    cpf = request.form.get("funcionario_cpf","").strip()
+    cpf1 = funcionario.cpf_existente(cpf)
+    if cpf1:
+        flash("CPF já cadastrado!", "erro")
+        return render_template("cadastrofuncionario.html",funcionario=dados)
+
+    email = request.form.get("funcionario_email","").strip()
+    email1 = funcionario.email_existente(email)
+    if email1:
+        flash("Email já cadastrado!", "erro")
+        return render_template("cadastrofuncionario.html",funcionario=dados)
+
+    try:
+        funcionario.inserir_funcionario()
+        flash("Funcionário cadastrado com sucesso.","sucesso")
+        return redirect(url_for("listagem_funcionario"))
+
+    except Exception as e:
+        flash(f"Erro ao cadastrar funcionário: {e}","erro")
+        return render_template("cadastrofuncionario.html",funcionario=dados)
+
+@app.route("/editar_funcionario/<int:id>")
+def editar_funcionario(id):
+    funcionario = Funcionario.find_by_id(id)
+    if not funcionario:
+        flash("Funcionário não encontrado.", "erro")
+        return redirect(url_for("listagem_funcionario"))
+    return render_template("cadastrofuncionario.html", funcionario=funcionario)
+
+
+@app.route("/atualizar_funcionario/<int:id>", methods=["POST"])
+def atualizar_funcionario(id):
+    dados = get_funcionario_form()
+    funcionario = Funcionario(**dados)
+    erros = funcionario.validate()
+
+    if erros:
+        for erro in erros:
+            flash(erro, "erro")
+        dados["id"] = id
+        return render_template("cadastrofuncionario.html", funcionario=dados)
+
+    try:
+        if not Funcionario.find_by_id(id):
+            flash("Funcionario não encontrado.", "erro")
+            return redirect(url_for("listagem_funcionario"))
+
+        funcionario.update(id)
+        flash("Funcionário atualizado com sucesso.", "sucesso")
+        return redirect(url_for("listagem_funcionario"))
+    except Exception as e:
+        dados["id"] = id
+        flash(f"Erro ao atualizar funcionário: {e}", "erro")
+        return render_template("cadastrofuncionario.html", funcionario=dados)
+
+# Deleta um funcionario
+@app.route("/deletar_funcionario/<int:id>")
+def deletar_funcionario(id):
+    #Tenta deletar
+    try:
+        Funcionario.safe_delete(id)
+        flash("Funcionário excluído com sucesso.", "sucesso")
+    #Tratativa de erro
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao excluir funcionário: {e}", "erro")
+    return redirect(url_for("listagem_funcionario"))
+
+# -----> Fim: Funcionário
+############################################################################################################
+
+
+#Fim        
 
 if __name__ == "__main__":
     app.run(debug=True)
