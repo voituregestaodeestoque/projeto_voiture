@@ -423,7 +423,7 @@ def cancelar_pedido_entrada(pedido_entrada_id):
 
 
 ############################################################################################################
-# -----> Início: Pedido Saída
+# -----> Início: Pedido de saída
 
 @app.route("/pedidosaida")
 def pedidosaida():
