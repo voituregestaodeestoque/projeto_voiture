@@ -274,6 +274,7 @@ def atualizar_produto(id):
 def deletar_produto(id):
     #Tenta deletar
     try:
+        Estoque.delete_by_produto(id)
         Produto.safe_delete(id)
         flash("Produto excluído com sucesso.", "sucesso")
     #Tratativa de erro

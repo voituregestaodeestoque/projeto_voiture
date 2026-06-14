@@ -65,12 +65,13 @@ class Produto(CrudBase):
         produto = cls.find_by_id(id)
         if not produto:
             raise ValueError("Produto não encontrado.")
-        if cls.has_related_records(id):
+        
+        #if cls.has_related_records(id):
             raise ValueError("Não é possível excluir o produto porque ele está vinculado a outros serviços.")
         cls.delete(id)
 
     
-    @classmethod
+    '''@classmethod
     def has_related_records(cls, id):
         conexao = Database.connect()
         cursor = conexao.cursor()
@@ -85,7 +86,7 @@ class Produto(CrudBase):
         finally:
             cursor.close()
             conexao.close()
-
+'''
 
     @classmethod
     def produto_total(cls):
