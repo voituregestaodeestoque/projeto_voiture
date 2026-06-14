@@ -61,7 +61,7 @@ def loginfuncionario():
 
 @app.route('/loginfunciona', methods=["POST"])
 def login():
-    #pega o email e senha do usuario pra procurar no banco se já existe um funcionário com as informações
+    #pega o email e senha do usuário para procurar no banco se já existe um funcionário com as informações
     email = request.form.get("funcionario_email")   
     senha = request.form.get("funcionario_senha")
 
@@ -916,7 +916,10 @@ def deletar_cliente(id):
 
 # Rota para a tela de cadastro de fornecedor
 @app.route('/fornecedor')
+# Não é possível navegar por essa tela sem estar logado
 @login_obrigatorio
+
+#função que renderiza o html da tela para cadastro
 def fornecedor():
     return render_template('cadastrofornecedor.html')
 
@@ -936,46 +939,83 @@ def get_fornecedor_form():
 
 # Registro do fornecedor no banco de dados
 @app.route("/salvar_fornecedor", methods=["POST"])
+# Não é possível navegar por essa tela sem estar logado
 @login_obrigatorio
+
 def salvar_fornecedor():
+    #Recebe os dados resgatados do formulário
     dados = get_fornecedor_form()
+
+    #Transforma as chaves em argumentos
     fornecedor = Fornecedor(**dados)
 
     #Validação
     erros = fornecedor.validate()
 
+    #Caso haja erros
     if erros :
+
+        #Passa por todos as mensagens de erro da validação
         for erro in erros:
+            #Apresenta a mensagem de erro
             flash(erro,"erro")
+
+        #Retorna a tela renderizada com as mensagens
         return render_template("cadastrofornecedor.html", fornecedor=dados)
 
+    #Coleta os dados de CNPJ do formulário
     cnpj = request.form.get("fornecedor_cnpj", "").strip()
+
+    #Valida se o CNPJ já está cadastrado no sistema
     cnpj_cadastrado = Fornecedor.cnpj_existente(cnpj)
+
+    #Caso já esteja cadastrado
     if cnpj_cadastrado:
+        #Mensagem de erro
         flash("CNPJ já existe no sistema! ","erro")
+
+        #Retorna a tela renderizada com as mensagens
         return render_template("cadastrofornecedor.html",fornecedor=dados)
 
+    #Coleta os dados de email do formulário
     email = request.form.get("fornecedor_email", "").strip()
+
+    #Valida se email já está cadastrado no sistema
     email_cadastrado = Fornecedor.email_existente(email)
+
+    #Caso já esteja cadastrado
     if email_cadastrado:
+        #Mensagem de erro
         flash("Email já existe no sistema!","erro")
+        #Retorna a tela renderizada com as mensagens
         return render_template("cadastrofornecedor.html", fornecedor=dados)
 
-    #Cadastro
+    #Tentativa de cadastro
     try:
+        #Executa a inserção
         fornecedor.insert()
+        #Mensagem de sucesso
         flash("Fornecedor cadastrado com sucesso.", "sucesso")
+        #Renderiza a tela de listagem com todos os fornecedores e a mensagem
         return redirect(url_for("listagem_fornecedor"))
+
+    #Exceção: erros não tratado anteriormente
     except Exception as e:
+        #Mensagem de erro
         flash(f"Erro ao cadastrar fornecedor: {e}", "erro")
+        #Renderiza a tela com a mensagem de erro
         return render_template("cadastrofornecedor.html", fornecedor=dados)
 
 
 # Listagem de fornecedores cadastrados
 @app.route('/listagem_fornecedor')
+# Não é possível navegar por essa tela sem estar logado
 @login_obrigatorio
 def listagem_fornecedor():
+    #Chama o método de listagem da classe Fornecedor
     fornecedores = Fornecedor.listagem()
+
+    #Retorna a tela renderizadas com todos os fornecedores
     return render_template(
         'listagem_fornecedor.html',
         fornecedores=fornecedores
@@ -984,61 +1024,99 @@ def listagem_fornecedor():
 
 #Edição de um fornecedor já cadastrado
 @app.route("/editar_fornecedor/<int:id>")
+# Não é possível navegar por essa tela sem estar logado
 @login_obrigatorio
+
 def editar_fornecedor(id):
+    #Seleciona um fornecedor pelo ID
     fornecedor = Fornecedor.find_by_id(id)
+
+    #Caso não haja fornecedor com aquele ID
     if not fornecedor:
+        #Mensagem de erro
         flash("Fornecedor não encontrado.", "erro")
+        #Renderização da tela com o erro
         return redirect(url_for("listagem_fornecedor"))
+    
+    #Renderização da tela de edição
     return render_template("cadastrofornecedor.html", fornecedor=fornecedor)
 
 #Atualização do cadastro de um fornecedor
 @app.route("/atualizar_fornecedor/<int:id>", methods=["POST"])
+# Não é possível navegar por essa tela sem estar logado
 @login_obrigatorio
 def atualizar_fornecedor(id):
+
+    #Recebe os dados resgatados do formulário
     dados = get_fornecedor_form()
+
+    #Transforma as chaves em argumentos
     fornecedor = Fornecedor(**dados)
 
     #Validação dos campos
     erros = fornecedor.validate()
 
     #Tratativa de erro
+    
     if erros:
+        #Passa por todos as mensagens de erro da validação
         for erro in erros:
-            flash(erro, "erro")
+            #Apresenta a mensagem de erro
+            flash(erro,"erro")
+
+        #Coleta o parâmetro de ID    
         dados["id"] = id
+
+        #Renderiza a tela com a mensagem 
         return render_template("cadastrofornecedor.html", fornecedor=dados)
 
     #Procura do fornecedor por id
     try:
         #ID não encontrado
         if not Fornecedor.find_by_id(id):
+            #Mensagem de erro
             flash("Fornecedor não encontrado.", "erro")
+            #Renderização da tela com a mensagem
             return redirect(url_for("listagem_fornecedor"))
 
         #Id encontrado, atualização possível
         fornecedor.update(id)
+        #Mensagem de sucesso
         flash("Fornecedor atualizado com sucesso.", "sucesso")
+        #Renderização da tela de listagem com todos os fornecedores e a mensagem
         return redirect(url_for("listagem_fornecedor"))
+
+    #Exceção}: Erros não tratados anteriormente
     except Exception as e:
         dados["id"] = id
+        #Mensagem de erro
         flash(f"Erro ao atualizar fornecedor: {e}", "erro")
+        #Renderização da tela com a mensagem
         return render_template("cadastrofornecedor.html", fornecedor=dados)
 
 
 # Deleta um fornecedor
 @app.route("/deletar_fornecedor/<int:id>")
+# Não é possível navegar por essa tela sem estar logado
 @login_obrigatorio
+
 def deletar_fornecedor(id):
     #Tenta deletar
     try:
+        #Usa o método de deletar com segurança
         Fornecedor.safe_delete(id)
+        #Mensagem de sucesso
         flash("Fornecedor excluído com sucesso.", "sucesso")
-    #Tratativa de erro
+
+    #Tratativa de erros
     except ValueError as e:
+        #Mensagem de erro
         flash(str(e), "erro")
     except Exception as e:
+        #Mensagem de erro
         flash(f"Erro ao excluir fornecedor: {e}", "erro")
+        
+    #Renderização da tela de listagem com mensagem
     return redirect(url_for("listagem_fornecedor"))
 
 # -----> Fim: Fornecedor
