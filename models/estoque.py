@@ -30,6 +30,23 @@ class Estoque(CrudBase):
         return erros
 
     @classmethod
+    def delete_by_produto(cls, id):
+        conexao = Database.connect()
+        cursor = conexao.cursor()
+
+        try:
+            sql = "DELETE FROM estoque WHERE produto_id = %s"
+            cursor.execute(sql, (id,))
+            conexao.commit()
+            return cursor.rowcount
+        except Exception:
+            conexao.rollback()
+            raise
+        finally:
+            cursor.close()
+            conexao.close()
+
+    @classmethod
     def card_estoque(cls):
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
