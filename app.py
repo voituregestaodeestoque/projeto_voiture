@@ -102,17 +102,31 @@ def base():
 ############################################################################################################
 # -----> Início: Dashboard
 
+#Rota para a tela de dashboard
 @app.route("/dashboard")
+
+# Não é possível navegar por essa tela sem estar logado
 @login_obrigatorio
+
+#Função que define as funcionalidades do dashboard
 def dashboard():
+
+    #Recebe a soma de todas as quantidades contidas no estoque
     dic_total=Estoque.estoque_total()
 
+    #Recebe a soma de todos os tipos de produtos cadastrados no sistema
     pod_total=Produto.produto_total()
 
+    #Recebe os produtos que estão com estoque baixo
     baixo_estoque = Estoque.estoque_baixo()
 
+    #Seleciona a chave de quantidade de produto na tabela temporária de contagem
     total_produto = pod_total['quantidade_produto']
+
+    #Seleciona a chave do estoque total na tabela temporária de contagem
     total_estoque = dic_total['quantidade_total']
+
+    #Retorna a tela renderizada com todos os valores anteriores informados
     return render_template('dashboard.html', total_estoque=total_estoque,total_produto=total_produto, baixo_estoque=baixo_estoque)
 
 # -----> Fim: Dashboard
@@ -122,39 +136,68 @@ def dashboard():
 ############################################################################################################
 # -----> Início: Estoque
 
+#Rota para a tela de estoque
 @app.route("/listagem_estoque")
+
+# Não é possível navegar por essa tela sem estar logado
 @login_obrigatorio
+
+#Função que define a listagem do estoque em cards
 def listagem_estoque():
 
+    #Recebe os dados da barra de pesquisa
     pesquisa = get_pesquisa_estoque_form()
 
+    #Caso haja uma pesquisa
     if pesquisa:
+        #Atualiza os cards na tela para os correspondentes à pesquisa
         estoque = Estoque.card_estoque_pesquisa(pesquisa)
 
+    #Caso nada tenha sido pesquisado
     else:
+        #Gera os cards de todos os produtos em estoque
         estoque = Estoque.card_estoque()
 
+    #Recebe os argumentos para o filtro de ordenação
     filtro = request.args.get("filtro", "adc-recente")
 
+    #Caso a opção alfabética seja selecionada
     if filtro == "nome":
+        #Chama a função de ordenar por ordem alfabética de nome
         estoque = Estoque.card_estoque_nome()
+
+    #Caso a opção quantidade maior em estoque seja selecionada
     elif filtro == "maior":
+        #Chama a função de ordenar por quantidade maior em estoque
         estoque = Estoque.card_estoque_maior()
+
+    #Caso a opção quantidade menor em estoque seja selecionada
     elif filtro == "menor":
+        #Chama a função de ordenar por quantidade menor em estoque
         estoque = Estoque.card_estoque_menor()
+    
+    #Caso a opção preço maior seja selecionada
     elif filtro == "preco-maior":
+        #Chama a função de ordenar por preço maior
         estoque = Estoque.card_estoque_preco_maior()
+
+    #Caso a opção preço menor seja selecionada    
     elif filtro == "preco-menor":
+        #Chama a função de ordenar por preço menor
         estoque = Estoque.card_estoque_preco_menor()        
 
+    #Retorna a renderização da tela com a ordenação escolhida
     return render_template(
         "estoque.html",
         estoque=estoque,
         filtro=filtro
     )
 
+#Recolhe os dados do formulário de pesquisa
 def get_pesquisa_estoque_form():
+    #Coleta a chave de pesquisa como um argumento
     chave = {"chave_pesquisa": request.args.get("chave_pesquisa", "").strip()}
+    #Retorna o argumento
     return chave
 
 # -----> Fim: Estoque
