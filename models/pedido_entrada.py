@@ -63,7 +63,8 @@ class Pedido_entrada(CrudBase):
                     FROM pedido_entrada p
                     LEFT JOIN detalhe_entrada de ON p.id = de.pedido_entrada_id
                     LEFT JOIN movimentacao_entrada me ON de.id = me.detalhe_entrada_id AND de.pedido_entrada_id = me.detalhe_entrada_pedido_entrada_id
-                    LEFT JOIN produto pr ON pr.id = de.produto_id
+                    LEFT JOIN estoque e ON de.produto_id = e.id
+                    LEFT JOIN produto pr ON e.produto_id = pr.id
                     GROUP BY p.id, p.status_pedido_entrada, p.fornecedor_id, pr.produto_nome, de.detalhe_entrada_quantidade
                     ORDER BY p.id DESC"""
             cursor.execute(sql)
@@ -132,7 +133,7 @@ class Pedido_entrada(CrudBase):
                 UPDATE pedido_entrada
                 WHERE id = %s
                 """,
-                (pedido_entrada_id)
+                (pedido_entrada_id,)
             )
 
             conexao.commit()
@@ -240,7 +241,7 @@ class Pedido_entrada(CrudBase):
                     (
                         datetime.now(),
                         detalhe["id"],
-                        pedido_entrada_id
+                        pedido_entrada_id,
                     )
                 )
 
@@ -251,7 +252,7 @@ class Pedido_entrada(CrudBase):
                 SET status_pedido_entrada = %s
                 WHERE id = %s
                 """,
-                ("CONCLUIDO", pedido_entrada_id)
+                ("CONCLUIDO", pedido_entrada_id,)
             )
 
             conexao.commit()
@@ -283,7 +284,7 @@ class Pedido_entrada(CrudBase):
                 SET status_pedido_entrada = %s
                 WHERE id = %s
                 """,
-                ("CANCELADO", pedido_entrada_id)
+                ("CANCELADO", pedido_entrada_id,)
             )
             conexao.commit()
             return "Pedido de entrada cancelado com sucesso."
