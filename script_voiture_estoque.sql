@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `detalhe_entrada` (
   INDEX `fk_detalhe_entrada_pedido_entrada1_idx` (`pedido_entrada_id` ASC) VISIBLE,
   CONSTRAINT `fk_detalhe_entrada_estoque1`
     FOREIGN KEY (`produto_id`)
-    REFERENCES `produto` (`id`)
+    REFERENCES `estoque` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_detalhe_entrada_pedido_entrada1`
@@ -288,6 +288,4 @@ SHOW WARNINGS;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
-
 
