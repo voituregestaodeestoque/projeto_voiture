@@ -14,6 +14,7 @@
             <p class="text-muted mb-0">Gerencie os fornecedores de produtos</p>
         </div>
 
+        <!--Botão que leva à pagina de cadastro de fornecedor-->
         <a href="{{ url_for('fornecedor') }}" class="botao-add btn">
             <i class="bi bi-plus-lg"></i> Novo Fornecedor</a>
     </div>
@@ -26,6 +27,7 @@
             <div class="table-responsive">
                 {% if fornecedores %}
                 <table class="table table-striped">
+                    <!--Cabeçalho da tabela-->
                     <thead>
                         <tr>
                             <!--Colunas da tabela-->
@@ -41,7 +43,9 @@
                             <th scope="col" class="text-end">Ações</th>
                         </tr>
                     </thead>
+                    <!--Corpo da tabela-->
                     <tbody>
+                        <!--Para cada fornecedor cadastrado haverá uma linha-->
                         {% for fornecedor in fornecedores %}
                         <tr>
                             <!--Valores do banco que deverão aparecer-->
@@ -55,6 +59,7 @@
                             <td>{{ fornecedor.fornecedor_telefone}}</td>
                             <td>{{ fornecedor.fornecedor_descricao }}</td>
                             <td class="text-end">
+
                                 <!--Botão de edição-->
                                 <a href="{{ url_for('editar_fornecedor', id=fornecedor.id) }}"
                                     class="btn btn-sm btn-outline-primary">
@@ -66,19 +71,22 @@
                                     <i class="bi bi-trash"></i>
                                 </button>
 
-                                <!-- Modal -->
+                                <!-- Modal de exclusão -->
                                 <div class="modal fade" id="Modal{{fornecedor.id}}" tabindex="-1"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja excluir esse fornecedor?</strong></h1>
+                                                <!--Botão para fechar o modal-->
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-footer">
+                                                <!--Botão de cancelar a ação-->
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Cancelar</button>
+                                                <!--Link para a exclusão definitiva de um fornecdor-->
                                                 <a href="{{ url_for('deletar_fornecedor', id=fornecedor.id) }}"
                                                     class="btn btn-danger">
                                                     <strong>Excluir</strong>
