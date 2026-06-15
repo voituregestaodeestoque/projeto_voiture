@@ -204,11 +204,11 @@ CREATE TABLE IF NOT EXISTS `detalhe_entrada` (
   `pedido_entrada_id` INT NOT NULL,
   `detalhe_entrada_item` INT NOT NULL,
   PRIMARY KEY (`id`, `pedido_entrada_id`),
-  INDEX `fk_detalhe_entrada_estoque1_idx` (`estoque_id` ASC) VISIBLE,
+  INDEX `fk_detalhe_entrada_estoque1_idx` (`produto_id` ASC) VISIBLE,
   INDEX `fk_detalhe_entrada_pedido_entrada1_idx` (`pedido_entrada_id` ASC) VISIBLE,
   CONSTRAINT `fk_detalhe_entrada_estoque1`
     FOREIGN KEY (`produto_id`)
-    REFERENCES `estoque` (`id`)
+    REFERENCES `produto` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_detalhe_entrada_pedido_entrada1`
