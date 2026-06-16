@@ -10,6 +10,7 @@ from models.produto import Produto
 from models.cliente import Cliente
 from models.pedido_entrada import Pedido_entrada
 from models.detalhe_entrada import Detalhe_entrada
+from models.detalhe_saida import Detalhe_saida
 from models.pedido_saida import Pedido_saida
 from models.estoque import Estoque
 from datetime import datetime
@@ -529,12 +530,19 @@ def detalhes_saida(pedido_saida_id):
 @login_obrigatorio
 def adicionar_item_saida(pedido_saida_id):
     produto_id = int(request.form.get("produto_id", 0))
-    quantidade = int(request.form.get("quantidade", 0) or 0)
+    detalhe_saida_quantidade = int(request.form.get("quantidade", 0) or 0)
+    detalhe_saida_item = request.form.get("detalhe_saida_item", "")
+
+    # Buscamos quantos itens esse pedido já tem salvos no banco
+    itens_existentes = Detalhe_saida.find_by_pedido(pedido_saida_id)
+    # Ex: se o pedido já tem 2 itens, o próximo será o 3 (2 + 1)
+    proximo_item_numero = len(itens_existentes) + 1
 
     mensagem = Detalhe_saida.adicionar_item(
-        pedido_id=pedido_saida_id,
+        pedido_saida_id=pedido_saida_id,
         produto_id=produto_id,
-        quantidade=quantidade
+        detalhe_saida_quantidade=detalhe_saida_quantidade,
+        detalhe_entrada_item= proximo_item_numero
     )
 
     flash(mensagem)
@@ -554,7 +562,7 @@ def remover_item_saida(detalhe_saida_id, pedido_saida_id):
 def finalizar_saida(pedido_saida_id):
     mensagem = Pedido_saida.finalizar(pedido_saida_id)
     flash(mensagem)
-    return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
+    return redirect(url_for("pedidosaida"))
 
 
 @app.route("/saida/nova", methods=["GET", "POST"])
@@ -569,7 +577,7 @@ def nova_saida():
         except Exception:
             itens = []
 
-        pedido = Pedido_saida(status_pedido_saida="PENDENTE", cliente_id=cliente_id)
+        pedido = Pedido_saida(status_pedido_saida="PENDENTE", cliente_id=cliente_id, data_pedido_saida = datetime.now())
         erros = pedido.validate()
 
         if not itens:
@@ -594,21 +602,23 @@ def nova_saida():
             pedido_saida_id = pedido.insert()
             cont = 0
             teste = []
-            
+            print("antes itens", pedido_saida_id)
             for item in itens:
                 cont += 1
                 Detalhe_saida.adicionar_item(
-                    pedido_saida_id=pedido_saida_id,
+                    detalhe_saida_quantidade=int(item["quantidade"]),
                     produto_id=int(item["produto_id"]),
                     detalhe_saida_item=cont,
-                    detalhe_saida_quantidade=int(item["quantidade"])
+                    pedido_saida_id=pedido_saida_id
+                    
                 )
             
-                print("check", teste)
+            print("check", teste)
             flash("Pedido de saída criado com sucesso.")
             return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
 
-        except Exception:
+        except Exception as e:
+            print("erro", e)
             flash("Erro ao criar pedido de saída.")
             return render_template(
                 "formulario_pedidosaida.html",
@@ -623,6 +633,34 @@ def nova_saida():
         produto=Estoque.card_estoque_nome(),
         clientes=Cliente.find_all()
     )
+
+
+
+@app.route("/pedido_saida/processar/<int:pedido_saida_id>")
+@login_obrigatorio
+def processar_pedido_saida(pedido_saida_id):
+    try:
+        mensagem = Pedido_saida.processar(pedido_saida_id)
+        flash(mensagem, "sucesso")
+    except ValueError as e:
+        print("VALUE ERROR:", e)
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao processar pedido: {e}", "erro")
+    return redirect(url_for("pedidosaida"))
+
+
+@app.route("/pedido_saida/cancelar/<int:pedido_saida_id>")
+@login_obrigatorio
+def cancelar_pedido_saida(pedido_saida_id):
+    try:
+        mensagem = Pedido_saida.cancelar(pedido_saida_id)
+        flash(mensagem, "sucesso")
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao cancelar pedido: {e}", "erro")
+    return redirect(url_for("pedidosaida"))
     
 # -----> Fim: Pedido Saída
 ############################################################################################################
