@@ -210,3 +210,11 @@ form input {
 select#funcionario_id {
     width: 60% !important;
 }
+
+.pedido-dashboard{
+    background: rgb(225, 254, 225);
+}
+
+.logout:hover{
+    background-color: #127ea1;
+}

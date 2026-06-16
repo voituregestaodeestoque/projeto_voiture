@@ -93,28 +93,22 @@
                     </div>
                 </div>
 
-                <div class="card shadow-sm p-3" style="height: 50%;">
+                <div class="card shadow-sm p-3 " style="height: 50%;">
                     <h4 class="text-center"><strong>Pedidos Pendentes</strong></h4>
 
                     <!--Tabela de pedidos pendentes-->
-                    {%if pedidos%}
-                    <!--LINHA-->
-                    <div class="row">
-
-                        {%for pedido in pedidos%}
-
-                        <!--COLUNA-->
-                        <div class="col-md-3">
-
-                            <!--CARD-->
-                            <div class="card mb-4" style="max-width: 100%;">
-                                <div class="card-body">
-                                    <p class="card-text">Pedido {{pedido.id}}</p>
-                                </div>
-
+                    {% if pedido_pendente %}
+                    <div style="overflow-x: hidden ; overflow-y:auto;" class="d-flex flex-column align-items-center">
+                        {%for pedido in pedido_pendente %}
+                        <!--CARD-->
+                        <div class="card mb-1 pedido-dashboard" style="width: 90%;">
+                            <div class="card-body d-flex justify-content-between" style="margin-top: 10px;">
+                                <p class="card-text me-2"><strong>Pedido n°{{pedido.id}}</strong></p>
+                                <p>Entrada</p>
+                                <p class="card-text">Data: {{pedido.data_pedido_entrada}}</p>
                             </div>
-
                         </div>
+
 
                         {%endfor%}
 
@@ -134,11 +128,11 @@
 
             <div class="col-6">
                 <!--Gráfico de movimentações-->
-                <div class="card shadow-sm p-3 mb-4" style="height: 106%;">
+                <div class="card shadow-sm p-3 mb-4" style="height: 100%;">
                     <h4 class="text-center"><strong>Movimentações</strong></h4>
 
                 </div>
-    
+
             </div>
     </section>
 </div>

@@ -121,6 +121,13 @@ def dashboard():
     #Recebe os produtos que estão com estoque baixo
     baixo_estoque = Estoque.estoque_baixo()
 
+    pedido_pendente= Pedido_entrada.pedidoentrada_pendente()
+
+    entrada_total = Pedido_entrada.contar_pedidoentrada()
+
+    total_entrada = entrada_total['pedido_entrada_total']
+
+
     #Seleciona a chave de quantidade de produto na tabela temporária de contagem
     total_produto = pod_total['quantidade_produto']
 
@@ -128,7 +135,7 @@ def dashboard():
     total_estoque = dic_total['quantidade_total']
 
     #Retorna a tela renderizada com todos os valores anteriores informados
-    return render_template('dashboard.html', total_estoque=total_estoque,total_produto=total_produto, baixo_estoque=baixo_estoque)
+    return render_template('dashboard.html', total_estoque=total_estoque,total_produto=total_produto, baixo_estoque=baixo_estoque, total_entrada=total_entrada, pedido_pendente=pedido_pendente)
 
 # -----> Fim: Dashboard
 ############################################################################################################
@@ -796,8 +803,7 @@ def tabelaempilhadeira():
 def desocupar_empilhadeira(id):
 
     try:
-        Uso_empilhadeira.desocupar(id)
-
+        Uso_empilhadeira.delete(id)
         flash("Empilhadeira desocupada com sucesso.", "sucesso")
 
     except Exception as e:
