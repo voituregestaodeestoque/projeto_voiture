@@ -59,7 +59,7 @@ class Pedido_saida(CrudBase):
                     FROM pedido_saida p
                     LEFT JOIN detalhe_saida de ON p.id = de.pedido_saida_id
                     LEFT JOIN movimentacao_saida m ON de.id = m.detalhe_saida_id AND de.pedido_saida_id = m.detalhe_saida_pedido_saida_id
-                    left join estoque es on es.id = de.estoque_id
+                    left join estoque es on es.id = de.produto_id
                     LEFT JOIN produto pr ON pr.id = es.produto_id
                     GROUP BY p.id, p.status_pedido_saida, p.cliente_id, pr.produto_nome, de.detalhe_saida_quantidade
                     ORDER BY p.id DESC"""
