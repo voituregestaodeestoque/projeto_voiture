@@ -1,23 +1,25 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
+
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="titulo-pagina">
-                <i class="bi bi-box-arrow-up"></i> Pedidos de Saída
+                <i class="bi bi-box-seam"></i> Movimentações saída
             </h2>
-            <p class="text-muted mb-0">Movimentação</p>
+            <p class="text-muted mb-0">Pedido de Saída</p>
         </div>
 
-        <a href="{{ url_for('nova_saida') }}" class="btn btn-primary">
+        <a href="{{ url_for('nova_entrada') }}" class="btn botao-add">
             <i class="bi bi-plus-lg"></i> Novo Pedido de Saída
         </a>
+
     </div>
 
     <div class="table-responsive">
         <table id="tabela-movimentacao" class="table table-hover align-middle">
-            <thead>
+            <thead class="table-light">
                 <tr>
                     <th>ID</th>
                     <th>Produto</th>
@@ -25,49 +27,32 @@
                     <th>Status</th>
                     <th>Data do pedido</th>
                     <th>Data do processamento</th>
-                    <th>Ações</th>
+                    <th class= "text-end">Ações</th>
                 </tr>
             </thead>
+
             <tbody>
                 {% for pedido in pedidos %}
                 <tr>
-                    <td>{{ pedido.detalhe_saida_id }}</td>
-                    <td>{{ pedido.produto_nome if pedido.produto_nome else 'Não informado' }}</td>
-                    <td>{{ pedido.detalhe_saida_quantidade if pedido.detalhe_saida_quantidade else 0 }}</td>
-                    <td>
-                        <span class="badge {% if pedido.status_pedido_saida == 'FINALIZADO' %}bg-success{% else %}bg-warning text-dark{% endif %}">
-                            {{ pedido.status_pedido_saida }}
-                        </span>
-                    </td>
-                    
-                    <td>
-                        {% if pedido.data_pedido_entrada %}
-                            {{ pedido.data_pedido_entrada.strftime('%d/%m/%Y %H:%M') if pedido.data_pedido_entrada.strftime else pedido.data_pedido_entrada }}
+                    <td>{{ pedido.pedido_saida_id }}</td>
+                    <td>{{ pedido.produto_nome }}</td>
+                    <td>{{ pedido.detalhe_saida_quantidade }}</td>
+                    <td>{{ pedido.status_pedido_saida }}</td>
+                    <td>{{ pedido.data_pedido_saida }}</td>
+                    <td>{{ pedido.data_processamento or '-' }}</td>
+                    <td class="text-end">
+                        {% if pedido.status_pedido_entrada == 'PENDENTE' %}
+                        <a href="{{ url_for('processar_pedido_saida', pedido_saida_id=pedido.pedido_saida_id) }}" class="btn btn-sm btn-success">Processar</a>
+                        <a href="{{ url_for('cancelar_pedido_saida', pedido_saida_id=pedido.pedido_saida_id) }}" class="btn btn-sm btn-danger">Cancelar</a>
                         {% else %}
-                            <span class="text-muted">Não registrada</span>
-                        {% endif %}
-                    </td>
-                    
-                    <td>
-                        {% if pedido.data_processamento %}
-                            {{ pedido.data_processamento.strftime('%d/%m/%Y %H:%M') if pedido.data_processamento.strftime else pedido.data_processamento }}
-                        {% else %}
-                            <span class="text-muted">-</span>
-                        {% endif %}
-                    </td>
-
-                    <td class="acoes">
-                        {% if pedido.status_pedido_saida == 'PENDENTE' %}
-                        <a href="{{ url_for('processar_pedido', pedido_entrada_id=pedido.id) }}" class="btn btn-sm btn-outline-primary">Processar</a>
-                        <a href="{{ url_for('cancelar_pedido', pedido_entrada_id=pedido.id) }}" class="btn btn-sm btn-outline-danger">Cancelar</a>
-                        {% else %}
-                            <span class="text-muted">-</span>
+                        -
                         {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        
+        </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
