@@ -67,6 +67,7 @@ class Pedido_entrada(CrudBase):
                     LEFT JOIN produto pr ON e.produto_id = pr.id
                     GROUP BY p.id, p.status_pedido_entrada, p.fornecedor_id, pr.produto_nome, de.detalhe_entrada_quantidade
                     ORDER BY p.id DESC"""
+                    
             cursor.execute(sql)
             return cursor.fetchall()
         finally:
