@@ -16,7 +16,7 @@
 
         {%endif%}
 
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end" style="padding-right: 12px;">
             <a href="{{ url_for('listagem_produto') }}" class="btn btn-success">
                 <i></i>Visualizar produtos</a>
         </div>
@@ -130,7 +130,7 @@
                             style="padding: 20px;">
                     </div>
 
-                    <div id="botao-direita">
+                    <div class="botao-direita">
 
                         <!--Botão que envia o formulário em caso de cadastro-->
                         {% if produto and produto.id %}
