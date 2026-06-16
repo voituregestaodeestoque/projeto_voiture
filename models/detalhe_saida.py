@@ -62,7 +62,6 @@ class Detalhe_saida(CrudBase):
 
     @classmethod
     def adicionar_item(cls, detalhe_saida_quantidade, produto_id, detalhe_saida_item, pedido_saida_id):
-        print("pedido", pedido_saida_id)
         pedido = Pedido_saida.find_by_id(pedido_saida_id)
         
         if not pedido:
@@ -74,6 +73,7 @@ class Detalhe_saida(CrudBase):
             return "Não é possível alterar um pedido finalizado."
 
         produto = Produto.find_by_id(produto_id)
+
         if not produto:
             return "Produto não encontrado."
 

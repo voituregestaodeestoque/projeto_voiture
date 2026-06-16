@@ -7,59 +7,47 @@
     <div>
         <!--TOPO-->
         <div style="width: 99%; margin-left: 10px;" class="d-flex">
-
-            <!--Barra de pesquisa-->
             <form action="{{ url_for('listagem_estoque')}}" class="input-group form-card">
 
                 <input name="chave_pesquisa" type="text" class="form-control" placeholder="Pesquisa">
-
-                <!--Botão de envio-->
                 <button class="input-group-text bg-dark border-secondary">
                 <i class="bi bi-search text-white"></i>
                 </button>
                 
             </form>
                 
-            <!--Filtro de ordenação-->
-            <form method="GET" class="form-card ms-3" style="width: 29%; margin-right: 10px;">
 
-                <!--Menu de opções de ordenação-->
+            <form method="GET" class="form-card ms-3" style="width: 29%; margin-right: 10px;">
                 <select
                     name="filtro"
                     class="filtrar form-select"
                     onchange="this.form.submit()">
             
-                    <!--Opção: adicionados recentemente-->
                     <option value="adc-recente"
                         {{ 'selected' if filtro == 'adc-recente' else '' }}>
                         Adicionados recentemente
                     </option>
-                    
-                    <!--Opção: ordem alfabética de nome-->
+            
                     <option value="nome"
                         {{ 'selected' if filtro == 'nome' else '' }}>
                         Ordenar por nome
                     </option>
             
-                    <!--Opção: Estoque decrescente-->
                     <option value="maior"
                         {{ 'selected' if filtro == 'maior' else '' }}>
                         Quantidade: Maior ao menor
                     </option>
             
-                    <!--Opção: Estoque crescente-->
                     <option value="menor"
                         {{ 'selected' if filtro == 'menor' else '' }}>
                         Quantidade: Menor ao maior
                     </option>
 
-                    <!--Opção: Preço decrescente-->
                     <option value="preco-maior"
                         {{ 'selected' if filtro == 'preco-maior' else '' }}>
                         Preço: Maior ao menor
                     </option>
             
-                    <!--Opção: Preço crescente-->
                     <option value="preco-menor"
                         {{ 'selected' if filtro == 'preco-menor' else '' }}>
                         Preço: Menor ao maior
@@ -91,7 +79,6 @@
                         <p class="card-text"><strong>Estoque mínimo:</strong> {{estoque_produto.produto_quantidade_minima}}</p>
                         <p class="card-text"><strong>Estoque atual:</strong> {{estoque_produto.estoque_quantidade}}</p>
                         <p class="card-text"><strong>Localização:</strong> {{estoque_produto.produto_localizacao}}</p>
-                        
                         <!-- Botão pra ativar o modal -->
                         <button type="button" class="botao-add btn w-100" data-bs-toggle="modal"
                             data-bs-target="#modal{{estoque_produto.id}}">
