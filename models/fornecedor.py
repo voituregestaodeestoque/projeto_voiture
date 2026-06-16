@@ -61,7 +61,7 @@ class Fornecedor(CrudBase):
         for item in validacoes:
             #Verifica se não o retorno não é vazio e o retorno é Falso
             if item is not None and not item['valida']:
-                #adicions em uma lista todas as mensagens de erro vindas das validações
+                #adiciona em uma lista todas as mensagens de erro vindas das validações
                 erros.append(item["mensagem"])
 
         #Retorna a lista com todas as mensagens de erro
