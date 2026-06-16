@@ -529,16 +529,24 @@ def detalhes_saida(pedido_saida_id):
 @login_obrigatorio
 def adicionar_item_saida(pedido_saida_id):
     produto_id = int(request.form.get("produto_id", 0))
-    quantidade = int(request.form.get("quantidade", 0) or 0)
+    detalhe_saida_quantidade = int(request.form.get("quantidade", 0) or 0)
+    detalhe_saida_item = request.form.get("detalhe_saida_item", "")
 
+    # Buscamos quantos itens esse pedido já tem salvos no banco
+    itens_existentes = Detalhe_saida.find_by_pedido(pedido_saida_id)
+    # Ex: se o pedido já tem 2 itens, o próximo será o 3 (2 + 1)
+    proximo_item_numero = len(itens_existentes) + 1
+    
     mensagem = Detalhe_saida.adicionar_item(
-        pedido_id=pedido_saida_id,
+        pedido_saida_id = pedido_saida_id,
         produto_id=produto_id,
-        quantidade=quantidade
+        detalhe_saida_quantidade=detalhe_saida_quantidade,
+        detalhe_saida_item= proximo_item_numero
     )
 
     flash(mensagem)
     return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
+
 
 
 @app.route("/saida/item/remover/<int:detalhe_saida_id>/<int:pedido_saida_id>")
