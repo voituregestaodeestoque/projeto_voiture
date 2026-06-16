@@ -142,7 +142,7 @@ class Pedido_saida(CrudBase):
                 SET status_pedido_saida = %s
                 WHERE id = %s
                 """,
-                ("FINALIZADO", pedido_saida_id)
+                ("PENDENTE", pedido_saida_id)
             )
 
             conexao.commit()
@@ -175,3 +175,131 @@ class Pedido_saida(CrudBase):
         finally:
             cursor.close()
             conexao.close()
+
+
+    @classmethod
+    def processar(cls, pedido_SAIDA_id):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            conexao.start_transaction()
+
+            cursor.execute("SELECT * FROM pedido_saida WHERE id = %s FOR UPDATE", (pedido_saida_id,))
+            pedido = cursor.fetchone()
+            if not pedido:
+                raise ValueError("Pedido de saída não encontrado.")
+
+            if pedido["status_pedido_saida"] != "PENDENTE":
+                raise ValueError("Somente pedidos pendentes podem ser processados.")
+
+            cursor.execute("SELECT * FROM detalhe_entrada WHERE pedido_entrada_id = %s FOR UPDATE", (pedido_saida_id,))
+
+            detalhes = cursor.fetchall()
+
+            if not detalhes:
+                raise ValueError("Pedido sem itens.")
+
+            for detalhe in detalhes:
+
+         
+                cursor.execute(
+                    """
+                    SELECT *
+                    FROM estoque
+                    WHERE produto_id = %s
+                    FOR UPDATE
+                    """,
+                    (detalhe["produto_id"],)
+                )
+                estoque = cursor.fetchone()
+
+                if not estoque:
+                    raise ValueError(
+                        f"Não existe estoque para o produto {detalhe['produto_id']}"
+                    )
+
+                nova_quantidade = (
+                    estoque["estoque_quantidade"]
+                    + detalhe["detalhe_saida_quantidade"]
+                )                
+         
+                cursor.execute(
+                    """
+                    UPDATE estoque
+                    SET estoque_quantidade = %s
+                    WHERE produto_id = %s
+                    """,
+                    (
+                        nova_quantidade,
+                        detalhe["produto_id"]
+                        )
+                )
+
+            
+                cursor.execute(
+                    """
+                    INSERT INTO movimentacao_saida
+                    (
+                        datahora_movimentacao_saida,
+                        detalhe_entrada_id,
+                        detalhe_saida_pedido_saida_id
+                    )
+                    VALUES (%s, %s, %s)
+                    """,
+                    (
+                        datetime.now(),
+                        detalhe["id"],
+                        pedido_saida_id,
+                    )
+                )
+
+    
+            cursor.execute(
+                """
+                UPDATE pedido_saida
+                SET status_pedido_saida = %s
+                WHERE id = %s
+                """,
+                ("CONCLUIDO", pedido_saida_id,)
+            )
+
+            conexao.commit()
+            return "Pedido de saída processado com sucesso."
+        except Exception:
+            conexao.rollback()
+            raise
+        finally:
+            cursor.close()
+            conexao.close()
+
+
+    @classmethod
+    def cancelar(cls, pedido_saida_id):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            cursor.execute("SELECT * FROM pedido_saida WHERE id = %s", (pedido_saida_id,))
+            pedido = cursor.fetchone()
+            if not pedido:
+                raise ValueError("Pedido de saída não encontrado.")
+            if pedido["status_pedido_saida"] != "PENDENTE":
+                raise ValueError("Somente pedidos pendentes podem ser cancelados.")
+
+            cursor = conexao.cursor()
+            cursor.execute(
+                """
+                UPDATE pedido_saida
+                SET status_pedido_saida = %s
+                WHERE id = %s
+                """,
+                ("CANCELADO", pedido_saida_id,)
+            )
+            conexao.commit()
+            return "Pedido de saída cancelado com sucesso."
+        except Exception:
+            conexao.rollback()
+            raise
+        finally:
+            cursor.close()
+            conexao.close()
+
