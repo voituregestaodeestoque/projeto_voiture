@@ -355,7 +355,7 @@ def detalhes_entrada(pedido_entrada_id):
         "detalhes_entrada.html",
         pedido=pedido,
         itens=Detalhe_entrada.find_by_pedido(pedido_entrada_id),
-        produto=Produto.find_all()
+        produto=Produto.find_all(order_by="produto_nome")
     )
 
 
@@ -586,7 +586,7 @@ def nova_saida():
             return render_template(
                 "formulario_pedidosaida.html",
                 pedido=pedido,
-                produto=Produto.find_all(),
+                produto=Estoque.card_estoque_nome(),
                 clientes=Cliente.find_all()
             )
         
@@ -613,14 +613,14 @@ def nova_saida():
             return render_template(
                 "formulario_pedidosaida.html",
                 pedidos=Pedido_saida.find_all_ordered(),
-                produto=Produto.find_all(),
+                produto=Estoque.card_estoque_nome(),
                 clientes=Cliente.find_all()
             )
 
     return render_template(
         "formulario_pedidosaida.html",
         pedido=None,
-        produto=Produto.find_all(),
+        produto=Estoque.card_estoque_nome(),
         clientes=Cliente.find_all()
     )
     
