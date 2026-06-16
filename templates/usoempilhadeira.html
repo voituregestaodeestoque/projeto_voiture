@@ -5,24 +5,25 @@
 {% block conteudo %}
 
 
-
-<!--Fornecedor-->
-
 <div id="template_uso_empilhadeira">
-
+    <!--título-->
     <h2 class=" bi bi-box">Uso de Empilhadeira</h2>
 
 
     <form action="{{ url_for('salvar_uso_empilhadeira')}}" method="POST">
-
+        <!--Div pai-->
         <div class="row">
+            <!--coluna-->
             <div class="col-md-6 mb-3" style="width: 50%;">
+                <!--nome do campo option -->
                 <label for="funcionario_id" class="form-label">Funcionário</label>
                 <div class="input-group"style="width: 100%;" >
                     <span class="input-group-text bg-dark border-secondary">
+                        <!--icone BS-->
                         <i class="bi bi-person-fill text-white"></i>
                     </span>
 
+                    <!--campo option + importação do nome e id do funcionário existente-->
                     <select id="funcionario_id" name="funcionario_id" class="form-select">
                         <option value="">Selecione</option>
                         {% for funcionario in funcionarios %}
@@ -36,15 +37,15 @@
                 </div>
 
             </div>
-
+            <!--coluna + noma do campo option-->
             <div class="col-md-6 mb-3 w-50" >
                 <label for="empilhadeira_id" class="form-label">Empilhadeira</label>
-
                 <div class="input-group" style="width: 100%;">
+                    <!--icone BS-->
                     <span class="input-group-text bg-dark border-secondary">
                         <i class="bi bi-tools text-white"></i>
                     </span>
-
+                    <!--campo option + importação do chassi, marca, modelo e id de uma empilhadeira existente-->
                     <select id="empilhadeira_id" name="empilhadeira_id" class="form-select">
                         <option value="">Selecione</option>
                         {% for empilhadeira in empilhadeiras %}
@@ -59,7 +60,7 @@
 
             </div>
 
-
+            <!--Botao-->
             <div class=" botao-direita">
                 <button type="submit" class="btn botao-add">Registrar</button>
             </div>

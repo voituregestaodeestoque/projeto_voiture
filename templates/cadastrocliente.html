@@ -2,9 +2,11 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
+<!--Titulo + botao de volta para a tabelad clientes-->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h2 class="titulo-pagina">
+            <!--Icone BS-->
             <i class="bi bi-person-fill"></i>
             {{ 'Editar Cliente' if cliente and cliente.id else 'Cadastrar Cliente' }}
         </h2>
@@ -14,16 +16,21 @@
             <i></i>Visualizar Clientes</a>
     </div>
 </div>
+<!--Salva atualização dos cliente-->
 <form
     action="{% if cliente and cliente.id %}{{ url_for('atualizar_cliente', id=cliente.id) }}{% else %}{{ url_for('salvar_cliente') }}{% endif %}"
     method="POST">
+
+
     <div class="row">
+        <!--coluna-->
         <div class="col-md-6 mb-3">
 
             <!--Campo Nome-->
             <label for="cliente_nome" class="form-label">Nome</label>
             <div class="input-group">
                 <span class="input-group-text bg-dark border-secondary">
+                    <!--Icone BS-->
                     <i class="bi bi-person-fill text-white"></i>
                 </span>
                 <input type="text" name="cliente_nome" id="cliente_nome" class="form-control"
@@ -39,6 +46,7 @@
             <label for="cliente_cnpj" class="form-label">CNPJ</label>
             <div class="input-group">
                 <span class="input-group-text bg-dark border-secondary">
+                    <!--Icone BS-->
                     <i class="bi bi-person-vcard-fill text-white"></i>
                 </span>
                 <input type="text" name="cliente_cnpj" id="cliente_cnpj" class="form-control"
@@ -52,6 +60,7 @@
             <label for="cliente_cep" class="form-label">CEP</label>
             <div class="input-group">
                 <span class="input-group-text bg-dark border-secondary">
+                    <!--Icone BS-->
                     <i class="bi bi-geo-alt text-white"></i>
                 </span>
                 <input type="text" name="cliente_cep" id="cliente_cep" class="form-control" placeholder="Digite seu CEP"
@@ -65,6 +74,7 @@
             <label for="cliente_email" class="form-label">Email</label>
             <div class="input-group">
                 <span class="input-group-text bg-dark border-secondary">
+                    <!--Icone BS-->
                     <i class="bi bi-envelope text-white"></i>
                 </span>
                 <input type="email" name="cliente_email" id="cliente_email" class="form-control"
@@ -78,6 +88,7 @@
             <label for="cliente_ddi" class="form-label">DDI</label>
             <div class="input-group">
                 <span class="input-group-text bg-dark border-secondary">
+                    <!--Icone BS-->
                     <i class="bi bi-telephone-fill text-white"></i>
                 </span>
                 <input type="text" name="cliente_ddi" id="cliente_ddi" class="form-control" placeholder="DDI" required
@@ -91,6 +102,7 @@
             <label for="cliente_ddd" class="form-label">DDD</label>
             <div class="input-group">
                 <span class="input-group-text bg-dark border-secondary">
+                    <!--Icone BS-->
                     <i class="bi bi-telephone-fill text-white"></i>
                 </span>
                 <input type="text" name="cliente_ddd" id="cliente_ddd" class="form-control" placeholder="DDD" required
@@ -104,6 +116,7 @@
             <label for="cliente_telefone" class="form-label">Telefone</label>
             <div class="input-group">
                 <span class="input-group-text bg-dark border-secondary">
+                    <!--Icone BS-->
                     <i class="bi bi-telephone-fill text-white"></i>
                 </span>
                 <input type="text" name="cliente_telefone" id="cliente_telefone" class="form-control"
