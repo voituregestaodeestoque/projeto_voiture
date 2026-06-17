@@ -35,7 +35,7 @@
                 <div class="card shadow-sm p-3">
                     <!--Quantidade de pedidos de saida-->
                     <h6 class="text-muted">Pedidos de saída</h6>
-                    <h3>{{total_estoque if total_estoque else 0}}</h3>
+                    <h3>{{total_saida if total_saida else 0}}</h3>
                 </div>
             </div>
         </div>
@@ -97,11 +97,11 @@
                     <h4 class="text-center"><strong>Pedidos Pendentes</strong></h4>
 
                     <!--Tabela de pedidos pendentes-->
-                    {% if pedido_pendente %}
+                    {% if pedido_entrada_pendente or pedido_saida_pendente%}
                     <div style="overflow-x: hidden ; overflow-y:auto;" class="d-flex flex-column align-items-center">
-                        {%for pedido in pedido_pendente %}
+                        {%for pedido in pedido_entrada_pendente %}
                         <!--CARD-->
-                        <div class="card mb-1 pedido-dashboard" style="width: 90%;">
+                        <div class="card mb-1 pedido-entrada-dashboard" style="width: 90%;">
                             <div class="card-body d-flex justify-content-between" style="margin-top: 10px;">
                                 <p class="card-text me-2"><strong>Pedido n°{{pedido.id}}</strong></p>
                                 <p>Entrada</p>
@@ -109,6 +109,17 @@
                             </div>
                         </div>
 
+                        {%endfor%}
+
+                        {%for pedido in pedido_saida_pendente %}
+                        <!--CARD-->
+                        <div class="card mb-1 pedido-saida-dashboard" style="width: 90%;">
+                            <div class="card-body d-flex justify-content-between" style="margin-top: 10px;">
+                                <p class="card-text me-2"><strong>Pedido n°{{pedido.id}}</strong></p>
+                                <p>Saída</p>
+                                <p class="card-text">Data: {{pedido.data_pedido_saida}}</p>
+                            </div>
+                        </div>
 
                         {%endfor%}
 

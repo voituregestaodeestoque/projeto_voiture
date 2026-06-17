@@ -211,8 +211,12 @@ select#funcionario_id {
     width: 60% !important;
 }
 
-.pedido-dashboard{
+.pedido-entrada-dashboard{
     background: rgb(225, 254, 225);
+}
+
+.pedido-saida-dashboard{
+    background: rgb(241, 195, 194);
 }
 
 .logout:hover{

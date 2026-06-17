@@ -303,3 +303,28 @@ class Pedido_saida(CrudBase):
         finally:
             cursor.close()
             conexao.close()
+
+    @classmethod
+    def contar_pedidosaida(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT COUNT(status_pedido_saida) as pedido_saida_total FROM pedido_saida WHERE status_pedido_saida = 'pendente';"
+            cursor.execute(sql)
+            return cursor.fetchone()
+        finally:
+            cursor.close()
+            conexao.close()
+
+
+    @classmethod
+    def pedidosaida_pendente(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            sql = "SELECT * FROM pedido_saida WHERE status_pedido_saida = 'pendente';"
+            cursor.execute(sql)
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexao.close()
