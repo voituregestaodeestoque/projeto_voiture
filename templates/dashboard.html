@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
-<!--Atualizado por Júlia dia 28/05/2026 às 12h29-->
+<!--Atualizado por Ryan dia 17/06/2026 às 19h17-->
 {% block conteudo %}
 <div class="container-fluid">
+    <!--Topo da pagina -->
     <div class="mb-4">
         <h2 class="titulo-pagina">
+            <!--Icone BS-->
             <i class="bi bi-graph-up-arrow"></i>
             Dashboard
         </h2>
@@ -14,41 +16,41 @@
                 <div class="card shadow-sm p-3">
                     <!--Quantidade de produtos cadastrados no sistema-->
                     <h6 class="text-muted">Total de Produtos</h6>
-                    <h3>{{total_produto if total_produto else 0}}</h3>
+                    <h3>{{total_produto if total_produto else 0}}</h3><!--Número total de tipos de produto-->
                 </div>
             </div>
             <div class="col">
                 <div class="card shadow-sm p-3">
                     <!--Quantidade total de produtos em estoque-->
                     <h6 class="text-muted">Total no estoque</h6>
-                    <h3>{{total_estoque if total_estoque else 0}}</h3>
+                    <h3>{{total_estoque if total_estoque else 0}}</h3><!--Número total de produto no estoque-->
                 </div>
             </div>
             <div class="col">
                 <div class="card shadow-sm p-3">
                     <!--Quantidade de pedidos de entrada-->
                     <h6 class="text-muted">Pedidos de entradas</h6>
-                    <h3>{{total_entrada if total_entrada else 0}}</h3>
+                    <h3>{{total_entrada if total_entrada else 0}}</h3> <!--Número total de pedidos de entrada pendente-->
                 </div>
             </div>
             <div class="col">
                 <div class="card shadow-sm p-3">
                     <!--Quantidade de pedidos de saida-->
                     <h6 class="text-muted">Pedidos de saída</h6>
-                    <h3>{{total_saida if total_saida else 0}}</h3>
+                    <h3>{{total_saida if total_saida else 0}}</h3> <!--Número do total de pedidos de saida pendente-->
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-6 ">
-                <div class="card shadow-sm p-3 mb-4" style="max-height: 50%;">
+                <div class="card shadow-sm p-3 mb-4" style="height: 200px;">
 
                     <!--Produtos com estoque baixo-->
                     <h4 class="text-center"><strong>Estoque Baixo</strong></h4>
 
                     <!--Criação de tabela em caso de produtos com estoque baixo-->
                     <div class="table-responsive">
-                        {% if baixo_estoque %}
+                        {% if baixo_estoque %}<!--se tiver um produto com a quantidade próxima do minimo-->
 
                         <!--Tabela-->
                         <table class="table border-secondary">
@@ -67,12 +69,12 @@
                                     <th scope="row" class="ps-3">{{ item.produto_nome }}</th>
                                     <td class="text-center">{{ item.produto_quantidade_minima }}</td>
 
-                                    <!--Estoque maior que a quantidade mínima-->
+                                    <!--Estoque maior que a quantidade mínima -->
                                     {% if item.estoque_quantidade > item.produto_quantidade_minima %}
                                     <td class="text-warning text-center"><strong>{{ item.estoque_quantidade }}</strong>
                                     </td>
 
-                                    {% else %}
+                                    {% else %} <!--Estoque menor que a quantidade mínima-->
                                     <td class="text-danger text-center"><strong>{{ item.estoque_quantidade }}</strong>
                                     </td>
 
@@ -93,13 +95,13 @@
                     </div>
                 </div>
 
-                <div class="card shadow-sm p-3 " style="max-height: 50%;">
+                <div class="card shadow-sm p-3 " style="height: 200px;">
                     <h4 class="text-center"><strong>Pedidos Pendentes</strong></h4>
 
                     <!--Tabela de pedidos pendentes-->
-                    {% if pedido_entrada_pendente or pedido_saida_pendente%}
+                    {% if pedido_entrada_pendente or pedido_saida_pendente%} <!--se tiver um pedido de entrada ou saida pendente-->
                     <div style="overflow-x: hidden ; overflow-y:auto;" class="d-flex flex-column align-items-center">
-                        {%for pedido in pedido_entrada_pendente %}
+                        {%for pedido in pedido_entrada_pendente %} <!--roda cada pedido deentrada pendente-->
                         <!--CARD-->
                         <div class="card mb-1 pedido-entrada-dashboard" style="width: 90%;">
                             <div class="card-body d-flex justify-content-between" style="margin-top: 10px;">
@@ -111,7 +113,7 @@
 
                         {%endfor%}
 
-                        {%for pedido in pedido_saida_pendente %}
+                        {%for pedido in pedido_saida_pendente %} <!--roda cada pedido de saida pendente-->
                         <!--CARD-->
                         <div class="card mb-1 pedido-saida-dashboard" style="width: 90%;">
                             <div class="card-body d-flex justify-content-between" style="margin-top: 10px;">
@@ -140,7 +142,7 @@
             <div class="col-6">
                 <!--Gráfico de movimentações-->
                 <div class="card shadow-sm p-3 mb-4" style="height: 100%;">
-                    <h4 class="text-center"><strong>Movimentações</strong></h4>
+                    <h4 class="text-center"><strong>Movimentações</strong></h4> <!---->
 
                 </div>
 
