@@ -91,8 +91,7 @@
 
 {% if pedido.status_pedido_saida == 'PENDENTE' %}
 <h2 style="margin-left: 40px;">
-    <a href="{{ url_for('finalizar_saida', pedido_saida_id=pedido.id) }}" class="btn btn-success">Finalizar
-        Pedido de Venda</a>
+    <a href="{{ url_for('finalizar_saida', pedido_saida_id=pedido.id) }}" class="btn btn-success">Finalizar</a>
 </h2>
 {% endif %}
 
