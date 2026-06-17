@@ -1,3 +1,58 @@
+/* LOGIN */
+
+#body-login {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+
+    background: url('../static/images/teladelogin.png') no-repeat center center;
+    background-size: cover;
+
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    padding: 20px;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 380px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.logo {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.form-login {
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: #fff;
+}
+
+.form-login:focus {
+    background: #0f172a;
+    border-color: #ff0000;
+    box-shadow: none !important;
+    color: #fff;
+}
+
+.btn-login {
+    background: linear-gradient(135deg, #2563eb, #06b6d4);
+    border: none;
+}
+
+.btn-login:hover {
+    opacity: 0.9;
+}
+
+
 /* RESET */
 body {
     font-family: 'Inter', Arial, sans-serif;
@@ -211,10 +266,15 @@ select#funcionario_id {
     width: 60% !important;
 }
 
-.pedido-dashboard{
+.pedido-entrada-dashboard{
     background: rgb(225, 254, 225);
+}
+
+.pedido-saida-dashboard{
+    background: rgb(241, 195, 194);
 }
 
 .logout:hover{
     background-color: #127ea1;
 }
+

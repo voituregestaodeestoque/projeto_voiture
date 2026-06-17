@@ -128,3 +128,5 @@ class Detalhe_saida(CrudBase):
         finally:
             cursor.close()
             conexao.close()
+
+    

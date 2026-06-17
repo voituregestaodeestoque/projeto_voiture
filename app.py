@@ -115,27 +115,37 @@ def dashboard():
     #Recebe a soma de todas as quantidades contidas no estoque
     dic_total=Estoque.estoque_total()
 
+    #Seleciona a chave do estoque total na tabela temporária de contagem
+    total_estoque = dic_total['quantidade_total']
+
     #Recebe a soma de todos os tipos de produtos cadastrados no sistema
     pod_total=Produto.produto_total()
 
-    #Recebe os produtos que estão com estoque baixo
-    baixo_estoque = Estoque.estoque_baixo()
+    #Seleciona a chave de quantidade de produto na tabela temporária de contagem
+    total_produto = pod_total['quantidade_produto']
 
-    pedido_pendente= Pedido_entrada.pedidoentrada_pendente()
 
     entrada_total = Pedido_entrada.contar_pedidoentrada()
 
     total_entrada = entrada_total['pedido_entrada_total']
 
 
-    #Seleciona a chave de quantidade de produto na tabela temporária de contagem
-    total_produto = pod_total['quantidade_produto']
+    saida_total = Pedido_saida.contar_pedidosaida()
 
-    #Seleciona a chave do estoque total na tabela temporária de contagem
-    total_estoque = dic_total['quantidade_total']
+    total_saida = saida_total['pedido_saida_total']
+
+
+    #Recebe os produtos que estão com estoque baixo
+    baixo_estoque = Estoque.estoque_baixo()
+
+
+    pedido_entrada_pendente= Pedido_entrada.pedidoentrada_pendente()
+
+    pedido_saida_pendente= Pedido_saida.pedidosaida_pendente()
+
 
     #Retorna a tela renderizada com todos os valores anteriores informados
-    return render_template('dashboard.html', total_estoque=total_estoque,total_produto=total_produto, baixo_estoque=baixo_estoque, total_entrada=total_entrada, pedido_pendente=pedido_pendente)
+    return render_template('dashboard.html', total_estoque=total_estoque,total_produto=total_produto, baixo_estoque=baixo_estoque, total_entrada=total_entrada, pedido_entrada_pendente=pedido_entrada_pendente, total_saida=total_saida, pedido_saida_pendente=pedido_saida_pendente)
 
 # -----> Fim: Dashboard
 ############################################################################################################

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Funcionário</title>
-    <link rel="stylesheet" href="../static/login.css">
+    <link rel="stylesheet" href="../static/style.css">
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="../static/images-lp/favicon.ico" type="image/x-icon">
@@ -21,7 +21,7 @@
 
 </head>
 
-<body><!--imagem do fundo da tela de login está aqui pelo css-->
+<body id="body-login" style="margin: 0;padding: 0;box-sizing: border-box;"><!--imagem do fundo da tela de login está aqui pelo css-->
     <!--card de toda a parte branca do site-->
     <div class="container d-flex justify-content-end login-container">
 
@@ -37,7 +37,7 @@
                             <i class="bi bi-envelope text-white"></i>
                         </span>
                         <!--campo pra digitar o email-->
-                        <input type="email" name="funcionario_email" id="email" class="form-control"
+                        <input type="email" name="funcionario_email" id="email" class="form-control form-login"
                             placeholder="Digite seu email" required>
 
                     </div>
@@ -49,7 +49,7 @@
                             <i class="bi bi-lock text-white"></i>
                         </span>
                         <!--campo pra digitar a senha-->
-                        <input type="password" name="funcionario_senha" id="password" class="form-control"
+                        <input type="password" name="funcionario_senha" id="password" class="form-control form-login"
                             placeholder="Digite sua Senha" required>
                     </div>
 
