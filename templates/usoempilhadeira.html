@@ -7,8 +7,20 @@
 
 <div id="template_uso_empilhadeira">
     <!--título-->
-    <h2 class=" bi bi-box">Uso de Empilhadeira</h2>
-
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="titulo-pagina">
+                <i class="bi bi-tools"></i>
+                Uso de empilhadeira
+                <!--se passarem um id, o titulo vira outro-->
+            </h2>
+        </div>
+        <div>
+            <!--rota para ir visualizar as empilhadeiras já cadastradas-->
+            <a href="{{ url_for('tabelaempilhadeira') }}" class="btn btn-success">
+                <i></i>Visualizar Empilhadeiras</a>
+        </div>
+    </div>
 
     <form action="{{ url_for('salvar_uso_empilhadeira')}}" method="POST">
         <!--Div pai-->
@@ -17,7 +29,7 @@
             <div class="col-md-6 mb-3" style="width: 50%;">
                 <!--nome do campo option -->
                 <label for="funcionario_id" class="form-label">Funcionário</label>
-                <div class="input-group"style="width: 100%;" >
+                <div class="input-group" style="width: 100%;">
                     <span class="input-group-text bg-dark border-secondary">
                         <!--icone BS-->
                         <i class="bi bi-person-fill text-white"></i>
@@ -27,10 +39,9 @@
                     <select id="funcionario_id" name="funcionario_id" class="form-select">
                         <option value="">Selecione</option>
                         {% for funcionario in funcionarios %}
-                            <option 
-                                value="{{ funcionario.id }}">
-                                nome {{ funcionario.funcionario_nome }} - {{ funcionario.id }}
-                            </option>
+                        <option value="{{ funcionario.id }}">
+                            nome {{ funcionario.funcionario_nome }} - {{ funcionario.id }}
+                        </option>
                         {% endfor %}
                     </select>
 
@@ -38,7 +49,7 @@
 
             </div>
             <!--coluna + noma do campo option-->
-            <div class="col-md-6 mb-3 w-50" >
+            <div class="col-md-6 mb-3 w-50">
                 <label for="empilhadeira_id" class="form-label">Empilhadeira</label>
                 <div class="input-group" style="width: 100%;">
                     <!--icone BS-->
@@ -49,10 +60,10 @@
                     <select id="empilhadeira_id" name="empilhadeira_id" class="form-select">
                         <option value="">Selecione</option>
                         {% for empilhadeira in empilhadeiras %}
-                            <option 
-                                value="{{ empilhadeira.id }}">
-                                chassi {{ empilhadeira.empilhadeira_chassi }} - marca {{ empilhadeira.empilhadeira_marca }} - modelo {{ empilhadeira.empilhadeira_modelo }} - {{ empilhadeira.id }}
-                            </option>
+                        <option value="{{ empilhadeira.id }}">
+                            chassi {{ empilhadeira.empilhadeira_chassi }} - marca {{ empilhadeira.empilhadeira_marca }}
+                            - modelo {{ empilhadeira.empilhadeira_modelo }} - {{ empilhadeira.id }}
+                        </option>
                         {% endfor %}
                     </select>
 

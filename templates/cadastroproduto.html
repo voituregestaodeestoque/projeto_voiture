@@ -6,144 +6,150 @@
 
 <div id="template_produto">
     <div class="mb-4">
-
-        <!--Título em caso de cadastro-->
-        {% if produto and produto.id %}
-        <h2 class="titulo-pagina" style="margin-left: 5px;margin-bottom: 10px;">Editar Produto</h2>
-
-        {%else%}
-        <h2 class="titulo-pagina" style="margin-left: 5px;margin-bottom: 10px;">Cadastrar Produto</h2>
-
-        {%endif%}
-
-        <div class="d-flex justify-content-end" style="padding-right: 12px;">
-            <a href="{{ url_for('listagem_produto') }}" class="btn btn-success">
-                <i></i>Visualizar produtos</a>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="titulo-pagina">
+                    <i class="bi bi-tools"></i>
+                    {{ 'Editar Produto' if produto and produto.id else 'Cadastrar Produto' }}
+                    <!--se passarem um id, o titulo vira outro-->
+                </h2>
+            </div>
+            <div>
+                <!--rota para ir visualizar as empilhadeiras já cadastradas-->
+                <a href="{{ url_for('listagem_produto') }}" class="btn btn-success">
+                    <i></i>Visualizar produtos</a>
+            </div>
         </div>
-    </div>
+        <div class="container-fluid produto-container d-flex justify-content-center">
 
-    <div class="container-fluid produto-container d-flex justify-content-center">
+            <div class="produto-card text-dark">
 
-        <div class="produto-card text-dark">
-
-            <form id="form_produto"
-                action="{% if produto and produto.id %}{{ url_for('atualizar_produto', id=produto.id) }}{% else %}{{ url_for('salvar_produto') }}{% endif %}"
-                method="POST">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="produto_nome">Nome do produto</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-box text-white"></i>
-                            </span>
-                            <input type="text" class="form-control" name="produto_nome" id="produto_nome"
-                                placeholder="Nome do produto" required value="{{ produto.produto_nome if produto else '' }}">
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="produto_categoria">Categoria</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-box text-white"></i>
-                            </span>
-                            <input type="text" name="produto_categoria" class="form-control" id="produto_categoria"
-                                placeholder="Categoria do produto" required value="{{ produto.produto_categoria if produto else '' }}">
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="produto_localizacao">Localização</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-geo-alt-fill text-white"></i>
-                            </span>
-                            <input type="text" name="produto_localizacao" class="form-control" id="produto_localizacao"
-                                placeholder="Localização do produto" required value="{{ produto.produto_localizacao if produto else '' }}">
+                <form id="form_produto"
+                    action="{% if produto and produto.id %}{{ url_for('atualizar_produto', id=produto.id) }}{% else %}{{ url_for('salvar_produto') }}{% endif %}"
+                    method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="produto_nome">Nome do produto</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary">
+                                    <i class="bi bi-box text-white"></i>
+                                </span>
+                                <input type="text" class="form-control" name="produto_nome" id="produto_nome"
+                                    placeholder="Nome do produto" required
+                                    value="{{ produto.produto_nome if produto else '' }}">
+                            </div>
                         </div>
 
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="produto_quantidade_minima"> Estoque mínimo</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-basket2-fill text-white"></i>
-                            </span>
-                            <input type="text" name="produto_quantidade_minima" class="form-control"
-                                id="produto_quantidade_minima" placeholder="Estoque mínimo do produto" required value="{{ produto.produto_quantidade_minima if produto else '' }}">
+                        <div class="col-md-6 mb-3">
+                            <label for="produto_categoria">Categoria</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary">
+                                    <i class="bi bi-box text-white"></i>
+                                </span>
+                                <input type="text" name="produto_categoria" class="form-control" id="produto_categoria"
+                                    placeholder="Categoria do produto" required
+                                    value="{{ produto.produto_categoria if produto else '' }}">
+                            </div>
                         </div>
 
-                    </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="produto_localizacao">Localização</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary">
+                                    <i class="bi bi-geo-alt-fill text-white"></i>
+                                </span>
+                                <input type="text" name="produto_localizacao" class="form-control"
+                                    id="produto_localizacao" placeholder="Localização do produto" required
+                                    value="{{ produto.produto_localizacao if produto else '' }}">
+                            </div>
 
-                    <div class="col-md-4 mb-3">
-                        <label for="produto_peso">Peso</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-hammer text-white"></i>
-                            </span>
-                            <input type="text" name="produto_peso" class="form-control" id="produto_peso"
-                                placeholder="Peso em kg" required value="{{ produto.produto_peso if produto else '' }}">
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label for="produto_preco_custo">Preço de custo</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-cash-stack text-white"></i>
-                            </span>
-                            <input type="text" name="produto_preco_custo" class="form-control" id="produto_preco_custo"
-                                placeholder="Preço de custo em R$" required value="{{ produto.produto_preco_custo if produto else '' }}">
                         </div>
 
-                    </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="produto_quantidade_minima"> Estoque mínimo</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary">
+                                    <i class="bi bi-basket2-fill text-white"></i>
+                                </span>
+                                <input type="text" name="produto_quantidade_minima" class="form-control"
+                                    id="produto_quantidade_minima" placeholder="Estoque mínimo do produto" required
+                                    value="{{ produto.produto_quantidade_minima if produto else '' }}">
+                            </div>
 
-                    <div class="col-md-4 mb-3">
-                        <label for="produto_preco_venda">Preço de venda</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-cash-coin text-white"></i>
-                            </span>
-                            <input type="text" name="produto_preco_venda" class="form-control" id="produto_preco_venda"
-                                placeholder="Preço de venda em R$" required value="{{ produto.produto_preco_venda if produto else '' }}">
                         </div>
-                    </div>
 
-                    {% if produto and produto.id %}
-                    {%else%}
-                    <div class="col-md-4 mb-3">
-                        <label for="estoque_quantidade">Quantidade</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-secondary">
-                                <i class="bi bi-box text-white"></i>
-                            </span>
-                            <input type="text" name="estoque_quantidade" class="form-control" id="estoque_quantidade"
-                                placeholder="Quantidade de produto" required >
+                        <div class="col-md-4 mb-3">
+                            <label for="produto_peso">Peso</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary">
+                                    <i class="bi bi-hammer text-white"></i>
+                                </span>
+                                <input type="text" name="produto_peso" class="form-control" id="produto_peso"
+                                    placeholder="Peso em kg" required
+                                    value="{{ produto.produto_peso if produto else '' }}">
+                            </div>
                         </div>
-                    </div>
-                    {%endif%}
 
-                    <div class="col-md-12 mb-3">
-                        <label for="produto_descricao" class="form-label">Descrição</label>
-                        <input type="text" name="produto_descricao" class="form-control" id="produto_descricao" required value="{{ produto.produto_descricao if produto else '' }}"
-                            style="padding: 20px;">
-                    </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="produto_preco_custo">Preço de custo</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary">
+                                    <i class="bi bi-cash-stack text-white"></i>
+                                </span>
+                                <input type="text" name="produto_preco_custo" class="form-control"
+                                    id="produto_preco_custo" placeholder="Preço de custo em R$" required
+                                    value="{{ produto.produto_preco_custo if produto else '' }}">
+                            </div>
 
-                    <div class="botao-direita">
+                        </div>
 
-                        <!--Botão que envia o formulário em caso de cadastro-->
+                        <div class="col-md-4 mb-3">
+                            <label for="produto_preco_venda">Preço de venda</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary">
+                                    <i class="bi bi-cash-coin text-white"></i>
+                                </span>
+                                <input type="text" name="produto_preco_venda" class="form-control"
+                                    id="produto_preco_venda" placeholder="Preço de venda em R$" required
+                                    value="{{ produto.produto_preco_venda if produto else '' }}">
+                            </div>
+                        </div>
+
                         {% if produto and produto.id %}
-                        <button type="submit" class="botao-add btn">Atualizar</button>
-
-                        <!--Botão que envia o formulário em caso de atualização-->
                         {%else%}
-                        <button type="submit" class="botao-add btn">Cadastrar</button>
-
+                        <div class="col-md-4 mb-3">
+                            <label for="estoque_quantidade">Quantidade</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary">
+                                    <i class="bi bi-box text-white"></i>
+                                </span>
+                                <input type="text" name="estoque_quantidade" class="form-control"
+                                    id="estoque_quantidade" placeholder="Quantidade de produto" required>
+                            </div>
+                        </div>
                         {%endif%}
+
+                        <div class="col-md-12 mb-3">
+                            <label for="produto_descricao" class="form-label">Descrição</label>
+                            <input type="text" name="produto_descricao" class="form-control" id="produto_descricao"
+                                required value="{{ produto.produto_descricao if produto else '' }}"
+                                style="padding: 20px;">
+                        </div>
+
+                        <div class="botao-direita">
+
+                            <!--Botão que envia o formulário em caso de cadastro-->
+                            {% if produto and produto.id %}
+                            <button type="submit" class="botao-add btn">Atualizar</button>
+
+                            <!--Botão que envia o formulário em caso de atualização-->
+                            {%else%}
+                            <button type="submit" class="botao-add btn">Cadastrar</button>
+
+                            {%endif%}
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-</div>
-{% endblock %}
+        {% endblock %}

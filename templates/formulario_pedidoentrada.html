@@ -3,80 +3,87 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
-
-<div class="container-fluid produto-container d-flex justify-content-between">
-
-    <div class="pedido-card text-dark" style="width: 45%;">
-
-        <form id="form_pedido" method="POST" action="{{ url_for('nova_entrada') }}" onsubmit="prepararEnvio()">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="fornecedor_nome">Fornecedor</label>
-                    <select id="fornecedor" name="fornecedor_id" class="form-select">
-                        <option value="0">Selecione</option>
-                        {% for fornecedor in fornecedores %}
-                        <option value="{{ fornecedor.id }}">
-                            {{ fornecedor.fornecedor_nome }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <h5>Itens do Pedido</h5>
-
-                <div class=" mb-3">
-                    <label for="produto">Produto</label>
-                    <select id="produto" class="form-select">
-                        <option value="">Selecione</option>
-                        {% for produto in produto %}
-                        <option value="{{ produto.id }}" data-nome="{{ produto.produto_nome }}"
-                            data-estoque="{{ produto.estoque_quantidade }}">
-                            {{ produto.produto_nome }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label for="produto_quantidade">Quantidade</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="produto_quantidade"
-                            placeholder="Quantidade do produto" min="1">
-                    </div>
-                </div>
-
-
-
-                <button type="button" class="btn botao-add" onclick="adicionarItem()">
-                    Adicionar item
-                </button>
-
-
-                <input type="hidden" name="itens_json" id="itens_json">
-            </div>
-        </form>
+<div class="container-fluid">
+    <div class="mb-4">
+        <h2 class="titulo-pagina">
+            <i class="bi bi-arrow-right-square"></i> Movimentações entrada
+        </h2>
+        <p class="text-muted mb-0">Pedido de entrada</p>
     </div>
-    <div class="pedido-card text-dark" style="width: 45%;">
+    <div class=" produto-container d-flex justify-content-between">
 
-        <div class="table-responsive">
-            <table id="tabela-itens" class="table table-hover align-middle">
+        <div class="pedido-card text-dark" style="width: 45%;">
 
-                <thead class="table-light">
-                    <tr>
-                        <th scope="col">Item</th>
-                        <th scope="col">Produto</th>
-                        <th scope="col">Quantidade</th>
-                        <th class="text-end">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <form id="form_pedido" method="POST" action="{{ url_for('nova_entrada') }}" onsubmit="prepararEnvio()">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="fornecedor_nome">Fornecedor</label>
+                        <select id="fornecedor" name="fornecedor_id" class="form-select">
+                            <option value="0">Selecione</option>
+                            {% for fornecedor in fornecedores %}
+                            <option value="{{ fornecedor.id }}">
+                                {{ fornecedor.fornecedor_nome }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-                </tbody>
+                    <h5>Itens do Pedido</h5>
 
-            </table>
-            <button type="submit" form="form_pedido" class="btn botao-add">
-                Salvar Pedido
-            </button>
+                    <div class=" mb-3">
+                        <label for="produto">Produto</label>
+                        <select id="produto" class="form-select">
+                            <option value="">Selecione</option>
+                            {% for produto in produto %}
+                            <option value="{{ produto.id }}" data-nome="{{ produto.produto_nome }}"
+                                data-estoque="{{ produto.estoque_quantidade }}">
+                                {{ produto.produto_nome }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="produto_quantidade">Quantidade</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="produto_quantidade"
+                                placeholder="Quantidade do produto" min="1">
+                        </div>
+                    </div>
+
+
+
+                    <button type="button" class="btn botao-add" onclick="adicionarItem()">
+                        Adicionar item
+                    </button>
+
+
+                    <input type="hidden" name="itens_json" id="itens_json">
+                </div>
+            </form>
+        </div>
+        <div class="pedido-card text-dark" style="width: 45%;">
+
+            <div class="table-responsive">
+                <table id="tabela-itens" class="table table-hover align-middle">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Produto</th>
+                            <th scope="col">Quantidade</th>
+                            <th class="col">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+
+                </table>
+                <button type="submit" form="form_pedido" class="btn botao-add">
+                    Salvar Pedido
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -141,7 +148,7 @@
                     <td>${item.nome}</td>
                     <td>${item.quantidade}</td>
                     <td>
-                        <button type="button" onclick="removerItem(${index})">Remover</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerItem(${index})"><i class="bi bi-trash"></i></button>
                     </td>
                 </tr>
             `;
