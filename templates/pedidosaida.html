@@ -6,12 +6,12 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="titulo-pagina">
-                <i class="bi bi-box-seam"></i> Movimentações saída
+                <i class="bi bi-box-seam"></i> Movimentações de Saída
             </h2>
-            <p class="text-muted mb-0">Pedido de Saída</p>
+            <p class="text-muted mb-0">Pedido de saída</p>
         </div>
 
-        <a href="{{ url_for('nova_entrada') }}" class="btn botao-add">
+        <a href="{{ url_for('nova_saida') }}" class="btn botao-add">
             <i class="bi bi-plus-lg"></i> Novo Pedido de Saída
         </a>
 
@@ -41,7 +41,7 @@
                     <td>{{ pedido.data_pedido_saida }}</td>
                     <td>{{ pedido.data_processamento or '-' }}</td>
                     <td class="text-end">
-                        {% if pedido.status_pedido_entrada == 'PENDENTE' %}
+                        {% if pedido.status_pedido_saida == 'PENDENTE' %}
                         <a href="{{ url_for('processar_pedido_saida', pedido_saida_id=pedido.pedido_saida_id) }}" class="btn btn-sm btn-success">Processar</a>
                         <a href="{{ url_for('cancelar_pedido_saida', pedido_saida_id=pedido.pedido_saida_id) }}" class="btn btn-sm btn-danger">Cancelar</a>
                         {% else %}

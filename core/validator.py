@@ -47,8 +47,9 @@ class Validator:
                 return {"valida":False,"mensagem":f"O campo {field_name} só pode ter números"}
 
         #Limite de 8 dígitos
-        if  not len(value) == 8:
-            return f"O campo {field_name} não suporta essa quantidade de caracteres"
+        if not len(value) == 8:
+            return {"valida":False,"mensagem":f"O campo {field_name} não suporta essa quantidade de caracteres"}
+
         base_url = "https://api.invertexto.com/v1/cep"
         cep_encoded = urllib.parse.quote(value)
         url = f"{base_url}/{cep_encoded}"
