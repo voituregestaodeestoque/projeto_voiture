@@ -140,7 +140,6 @@ class Pedido_saida(CrudBase):
             cursor.execute(
                 """
                 UPDATE pedido_saida
-                SET status_pedido_saida = %s
                 WHERE id = %s
                 """,
                 ("PENDENTE", pedido_saida_id)
