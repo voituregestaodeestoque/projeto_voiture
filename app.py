@@ -539,7 +539,7 @@ def detalhes_saida(pedido_saida_id):
         "detalhes_saida.html",
         pedido=pedido,
         itens=Detalhe_saida.find_by_pedido(pedido_saida_id),
-        produto=Produto.find_all()
+        produto=Estoque.card_estoque_nome()
     )
 
 
@@ -559,7 +559,7 @@ def adicionar_item_saida(pedido_saida_id):
         pedido_saida_id=pedido_saida_id,
         produto_id=produto_id,
         detalhe_saida_quantidade=detalhe_saida_quantidade,
-        detalhe_entrada_item= proximo_item_numero
+        detalhe_saida_item= proximo_item_numero
     )
 
     flash(mensagem)
@@ -608,6 +608,7 @@ def nova_saida():
             for erro in erros:
                 flash(erro)
 
+            
             return render_template(
                 "formulario_pedidosaida.html",
                 pedido=pedido,
