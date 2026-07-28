@@ -536,7 +536,7 @@ def detalhes_saida(pedido_saida_id):
         return redirect(url_for("pedidosaida"))
 
     return render_template(
-        "detalhes_saida.html",
+        "formulario_pedidosaida.html",
         pedido=pedido,
         itens=Detalhe_saida.find_by_pedido(pedido_saida_id),
         produto=Estoque.card_estoque_nome()
@@ -572,6 +572,13 @@ def remover_item_saida(detalhe_saida_id, pedido_saida_id):
     mensagem = Detalhe_saida.remover_item(detalhe_saida_id)
     flash(mensagem)
     return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
+
+@app.route("/saida/finalizar/<int:pedido_saida_id>")
+@login_obrigatorio
+def salvar_saida(pedido_saida_id):
+    mensagem = Pedido_saida.finalizar(pedido_saida_id)
+    flash(mensagem)
+    return redirect(url_for("pedidosaida"))
 
 
 @app.route("/saida/finalizar/<int:pedido_saida_id>")
