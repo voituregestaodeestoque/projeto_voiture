@@ -72,6 +72,7 @@ def login():
         #cria uma sessão no sistema para poder usar o site
         session["usuario_id"] = funcionario["id"]
         session["funcionario_nome"] = funcionario["funcionario_nome"]
+        session["funcionario_permissao"] = funcionario["funcionario_permissao"]
         return redirect(url_for("base"))#retorna para o site
     #se a senha ou email não bater
     flash("Login e/ou senha inválidos","erro")
@@ -468,7 +469,7 @@ def nova_entrada():
             
                 print("check", teste)
             flash("Pedido de entrada criado com sucesso.")
-            return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
+            return redirect(url_for("pedidoentrada", pedido_entrada_id=pedido_entrada_id))
 
         except Exception:
             flash("Erro ao criar pedido de entrada.")
@@ -573,13 +574,6 @@ def remover_item_saida(detalhe_saida_id, pedido_saida_id):
     flash(mensagem)
     return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
 
-@app.route("/saida/finalizar/<int:pedido_saida_id>")
-@login_obrigatorio
-def salvar_saida(pedido_saida_id):
-    mensagem = Pedido_saida.finalizar(pedido_saida_id)
-    flash(mensagem)
-    return redirect(url_for("pedidosaida"))
-
 
 @app.route("/saida/finalizar/<int:pedido_saida_id>")
 @login_obrigatorio
@@ -617,7 +611,7 @@ def nova_saida():
 
             
             return render_template(
-                "formulario_pedidosaida.html",
+                "pedidosaida.html",
                 pedido=pedido,
                 produto=Estoque.card_estoque_nome(),
                 clientes=Cliente.find_all()
@@ -640,7 +634,7 @@ def nova_saida():
             
             print("check", teste)
             flash("Pedido de saída criado com sucesso.")
-            return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
+            return redirect(url_for("pedidosaida", pedido_saida_id=pedido_saida_id))
 
         except Exception as e:
             print("erro", e)
@@ -1258,6 +1252,7 @@ def get_funcionario_form():
         "funcionario_ddd": request.form.get("funcionario_ddi", "").strip(),
         "funcionario_telefone": request.form.get("funcionario_telefone", "").strip(),
         "funcionario_cargo": request.form.get("funcionario_cargo", "").strip(),
+        "funcionario_permissao": request.form.get("funcionario_permissao", "").strip(),
     }
 
 # Registro de funcionário no banco de dados
