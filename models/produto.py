@@ -77,6 +77,8 @@ class Produto(CrudBase):
         cursor = conexao.cursor()
         try:
             queries = [
+                "SELECT COUNT(*) FROM pedido_entrada WHERE produto_id = %s",
+                "SELECT COUNT(*) FROM pedido_saida WHERE produto_id = %s"
             ]
             total = 0
             for sql in queries:
@@ -86,6 +88,8 @@ class Produto(CrudBase):
         finally:
             cursor.close()
             conexao.close()
+
+
 
 
     @classmethod

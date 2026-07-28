@@ -84,6 +84,11 @@ class Cliente(CrudBase):#cria a classe Cliente
         fornecedor = cls.find_by_id(id)
         if not fornecedor:
             raise ValueError("Cliente não encontrado.")
+
+        if cls.has_related_records(id):
+
+            #Interrompe a execução e apresenta uma mensagem de erro
+            raise ValueError("Não é possível excluir o cliente porque ele está vinculado a outros serviços.")
         cls.delete(id)
 
     #Procura no banco algum cliente com o mesmo CNPJ
@@ -118,3 +123,54 @@ class Cliente(CrudBase):#cria a classe Cliente
         finally:
             cursor.close()
             conexao.close()
+
+
+######################################################################################
+#---> Início: Busca por tabela relacionada
+
+    #Define um método da classe
+    @classmethod
+
+    #define uma função
+    def has_related_records(cls, id):
+
+        #Conecta com o banco de dados
+        conexao = Database.connect()
+
+        #Ativa o cursor para selecionar linhas do banco de dados
+        cursor = conexao.cursor()
+
+        #Inicia uma tentativa
+        try:
+            #Monta uma lista que conta quantas vezes cliente aparece na tabela de pedido de entrada
+            queries = [
+
+                #Comando SQL para a contagem
+                "SELECT COUNT(*) FROM pedido_saida WHERE cliente_id = %s"
+            ]
+            #Define a quantidade inicial como zero
+            total = 0
+
+            #executará cada comando da lista de comandos
+            for sql in queries:
+
+                #executa o comando SQL
+                cursor.execute(sql, (id,))
+
+                #Soma a contagem do SQL à quantidade inicial
+                total += cursor.fetchone()[0]
+
+            #Retorna a soma maior que zero
+            return total > 0
+        
+        #Enecerra a execução
+        finally:
+
+            #Fecha o cursor
+            cursor.close()
+
+            #Encerra a conexão
+            conexao.close()
+
+#---> Fim: Busca por tabela relacionada
+######################################################################################

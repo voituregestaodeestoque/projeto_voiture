@@ -129,14 +129,6 @@ class Pedido_entrada(CrudBase):
                     """,
                     (nova_quantidade, item["produto_id"]) )
 
-            cursor.execute(
-                """
-                UPDATE pedido_entrada
-                WHERE id = %s
-                """,
-                (pedido_entrada_id,)
-            )
-
             conexao.commit()
             return "Pedido de entrada finalizado com sucesso."
 

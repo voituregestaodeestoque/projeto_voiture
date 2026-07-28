@@ -127,7 +127,7 @@ class Fornecedor(CrudBase):
 
         #Inicia uma tentativa
         try:
-            #Monta uma lista que conta quantas vezes fornecedor apararece na tabela de pedido de entrada
+            #Monta uma lista que conta quantas vezes fornecedor aparece na tabela de pedido de entrada
             queries = [
 
                 #Comando SQL para a contagem
