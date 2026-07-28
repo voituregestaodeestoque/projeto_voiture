@@ -83,12 +83,13 @@
                 class="{% if request.endpoint == 'fornecedor' or request.endpoint == 'listagem_fornecedor'  %}active{% endif %}">
                 <i class="bi bi-briefcase"></i> Fornecedores
             </a>
-
             <!--botão/rota que leva pra tela de listagem de funcionario-->
-            <a href="{{ url_for('listagem_funcionario') }}"
-                class="{% if request.endpoint == 'cadastro_funcionario' or request.endpoint == 'listagem_funcionario' %}active{% endif %}">
-                <i class="bi bi-gear"></i> Gestão
-            </a>
+            {% if session["funcionario_permissao"] == 'administrador' %}
+                <a href="{{ url_for('listagem_funcionario') }}"
+                    class="{% if request.endpoint == 'cadastro_funcionario' or request.endpoint == 'listagem_funcionario' %}active{% endif %}">
+                    <i class="bi bi-gear"></i> Gestão
+                </a>
+            {%endif%}
 
 
         </nav>

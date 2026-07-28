@@ -338,6 +338,15 @@ class Validator:
 
         return{"valida":True}
     
+    @staticmethod
+    def validar_permissao(value, field_name):
+        #Não pode ter mais de 700 caracteres
+        if value == "":
+            return{"valida":False,"mensagem":f"Selecione um nível de permissão"}
+        if value != "administrador":
+            if value != "funcionario":
+                return{"valida":False,"mensagem":f"O nível de usabilidade não existe!"}
+        return{"valida":True}
 
 
         

@@ -16,12 +16,13 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
         'funcionario_ddi',
         'funcionario_ddd',
         'funcionario_telefone',
-        'funcionario_cargo'
+        'funcionario_cargo',
+        'funcionario_permissao'
     ]
     #campos que existe na tabela
 
     #metodo pra criar um objeto e no self passando os dados de cada campo
-    def __init__(self, funcionario_nome, funcionario_senha, funcionario_cpf, funcionario_cep, funcionario_email, funcionario_ddi, funcionario_ddd, funcionario_telefone, funcionario_cargo):
+    def __init__(self, funcionario_nome, funcionario_senha, funcionario_cpf, funcionario_cep, funcionario_email, funcionario_ddi, funcionario_ddd, funcionario_telefone, funcionario_cargo, funcionario_permissao):
         self.funcionario_nome = funcionario_nome
         self.funcionario_senha = funcionario_senha
         self.funcionario_cpf = funcionario_cpf
@@ -31,6 +32,7 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
         self.funcionario_ddd = funcionario_ddd
         self.funcionario_telefone = funcionario_telefone
         self.funcionario_cargo = funcionario_cargo
+        self.funcionario_permissao = funcionario_permissao
     
     #Função para validar os campos da tabela 
     def validate(self):
@@ -47,7 +49,8 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
             Validator.validar_ddi_ddd(self.funcionario_ddi, "funcionario_ddi"),
             Validator.validar_ddi_ddd(self.funcionario_ddd, "funcionario_ddd"),
             Validator.validar_telefone(self.funcionario_telefone, "funcionario_telefone"),
-            Validator.validar_cargo(self.funcionario_cargo, "funcionario_cargo")
+            Validator.validar_cargo(self.funcionario_cargo, "funcionario_cargo"),
+            Validator.validar_permissao(self.funcionario_permissao, "funcionario_permissao"),
         ]
         #se der algum erro
         for itens in validacoes:

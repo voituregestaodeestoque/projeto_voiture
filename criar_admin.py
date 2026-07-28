@@ -38,7 +38,8 @@ dados = {
     "funcionario_ddi": "55",
     "funcionario_ddd": "19",
     "funcionario_telefone": "123456789",
-    "funcionario_cargo": "Admin"
+    "funcionario_cargo": "Admin",
+    "funcionario_permissao": "administrador"
 }
 
 funcionario=select_admin()

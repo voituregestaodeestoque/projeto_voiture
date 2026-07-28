@@ -83,7 +83,7 @@
 
                 </div>
             </div>
-            <div class="col-md-6 mb-3 text-start">
+            <div class="col-md-4 mb-3 text-start">
                 <!--Cpf-->
                 <label for="funcionario_cpf" class="form-label">CPF</label>
                 <div class="input-group">
@@ -98,7 +98,7 @@
 
                 </div>
             </div>
-            <div class="col-md-6 mb-3 text-start">
+            <div class="col-md-4 mb-3 text-start">
                 <!--Cargo-->
                 <label for="funcionario_cargo" class="form-label">Cargo</label>
                 <div class="input-group">
@@ -111,6 +111,22 @@
                         placeholder="Digite o cargo" required
                         value="{{ funcionario.funcionario_cargo if funcionario else '' }}">
 
+                </div>
+            </div>
+            <div class="col-md-4 mb-3 text-start">
+                <!--Cargo-->
+                <label for="funcionario_cargo" class="form-label">Nível de Permissão</label>
+                <div class="input-group">
+                    <!--icone do lado do campo input-->
+                    <span class="input-group-text bg-dark border-secondary">
+                        <i class="bi bi-person-vcard text-white"></i>
+                    </span>
+                    <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
+                    <select id="funcionario_permissao" name="funcionario_permissao" class="form-select">
+                        <option value="">Selecione</option>
+                        <option value="administrador">Administrador</option>
+                        <option value="funcionario">Funcionário</option>
+                    </select>
                 </div>
             </div>
             <div class="col-md-3 mb-3 text-start">
