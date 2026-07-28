@@ -537,7 +537,7 @@ def detalhes_saida(pedido_saida_id):
         return redirect(url_for("pedidosaida"))
 
     return render_template(
-        "detalhes_saida.html",
+        "formulario_pedidosaida.html",
         pedido=pedido,
         itens=Detalhe_saida.find_by_pedido(pedido_saida_id),
         produto=Estoque.card_estoque_nome()
@@ -611,7 +611,7 @@ def nova_saida():
 
             
             return render_template(
-                "formulario_pedidosaida.html",
+                "pedidosaida.html",
                 pedido=pedido,
                 produto=Estoque.card_estoque_nome(),
                 clientes=Cliente.find_all()

@@ -116,13 +116,13 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
             raise ValueError("Não é possível excluir o funcionario porque ele está vinculado a outros serviços.")
         cls.delete(id)
 
-    #Procura se o funcionario em questão está relacionado com algum pedido de entrada
+    #Procura se o funcionario em questão está relacionado com algum uso de empilhadeira
     @classmethod
     def has_related_records(cls, id):
         conexao = Database.connect() #conecta no banco
         cursor = conexao.cursor()
         try:
-            #conta quantas vezes existe o campo funcionario_id na tabela uso_emilhadeira
+            #conta quantas vezes existe o campo funcionario_id na tabela uso_empilhadeira
             queries = [
                 "SELECT COUNT(*) FROM uso_empilhadeira WHERE funcionario_id = %s"
             ]

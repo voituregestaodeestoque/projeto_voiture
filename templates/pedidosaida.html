@@ -44,6 +44,7 @@
                         {% if pedido.status_pedido_saida == 'PENDENTE' %}
                         <a href="{{ url_for('processar_pedido_saida', pedido_saida_id=pedido.pedido_saida_id) }}" class="btn btn-sm btn-success">Processar</a>
                         <a href="{{ url_for('cancelar_pedido_saida', pedido_saida_id=pedido.pedido_saida_id) }}" class="btn btn-sm btn-danger">Cancelar</a>
+                        <a href="" class="btn btn-sm btn-warning">Editar</a>
                         {% else %}
                         -
                         {% endif %}

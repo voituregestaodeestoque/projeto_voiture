@@ -137,14 +137,6 @@ class Pedido_saida(CrudBase):
                     (datetime.now(), item["id"], pedido_saida_id)
                 )
 
-            cursor.execute(
-                """
-                UPDATE pedido_saida
-                WHERE id = %s
-                """,
-                ("PENDENTE", pedido_saida_id)
-            )
-
             conexao.commit()
             return "Pedido de saída finalizado com sucesso."
 
