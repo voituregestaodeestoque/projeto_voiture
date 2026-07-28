@@ -7,7 +7,8 @@
     <div>
         <h2 class="titulo-pagina">
             <i class="bi bi-person"></i>
-            {{ 'Editar Funcionário' if funcionario and funcionario.id else 'Cadastrar Funcionário' }} <!--se passarem um id, o titulo vira outro-->
+            {{ 'Editar Funcionário' if funcionario and funcionario.id else 'Cadastrar Funcionário' }}
+            <!--se passarem um id, o titulo vira outro-->
         </h2>
     </div>
     <div>
@@ -21,7 +22,8 @@
 
     <form class="mb-3"
         action="{% if funcionario and funcionario.id %}{{ url_for('atualizar_funcionario', id=funcionario.id) }}{% else %}{{ url_for('salvar_funcionario') }}{% endif %}"
-        method="POST"> <!--ação que executa o cadastro de um funcionario e se ja existir um parametro de id, ele edita um funcionario existente-->
+        method="POST">
+        <!--ação que executa o cadastro de um funcionario e se ja existir um parametro de id, ele edita um funcionario existente-->
         <div class="row">
             <!--Campo Nome-->
             <div class="col-md-6 mb-3 text-start">
@@ -61,7 +63,7 @@
                     <span class="input-group-text bg-dark border-secondary">
                         <i class="bi bi-lock-fill text-white"></i>
                     </span>
-                    
+
                     <input type="password" name="funcionario_senha" id="funcionario_senha" class="form-control"
                         placeholder="Digite a senha" required
                         value="{{ funcionario.funcionario_senha if funcionario else '' }}">
@@ -94,8 +96,7 @@
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
                     <input type="text" name="funcionario_cpf" id="funcionario_cpf" class="form-control"
                         placeholder="Digite o CPF" required
-                        value="{{ funcionario.funcionario_cpf if funcionario else '' }}">
-
+                    value="{{ funcionario.funcionario_cpf if funcionario else '' }}">
                 </div>
             </div>
             <div class="col-md-4 mb-3 text-start">
@@ -109,8 +110,7 @@
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
                     <input type="text" name="funcionario_cargo" id="funcionario_cargo" class="form-control"
                         placeholder="Digite o cargo" required
-                        value="{{ funcionario.funcionario_cargo if funcionario else '' }}">
-
+                    value="{{ funcionario.funcionario_cargo if funcionario else '' }}">
                 </div>
             </div>
             <div class="col-md-4 mb-3 text-start">
@@ -140,7 +140,8 @@
                     </span>
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
                     <input type="text" name="funcionario_ddi" id="funcionario_ddi" class="form-control"
-                        placeholder="Código Internacional" required value="{{ funcionario.funcionario_ddi if funcionario else '' }}">
+                        placeholder="Código Internacional" required
+                        value="{{ funcionario.funcionario_ddi if funcionario else '' }}">
                 </div>
             </div>
 
@@ -155,7 +156,8 @@
                     </span>
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
                     <input type="text" name="funcionario_ddd" id="funcionario_ddd" class="form-control"
-                        placeholder="Código Regional" required value="{{ funcionario.funcionario_ddd if funcionario else '' }}">
+                        placeholder="Código Regional" required
+                        value="{{ funcionario.funcionario_ddd if funcionario else '' }}">
 
                 </div>
             </div>
