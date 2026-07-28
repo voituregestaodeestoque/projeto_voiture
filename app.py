@@ -72,6 +72,7 @@ def login():
         #cria uma sessão no sistema para poder usar o site
         session["usuario_id"] = funcionario["id"]
         session["funcionario_nome"] = funcionario["funcionario_nome"]
+        session["funcionario_permissao"] = funcionario["funcionario_permissao"]
         return redirect(url_for("base"))#retorna para o site
     #se a senha ou email não bater
     flash("Login e/ou senha inválidos","erro")
@@ -1251,6 +1252,7 @@ def get_funcionario_form():
         "funcionario_ddd": request.form.get("funcionario_ddi", "").strip(),
         "funcionario_telefone": request.form.get("funcionario_telefone", "").strip(),
         "funcionario_cargo": request.form.get("funcionario_cargo", "").strip(),
+        "funcionario_permissao": request.form.get("funcionario_permissao", "").strip(),
     }
 
 # Registro de funcionário no banco de dados
