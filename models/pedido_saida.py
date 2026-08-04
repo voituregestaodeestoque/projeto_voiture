@@ -140,9 +140,6 @@ class Pedido_saida(CrudBase):
             conexao.commit()
             return "Pedido de saída finalizado com sucesso."
 
-        except Exception:
-            conexao.rollback()
-            return "Erro ao finalizar pedido de saída."
         finally:
             cursor.close()
             conexao.close()
@@ -211,6 +208,11 @@ class Pedido_saida(CrudBase):
                 if not estoque:
                     raise ValueError(
                         f"Não existe estoque para o produto {detalhe['produto_id']}"
+                    )
+                
+                if estoque['estoque_quantidade'] < detalhe["detalhe_saida_quantidade"]:
+                    raise ValueError (
+                        f"Estoque insuficiente para o produto {detalhe['produto_id']}"
                     )
 
                 nova_quantidade = (
