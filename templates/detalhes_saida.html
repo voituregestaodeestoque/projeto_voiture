@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
-<h2></h2>
-
 <div>
     <h2 class="titulo-pagina">
         <i class="bi bi-box-seam"></i> Pedido de Saída nº {{ pedido.id }}
@@ -119,11 +117,18 @@
 
         const option = selectProduto.options[selectProduto.selectedIndex];
         const nome = option.getAttribute("data-nome");
+        const estoque = parseInt(option.getAttribute("data-estoque"));
+
+        if (quantidade > estoque) {
+            alert(`Estoque insuficiente. Disponível: ${estoque}`);
+        return;
+        }
 
         const itemExistente = itens.find(item => item.produto_id === produtoId);
 
         if (itemExistente) {
             const novaQuantidade = itemExistente.quantidade - quantidade;
+
 
             itemExistente.quantidade = novaQuantidade;
         } else {

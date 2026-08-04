@@ -311,3 +311,25 @@ class Pedido_entrada(CrudBase):
         finally:
             cursor.close()
             conexao.close()
+    @classmethod
+    def total_entradas(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+
+        try:
+            sql = """
+            SELECT 
+                SUM(detalhe_entrada_quantidade) AS total
+            FROM detalhe_entrada
+            """
+
+            cursor.execute(sql)
+            resultado = cursor.fetchone()
+
+            return resultado["total"] or 0
+
+        finally:
+            cursor.close()
+            conexao.close()
+
+                

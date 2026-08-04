@@ -141,10 +141,81 @@
 
             <div class="col-6">
                 <!--Gráfico de movimentações-->
-                <div class="card shadow-sm p-3 mb-4" style="height: 100%;">
-                    <h4 class="text-center"><strong>Movimentações</strong></h4> <!---->
+                <div class="card shadow-sm p-3 mb-3" style="height: 430px; width: 600px;">
+                    <h4 class="text-center"><strong>Movimentações</strong></h4>
+                    <div style="height: 350px; display: flex; justify-content: center;">
+                        <canvas id="graficoMovimentacao"></canvas>
+                    </div>
 
-                </div>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                    <script>
+
+                        const entrada = {{ entrada }};
+                        const saida = {{ saida }};
+
+
+                        const ctx = document
+                            .getElementById('graficoMovimentacao');
+
+
+                        new Chart(ctx, {
+
+                            type: 'pie',
+
+                            data: {
+
+                                labels: [
+                                    'Produtos Entrando',
+                                    'Produtos Saindo'
+                                ],
+
+                                datasets: [{
+
+                                    data: [
+                                        entrada,
+                                        saida
+                                    ],
+
+                                    backgroundColor: [
+                                        '#28a745',
+                                        '#dc3545'
+                                    ],
+
+                                    borderWidth: 1
+
+                                }]
+
+                            },
+
+
+                            options: {
+
+                                responsive: true,
+
+                                plugins: {
+
+                                    legend: {
+
+                                        position: 'bottom'
+
+                                    },
+
+                                    title: {
+
+                                        display: true,
+
+                                        text: 'Movimentação de Produtos'
+
+                                    }
+
+                                }
+
+                            }
+
+                        });
+
+                    </script>
 
             </div>
     </section>
