@@ -140,6 +140,9 @@ class Pedido_saida(CrudBase):
             conexao.commit()
             return "Pedido de saída finalizado com sucesso."
 
+        except Exception:
+            conexao.rollback()
+            return "Erro ao finalizar pedido de saída."
         finally:
             cursor.close()
             conexao.close()
@@ -208,11 +211,6 @@ class Pedido_saida(CrudBase):
                 if not estoque:
                     raise ValueError(
                         f"Não existe estoque para o produto {detalhe['produto_id']}"
-                    )
-                
-                if estoque['estoque_quantidade'] < detalhe["detalhe_saida_quantidade"]:
-                    raise ValueError (
-                        f"Estoque insuficiente para o produto {detalhe['produto_id']}"
                     )
 
                 nova_quantidade = (
@@ -330,9 +328,11 @@ class Pedido_saida(CrudBase):
 
         try:
             sql = """
-                SELECT 
-                SUM(detalhe_saida_quantidade) AS total
-            FROM detalhe_saida
+                SELECT SUM(ds.detalhe_saida_quantidade) AS total
+                FROM detalhe_saida ds
+                INNER JOIN pedido_saida ps
+                    ON ds.pedido_saida_id = ps.id
+                WHERE ps.status_pedido_saida = 'CONCLUIDO'
             """
 
             cursor.execute(sql)

@@ -315,9 +315,11 @@ class Pedido_entrada(CrudBase):
 
         try:
             sql = """
-            SELECT 
-                SUM(detalhe_entrada_quantidade) AS total
-            FROM detalhe_entrada
+                SELECT SUM(ds.detalhe_entrada_quantidade) AS total
+                FROM detalhe_entrada ds
+                INNER JOIN pedido_entrada ps
+                    ON ds.pedido_entrada_id = ps.id
+                WHERE ps.status_pedido_entrada = 'CONCLUIDO'
             """
 
             cursor.execute(sql)
@@ -328,5 +330,3 @@ class Pedido_entrada(CrudBase):
         finally:
             cursor.close()
             conexao.close()
-
-                
