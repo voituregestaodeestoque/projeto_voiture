@@ -1,6 +1,6 @@
 
 # Editado por Júlia em 13/06/2026 às 14h40
-from core.security import login_obrigatorio
+from core.security import login_obrigatorio, admin_obrigatorio
 from flask import Flask, render_template, request, redirect, url_for, flash, json, session
 from models.funcionario import Funcionario
 from models.empilhadeira import Empilhadeira
@@ -336,6 +336,12 @@ def atualizar_produto(id):
 def deletar_produto(id):
     #Tenta deletar
     try:
+        if Produto.has_related_records(id):
+            flash(
+                "Não é possível excluir o produto porque ele está vinculado a outros serviços.","erro"
+            )
+            return redirect(url_for("listagem_produto"))
+
         Estoque.delete_by_produto(id)
         Produto.safe_delete(id)
         flash("Produto excluído com sucesso.", "sucesso")
@@ -537,7 +543,7 @@ def detalhes_saida(pedido_saida_id):
         return redirect(url_for("pedidosaida"))
 
     return render_template(
-        "formulario_pedidosaida.html",
+        "detalhes_saida.html",
         pedido=pedido,
         itens=Detalhe_saida.find_by_pedido(pedido_saida_id),
         produto=Estoque.card_estoque_nome()
@@ -582,6 +588,15 @@ def finalizar_saida(pedido_saida_id):
     flash(mensagem)
     return redirect(url_for("pedidosaida"))
 
+@app.route("/editar_pedido_saida/<int:pedido_saida_id>")
+@login_obrigatorio
+def editar_saida(pedido_saida_id):
+    pedido = Pedido_saida.find_by_id(pedido_saida_id)
+    if not pedido:
+        flash("Pedido de saida não encontrado.", "erro")
+        return redirect(url_for("detalhes_saida"))
+    return render_template("detalhes_saida.html", pedido=pedido)
+    
 
 @app.route("/saida/nova", methods=["GET", "POST"])
 @login_obrigatorio
@@ -634,7 +649,7 @@ def nova_saida():
             
             print("check", teste)
             flash("Pedido de saída criado com sucesso.","sucesso")
-            return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
+            return redirect(url_for("pedidosaida", pedido_saida_id=pedido_saida_id))
 
         except Exception as e:
             print("erro", e)
@@ -1234,6 +1249,7 @@ def cadastro_funcionario():
 
 @app.route("/listagem_funcionario")
 @login_obrigatorio
+@admin_obrigatorio
 def listagem_funcionario():
     funcionario = Funcionario.funcionario_listagem() #função select pra mostrar os funcionario cadastrados no sistema
     return render_template(
