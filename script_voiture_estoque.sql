@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS funcionario (
   funcionario_ddd VARCHAR(2) NOT NULL,
   funcionario_telefone VARCHAR(20) NOT NULL,
   funcionario_cargo VARCHAR(50) NOT NULL,
+  funcionario_permissao VARCHAR(50) NOT NULL,
   PRIMARY KEY (id))
 ENGINE = InnoDB
 AUTO_INCREMENT = 7

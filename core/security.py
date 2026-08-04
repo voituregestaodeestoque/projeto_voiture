@@ -38,3 +38,17 @@ def login_obrigatorio(funcao):
         return funcao(*args, **kwargs)
 
     return wrapper
+
+def admin_obrigatorio(funcao):
+    """
+    Decorador para proteger rotas que exigem login.
+    """
+    @wraps(funcao)
+    def wrapper(*args, **kwargs):
+        if session["funcionario_permissao"] != "administrador":
+            flash("Você não tem permissão para acessar", "erro")
+            return redirect(url_for("base"))
+
+        return funcao(*args, **kwargs)
+
+    return wrapper

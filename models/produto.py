@@ -66,6 +66,7 @@ class Produto(CrudBase):
         if not produto:
             raise ValueError("Produto não encontrado.")
         
+        print(cls.has_related_records(id))
         if cls.has_related_records(id):
             raise ValueError("Não é possível excluir o produto porque ele está vinculado a outros serviços.")
         cls.delete(id)
@@ -77,8 +78,8 @@ class Produto(CrudBase):
         cursor = conexao.cursor()
         try:
             queries = [
-                "SELECT COUNT(*) FROM pedido_entrada WHERE produto_id = %s",
-                "SELECT COUNT(*) FROM pedido_saida WHERE produto_id = %s"
+                "SELECT COUNT(*) FROM detalhe_entrada WHERE produto_id = %s",
+                "SELECT COUNT(*) FROM detalhe_saida WHERE produto_id = %s"
             ]
             total = 0
             for sql in queries:
