@@ -44,7 +44,7 @@ class Fornecedor(CrudBase):
             #nome 
             Validator.validar_nome(self.fornecedor_nome, "fornecedor_nome"),
             #cnpj válido
-            Validator.validar_cpf_cnpj(self.fornecedor_cnpj, "fornecedor_cnpj"),
+            Validator.validar_cnpj(self.fornecedor_cnpj, "fornecedor_cnpj"),
             #cep 
             Validator.validar_cep(self.fornecedor_cep, "fornecedor_cep"),
             #email válido

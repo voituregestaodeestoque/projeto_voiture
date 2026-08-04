@@ -97,7 +97,7 @@ class Validator:
 
     #função:validação externa de CPF/CNPJ
     @staticmethod
-    def validar_cpf_cnpj(value, field_name):
+    def validar_cnpj(value, field_name):
         url = "https://api.invertexto.com/v1/validator"
 
         params = {
@@ -121,7 +121,35 @@ class Validator:
             print("Timeout:", errt)
         except requests.exceptions.RequestException as err:
             print("Erro", err)
-        return {"valida":False,"mensagem":"CPF/CNPJ inválido"}
+        return {"valida":False,"mensagem":"CNPJ inválido"}
+
+
+    @staticmethod
+    def validar_cpf(value, field_name):
+        url = "https://api.invertexto.com/v1/validator"
+
+        params = {
+            "token": "22548|PVsusDzEZnuek7rPOVOsPZCmk1hFXUbK",
+            "value": (value)
+        }
+
+        try:
+            response = requests.get(url, params = params)
+            response.raise_for_status()
+
+            data = response.json()
+            if data['valid'] and data['formatted']:
+                return{"valida":True}
+
+        except requests.exceptions.HTTPError as errh:
+            print("Erro HTTP:", errh)
+        except requests.exceptions.ConnectionError as errc:
+            print("Erro de conexão", errc)
+        except requests.exceptions.Timeout as errt:
+            print("Timeout:", errt)
+        except requests.exceptions.RequestException as err:
+            print("Erro", err)
+        return {"valida":False,"mensagem":"CPF inválido"}
 
 
     '''============> Validações BASE INTERNAS <============'''

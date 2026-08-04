@@ -40,7 +40,7 @@ class Cliente(CrudBase):#cria a classe Cliente
             #nome
             Validator.validar_nome(self.cliente_nome, "cliente_nome"),
             #cnpj
-            Validator.validar_cpf_cnpj(self.cliente_cnpj, "cliente_cnpj"),
+            Validator.validar_cnpj(self.cliente_cnpj, "cliente_cnpj"),
             #cep
             Validator.validar_cep(self.cliente_cep, "cliente_cep"),
             #email
