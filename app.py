@@ -432,6 +432,17 @@ def finalizar_entrada(pedido_entrada_id):
     return redirect(url_for("pedidoentrada"))
 
 
+@app.route("/editar_pedido_entrada/<int:pedido_entrada_id>")
+@login_obrigatorio
+def editar_entrada(pedido_entrada_id):
+    pedido = Pedido_entrada.find_by_id(pedido_entrada_id)
+    if not pedido:
+        flash("Pedido de entrada não encontrado.", "erro")
+        return redirect(url_for("detalhes_entrada"))
+    return render_template("detalhes_entrada.html", pedido=pedido, itens=Detalhe_entrada.find_by_pedido(pedido_entrada_id),
+        produto=Estoque.card_estoque_nome())
+
+
 @app.route("/entrada/nova", methods=["GET", "POST"])
 @login_obrigatorio
 def nova_entrada():
@@ -484,7 +495,7 @@ def nova_entrada():
             
                 print("check", teste)
             flash("Pedido de entrada criado com sucesso.","sucesso")
-            return redirect(url_for("detalhes_entrada", pedido_entrada_id=pedido_entrada_id))
+            return redirect(url_for("pedidoentrada", pedido_entrada_id=pedido_entrada_id))
 
         except Exception:
             flash("Erro ao criar pedido de entrada.")
@@ -604,7 +615,8 @@ def editar_saida(pedido_saida_id):
     if not pedido:
         flash("Pedido de saida não encontrado.", "erro")
         return redirect(url_for("detalhes_saida"))
-    return render_template("detalhes_saida.html", pedido=pedido)
+    return render_template("detalhes_saida.html", pedido=pedido, itens=Detalhe_saida.find_by_pedido(pedido_saida_id),
+        produto=Estoque.card_estoque_nome())
     
 
 @app.route("/saida/nova", methods=["GET", "POST"])
