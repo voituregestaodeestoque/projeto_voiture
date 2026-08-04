@@ -427,8 +427,13 @@ def remover_item_entrada(detalhe_entrada_id, pedido_entrada_id):
 @app.route("/entrada/finalizar/<int:pedido_entrada_id>")
 @login_obrigatorio
 def finalizar_entrada(pedido_entrada_id):
-    mensagem = Pedido_entrada.finalizar(pedido_entrada_id)
-    flash(mensagem)
+    try:
+        mensagem = Pedido_entrada.finalizar(pedido_entrada_id)
+        flash(mensagem, "sucesso")
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao atualizar pedido de entrada: {e}", "erro")
     return redirect(url_for("pedidoentrada"))
 
 
@@ -582,11 +587,13 @@ def adicionar_item_saida(pedido_saida_id):
     # Ex: se o pedido já tem 2 itens, o próximo será o 3 (2 + 1)
     proximo_item_numero = len(itens_existentes) + 1
 
+    
+
     mensagem = Detalhe_saida.adicionar_item(
         pedido_saida_id=pedido_saida_id,
         produto_id=produto_id,
         detalhe_saida_quantidade=detalhe_saida_quantidade,
-        detalhe_saida_item= proximo_item_numero
+        detalhe_saida_item= proximo_item_numero,
     )
 
     flash(mensagem)
@@ -604,9 +611,15 @@ def remover_item_saida(detalhe_saida_id, pedido_saida_id):
 @app.route("/saida/finalizar/<int:pedido_saida_id>")
 @login_obrigatorio
 def finalizar_saida(pedido_saida_id):
-    mensagem = Pedido_saida.finalizar(pedido_saida_id)
-    flash(mensagem)
+    try:
+        mensagem = Pedido_saida.finalizar(pedido_saida_id)
+        flash(mensagem, "sucesso")
+    except ValueError as e:
+        flash(str(e), "erro")
+    except Exception as e:
+        flash(f"Erro ao atualizar pedido de saida: {e}", "erro")
     return redirect(url_for("pedidosaida"))
+
 
 @app.route("/editar_pedido_saida/<int:pedido_saida_id>")
 @login_obrigatorio
@@ -1286,7 +1299,7 @@ def get_funcionario_form():
         "funcionario_cep": request.form.get("funcionario_cep", "").strip(),
         "funcionario_email": request.form.get("funcionario_email", "").strip(),
         "funcionario_ddi": request.form.get("funcionario_ddi", "").strip(),
-        "funcionario_ddd": request.form.get("funcionario_ddi", "").strip(),
+        "funcionario_ddd": request.form.get("funcionario_ddd", "").strip(),
         "funcionario_telefone": request.form.get("funcionario_telefone", "").strip(),
         "funcionario_cargo": request.form.get("funcionario_cargo", "").strip(),
         "funcionario_permissao": request.form.get("funcionario_permissao", "").strip(),
@@ -1298,6 +1311,11 @@ def get_funcionario_form():
 def salvar_funcionario():
     dados = get_funcionario_form() #pega os dados do formulário do funcionário e coloca dentro da variavel dados
     funcionario = Funcionario(**dados) #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
+    numeros_cpf = ""
+    for caractere in funcionario.funcionario_cpf:
+        if caractere.isdigit():
+            numeros_cpf = numeros_cpf + caractere
+    funcionario.funcionario_cpf = numeros_cpf
     #Validação
     erros = funcionario.validate() 
     if erros: #se tiver algum erro dentro do validate, ele cai nesse if
