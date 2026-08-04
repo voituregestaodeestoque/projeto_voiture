@@ -92,7 +92,7 @@
 
 {% if pedido.status_pedido_entrada == 'PENDENTE' %}
 <h2 style="margin-left: 40px;" class="botao-direita">
-    <a href="{{ url_for('finalizar_entrada', pedido_entrada_id=pedido.id) }}" class="btn btn-success ">Finalizar</a>
+    <a href="{{ url_for('finalizar_entrada', pedido_entrada_id=pedido.id) }}" class="btn btn-success ">Atualizar</a>
 </h2>
 {% endif %}
 
