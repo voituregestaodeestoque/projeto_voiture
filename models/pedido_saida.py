@@ -148,6 +148,8 @@ class Pedido_saida(CrudBase):
             conexao.close()
 
     
+
+    
     @classmethod
     def find_by_id(cls, pedido_saida_id):
         conexao = Database.connect()
@@ -319,3 +321,5 @@ class Pedido_saida(CrudBase):
         finally:
             cursor.close()
             conexao.close()
+
+
