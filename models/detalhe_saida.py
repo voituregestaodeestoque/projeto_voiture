@@ -3,6 +3,7 @@ from core.database import Database
 from core.validator import Validator
 from models.pedido_saida import Pedido_saida
 from models.produto import Produto
+from models.estoque import Estoque
 
 class Detalhe_saida(CrudBase):
     table = "detalhe_saida"
@@ -64,6 +65,7 @@ class Detalhe_saida(CrudBase):
     def adicionar_item(cls, detalhe_saida_quantidade, produto_id, detalhe_saida_item, pedido_saida_id):
         print("pedido", pedido_saida_id)
         pedido = Pedido_saida.find_by_id(pedido_saida_id)
+
         
         if not pedido:
             print("01")
