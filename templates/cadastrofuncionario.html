@@ -95,7 +95,7 @@
                     </span>
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
                     <input type="text" name="funcionario_cpf" id="funcionario_cpf" class="form-control"
-                        placeholder="Digite o CPF" required
+                        placeholder="Digite o CPF" required maxlength="14"
                     value="{{ funcionario.funcionario_cpf if funcionario else '' }}">
                 </div>
             </div>
