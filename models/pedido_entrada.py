@@ -130,11 +130,11 @@ class Pedido_entrada(CrudBase):
                     (nova_quantidade, item["produto_id"]) )
 
             conexao.commit()
-            return "Pedido de entrada finalizado com sucesso."
+            return "Pedido de entrada atualizado com sucesso."
 
         except Exception:
             conexao.rollback()
-            return "Erro ao finalizar pedido de entrada."
+            return "Erro ao atualizar pedido de entrada."
         finally:
             cursor.close()
             conexao.close()
@@ -250,9 +250,6 @@ class Pedido_entrada(CrudBase):
 
             conexao.commit()
             return "Pedido de entrada processado com sucesso."
-        except Exception:
-            conexao.rollback()
-            raise
         finally:
             cursor.close()
             conexao.close()
