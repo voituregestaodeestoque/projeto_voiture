@@ -49,7 +49,7 @@
                     <!--Icone BS-->
                     <i class="bi bi-person-vcard-fill text-white"></i>
                 </span>
-                <input type="text" name="cliente_cnpj" id="cliente_cnpj" class="form-control"
+                <input type="text" name="cliente_cnpj" id="cliente_cnpj" class="form-control" maxlength="18"
                     placeholder="Digite seu CNPJ" required value="{{ cliente.cliente_cnpj if cliente else '' }}">
             </div>
         </div>
