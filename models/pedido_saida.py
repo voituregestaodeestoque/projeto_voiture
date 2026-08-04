@@ -321,5 +321,23 @@ class Pedido_saida(CrudBase):
         finally:
             cursor.close()
             conexao.close()
+    @classmethod
+    def total_saidas(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
 
+        try:
+            sql = """
+                SELECT 
+                SUM(detalhe_saida_quantidade) AS total
+            FROM detalhe_saida
+            """
 
+            cursor.execute(sql)
+            resultado = cursor.fetchone()
+
+            return resultado["total"] or 0
+
+        finally:
+            cursor.close()
+            conexao.close()

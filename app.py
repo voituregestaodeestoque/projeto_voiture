@@ -113,6 +113,15 @@ def base():
 #Função que define as funcionalidades do dashboard
 def dashboard():
 
+    entrada = Pedido_entrada.total_entradas()
+    saida = Pedido_saida.total_saidas()
+
+    return render_template(
+        "dashboard.html",
+        entrada=entrada,
+        saida=saida
+    )
+
     #Recebe a soma de todas as quantidades contidas no estoque
     dic_total=Estoque.estoque_total()
 
