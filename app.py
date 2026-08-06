@@ -37,7 +37,7 @@ def to_float(value, default=0.0):
 
 @app.route('/landingpage')
 def landingpage():
-    return render_template('lp.html')
+    return render_template('landing_page.html')
 
 # -----> Fim: Landing Page
 ############################################################################################################
