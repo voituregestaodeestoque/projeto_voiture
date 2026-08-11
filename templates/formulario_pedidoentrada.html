@@ -76,7 +76,48 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for item in itens %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.produto }}</td>
+                            <td>{{ item.detalhe_entrada_quantidade}}</td>
+                            <td>
+                                {% if pedido.status_pedido_entrada == 'PENDENTE' %}
+                                <!-- Botão do modal pra excluir -->
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                    data-bs-target="#Modal{{pedido.id}}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
 
+                                <!-- Modal -->
+                                <div class="modal fade" id="Modal{{pedido.id}}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja
+                                                        excluir esse produto?</strong></h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancelar</button>
+                                                <!--Ação para excluir o produto-->
+                                                <a href="{{ url_for('remover_item_entrada', detalhe_entrada_id=item.id, pedido_entrada_id=pedido.id) }}"
+                                                    class="btn btn-danger">
+                                                    <strong>Excluir</strong>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
 
                 </table>

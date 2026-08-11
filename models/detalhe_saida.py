@@ -3,7 +3,6 @@ from core.database import Database
 from core.validator import Validator
 from models.pedido_saida import Pedido_saida
 from models.produto import Produto
-from models.estoque import Estoque
 
 class Detalhe_saida(CrudBase):
     table = "detalhe_saida"
