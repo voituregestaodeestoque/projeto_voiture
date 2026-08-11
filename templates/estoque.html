@@ -1,4 +1,4 @@
-<!--Editado por Júlia em 02/06/2026 as 16h46-->
+<!--Editado por Ryan em 11/08/2026 as 10h11-->
 {% extends 'base.html' %}
 
 {% block conteudo %}
@@ -15,56 +15,47 @@
 
                 <!--Botão de envio-->
                 <button class="input-group-text bg-dark border-secondary">
-                <i class="bi bi-search text-white"></i>
+                    <i class="bi bi-search text-white"></i>
                 </button>
-                
+
             </form>
-                
+
             <!--Filtro de ordenação-->
             <form method="GET" class="form-card ms-3" style="width: 29%; margin-right: 10px;">
 
                 <!--Menu de opções de ordenação-->
-                <select
-                    name="filtro"
-                    class="filtrar form-select"
-                    onchange="this.form.submit()">
-            
+                <select name="filtro" class="filtrar form-select" onchange="this.form.submit()">
+
                     <!--Opção: adicionados recentemente-->
-                    <option value="adc-recente"
-                        {{ 'selected' if filtro == 'adc-recente' else '' }}>
+                    <option value="adc-recente" {{ 'selected' if filtro=='adc-recente' else '' }}>
                         Adicionados recentemente
                     </option>
-                    
+
                     <!--Opção: ordem alfabética de nome-->
-                    <option value="nome"
-                        {{ 'selected' if filtro == 'nome' else '' }}>
+                    <option value="nome" {{ 'selected' if filtro=='nome' else '' }}>
                         Ordenar por nome
                     </option>
-            
+
                     <!--Opção: Estoque decrescente-->
-                    <option value="maior"
-                        {{ 'selected' if filtro == 'maior' else '' }}>
+                    <option value="maior" {{ 'selected' if filtro=='maior' else '' }}>
                         Quantidade: Maior ao menor
                     </option>
-            
+
                     <!--Opção: Estoque crescente-->
-                    <option value="menor"
-                        {{ 'selected' if filtro == 'menor' else '' }}>
+                    <option value="menor" {{ 'selected' if filtro=='menor' else '' }}>
                         Quantidade: Menor ao maior
                     </option>
 
                     <!--Opção: Preço decrescente-->
-                    <option value="preco-maior"
-                        {{ 'selected' if filtro == 'preco-maior' else '' }}>
+                    <option value="preco-maior" {{ 'selected' if filtro=='preco-maior' else '' }}>
                         Preço: Maior ao menor
                     </option>
-            
+
                     <!--Opção: Preço crescente-->
-                    <option value="preco-menor"
-                        {{ 'selected' if filtro == 'preco-menor' else '' }}>
+                    <option value="preco-menor" {{ 'selected' if filtro=='preco-menor' else '' }}>
                         Preço: Menor ao maior
                     </option>
-            
+
                 </select>
             </form>
         </div>
@@ -85,13 +76,21 @@
 
                 <!--CARD-->
                 <div class="card mb-4" style="max-width: 100%;">
-                    <img class="card-img-top" src="https://picsum.photos/300/200?random=8" alt="imagem">
+                    {% if estoque_produto.imagem_base64 %}
+                    <img class="card-img-top"
+                        src="data:{{ estoque_produto.imagem_tipo }};base64,{{ estoque_produto.imagem_base64 }}"
+                        alt="Imagem do produto" style="width: 100%; height: 180px; object-fit: cover;">
+                    {% else %}
+                    <img class="card-img-top" src="{{ url_for('static', filename='images/produto-sem-imagem.png') }}"
+                        alt="Produto sem imagem">
+                    {% endif %}
                     <div class="card-body">
                         <h5 class="card-title"><strong>{{estoque_produto.produto_nome}}</strong></h5>
-                        <p class="card-text"><strong>Estoque mínimo:</strong> {{estoque_produto.produto_quantidade_minima}}</p>
+                        <p class="card-text"><strong>Estoque mínimo:</strong>
+                            {{estoque_produto.produto_quantidade_minima}}</p>
                         <p class="card-text"><strong>Estoque atual:</strong> {{estoque_produto.estoque_quantidade}}</p>
                         <p class="card-text"><strong>Localização:</strong> {{estoque_produto.produto_localizacao}}</p>
-                        
+
                         <!-- Botão pra ativar o modal -->
                         <button type="button" class="botao-add btn w-100" data-bs-toggle="modal"
                             data-bs-target="#modal{{estoque_produto.id}}">
@@ -112,15 +111,20 @@
                                     </div>
                                     <div class="modal-body">
                                         <section class="container d-flex justify-content-between"
-                                        style="background-color: #DCE3EE; width: 100%; height: 550px; border-radius: 10px;">
+                                            style="background-color: #DCE3EE; width: 100%; height: 550px; border-radius: 10px;">
                                             <!-- LADO ESQUERDO -->
                                             <div class="d-flex flex-column gap-3 m-3">
-                                                <div class="bg-white" style="width: 300px; border-radius: 10px !important;">
-                                                    <img class="card-img-top" src="https://picsum.photos/300/200?random=8" style="border-radius: 10px !important;" alt="imagem">
+                                                <div class="bg-white"
+                                                    style="width: 300px; border-radius: 10px !important;">
+                                                    
+                                                    <img class="card-img-top"
+                                                    src="data:{{ estoque_produto.imagem_tipo }};base64,{{ estoque_produto.imagem_base64 }}"
+                                                    alt="Imagem do produto" style="width: 100%; height: 180px; object-fit: cover;">
+
                                                 </div>
-                                                <div class="bg-white w-100"
-                                                    style="height: 285px; border-radius: 10px;">
-                                                    <p style="margin: 15px;"><strong>Descrição:</strong> {{estoque_produto.produto_descricao}}</p>
+                                                <div class="bg-white w-100" style="height: 285px; border-radius: 10px;">
+                                                    <p style="margin: 15px;"><strong>Descrição:</strong>
+                                                        {{estoque_produto.produto_descricao}}</p>
                                                 </div>
                                             </div>
                                             <div class="d-flex flex-column m-3 mx-auto" style="width: 320px;">
@@ -130,19 +134,23 @@
                                                 </div>
                                                 <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                     style="height: 70px; border-radius: 10px;">
-                                                    <p><strong>Categoria:</strong> {{estoque_produto.produto_categoria}}</p>
+                                                    <p><strong>Categoria:</strong> {{estoque_produto.produto_categoria}}
+                                                    </p>
                                                 </div>
                                                 <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                     style="height: 70px; border-radius: 10px;">
-                                                    <p><strong>Preço de Venda:</strong> {{estoque_produto.produto_preco_venda}}</p>
+                                                    <p><strong>Preço de Venda:</strong>
+                                                        {{estoque_produto.produto_preco_venda}}</p>
                                                 </div>
                                                 <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                     style="height: 70px; border-radius: 10px;">
-                                                    <p><strong>Preço de Custo:</strong> {{estoque_produto.produto_preco_custo}}</p>
+                                                    <p><strong>Preço de Custo:</strong>
+                                                        {{estoque_produto.produto_preco_custo}}</p>
                                                 </div>
                                                 <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                     style="height: 70px; border-radius: 10px;">
-                                                    <p><strong>Quantidade atual:</strong> {{estoque_produto.estoque_quantidade}}</p>
+                                                    <p><strong>Quantidade atual:</strong>
+                                                        {{estoque_produto.estoque_quantidade}}</p>
                                                 </div>
                                                 <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                     style="height: 70px; border-radius: 10px;">
@@ -166,7 +174,7 @@
 
         {%else%}
 
-        
+
         <!--Mensagem em caso de não ter estoque de produtos cadastrados-->
         <div class="alert alert-info mb-0">
             <i class="bi bi-info-circle"></i>

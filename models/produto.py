@@ -1,8 +1,9 @@
-# Editado por Júlia em 26/05/2026 às 11h18
+# Editado por Ryan em 11/08/2026 às 10h12
 
 from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
+import base64
 
 class Produto(CrudBase):
     table = "produto"
@@ -15,10 +16,13 @@ class Produto(CrudBase):
         'produto_preco_venda',
         'produto_peso',
         'produto_localizacao',
+        'imagem_nome',
+        'imagem_tipo',
+        'imagem_blob',
     ]
 
     def __init__(self, produto_nome, produto_descricao, produto_categoria, produto_quantidade_minima,
-                 produto_preco_custo, produto_preco_venda, produto_peso, produto_localizacao):
+                 produto_preco_custo, produto_preco_venda, produto_peso, produto_localizacao,imagem_nome,imagem_tipo, imagem_blob):
         self.produto_nome = produto_nome
         self.produto_descricao = produto_descricao
         self.produto_categoria = produto_categoria
@@ -27,6 +31,9 @@ class Produto(CrudBase):
         self.produto_preco_venda = produto_preco_venda
         self.produto_peso = produto_peso
         self.produto_localizacao = produto_localizacao
+        self.imagem_nome = imagem_nome
+        self.imagem_tipo = imagem_tipo
+        self.imagem_blob = imagem_blob
 
 
     def validate(self):

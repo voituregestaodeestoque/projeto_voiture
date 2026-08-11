@@ -1,5 +1,5 @@
 
-# Editado por Júlia em 13/06/2026 às 14h40
+# Editado por Ryan em 11/08/2026 às 10h12
 from core.security import login_obrigatorio, admin_obrigatorio
 from flask import Flask, render_template, request, redirect, url_for, flash, json, session
 from models.funcionario import Funcionario
@@ -17,6 +17,12 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "chave_secreta"
+
+EXTENSOES_PERMITIDAS = {"image/png", "image/jpeg", "image/jpg", "image/webp"}
+
+
+def imagem_permitida(tipo_arquivo):
+    return tipo_arquivo in EXTENSOES_PERMITIDAS
 
 def to_int(value, default=0):
     try:
@@ -271,7 +277,31 @@ def listagem_produto():
 @app.route("/salvar_produto", methods=["POST"])
 @login_obrigatorio
 def salvar_produto():
+    print("FORM:", request.form)
+    print("FILES:", request.files)
+    print("CONTENT-TYPE:", request.content_type)
+    arquivo = request.files.get("imagem")
+
+    imagem_nome = None
+    imagem_tipo = None
+    imagem_blob = None
+
+    if arquivo and arquivo.filename != "":
+        if not imagem_permitida(arquivo.content_type):
+            flash("Formato de imagem inválido. Use PNG, JPG, JPEG ou WEBP.", "danger")
+            return redirect(url_for("listagem_produto"))
+
+        imagem_nome = arquivo.filename
+        imagem_tipo = arquivo.content_type
+        imagem_blob = arquivo.read()
+
+    
     dados = get_produto_form()
+
+    dados["imagem_nome"] = imagem_nome
+    dados["imagem_tipo"] = imagem_tipo
+    dados["imagem_blob"] = imagem_blob
+
     produto = Produto(**dados)
 
     erros = produto.validate()
