@@ -22,7 +22,8 @@
 
     <form class="mb-3"
         action="{% if funcionario and funcionario.id %}{{ url_for('atualizar_funcionario', id=funcionario.id) }}{% else %}{{ url_for('salvar_funcionario') }}{% endif %}"
-        method="POST">
+        method="POST"
+        enctype="multipart/form-data">
         <!--ação que executa o cadastro de um funcionario e se ja existir um parametro de id, ele edita um funcionario existente-->
         <div class="row">
             <!--Campo Nome-->
@@ -177,6 +178,23 @@
                         value="{{ funcionario.funcionario_telefone if funcionario else '' }}">
 
                 </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="imagem" class="form-label">
+                    Imagem do Funcionário
+                </label>
+        
+                <input 
+                    type="file" 
+                    class="form-control" 
+                    id="imagem" 
+                    name="imagem"
+                    accept="image/png, image/jpeg, image/jpg, image/webp"
+                >
+        
+                <small class="text-muted">
+                    Formatos permitidos: PNG, JPG, JPEG ou WEBP.
+                </small>
             </div>
         </div>
         <div class="botao-direita">

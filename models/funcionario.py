@@ -3,6 +3,7 @@ from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
 from core.security import gerar_hash_senha, verificar_senha
+import base64
 
 
 class Funcionario(CrudBase): #cria a classe empilhadeira
@@ -17,12 +18,15 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
         'funcionario_ddd',
         'funcionario_telefone',
         'funcionario_cargo',
-        'funcionario_permissao'
+        'funcionario_permissao',
+        'imagem_nome',
+        'imagem_tipo',
+        'imagem_blob',
     ]
     #campos que existe na tabela
 
     #metodo pra criar um objeto e no self passando os dados de cada campo
-    def __init__(self, funcionario_nome, funcionario_senha, funcionario_cpf, funcionario_cep, funcionario_email, funcionario_ddi, funcionario_ddd, funcionario_telefone, funcionario_cargo, funcionario_permissao):
+    def __init__(self, funcionario_nome, funcionario_senha, funcionario_cpf, funcionario_cep, funcionario_email, funcionario_ddi, funcionario_ddd, funcionario_telefone, funcionario_cargo, funcionario_permissao,imagem_nome,imagem_tipo, imagem_blob):
         self.funcionario_nome = funcionario_nome
         self.funcionario_senha = funcionario_senha
         self.funcionario_cpf = funcionario_cpf
@@ -33,6 +37,9 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
         self.funcionario_telefone = funcionario_telefone
         self.funcionario_cargo = funcionario_cargo
         self.funcionario_permissao = funcionario_permissao
+        self.imagem_nome = imagem_nome
+        self.imagem_tipo = imagem_tipo
+        self.imagem_blob = imagem_blob
     
     #Função para validar os campos da tabela 
     def validate(self):
@@ -59,6 +66,19 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
 
         return erros
 
+    @classmethod
+    def preparar_imagens(cls, funcionarios):
+
+        for funcionario in funcionarios:
+
+            funcionario["imagem_base64"] = None
+
+            if funcionario.get("imagem_blob"):
+                funcionario["imagem_base64"] = base64.b64encode(
+                    funcionario["imagem_blob"]
+                ).decode("utf-8")
+
+        return funcionarios
     
     #função pra logar no sistema
     @classmethod
@@ -100,7 +120,8 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
             #seleciona tudo de funcionario
             sql = "SELECT * FROM funcionario"
             cursor.execute(sql) #executa o comando sql do select
-            return cursor.fetchall() #retorna os dados após o comando select
+            funcionarios = cursor.fetchall()
+            return cls.preparar_imagens(funcionarios)  #retorna os dados após o comando select
         finally: # fecha o objeto e a conexão
             cursor.close()
             conexao.close()
