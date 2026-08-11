@@ -114,7 +114,7 @@ class Pedido_saida(CrudBase):
                 #Verificar se há estoque suficiente
                 if estoque["estoque_quantidade"] < item["detalhe_saida_quantidade"]:
                     conexao.rollback()
-                    return f"Estoque insuficiente para o item {item['produto_id']}."
+                    return f"Estoque insuficiente para o item {item['produto_nome']}."
 
                 
                 nova_quantidade = estoque["estoque_quantidade"] - item["detalhe_saida_quantidade"]
@@ -211,6 +211,11 @@ class Pedido_saida(CrudBase):
                 if not estoque:
                     raise ValueError(
                         f"Não existe estoque para o produto {detalhe['produto_id']}"
+                    )
+                
+                if estoque['estoque_quantidade'] < detalhe["detalhe_saida_quantidade"]:
+                    raise ValueError (
+                        f"Estoque insuficiente para o produto {detalhe['produto_nome']}"
                     )
 
                 nova_quantidade = (

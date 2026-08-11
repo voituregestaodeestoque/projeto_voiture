@@ -4,6 +4,7 @@ from datetime import datetime
 from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
+import base64
 
 
 #-----> Classe: Estoque
@@ -43,6 +44,20 @@ class Estoque(CrudBase):
 
 ######################################################################################
 #---> Início: Deletar produto e estoque
+
+    @classmethod
+    def preparar_imagens(cls, produtos):
+
+        for produto in produtos:
+
+            produto["imagem_base64"] = None
+
+            if produto.get("imagem_blob"):
+                produto["imagem_base64"] = base64.b64encode(
+                    produto["imagem_blob"]
+                ).decode("utf-8")
+
+        return produtos
 
     @classmethod #Define um método da classe
 
@@ -91,7 +106,12 @@ class Estoque(CrudBase):
             sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id order by p.id DESC" 
 
             cursor.execute(sql) #Executa o comando
-            return cursor.fetchall() #Retorna a seleção dos produtos em estoque
+
+
+            produtos = cursor.fetchall()
+
+            return cls.preparar_imagens(produtos) #Retorna a seleção dos produtos em estoque
+           
 
         finally:
             cursor.close() #Fecha o cursor
@@ -119,7 +139,10 @@ class Estoque(CrudBase):
             sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id order by produto_nome ASC"
 
             cursor.execute(sql)#Executa o comando
-            return cursor.fetchall() #Retorna a seleção dos produtos
+            produtos = cursor.fetchall()
+
+            return cls.preparar_imagens(produtos)
+             #Retorna a seleção dos produtos
 
         finally:
             cursor.close() #Fecha o cursor
@@ -140,7 +163,10 @@ class Estoque(CrudBase):
             sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id order by estoque_quantidade DESC"
 
             cursor.execute(sql) #Executa o comando
-            return cursor.fetchall()#Retorna a seleção dos produtos
+            produtos = cursor.fetchall()
+
+            return cls.preparar_imagens(produtos)
+            #Retorna a seleção dos produtos
 
         finally:
             cursor.close() #Fecha o cursor
@@ -161,7 +187,10 @@ class Estoque(CrudBase):
             sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id order by estoque_quantidade ASC"
 
             cursor.execute(sql) #Executa o comando
-            return cursor.fetchall() #Retorna a seleção dos produtos
+            produtos = cursor.fetchall()
+
+            return cls.preparar_imagens(produtos)
+             #Retorna a seleção dos produtos
 
         finally:
             cursor.close() #Fecha o cursor
@@ -182,7 +211,10 @@ class Estoque(CrudBase):
             sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id order by produto_preco_venda DESC"
 
             cursor.execute(sql) #Executa o comando
-            return cursor.fetchall() #Retorna a seleção dos produtos
+            produtos = cursor.fetchall()
+
+            return cls.preparar_imagens(produtos)
+             #Retorna a seleção dos produtos
 
         finally:
             cursor.close() #Fecha o cursor
@@ -203,7 +235,10 @@ class Estoque(CrudBase):
             sql = "SELECT e.estoque_quantidade,p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id order by produto_preco_venda ASC"
 
             cursor.execute(sql) #Executa o comando
-            return cursor.fetchall() #Retorna a seleção dos produtos
+            produtos = cursor.fetchall()
+
+            return cls.preparar_imagens(produtos)
+             #Retorna a seleção dos produtos
 
         finally:
             cursor.close() #Fecha o cursor
@@ -232,7 +267,10 @@ class Estoque(CrudBase):
             sql = "SELECT e.estoque_quantidade,p.produto_nome,p.produto_quantidade_minima FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id WHERE e.estoque_quantidade <= p.produto_quantidade_minima * 1.1;"
 
             cursor.execute(sql) #Executa o comando
-            return cursor.fetchall() #Retorna a seleção dos produtos
+            produtos = cursor.fetchall()
+
+            return cls.preparar_imagens(produtos)
+            #Retorna a seleção dos produtos
 
         finally:
             cursor.close() #Fecha o cursor
@@ -292,7 +330,9 @@ class Estoque(CrudBase):
             sql = f"SELECT e.estoque_quantidade, p.* FROM estoque AS e INNER JOIN produto AS p ON p.id = e.produto_id WHERE p.produto_nome LIKE %s order by p.id"
 
             cursor.execute(sql, (busca,)) #Executa o comando
-            return cursor.fetchall() #Retorna a seleção dos produtos
+            produtos = cursor.fetchall()
+
+            return cls.preparar_imagens(produtos) #Retorna a seleção dos produtos
         
         except Exception as e: #Erro
             raise #Limpa
