@@ -128,7 +128,7 @@ class Pedido_entrada(CrudBase):
                     WHERE produto_id = %s
                     """,
                     (nova_quantidade, item["produto_id"]) )
-
+                
             conexao.commit()
             return "Pedido de entrada atualizado com sucesso."
 
