@@ -212,14 +212,11 @@ class Pedido_saida(CrudBase):
                     raise ValueError(
                         f"Não existe estoque para o produto {detalhe['produto_id']}"
                     )
-<<<<<<< HEAD
                 
                 if estoque['estoque_quantidade'] < detalhe["detalhe_saida_quantidade"]:
                     raise ValueError (
                         f"Estoque insuficiente para o produto {detalhe['produto_nome']}"
                     )
-=======
->>>>>>> b13cbafcec2e8e584b6e99d466e2499b46f2681e
 
                 nova_quantidade = (
                     estoque["estoque_quantidade"] - detalhe["detalhe_saida_quantidade"]
