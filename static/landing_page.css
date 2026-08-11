@@ -123,6 +123,7 @@ a{
     align-items: center;
     min-height: 80vh;
     padding: 20px;
+    
 }
 
 .pai-container-main {
@@ -185,12 +186,14 @@ a{
 }
 /*======Sistema============*/
 #sistema {
-    background-color: #d9e3f0;
+    box-shadow: 0 -20px 60px 3px #ffffff1d;
+    background-color: #ffffff13;
+
 }
 
 #sistema h1{
     font-size: 50px;
-    color: #004AAD;
+    color: #fff;
     display: flex;
     justify-content: center;
     padding: 30px;
@@ -218,7 +221,7 @@ a{
 #texto-c2{
     display: flex;
     flex-direction: column;
-    color: #004AAD;
+    color: #ffffffc8;
 }
 
 #texto-c2 h2{
@@ -265,7 +268,7 @@ a{
 
 .header1 {
     text-align: center;
-    color: #0047AB; 
+    color: #fff; 
     margin-bottom: 50px;
 }
 
@@ -331,8 +334,8 @@ a{
 
 
 .box {
-    background-color: #dee7f2; 
-    color: #0047AB;
+    background-color: #ededed; 
+    color: #313131;
     padding: 20px;
     text-align: center;
     font-weight: bold;
@@ -343,7 +346,7 @@ a{
 
 /* Botão */
 .botao_planos {
-    background-color: #0047AB;
+    background-color: #0a546d;
     color: white;
     text-decoration: none;
     text-align: center;
@@ -354,7 +357,7 @@ a{
 }
 
 .botao_planos:hover {
-    background-color: #003580;
+    background-color: #096280;
     transform: scale(1.05) ;
 }
 /*Seção Contato*/
