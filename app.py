@@ -94,6 +94,15 @@ def logout():
 # -----> Fim: Login
 ############################################################################################################
 
+#-----> Início: Perfil
+
+@app.route('/perfil')
+@login_obrigatorio
+def perfil():
+    return render_template('perfil.html')
+
+# -----> Fim: Perfil
+################################################################
 
 ############################################################################################################
 # -----> Início: Base
@@ -121,12 +130,6 @@ def dashboard():
 
     entrada = Pedido_entrada.total_entradas()
     saida = Pedido_saida.total_saidas()
-
-    return render_template(
-        "dashboard.html",
-        entrada=entrada,
-        saida=saida
-    )
 
     #Recebe a soma de todas as quantidades contidas no estoque
     dic_total=Estoque.estoque_total()
@@ -161,7 +164,7 @@ def dashboard():
 
 
     #Retorna a tela renderizada com todos os valores anteriores informados
-    return render_template('dashboard.html', total_estoque=total_estoque,total_produto=total_produto, baixo_estoque=baixo_estoque, total_entrada=total_entrada, pedido_entrada_pendente=pedido_entrada_pendente, total_saida=total_saida, pedido_saida_pendente=pedido_saida_pendente)
+    return render_template('dashboard.html', total_estoque=total_estoque,total_produto=total_produto, baixo_estoque=baixo_estoque, total_entrada=total_entrada, pedido_entrada_pendente=pedido_entrada_pendente, total_saida=total_saida, pedido_saida_pendente=pedido_saida_pendente,entrada=entrada,saida=saida)
 
 # -----> Fim: Dashboard
 ############################################################################################################
