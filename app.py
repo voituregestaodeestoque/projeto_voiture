@@ -37,7 +37,7 @@ def to_float(value, default=0.0):
 
 @app.route('/landingpage')
 def landingpage():
-    return render_template('lp.html')
+    return render_template('landing_page.html')
 
 # -----> Fim: Landing Page
 ############################################################################################################
@@ -971,6 +971,12 @@ def salvar_cliente():
     dados = get_cliente_form()
     cliente = Cliente(**dados)
 
+    numeros_cnpj = ""
+    for caractere in cliente.cliente_cnpj:
+        if caractere.isdigit():
+            numeros_cnpj = numeros_cnpj + caractere
+    cliente.cliente_cnpj = numeros_cnpj
+
     erros = cliente.validate()
     if erros :
         for erro in erros:
@@ -1097,6 +1103,12 @@ def salvar_fornecedor():
 
     #Transforma as chaves em argumentos
     fornecedor = Fornecedor(**dados)
+
+    numeros_cnpj = ""
+    for caractere in fornecedor.fornecedor_cnpj:
+        if caractere.isdigit():
+            numeros_cnpj = numeros_cnpj + caractere
+    fornecedor.fornecedor_cnpj = numeros_cnpj
 
     #Validação
     erros = fornecedor.validate()

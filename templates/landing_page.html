@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page Voiture</title>
+    <link rel="stylesheet" href="../static/landing_page.css">
+    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header id="header-og">
+        <nav id="topo-esquerda">
+            <img src="../static/images/logo.png" alt="logo">
+            <ul id="topo-esquerda-ul">
+                <li><a href="#sistema">Sistema</li></a>
+                <li><a href="#planos">Planos</a></li>
+                <li><a href="#contato">Contato</a></li>
+                <li><a href="#banner-empresas">Clientes</a></li>
+                <li><a href="#sobre_nos">Sobre</a></li>
+            </ul>
+        </nav>
+        <nav id="topo-direita">
+            <li> <a href="{{ url_for('loginfuncionario') }}">Login</a></li>
+            <li id="demonstracao">Demonstração</li>
+        </nav>
+    </header>
+    <!--Seção Main-->
+    <main id="secao-main">        
+        <section class="pai-container-main">
+            <div class="container-main">
+                <h1>Domine o fluxo de suas peças com inteligência e precisão</h1>
+                <p>Visualize cada etapa da logística de seu estoque em um único sistema de gestão.</p>
+                <p>Monitore entradas, rastreie saídas para a oficina e identifique gargalos antes de se tornarem prejuízo.</p>
+                <a href="#" class="butao-main">Experimente nosso sistema</a>
+            </div>
+
+            <div class="imglegal-main">
+                <img src="../static/images/img-logistica.png" alt="img-logistica">
+            </div>
+        </section>
+    </main>
+    <!--Seção sistema-->
+    <section id="sistema">
+        <h1>Por que escolher a Voiture?</h1>
+        <div class="sistema-container">
+            <div class="sistema-texto">
+                <div id="c1">
+                    <img src="../static/images/check_preto.png" alt="check">
+                    <h2>Eficiência e lucratividade</h2>
+                </div>
+                <div id="c2">
+                    <img src="../static/images/check_azul.png" alt="azul">
+                    <div id="texto-c2">
+                        <h2>Agilização no armazenamento e distribuição</h2>
+                        <p>Rastreamento e identificação automática de peças e <br>visualização de entrada e saída de
+                            produtos do
+                            estoque em tempo real.</p>
+                    </div>
+                </div>
+                <div id="c3">
+                    <img src="../static/images/check_preto.png" alt="check">
+                    <h2>Gestão visual e descomplicada</h2>
+                </div>
+            </div>
+            <div class="sistema-img">
+                <img src="../static/images/grafico_neon.png" alt="sistema">
+            </div>
+        </div>
+    </section>
+    <!--Seção planos -->
+    <section id="planos">
+        <header class="header1">
+            <h1>Onde cada peça conta e nenhum <br> centavo é desperdiçado</h1>
+        </header>
+
+        <section class="planos_container">
+            <div class="planos-card">
+                <h2>Starter</h2>
+                <p class="description">Ideal para empresas de pequeno porte que desejam gerir eficientemente seu estoque.</p>
+                <ul class="informacao">
+                    <li><span>✓</span> 1000 assinaturas</li>
+                    <li><span>✓</span> Acesso a todos os recursos do sistema</li>
+                </ul>
+                <div class="box">R$ 4999/mês</div>
+                <a href="#" class="botao_planos">Contrate aqui!</a>
+            </div>
+
+            <div class="planos-card">
+                <h2>Business</h2>
+                <p class="description">Ideal para empresas de médio porte que desejam gerir eficientemente seu estoque.</p>
+                <ul class="informacao">
+                    <li><span>✓</span> 5000 assinaturas</li>
+                    <li><span>✓</span> Acesso a todos os recursos do sistema</li>
+                </ul>
+                <div class="box">R$ 7999/mês</div>
+                <a href="#" class="botao_planos">Contrate aqui!</a>
+            </div>
+
+            <div class="planos-card">
+                <h2>Enterprise</h2>
+                <p class="description">Ideal para empresas de grande porte que desejam gerir eficientemente seu estoque.</p>
+                <ul class="informacao">
+                    <li><span>✓</span> 10000 assinaturas</li>
+                    <li><span>✓</span> Acesso a todos os recursos do sistema</li>
+                </ul>
+                <div class="box">R$ 14999/mês</div>
+                <a href="#" class="botao_planos">Contrate aqui!</a>
+            </div>
+        </section>
+    </section>
+    <!--Seção contato-->
+    <section id="contato">
+        <main class="container_contato">
+            <section class="info_contato">
+                <h1>Entre em contato conosco para esclarecer dúvidas</h1>
+                <p>Preencha seus dados e em breve te enviaremos um email marcando uma reunião para apresentação do sistema e esclarecimentos.</p>
+            </section>
+
+            <section class="forms">
+                <div class="card_contato">
+                    <h2>Preencha com seus dados</h2>
+                    <form>
+                        <div class="item_contato">
+                            <label for="nome">Nome do representante</label>
+                            <input type="text" id="nome" name="nome">
+                        </div>
+
+                        <div class="item_contato">
+                            <label for="email">Email de contato</label>
+                            <input type="email" id="email" name="email">
+                        </div>
+
+                        <div class="item_contato">
+                            <label for="cnpj">CNPJ da empresa</label>
+                            <input type="text" id="cnpj" name="cnpj">
+                        </div>
+
+                        <button type="submit" class="botao_contato">Enviar</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </section>
+    <!---Seção Clientes e empresas-->
+    <div id="banner-empresas" class="banner-empresas">
+        <h2>Líderes do setor não buscam apenas fornecedores, eles escolhem a Voiture</h2>
+        <div class="slider">
+            <div class="logos">
+                <img src="../static/images/fiat.png" alt="Fiat">
+                <img src="../static/images/audi.png" alt="Audi">
+                <img src="../static/images/toyota.png" alt="Toyota">
+                <img src="../static/images/BMW.png" alt="BMW">
+                <img src="../static/images/honda.png" alt="Honda">
+                <img src="../static/images/hyundai.png" alt="Hyundai">
+
+                <img src="../static/images/fiat.png" alt="Fiat">
+                <img src="../static/images/audi.png" alt="Audi">
+                <img src="../static/images/toyota.png" alt="Toyota">
+                <img src="../static/images/BMW.png" alt="BMW">
+                <img src="../static/images/honda.png" alt="Honda">
+                <img src="../static/images/hyundai.png" alt="Hyundai">
+
+                <img src="../static/images/fiat.png" alt="Fiat">
+                <img src="../static/images/audi.png" alt="Audi">
+                <img src="../static/images/toyota.png" alt="Toyota">
+            </div>
+        </div>
+    </div>
+    <section id="sobre_nos">
+        <div id="sobre_superior" class="sobre_nos">
+            <div id="missao_texto" class="sobre_quadro sobre_texto">
+                <div class="sobre_titulo"><h1>Nossa missão</h1></div>
+                <p>Proporcionar um <span class="negrito">sistema de gerenciamento de estoque automatizado</span> perfeito para sua empresa e entregar <span class="negrito">soluções inteligentes</span> para a segurança de seus trabalhos!</p>
+            </div>
+
+            <div id="missao_imagem" class="sobre_quadro">
+                <img src="../static/images/sobre_imagem.png" alt="predio_voiture">
+            </div>
+        </div>
+
+        <div id="sobre_inferior" class="sobre_nos">
+            <div id="diferenciais_video" class="sobre_quadro ">
+                <video autoplay muted loop playsinline>
+                <source src="../static/images/sobre_video.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div id="diferenciais_texto" class="sobre_quadro sobre_texto">
+                <div class="sobre_titulo"><h1>Nossos diferenciais</h1></div>
+                <p>Nosso sistema possui <span class="negrito">organização</span> de ponta para sua empresa ao <span class="negrito">gerenciar o estoque.</span> Visamos uma interface intuitiva e facilitada, garantindo acessibilidade a todos! Você poderá ter acesso às movimentações de entrada e saída de peças do estoque e poderá <span class="negrito">otimizar os processos</span> de seu negócio!</p>
+            </div>
+
+        </div>
+    </section>
+    <footer>
+        <div id="footer_esquerda">
+            <div id="footer_logo" class="coluna_footer">
+                <img src="../static/images/logo.png" alt="footer_logo">
+            </div>
+
+            <div id="footer_empresa" class="coluna_footer">
+                <ul>
+                    <li class="footer_titulo">Empresa</li>
+                    <a class="footer_link" href="#sobre_superior">
+                        <li class="footer_texto">Missão da empresa</li>
+                    </a>
+                    <a class="footer_link" href="#sobre_inferior">
+                        <li class="footer_texto">Sobre nós</li>
+                    </a>
+                </ul>
+
+            </div>
+
+            <div id="footer_planos" class="coluna_footer">
+                <ul>
+                    <li class="footer_titulo">Planos</li>
+                    <a href="#planos" class="footer_link"><li class="footer_texto">Starter</li></a>
+                    <a href="#planos" class="footer_link"><li class="footer_texto">Business</li></a>
+                    <a href="#planos" class="footer_link"><li class="footer_texto">Enterprise</li> </a>
+                </ul>
+            </div>
+        </div>
+
+
+        <div id="footer_direita">
+            <div id="redes_sociais">
+                <ul>
+                    <a href="#" id="linkedin"><img src="../static/images/linkedin.png" alt="linkedin"></a>
+                    <a href="#" id="whatsapp"><img src="../static/images/whatsapp.png" alt="whatsapp"></a>
+                    <a href="#" id="instagram"><img src="../static/images/instagram.png" alt="instagram"></a>
+                    <a href="#" id="facebook"><img src="../static/images/facebook.png" alt="facebook"></a>
+                    <a href="#" id="email"><img src="../static/images/email.png" alt="email"></a>
+                </ul>
+            </div>
+            <ul id="footer-contato">
+                <li>voituregestaodeestoque@gmail.com</li>
+                <li id="footer_telefone"><img src="../static/images/telefone.png"alt="telefone"> (19) 99998-9998</li>                    
+                <li>Av. Paulo Afonso P. Ulbricht,</li>
+                <li>Itapira - SP</li>
+                <li>00.000.000/0000-00</li>
+            </ul>
+
+        </div>
+
+    </footer>
+
+</body>
+</html>

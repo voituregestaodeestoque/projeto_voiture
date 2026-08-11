@@ -1,0 +1,725 @@
+/*==============-Geral do site-========================*/
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+body::-webkit-scrollbar {
+    width: 12px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #004AAD;
+    border-radius: 20px;
+    border: 3px solid #d9e3f0;
+}
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+
+li{
+  list-style-type: none;
+}
+/*===================Seção Header===========================*/
+
+
+#header-og {
+    width: 100%;
+    display: flex;
+    flex: 2;
+    justify-content: space-between;
+    margin-left: 0;
+    background-color: #d9e3f0;
+    position: sticky;
+}
+
+a{
+    text-decoration: none;
+}
+
+
+#header-og li {
+    font-size: 20px;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+#header-og li:hover{
+    animation: fundo-header 0.5s forwards;
+}
+
+#header-og a{
+    color: inherit;
+}
+
+@keyframes fundo-header {
+    to {
+        
+        background-color: #004aad;
+        color: white;
+    }
+
+}
+
+#topo-esquerda {
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+}
+
+#topo-esquerda-ul{
+    display: flex;
+}
+
+#topo-esquerda img {
+    padding: 10px;
+    height: 80px;
+    width: 110px;
+}
+
+#topo-direita {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: flex-end;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    padding-right: 100px;
+
+}
+
+#demonstracao {
+    color: #004aad;
+    border: 2px solid #004aad;
+}
+/*===========Seção main================*/
+#secao-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background-color: #ffffff;
+    padding: 20px;
+}
+
+.pai-container-main {
+    max-width: 1100px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap; 
+}
+
+.container-main {
+    flex: 1;
+    min-width: 300px;
+}
+
+.container-main h1 {
+    color: #1a3c6e; 
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 25px;
+    font-weight: 800;
+}
+
+.container-main p {
+    color: #444;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.butao-main {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 30px;
+    background-color: #004aad; 
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.butao-main:hover {
+    background-color: #003580;
+}
+
+.imglegal-main {
+    flex: 1;
+    min-width: 300px;
+}
+
+.imglegal-main img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+/*======Sistema============*/
+#sistema {
+    background-color: #d9e3f0;
+}
+
+#sistema h1{
+    font-size: 50px;
+    color: #004AAD;
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+}
+
+.sistema-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+}
+
+#c1 img, #c2 img, #c3 img{
+    max-width: 40px;
+    padding: 20px;
+}
+
+#c1, #c2 ,#c3{
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+#texto-c2{
+    display: flex;
+    flex-direction: column;
+    color: #004AAD;
+}
+
+#texto-c2 h2{
+    margin-bottom: 0;
+}
+
+#texto-c2 p{
+    margin-top: 1;
+}
+
+    
+
+.sistema-texto, .sistema-img{
+    width: 50%;
+}
+
+.sistema-texto{
+    margin-left: 60px;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+
+.sistema-img img{
+    max-width: 100%;
+    transition: transform 0.4s ease;
+}
+
+.sistema-img img:hover {
+    transform: scale(1.05);
+}
+
+
+/*===================Planos============*/
+
+.planos {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 40px 20px;
+    color: #333;
+}
+
+.header1 {
+    text-align: center;
+    color: #0047AB; 
+    margin-bottom: 50px;
+}
+
+.header1 h1 {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+
+.planos_container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap; /* Quebra a linha assim que um dos flex itens não puder mais ser compactado. */
+}
+
+
+.planos-card {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 30px; /* para deixar arredondado */
+    width: 300px;
+    padding: 40px 25px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.planos-card h2 {
+    font-size: 30px;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+.planos-card .description {
+    font-size: 15px;
+    color: #666;
+    line-height: 2;
+    margin-bottom: 30px;
+    min-height: 60px; /* Garante alinhamento se o texto variar */
+}
+
+
+.informacao {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+    flex-grow: 1; /* Empurra o preço para baixo */
+}
+
+.informacao li {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+    font-weight: 500;
+}
+
+.informacao span {
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+
+.box {
+    background-color: #dee7f2; 
+    color: #0047AB;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Botão */
+.botao_planos {
+    background-color: #0047AB;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    padding: 15px;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.botao_planos:hover {
+    background-color: #003580;
+    transform: scale(1.05) ;
+}
+/*Seção Contato*/
+#contato{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: 
+                url(../static/images-lp/tela_binaria.png);
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container_contato{
+    display: flex;
+    max-width: 1100px;
+    width: 90%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+
+.info_contato {
+    flex: 1;
+}
+
+.info_contato h1 {
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.info_contato p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.forms {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.card_contato {
+    background-color: white;
+    color: #333;
+    padding: 40px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+}
+
+.card_contato h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.5rem;
+    color: #444;
+}
+
+.item_contato {
+    margin-bottom: 20px;
+}
+
+.item_contato label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+.item_contato input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #e8e8e8; 
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.botao_contato {
+    width: 100%;
+    padding: 15px;
+    background-color: #004094; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.botao_contato:hover {
+    background-color: #002d66;
+    transform: scale(1.05);
+}
+@media (max-width: 510px){
+    
+    .container_contato{
+        display: flex;
+        flex-direction: column;
+    }
+    .info_contato{
+        display: flex;
+        justify-content: center;
+    }
+    .info_contato h1{
+        font-size: 20px;
+    }
+    .forms{
+        height: 100%;
+    }
+}
+
+/*Seção Clientes e empresas*/
+.banner-empresas {
+    margin-bottom: 5px;
+margin-top: 5px;
+  background-color: #dbe4f3; 
+  padding: 15px ;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.banner-empresas h2 {
+  color: #1a4a8e; 
+  margin-top: 1px;
+  margin-bottom: 30px;
+  font-size: 20px;
+}
+
+.logos {
+    width: max-content;
+  display: flex;        
+  justify-content: center; 
+  align-items: center;     
+  gap: 60px;               
+  flex-wrap: wrap;        
+  animation: scroll 10s linear infinite; 
+}
+.slider{
+    overflow: hidden;
+    width: 100%;
+}
+@keyframes scroll{
+    from{
+        transform: translateX(0);
+    }
+    to{
+        transform: translateX(-40.15%);
+    }
+}
+
+.logos img {
+  height: 65px;            
+  width: auto;             
+  display: block;
+}
+
+
+/*-----SEÇÃO: SOBRE NÓS-----*/
+@media (max-width: 950px){
+    #sobre_superior{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #sobre_inferior{
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+   
+}
+
+#sobre_nos{
+    width: 100%;
+   
+}
+
+.sobre_nos{
+    display: flex;
+    width: 100%;
+}
+
+
+.sobre_quadro{
+    width: 50%;
+    
+}
+
+           /*------SOBRE: TEXTOS-----*/
+#missao_texto, #diferenciais_texto{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    text-align: justify;
+    height: 100%;
+}
+
+.sobre_texto{
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#missao_texto h1,#diferenciais_texto h1{
+    padding-left: 40px;
+    align-items: flex-start;
+    font-style: italic;
+    color: #193d60;
+    font-size: 40px;
+    margin-bottom: 0;
+    margin-top: 20px;
+}
+
+#missao_texto p, #diferenciais_texto p{
+    padding-top: 5px;
+    align-items: flex-start;
+    font-size: 21px;
+    margin: 0;
+    height: 70%;
+    width: 89%;
+    line-height: 40px
+}
+
+.negrito{
+    font-weight: bold;
+    color: #053266;
+}
+
+.sobre_titulo{
+    display: block;
+    width: 100%;
+    height: 20%;
+}
+
+
+     /*-----SOBRE: IMAGEM E VÍDEO-----*/
+
+#missao_imagem img, #diferenciais_video video{
+    width: 100%;
+}
+#diferenciais_video video{
+    border-bottom-right-radius: 5px;
+}
+
+#missao_imagem{
+    height: 414px;
+}
+@media (max-width: 950px){
+    
+    #missao_imagem{
+        height: 100%;
+    }
+    #missao_imagem img, #diferenciais_video video{
+        margin-top: 5px;
+    }
+
+}
+/*======Footer=========*/
+
+footer{
+    background: #d9e3f0;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    height: 200px;
+}
+
+/*-----FOOTER ESQUERDA-----*/
+
+#footer_esquerda{
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+
+
+
+/*-----FOOTER: LOGO-----*/
+
+#footer_logo{
+    padding: 25px;
+}
+
+#footer_logo img{
+    width: 80%;
+}
+
+/*-----FOOTER: EMPRESA E PLANOS*/
+
+.coluna_footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    width: 32%;
+}
+
+.footer_titulo{ 
+    list-style-type: none;
+    color: #064293;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.footer_link{
+    list-style-type: none;
+    text-decoration: none;
+    line-height: 25px;
+    
+}
+.footer_texto{
+    font-size: 17px;
+    color: #000;
+}
+#footer_empresa{
+    margin-bottom: 26px;
+}
+
+
+
+
+/*-----FOOTER DIREITA-----*/
+
+#footer_direita{
+    width: 40%;
+    display: flex;
+}
+
+#redes_sociais ul{
+    text-align: right;
+    
+
+}
+#redes_sociais a{
+    margin-right: 5px;
+} 
+
+#redes_sociais,#footer_contato{
+    width: 50%;
+}
+#footer-contato li{
+    text-align: end;
+    margin-right: 30px;
+}
+
+#footer_contato{
+    font-size: 16px;
+    line-height: 25px;
+    text-align: end;
+    max-width: 100%;
+    
+    
+}
+
+#footer_contato p{
+    margin-right: 60px;
+}
+
+#footer_telefone{
+    margin-right: 5px;
+}
+
+/*-----images-lp-----*/
+
+#redes_sociais img {
+    width: 27px;
+    margin-left: 7px;
+}
+
+#footer_telefone img{
+    width: 14px;
+}

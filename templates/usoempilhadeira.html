@@ -40,7 +40,7 @@
                         <option value="">Selecione</option>
                         {% for funcionario in funcionarios %}
                         <option value="{{ funcionario.id }}">
-                            nome {{ funcionario.funcionario_nome }} - {{ funcionario.id }}
+                        {{ funcionario.funcionario_nome }} | ID {{ funcionario.id }}
                         </option>
                         {% endfor %}
                     </select>
@@ -61,8 +61,7 @@
                         <option value="">Selecione</option>
                         {% for empilhadeira in empilhadeiras %}
                         <option value="{{ empilhadeira.id }}">
-                            chassi {{ empilhadeira.empilhadeira_chassi }} - marca {{ empilhadeira.empilhadeira_marca }}
-                            - modelo {{ empilhadeira.empilhadeira_modelo }} - {{ empilhadeira.id }}
+                            ID {{ empilhadeira.id }} | Modelo {{ empilhadeira.empilhadeira_modelo }} | Marca: {{ empilhadeira.empilhadeira_marca }}
                         </option>
                         {% endfor %}
                     </select>

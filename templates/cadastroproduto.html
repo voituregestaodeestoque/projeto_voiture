@@ -24,7 +24,7 @@
 
             <div class="produto-card text-dark">
 
-                <form id="form_produto"
+                <form id="form_produto" enctype="multipart/form-data"
                     action="{% if produto and produto.id %}{{ url_for('atualizar_produto', id=produto.id) }}{% else %}{{ url_for('salvar_produto') }}{% endif %}"
                     method="POST">
                     <div class="row">
@@ -134,6 +134,24 @@
                             <input type="text" name="produto_descricao" class="form-control" id="produto_descricao"
                                 required value="{{ produto.produto_descricao if produto else '' }}"
                                 style="padding: 20px;">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="imagem" class="form-label">
+                                Imagem do Produto
+                            </label>
+                    
+                            <input 
+                                type="file" 
+                                class="form-control" 
+                                id="imagem" 
+                                name="imagem"
+                                accept="image/png, image/jpeg, image/jpg, image/webp"
+                            >
+                    
+                            <small class="text-muted">
+                                Formatos permitidos: PNG, JPG, JPEG ou WEBP.
+                            </small>
                         </div>
 
                         <div class="botao-direita">
