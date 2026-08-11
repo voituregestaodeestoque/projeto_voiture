@@ -63,14 +63,14 @@ a{
 }
 
 #topo-direita li:hover{
-    animation: btn-demonstracao 0.5s forwards;
+    animation: btn-efeito 0.5s forwards;
 }
 
 #header-og a{
     color: inherit;
 }
 
-@keyframes btn-demonstracao {
+@keyframes btn-efeito {
     to {
         
         background-color: #0a8f91;;
@@ -80,6 +80,7 @@ a{
 }
 
 #topo-esquerda {
+    margin-left: 20px;
     max-width: 100%;
     display: flex;
     justify-content: space-between;
@@ -94,9 +95,8 @@ a{
 
 
 #topo-esquerda img {
-    padding: 10px;
-    height: 80px;
-    width: 110px;
+    height: 115px;
+    width: 120px;
 }
 
 #topo-direita {
@@ -123,6 +123,7 @@ a{
     align-items: center;
     min-height: 80vh;
     padding: 20px;
+    
 }
 
 .pai-container-main {
@@ -139,7 +140,7 @@ a{
 }
 
 .container-main h1 {
-    color: #1a3c6e; 
+    color: #ffffff; 
     font-size: 2.5rem;
     line-height: 1.2;
     margin-bottom: 25px;
@@ -147,27 +148,30 @@ a{
 }
 
 .container-main p {
-    color: #444;
+    color: #ffffffc8;
     font-size: 1.1rem;
     line-height: 1.6;
     margin-bottom: 15px;
 }
 
+.butao-main:hover{
+    animation: btn-efeito 0.5s forwards;
+}
+
 .butao-main {
+    color: #93fdfff0;
+    background-color: #077274;
+    border: 1px solid #06c1c4ac;
+    box-shadow: 0 0 30px 8px #06c1c45c;
     display: inline-block;
     margin-top: 20px;
     padding: 12px 30px;
-    background-color: #004aad; 
-    color: white;
     text-decoration: none;
     font-weight: bold;
     border-radius: 4px;
     transition: background 0.3s ease;
 }
 
-.butao-main:hover {
-    background-color: #003580;
-}
 
 .imglegal-main {
     flex: 1;
@@ -182,12 +186,14 @@ a{
 }
 /*======Sistema============*/
 #sistema {
-    background-color: #d9e3f0;
+    box-shadow: 0 -20px 60px 3px #ffffff1d;
+    background-color: #ffffff13;
+
 }
 
 #sistema h1{
     font-size: 50px;
-    color: #004AAD;
+    color: #fff;
     display: flex;
     justify-content: center;
     padding: 30px;
@@ -215,7 +221,7 @@ a{
 #texto-c2{
     display: flex;
     flex-direction: column;
-    color: #004AAD;
+    color: #ffffffc8;
 }
 
 #texto-c2 h2{
@@ -262,7 +268,7 @@ a{
 
 .header1 {
     text-align: center;
-    color: #0047AB; 
+    color: #fff; 
     margin-bottom: 50px;
 }
 
@@ -328,8 +334,8 @@ a{
 
 
 .box {
-    background-color: #dee7f2; 
-    color: #0047AB;
+    background-color: #ededed; 
+    color: #313131;
     padding: 20px;
     text-align: center;
     font-weight: bold;
@@ -340,7 +346,7 @@ a{
 
 /* Botão */
 .botao_planos {
-    background-color: #0047AB;
+    background-color: #0a546d;
     color: white;
     text-decoration: none;
     text-align: center;
@@ -351,7 +357,7 @@ a{
 }
 
 .botao_planos:hover {
-    background-color: #003580;
+    background-color: #096280;
     transform: scale(1.05) ;
 }
 /*Seção Contato*/

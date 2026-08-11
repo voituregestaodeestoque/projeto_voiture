@@ -79,70 +79,51 @@ class Pedido_saida(CrudBase):
         try:
             conexao.start_transaction()
 
-            cursor.execute("SELECT * FROM pedido_saida WHERE id = %s", (pedido_saida_id,))
+            cursor.execute(
+                "SELECT * FROM pedido_saida WHERE id = %s",
+                (pedido_saida_id,)
+            )
+
             pedido = cursor.fetchone()
 
             if not pedido:
-                conexao.rollback()
-                return "Pedido não encontrado."
+                raise ValueError("Pedido não encontrado.")
 
             if pedido["status_pedido_saida"] != "PENDENTE":
-                conexao.rollback()
-                return "Somente pedidos abertos podem ser finalizados."
+                raise ValueError(
+                    "Somente pedidos pendentes podem ser atualizados."
+                )
 
             cursor.execute(
-                "SELECT * FROM detalhe_saida WHERE pedido_saida_id = %s",
+                """
+                SELECT *
+                FROM detalhe_saida
+                WHERE pedido_saida_id = %s
+                """,
                 (pedido_saida_id,)
             )
+
             itens = cursor.fetchall()
 
             if not itens:
-                conexao.rollback()
-                return "Não é possível finalizar um pedido sem itens."
-
-            for item in itens:
-                cursor.execute(
-                    "SELECT * FROM estoque WHERE id = %s",
-                    (item["estoque_id"],)
-                )
-                estoque = cursor.fetchone()
-                
-                if not estoque:
-                    conexao.rollback()
-                    return "Produto não encontrado no pedido."
-
-                #Verificar se há estoque suficiente
-                if estoque["estoque_quantidade"] < item["detalhe_saida_quantidade"]:
-                    conexao.rollback()
-                    return f"Estoque insuficiente para o item {item['produto_nome']}."
-
-                
-                nova_quantidade = estoque["estoque_quantidade"] - item["detalhe_saida_quantidade"]
-
-                cursor.execute(
-                    """ 
-                    UPDATE estoque
-                    SET estoque_quantidade = %s
-                    WHERE id = %s
-                    """,
-                    (nova_quantidade, item["produto_id"]) 
-                )
-
-                cursor.execute(
-                    """
-                    INSERT INTO movimentacao_saida 
-                    (datahora_movimentacao_saida, detalhe_saida_id, detalhe_saida_pedido_saida_id)
-                    VALUES (%s, %s, %s)
-                    """,
-                    (datetime.now(), item["id"], pedido_saida_id)
+               raise ValueError(
+                 "Não é possível atualizar um pedido sem itens."
                 )
 
             conexao.commit()
-            return "Pedido de saída finalizado com sucesso."
 
-        except Exception:
+            return "Pedido de saída atualizado com sucesso."
+
+        except ValueError:
             conexao.rollback()
-            return "Erro ao finalizar pedido de saída."
+            raise
+
+        except Exception as e:
+            conexao.rollback()
+            raise Exception(
+             f"Erro ao atualizar pedido de saída: {e}"
+        )
+
         finally:
             cursor.close()
             conexao.close()

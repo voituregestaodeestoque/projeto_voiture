@@ -27,7 +27,7 @@
 
                 <div class="col-md-6 mb-3">
                     <label for="produto">Produto:</label>
-                    <select id="produto" class="form-select">
+                    <select id="produto" class="form-select" name="produto_id">
                         <option value="">Selecione</option>
                         {% for produto in produto %}
                         <option value="{{ produto.id }}" data-nome="{{ produto.produto_nome }}"
@@ -41,13 +41,13 @@
                 <div class="mb-3">
                     <label for="produto_quantidade">Quantidade</label>
                     <div class="input-group">
-                        <input type="number" class="form-control" id="produto_quantidade"
+                        <input type="number" name="quantidade" class="form-control" id="produto_quantidade"
                             placeholder="Quantidade do produto" min="1">
                     </div>
                 </div>
 
 
-                <button type="button" class="btn botao-add" onclick="adicionarItem()">Adicionar Item</button>
+                <button type="submit" class="btn botao-add">Adicionar Item</button>
             </form>
         </div>
         {% endif %}
@@ -109,6 +109,7 @@
                     </tr>
                     {% endfor %}
                 </tbody>
+                <tbody id="itens-novos"></tbody>
             </table>
 
 
