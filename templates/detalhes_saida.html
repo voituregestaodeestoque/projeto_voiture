@@ -9,7 +9,7 @@
 </div>
 
 <div class="card-info"
-    style="padding: 10px; margin-left: 40px; margin-top: 30px; margin-bottom: 50px; background-color: #fff; border-radius: 10px; width: auto;">
+    style="padding: 10px; margin-left: 20px; margin-top: 30px; margin-bottom: 50px; background-color: #fff; border-radius: 10px; width: auto;">
     <p><strong>Fornecedor:</strong> {{ pedido.cliente }}</p>
     <p><strong>Data:</strong> {{ pedido.data_pedido_saida }}</p>
     <p><strong>Status:</strong> {{ pedido.status_pedido_saida}}</p>
@@ -22,12 +22,12 @@
     <div class="pedido-card text-dark mb-4" style="width: 100%; display: flex; justify-content: space-around;">
         <div class="form-itens" style="width: 45%;">
 
-            <h4>Adicionar Item</h4>
+            <h3><strong><i class="bi bi-plus-circle"></i> Adicionar itens</strong></h3>
             <form method="POST" action="{{ url_for('adicionar_item_saida', pedido_saida_id=pedido.id) }}">
 
                 <div class="col-md-6 mb-3">
-                    <label>Produto:</label>
-                    <select id="produto" name="produto_id" style="border-radius: 10px; padding: 5px;" required>
+                    <label for="produto">Produto:</label>
+                    <select id="produto" class="form-select">
                         <option value="">Selecione</option>
                         {% for produto in produto %}
                         <option value="{{ produto.id }}" data-nome="{{ produto.produto_nome }}"
@@ -39,8 +39,11 @@
                 </div>
 
                 <div class="mb-3">
-                    <label>Quantidade:</label>
-                    <input type="number" name="quantidade" required>
+                    <label for="produto_quantidade">Quantidade</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="produto_quantidade"
+                            placeholder="Quantidade do produto" min="1">
+                    </div>
                 </div>
 
 
@@ -52,7 +55,7 @@
 
 
         <div class="table-responsive" style="width: 45%; ">
-            <h3>Itens do pedido</h3>
+            <h3><strong><i class="bi bi-basket"></i> Itens do pedido</strong></h3>
 
             <table id="tabela-movimentacao" class="table table-hover align-middle">
                 <thead class="table-light">
@@ -71,8 +74,34 @@
                         <td>{{ item.detalhe_saida_quantidade}}</td>
                         <td>
                             {% if pedido.status_pedido_saida == 'PENDENTE' %}
-                            <a
-                                href="{{ url_for('remover_item_saida', detalhe_saida_id=item.id, pedido_saida_id=pedido.id) }}">Remover</a>
+                            <!-- Botão do modal pra excluir -->
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                    data-bs-target="#Modal{{pedido.id}}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="Modal{{pedido.id}}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja excluir esse produto?</strong></h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancelar</button>
+                                                <!--Ação para excluir o funcionário-->
+                                                <a href="{{ url_for('remover_item_saida', detalhe_saida_id=item.id, pedido_saida_id=pedido.id) }}"
+                                                    class="btn btn-danger">
+                                                    <strong>Excluir</strong>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             {% else %}
                             -
                             {% endif %}
@@ -119,7 +148,7 @@
         const nome = option.getAttribute("data-nome");
         const estoque = parseInt(option.getAttribute("data-estoque"));
 
-        if (quantidade > 10) {
+        if (quantidade > estoque) {
             alert(`Estoque insuficiente. Disponível: ${estoque}`);
         return;
         }
