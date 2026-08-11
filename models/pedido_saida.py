@@ -110,6 +110,46 @@ class Pedido_saida(CrudBase):
                  "Não é possível atualizar um pedido sem itens."
                 )
 
+            #Raica
+            for item in itens:
+                cursor.execute(
+                    "SELECT * FROM estoque WHERE id = %s",
+                    (item["estoque_id"],)
+                )
+                estoque = cursor.fetchone()
+                
+                if not estoque:
+                    conexao.rollback()
+                    return "Produto não encontrado no pedido."
+
+                #Verificar se há estoque suficiente
+                
+                if estoque["estoque_quantidade"] < item["detalhe_saida_quantidade"]:
+                    conexao.rollback()
+                    return f"Estoque insuficiente para o item ID {item['produto_id']}."
+                
+
+                
+                nova_quantidade = estoque["estoque_quantidade"] - item["detalhe_saida_quantidade"]
+
+                cursor.execute(
+                    """ 
+                    UPDATE estoque
+                    SET estoque_quantidade = %s
+                    WHERE id = %s
+                    """,
+                    (nova_quantidade, item["produto_id"]) 
+                )
+
+                cursor.execute(
+                    """
+                    INSERT INTO movimentacao_saida 
+                    (datahora_movimentacao_saida, detalhe_saida_id, detalhe_saida_pedido_saida_id)
+                    VALUES (%s, %s, %s)
+                    """,
+                    (datetime.now(), item["id"], pedido_saida_id)
+                )
+
             conexao.commit()
 
             return "Pedido de saída atualizado com sucesso."
@@ -180,9 +220,10 @@ class Pedido_saida(CrudBase):
          
                 cursor.execute(
                     """
-                    SELECT *
-                    FROM estoque
-                    WHERE produto_id = %s
+                    SELECT e.*,p.produto_nome
+                    FROM estoque e
+                    INNER JOIN produto p ON e.produto_id = p.id
+                    WHERE e.produto_id = %s
                     FOR UPDATE
                     """,
                     (detalhe["produto_id"],)
@@ -196,7 +237,7 @@ class Pedido_saida(CrudBase):
                 
                 if estoque['estoque_quantidade'] < detalhe["detalhe_saida_quantidade"]:
                     raise ValueError (
-                        f"Estoque insuficiente para o produto {detalhe['produto_nome']}"
+                        f"Estoque insuficiente para o produto {estoque['produto_nome']}"
                     )
 
                 nova_quantidade = (
