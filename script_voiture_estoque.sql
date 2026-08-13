@@ -5,7 +5,6 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 
-select * from funcionario;
 -- -----------------------------------------------------
 -- Schema voiture_estoque
 -- -----------------------------------------------------
@@ -52,6 +51,9 @@ CREATE TABLE IF NOT EXISTS funcionario (
   funcionario_telefone VARCHAR(20) NOT NULL,
   funcionario_cargo VARCHAR(50) NOT NULL,
   funcionario_permissao VARCHAR(50) NOT NULL,
+  imagem_nome VARCHAR(255) NULL,
+  imagem_tipo VARCHAR(100) NULL,
+  imagem_blob LONGBLOB NULL,
   PRIMARY KEY (id))
 ENGINE = InnoDB
 AUTO_INCREMENT = 7
@@ -93,6 +95,9 @@ CREATE TABLE IF NOT EXISTS produto (
   produto_preco_venda DECIMAL(10,2) NOT NULL,
   produto_peso DECIMAL(10,3) NOT NULL,
   produto_localizacao VARCHAR(50) NOT NULL,
+  imagem_nome VARCHAR(255) NULL,
+  imagem_tipo VARCHAR(100) NULL,
+  imagem_blob LONGBLOB NULL,
   PRIMARY KEY (id))
 ENGINE = InnoDB;
 
