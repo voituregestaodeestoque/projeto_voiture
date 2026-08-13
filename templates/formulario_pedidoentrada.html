@@ -76,52 +76,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item in itens %}
-                        <tr>
-                            <td>{{ item.id }}</td>
-                            <td>{{ item.produto }}</td>
-                            <td>{{ item.detalhe_entrada_quantidade}}</td>
-                            <td>
-                                {% if pedido.status_pedido_entrada == 'PENDENTE' %}
-                                <!-- Botão do modal pra excluir -->
-                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                                    data-bs-target="#Modal{{pedido.id}}">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="Modal{{pedido.id}}" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja
-                                                        excluir esse produto?</strong></h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Cancelar</button>
-                                                <!--Ação para excluir o produto-->
-                                                <a href="{{ url_for('remover_item_entrada', detalhe_entrada_id=item.id, pedido_entrada_id=pedido.id) }}"
-                                                    class="btn btn-danger">
-                                                    <strong>Excluir</strong>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% else %}
-                                -
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
                     </tbody>
 
                 </table>
-                <button type="submit" form="form_pedido" class="btn botao-add">
+                <button type="submit" form="form_pedido" class="btn btn-success">
                     Salvar Pedido
                 </button>
             </div>
@@ -129,8 +87,35 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="modalAlerta" tabindex="-1" aria-labelledby="modalAlertaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-dark">
+                <h5 class="modal-title" id="modalAlertaLabel">
+                    Atenção
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="mensagemAlertaText"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Entendido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     let itens = [];
+
+    function exibirModalAlerta(mensagem) {
+        document.getElementById("mensagemAlertaText").innerText = mensagem;
+        const modalElement = document.getElementById('modalAlerta');
+        const bsModal = new bootstrap.Modal(modalElement);
+        bsModal.show();
+    }
 
     function adicionarItem() {
         const selectProduto = document.getElementById("produto");
@@ -140,12 +125,12 @@
         const quantidade = parseInt(quantidadeInput.value);
 
         if (!produtoId) {
-            alert("Selecione um produto.");
+            exibirModalAlerta("Selecione um produto.");
             return;
         }
 
         if (!quantidade || quantidade <= 0) {
-            alert("Informe uma quantidade maior que zero.");
+            exibirModalAlerta("Informe uma quantidade maior que zero.");
             return;
         }
 
@@ -179,8 +164,18 @@
 
     function atualizarTabela() {
         const tbody = document.querySelector("#tabela-itens tbody");
+
         tbody.innerHTML = "";
 
+        if (itens.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="text-center text-muted py-3">
+                        Nenhum item adicionado ao pedido.
+                    </td>
+                </tr>`;
+            return;
+        }
         itens.forEach((item, index) => {
 
             const linha = `
@@ -202,5 +197,7 @@
     function prepararEnvio() {
         document.getElementById("itens_json").value = JSON.stringify(itens);
     }
+
+    atualizarTabela();
 </script>
 {% endblock %}

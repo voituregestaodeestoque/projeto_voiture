@@ -43,7 +43,36 @@
                     <td class="text-end">
                         {% if pedido.status_pedido_saida == 'PENDENTE' %}
                         <a href="{{ url_for('processar_pedido_saida', pedido_saida_id=pedido.pedido_saida_id) }}" class="btn btn-sm btn-success">Processar</a>
-                        <a href="{{ url_for('cancelar_pedido_saida', pedido_saida_id=pedido.pedido_saida_id) }}" class="btn btn-sm btn-danger">Cancelar</a>
+
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#Modal{{pedido.id}}"> Cancelar
+                         
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="Modal{{pedido.id}}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja
+                                                cancelar esse pedido?</strong></h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Sair</button>
+                                       
+                                        <a href="{{ url_for('cancelar_pedido_saida', pedido_saida_id= pedido.pedido_saida_id) }}"
+                                            class="btn btn-danger">
+                                            <strong>Cancelar</strong>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <a href="{{ url_for('editar_saida', pedido_saida_id=pedido.pedido_saida_id) }}" class="btn btn-sm btn-warning">Editar</a>
                         {% else %}
                         -
