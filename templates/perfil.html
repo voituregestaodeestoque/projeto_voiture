@@ -1,183 +1,305 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<div class="">
+<div class="container-fluid py-4">
+
     <div class="mb-4">
-        <h2 class="titulo-pagina">
+        <h2>
             <i class="bi bi-person-badge"></i> Meu Perfil
         </h2>
-    </div>
-    <div class="container-fluid Card-principal text-center bg-white rounded">
 
-        <form class="mb-3"
-            action="{% if funcionario and funcionario.id %}{{ url_for('atualizar_funcionario', id=funcionario.id) }}{% else %}{{ url_for('salvar_funcionario') }}{% endif %}"
-            method="POST">
-            <!--ação que executa o cadastro de um funcionario e se ja existir um parametro de id, ele edita um funcionario existente-->
+        <p class="text-secondary">
+            Gerencie suas informações pessoais e de contato.
+        </p>
+    </div>
+
+    <div class="card shadow-sm border-0">
+
+        <form action="{{ url_for('atualizar_perfil') }}" method="POST"></form>
+
             <div class="row">
-                <!--Campo Nome-->
-                <div class="col-md-6 mb-3 text-start">
-                    <label for="funcionario_nome" class="form-label">Nome</label>
-                    <div class="input-group">
-                        <!--icone do lado do campo input-->
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-person-fill text-white"></i>
-                        </span>
-                        <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                        <input type="text" name="funcionario_nome" id="funcionario_nome" class="form-control"
-                            placeholder="Digite o nome" required
-                            value="{{ funcionario.funcionario_nome if funcionario else '' }}">
-    
-                    </div>
-                </div>
-                <!--Campo Email-->
-                <div class="col-md-6 mb-3 text-start">
-                    <label for="funcionario_email" class="form-label">Email</label>
-                    <div class="input-group"> 
-                        <!--icone do lado do campo input-->
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-envelope text-white"></i>
-                        </span>
-                        <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                        <input type="email" name="funcionario_email" id="funcionario_email" class="form-control"
-                            placeholder="Digite o Email" required
-                            value="{{ funcionario.funcionario_email if funcionario else '' }}">
-    
-                    </div>
-                </div>
-                <!--Campo Senha-->
-                <div class="col-md-6 mb-3 text-start">
-                    <label for="funcionario_senha" class="form-label">Senha</label>
-                    <div class="input-group">
-                        <!--icone do lado do campo input-->
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-lock-fill text-white"></i>
-                        </span>
-    
-                        <input type="password" name="funcionario_senha" id="funcionario_senha" class="form-control"
-                            placeholder="Digite a senha" required
-                            value="{{ funcionario.funcionario_senha if funcionario else '' }}">
-    
-                    </div>
-                </div>
-                <!--Campo CEP-->
-                <div class="col-md-6 mb-3 text-start">
-                    <label for="funcionario_cep" class="form-label">CEP</label>
-                    <div class="input-group">
-                        <!--icone do lado do campo input-->
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-geo-fill text-white"></i>
-                        </span>
-                        <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                        <input type="text" name="funcionario_cep" id="funcionario_cep" class="form-control"
-                            placeholder="Digite o CEP" required
-                            value="{{ funcionario.funcionario_cep if funcionario else '' }}">
-    
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3 text-start">
-                    <!--Cpf-->
-                    <label for="funcionario_cpf" class="form-label">CPF</label>
-                    <div class="input-group">
-                        <!--icone do lado do campo input-->
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-wallet text-white"></i>
-                        </span>
-                        <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                        <input type="text" name="funcionario_cpf" id="funcionario_cpf" class="form-control"
-                            placeholder="Digite o CPF" required
-                        value="{{ funcionario.funcionario_cpf if funcionario else '' }}">
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3 text-start">
-                    <!--Cargo-->
-                    <label for="funcionario_cargo" class="form-label">Cargo</label>
-                    <div class="input-group">
-                        <!--icone do lado do campo input-->
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-person-vcard text-white"></i>
-                        </span>
-                        <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                        <input type="text" name="funcionario_cargo" id="funcionario_cargo" class="form-control"
-                            placeholder="Digite o cargo" required
-                        value="{{ funcionario.funcionario_cargo if funcionario else '' }}">
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3 text-start">
-                    <!--Cargo-->
-                    <label for="funcionario_cargo" class="form-label">Nível de Permissão</label>
-                    <div class="input-group">
-                        <!--icone do lado do campo input-->
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-person-vcard text-white"></i>
-                        </span>
-                        <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                        <select id="funcionario_permissao" name="funcionario_permissao" class="form-select">
-                            <option value="">Selecione</option>
-                            <option value="administrador">Administrador</option>
-                            <option value="funcionario">Funcionário</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3 text-start">
-    
-                    <!--Campo DDI-->
-                    <label for="funcionario_ddi" class="form-label">DDI</label>
-                    <div class="input-group">
-                        <!--icone do lado do campo input-->
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-telephone-fill text-white"></i>
-                        </span>
-                        <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                        <input type="text" name="funcionario_ddi" id="funcionario_ddi" class="form-control"
-                            placeholder="Código Internacional" required
-                            value="{{ funcionario.funcionario_ddi if funcionario else '' }}">
-                    </div>
-                </div>
-    
-                <div class="col-md-3 mb-3 text-start">
-    
-                    <!--Campo DDD-->
-                    <label for="funcionario_ddd" class="form-label">DDD</label>
-                    <div class="input-group">
-                        <!--icone do lado do campo input-->
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-telephone-fill text-white"></i>
-                        </span>
-                        <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                        <input type="text" name="funcionario_ddd" id="funcionario_ddd" class="form-control"
-                            placeholder="Código Regional" required
-                            value="{{ funcionario.funcionario_ddd if funcionario else '' }}">
-    
-                    </div>
-                </div>
-    
-                <div class="col-md-6 mb-3 text-start">
-    
-                    <!--Campo Telefone-->
-                    <label for="fornecedor_telefone" class="form-label">Telefone</label>
-                    <div class="input-group">
-                        <!--icone do lado do campo input-->
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-telephone-fill text-white"></i>
-                        </span>
-                        <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                        <input type="text" name="funcionario_telefone" id="funcionario_telefone" class="form-control"
-                            placeholder="Telefone de Contato" required
-                            value="{{ funcionario.funcionario_telefone if funcionario else '' }}">
-    
-                    </div>
-                </div>
-            </div>
-            <div class="botao-direita">
-                <!--botão pra cadastrar ou atualizar de acordo com a ação-->
-                <button class="botao-add btn" type="submit">{{ 'Atualizar' if funcionario and funcionario.id else
-                    'Cadastrar' }}</button>
-            </div>
-    
-        </form>
-    
-    </div>
-</div>
 
+                <!-- FOTO -->
+                <div class="col-md-4 border-end text-center p-4">
+
+                    <h5>Foto de perfil</h5>
+
+                    <div
+                        class="bg-light rounded-circle mx-auto"
+                        style="width: 160px; height: 160px;"
+                    >
+                        <i class="bi bi-person-fill text-secondary"></i>
+                    </div>
+
+                    <p class="text-secondary">
+                        JPG, PNG ou GIF.<br>
+                        Máximo 2MB.
+                    </p>
+
+                    <label
+                        for="foto_perfil"
+                        class="btn btn-outline-primary"
+                    >
+                        <i class="bi bi-camera"></i>
+                        Alterar foto
+                    </label>
+
+                    <input
+                        type="file"
+                        id="foto_perfil"
+                        name="foto_perfil"
+                        class="d-none"
+                        accept="image/png,image/jpeg,image/gif"
+                    >
+
+                </div>
+
+
+                <!-- INFORMAÇÕES -->
+                <div class="col-md-8 p-4">
+
+                    <h5 class="text-primary border-bottom pb-3 mb-4">
+                        Informações pessoais
+                    </h5>
+
+                    <div class="row">
+
+                        <!-- NOME -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                Nome
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i class="bi bi-person-fill"></i>
+                                </span>
+
+                                <input
+                                    type="text"
+                                    name="funcionario_nome"
+                                    class="form-control"
+                                    placeholder="Digite o nome"
+                                    required
+                                    value="{{ funcionario.funcionario_nome if funcionario else '' }}"
+                                >
+
+                            </div>
+                        </div>
+
+
+                        <!-- EMAIL -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                E-mail
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i class="bi bi-envelope-fill"></i>
+                                </span>
+
+                                <input
+                                    type="email"
+                                    name="funcionario_email"
+                                    class="form-control"
+                                    placeholder="Digite o e-mail"
+                                    required
+                                    value="{{ funcionario.funcionario_email if funcionario else '' }}"
+                                >
+
+                            </div>
+                        </div>
+
+
+                        <!-- SENHA -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                Senha
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i class="bi bi-lock-fill"></i>
+                                </span>
+
+                                <input
+                                    type="password"
+                                    name="funcionario_senha"
+                                    class="form-control"
+                                    placeholder="Digite a senha"
+                                    {% if not funcionario %}required{% endif %}
+                                >
+
+                            </div>
+
+                            {% if funcionario %}
+                            <p class="text-secondary">
+                                Deixe em branco para manter a senha atual.
+                            </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- CPF -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                CPF
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i class="bi bi-person-vcard-fill"></i>
+                                </span>
+
+                                <input
+                                    type="text"
+                                    name="funcionario_cpf"
+                                    class="form-control"
+                                    placeholder="000.000.000-00"
+                                    required
+                                    value="{{ funcionario.funcionario_cpf if funcionario else '' }}"
+                                >
+
+                            </div>
+                        </div>
+
+
+                        <!-- CEP -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                CEP
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                </span>
+
+                                <input
+                                    type="text"
+                                    name="funcionario_cep"
+                                    class="form-control"
+                                    placeholder="00000-000"
+                                    required
+                                    value="{{ funcionario.funcionario_cep if funcionario else '' }}"
+                                >
+
+                            </div>
+                        </div>
+
+
+                        <!-- CARGO -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                Cargo
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i class="bi bi-briefcase-fill"></i>
+                                </span>
+
+                                <input
+                                    type="text"
+                                    name="funcionario_cargo"
+                                    class="form-control"
+                                    placeholder="Digite o cargo"
+                                    required
+                                    value="{{ funcionario.funcionario_cargo if funcionario else '' }}"
+                                >
+
+                            </div>
+                        </div>
+
+                        <!-- DDI -->
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">
+                                DDI
+                            </label>
+
+                            <input
+                                type="text"
+                                name="funcionario_ddi"
+                                class="form-control"
+                                placeholder="+55"
+                                required
+                                value="{{ funcionario.funcionario_ddi if funcionario else '' }}"
+                            >
+                        </div>
+
+
+                        <!-- DDD -->
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">
+                                DDD
+                            </label>
+
+                            <input
+                                type="text"
+                                name="funcionario_ddd"
+                                class="form-control"
+                                placeholder="11"
+                                required
+                                value="{{ funcionario.funcionario_ddd if funcionario else '' }}"
+                            >
+                        </div>
+
+
+                        <!-- TELEFONE -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                Telefone
+                            </label>
+
+                            <input
+                                type="text"
+                                name="funcionario_telefone"
+                                class="form-control"
+                                placeholder="99999-9999"
+                                required
+                                value="{{ funcionario.funcionario_telefone if funcionario else '' }}"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <!-- BOTÕES -->
+                    <div class="border-top pt-3 mt-3 text-end">
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                        >
+                            Cancelar
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            <i class="bi bi-save"></i>
+                            {{ 'Salvar alterações' if funcionario and funcionario.id else 'Cadastrar' }}
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 {% endblock %}
