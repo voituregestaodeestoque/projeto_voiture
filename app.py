@@ -99,7 +99,44 @@ def logout():
 @app.route('/perfil')
 @login_obrigatorio
 def perfil():
-    return render_template('perfil.html')
+
+    funcionario = Funcionario.find_by_id(session["usuario_id"])
+
+    return render_template(
+        'perfil.html',
+        funcionario=funcionario
+    )
+
+#Para atualizar o perfil 
+@app.route("/atualizar_perfil", methods=["POST"])
+@login_obrigatorio
+def atualizar_perfil():
+
+    id = session["usuario_id"]
+
+    dados = get_funcionario_form()
+
+    funcionario = Funcionario(**dados)
+
+    erros = funcionario.validate()
+
+    if erros:
+
+        for erro in erros:
+            flash(erro, "erro")
+
+        funcionario.id = id
+
+        return render_template(
+            "perfil.html",
+            funcionario=funcionario
+        )
+
+    funcionario.update(id)
+
+    flash("Perfil atualizado com sucesso.", "sucesso")
+
+    return redirect(url_for("perfil"))
 
 # -----> Fim: Perfil
 ################################################################
