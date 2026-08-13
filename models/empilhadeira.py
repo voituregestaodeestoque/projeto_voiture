@@ -132,3 +132,46 @@ WHERE u.funcionario_id IS NOT NULL
     #função para listar todas as empilhadeiras
     def empilhadeira_listagem(cls):
         return cls.find_all()
+
+    @classmethod
+    def alternar_status(cls, id):
+        conexao = Database.connect()
+        cursor = conexao.cursor()
+
+        try:
+            # Busca o status atual
+            sql = """
+                SELECT empilhadeira_status
+                FROM empilhadeira
+                WHERE id = %s
+            """
+
+            cursor.execute(sql, (id,))
+            resultado = cursor.fetchone()
+
+            if not resultado:
+                raise ValueError("Empilhadeira não encontrada.")
+
+            status_atual = resultado[0]
+
+            # Alterna o status
+            if status_atual == "ATIVA":
+                novo_status = "INATIVA"
+            else:
+                novo_status = "ATIVA"
+
+            # Atualiza o banco
+            sql = """
+                UPDATE empilhadeira
+                SET empilhadeira_status = %s
+                WHERE id = %s
+            """
+
+            cursor.execute(sql, (novo_status, id))
+            conexao.commit()
+
+            return novo_status
+
+        finally:
+            cursor.close()
+            conexao.close()

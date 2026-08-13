@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 <!--Ryan atualizado 13/06/2026 18:00-->
@@ -83,14 +82,25 @@
                             </td>
 
                             <td>
-                                <span class="badge bg-secondary">
-                                    {{ uso.empilhadeira_status }} <!--mostra o status da empilhadeira-->
-                                </span>
+                                {% if uso.empilhadeira_status == "ATIVA" %}
+                                <a href="{{ url_for('alternar_status_empilhadeira', id=uso.empilhadeira_id_real) }}"
+                                    class="badge bg-success text-decoration-none" style="cursor: pointer;"
+                                    title="Clique para alterar para INATIVA">
+                                    ATIVA
+                                </a>
+                                {% else %}
+                                <a href="{{ url_for('alternar_status_empilhadeira', id=uso.empilhadeira_id_real) }}"
+                                    class="badge bg-secondary text-decoration-none" style="cursor: pointer;"
+                                    title="Clique para alterar para ATIVA">
+                                    INATIVA
+                                </a>
+                                {% endif %}
                             </td>
 
                             <td>
                                 <span class="badge bg-secondary">
-                                    {{ uso.uso_empilhadeira_datahora }} <!--mostra a data e hora de quando começou a utlizar-->
+                                    {{ uso.uso_empilhadeira_datahora }}
+                                    <!--mostra a data e hora de quando começou a utlizar-->
                                 </span>
                             </td>
 
@@ -107,7 +117,8 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja desocupar essa empilhadeira?</strong></h1>
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja
+                                                        desocupar essa empilhadeira?</strong></h1>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
@@ -128,7 +139,7 @@
 
                         </tr>
                         {% endfor %}
-                        
+
                         <!--campos das empilhadeiras que não estão sendo utilizadas-->
                         {% for empilhadeira in empilhadeiras %}
                         <tr>
@@ -164,9 +175,19 @@
 
 
                             <td>
-                                <span class="badge bg-secondary">
-                                    {{ empilhadeira.empilhadeira_status }} <!--mostra o status-->
-                                </span>
+                                {% if uso.empilhadeira_status == "ATIVA" %}
+                                <a href="{{ url_for('alternar_status_empilhadeira', id=uso.empilhadeira_id_real) }}"
+                                    class="badge bg-success text-decoration-none" style="cursor: pointer;"
+                                    title="Clique para alterar para INATIVA">
+                                    ATIVA
+                                </a>
+                                {% else %}
+                                <a href="{{ url_for('alternar_status_empilhadeira', id=uso.empilhadeira_id_real) }}"
+                                    class="badge bg-secondary text-decoration-none" style="cursor: pointer;"
+                                    title="Clique para alterar para ATIVA">
+                                    INATIVA
+                                </a>
+                                {% endif %}
                             </td>
 
 
@@ -200,7 +221,8 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja excluir essa empilhadeira?</strong></h1>
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja
+                                                        excluir essa empilhadeira?</strong></h1>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>

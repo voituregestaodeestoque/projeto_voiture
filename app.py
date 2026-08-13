@@ -813,6 +813,26 @@ def salvar_empilhadeira():
         flash(f"Erro ao cadastrar empilhadeira: {e}", "erro") #mostra o erro
         return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
 
+@app.route("/alternar_status_empilhadeira/<int:id>")
+@login_obrigatorio
+def alternar_status_empilhadeira(id):
+
+    try:
+        novo_status = Empilhadeira.alternar_status(id)
+
+        flash(
+            f"Status da empilhadeira alterado para {novo_status}.",
+            "sucesso"
+        )
+
+    except ValueError as e:
+        flash(str(e), "erro")
+
+    except Exception as e:
+        flash(f"Erro ao alterar status da empilhadeira: {e}", "erro")
+
+    return redirect(url_for("tabelaempilhadeira"))
+
 #Edição de uma empilhadeira já cadastrada
 @app.route("/editar_empilhadeira/<int:id>")
 @login_obrigatorio
