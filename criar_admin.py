@@ -39,7 +39,10 @@ dados = {
     "funcionario_ddd": "19",
     "funcionario_telefone": "123456789",
     "funcionario_cargo": "Admin",
-    "funcionario_permissao": "administrador"
+    "funcionario_permissao": "administrador",
+    "imagem_nome": None,
+    "imagem_tipo": None,
+    "imagem_blob": None
 }
 
 funcionario=select_admin()
