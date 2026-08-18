@@ -10,48 +10,40 @@
 </head>
 
 <body>
-    <header style="width: max-content; display: flex; justify-content: center; align-items: center;">
-        <div id="logo" style="width: max-content;">
+    <header>
+        <div id="header-logo" style="width: max-content;">
             <img src="../static/images/logo_lp.png" style="
                 height: 115px;
                 width: 120px;
-    display: flex;
-    justify-content: center;
-    align-items: center;" alt="logo">
+                display: flex;
+                justify-content: center;
+                align-items: center;" alt="logo">
         </div>
+
         <!--Botão de menu para versão com responsividade-->
-        <button class="menu-toggle" id="menu-toggle">
-            ☰
-        </button>
-        <nav class="menu" id="menu" style="display: flex; justify-content: space-between; width: max-content; ">
-            <ul style="display: flex; justify-content: space-between; gap: 20px;">
-                <li><a href="#sistema">Sistema</li></a>
+        <div id="header-menu-toggle">
+            <button class="menu-toggle" id="menu-toggle">
+                ☰
+            </button>
+        </div>
+
+        <nav class="menu" id="menu">
+            <div id="nav-esquerda">
+                <li><a href="#sistema">Sistema</a></li>
                 <li><a href="#planos">Planos</a></li>
                 <li><a href="#contato">Contato</a></li>
                 <li><a href="#banner-empresas">Clientes</a></li>
                 <li><a href="#sobre_nos">Sobre</a></li>
+            </div>
+
+            <div id="nav-direita">
                 <li> <a href="{{ url_for('loginfuncionario') }}">Login</a></li>
                 <li id="demonstracao">Demonstração</li>
+            </div>
 
-            </ul>
         </nav>
     </header>
-    <header id="header-og">
-        <nav id="topo-esquerda">
-            <img src="../static/images/logo_lp.png" alt="logo">
-            <ul id="topo-esquerda-ul">
-                <li><a href="#sistema">Sistema</li></a>
-                <li><a href="#planos">Planos</a></li>
-                <li><a href="#contato">Contato</a></li>
-                <li><a href="#banner-empresas">Clientes</a></li>
-                <li><a href="#sobre_nos">Sobre</a></li>
-            </ul>
-        </nav>
-        <nav id="topo-direita">
-            <li> <a href="{{ url_for('loginfuncionario') }}">Login</a></li>
-            <li id="demonstracao">Demonstração</li>
-        </nav>
-    </header>
+
     <!--Seção Main-->
     <main id="secao-main">
         <section class="pai-container-main">
