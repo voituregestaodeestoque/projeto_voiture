@@ -427,10 +427,19 @@ header a {
 }
 
 .header1 h1 {
-    font-size: 30px;
+    font-size: 40px;
     font-weight: bold;
+    font-family: 'Space Grotesk', sans-serif;
+    color: #F6F4EE;
 }
 
+.header1 p {
+    display: flex;
+    align-items: center;
+    color: #9FB3AF;
+    font-size: 16px;
+    justify-content: center;
+}
 
 .planos_container {
     display: flex;
@@ -451,7 +460,13 @@ header a {
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform .35s ease, box-shadow .35s ease;
+    position: relative;
+    /* essencial para o selo se posicionar corretamente */
+    overflow: visible;
+    /* garante que o selo não seja cortado */
 }
+
 
 .planos-card h2 {
     font-size: 30px;
@@ -463,11 +478,54 @@ header a {
     font-size: 15px;
     color: #666;
     line-height: 2;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     min-height: 60px;
     /* Garante alinhamento se o texto variar */
 }
 
+.planos-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 40px 70px -25px rgba(0, 0, 0, .6);
+}
+
+.planos-card.business {
+    background: #FBFAF7;
+    border: 1px solid #B8924A;
+    padding-top: 44px;
+    transform: translateY(-14px);
+    box-shadow: 0 35px 80px -20px rgba(184, 146, 74, .35), 0 30px 60px -25px rgba(0, 0, 0, .6);
+}
+
+.planos-card.business:hover {
+    transform: translateY(-20px);
+}
+
+.escolha {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #083638;
+    color: #E9D9B4;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 999px;
+    border: 1px solid #B8924A;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+.planos-card.business .botao_planos {
+    background-color: #B8924A;
+    color: #20180A;
+}
+
+.planos-card.business .botao_planos:hover {
+    background: #C9A15A;
+}
 
 .informacao {
     list-style: none;
@@ -482,7 +540,10 @@ header a {
     display: flex;
     align-items: flex-start;
     font-weight: 500;
+    color: #000;
+    border-bottom: 1px dashed #dbc7c7;
 }
+
 
 .informacao span {
     margin-right: 10px;
@@ -492,15 +553,37 @@ header a {
 
 
 .box {
-    background-color: #ededed;
-    color: #313131;
-    padding: 20px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    border-top: 1px solid #12211F;
+    padding-top: 16px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
 }
+
+.box .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #000;
+}
+
+.preco {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    color: #000;
+    font-variant-numeric: tabular-nums;
+
+}
+
+.preco sup {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    margin-left: 2px;
+}
+
 
 /* Botão */
 .botao_planos {
@@ -509,16 +592,14 @@ header a {
     text-decoration: none;
     text-align: center;
     padding: 15px;
-    border-radius: 30px;
+    border-radius: 8px;
     font-weight: bold;
     transition: background 0.3s;
 }
 
 .botao_planos:hover {
-    background-color: #096280;
-    transform: scale(1.05);
+    background-color: #276c83;
 }
-
 /*Seção Contato*/
 #contato {
     margin-top: 20px;
