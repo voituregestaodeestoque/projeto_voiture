@@ -82,14 +82,14 @@
                             </td>
 
                             <td>
-                                {% if uso.empilhadeira_status == "ATIVA" %}
-                                <a href="{{ url_for('alternar_status_empilhadeira', id=uso.empilhadeira_id_real) }}"
+                                {% if empilhadeira.empilhadeira_status == "ATIVA" %}
+                                <a href="{{ url_for('alternar_status_empilhadeira', id=empilhadeira.id) }}"
                                     class="badge bg-success text-decoration-none" style="cursor: pointer;"
                                     title="Clique para alterar para INATIVA">
                                     ATIVA
                                 </a>
                                 {% else %}
-                                <a href="{{ url_for('alternar_status_empilhadeira', id=uso.empilhadeira_id_real) }}"
+                                <a href="{{ url_for('alternar_status_empilhadeira', id=empilhadeira.id) }}"
                                     class="badge bg-secondary text-decoration-none" style="cursor: pointer;"
                                     title="Clique para alterar para ATIVA">
                                     INATIVA
@@ -175,14 +175,14 @@
 
 
                             <td>
-                                {% if uso.empilhadeira_status == "ATIVA" %}
-                                <a href="{{ url_for('alternar_status_empilhadeira', id=uso.empilhadeira_id_real) }}"
+                                {% if empilhadeira.empilhadeira_status == "ATIVA" %}
+                                <a href="{{ url_for('alternar_status_empilhadeira', id=empilhadeira.id) }}"
                                     class="badge bg-success text-decoration-none" style="cursor: pointer;"
                                     title="Clique para alterar para INATIVA">
                                     ATIVA
                                 </a>
                                 {% else %}
-                                <a href="{{ url_for('alternar_status_empilhadeira', id=uso.empilhadeira_id_real) }}"
+                                <a href="{{ url_for('alternar_status_empilhadeira', id=empilhadeira.id) }}"
                                     class="badge bg-secondary text-decoration-none" style="cursor: pointer;"
                                     title="Clique para alterar para ATIVA">
                                     INATIVA
