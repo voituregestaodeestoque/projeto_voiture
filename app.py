@@ -1,5 +1,6 @@
-
 # Editado por Ryan em 11/08/2026 às 10h12
+import os
+import smtplib
 from core.security import login_obrigatorio, admin_obrigatorio
 from flask import Flask, render_template, request, redirect, url_for, flash, json, session
 from models.funcionario import Funcionario
@@ -14,6 +15,15 @@ from models.detalhe_saida import Detalhe_saida
 from models.pedido_saida import Pedido_saida
 from models.estoque import Estoque
 from datetime import datetime
+
+from dotenv import load_dotenv
+from email.message import EmailMessage
+
+load_dotenv()
+
+EMAIL_SISTEMA = os.getenv("EMAIL_SISTEMA")
+EMAIL_SENHA = os.getenv("EMAIL_SENHA")
+EMAIL_EMPRESA = os.getenv("EMAIL_EMPRESA")
 
 app = Flask(__name__)
 app.secret_key = "chave_secreta"
@@ -44,6 +54,66 @@ def to_float(value, default=0.0):
 @app.route('/landingpage')
 def landingpage():
     return render_template('landing_page.html')
+
+@app.route("/enviar_contato", methods=["POST"])
+def enviar_contato():
+
+    nome = request.form.get("nome")
+    email_cliente = request.form.get("email")
+    cnpj = request.form.get("cnpj")
+
+    try:
+
+        mensagem = EmailMessage()
+
+        mensagem["Subject"] = "Novo contato - Voiture"
+        mensagem["From"] = EMAIL_SISTEMA
+        mensagem["To"] = EMAIL_EMPRESA
+        mensagem["Reply-To"] = email_cliente
+
+        mensagem.set_content(f"""
+Olá!
+
+Uma nova empresa entrou em contato através da Landing Page da Voiture.
+
+Nome do representante: {nome}
+
+Email de contato: {email_cliente}
+
+CNPJ da empresa: {cnpj}
+
+Entre em contato com o representante para marcar uma reunião.
+
+Atenciosamente,
+Sistema Voiture - Gestão de Estoque
+""")
+
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as servidor:
+
+            servidor.login(
+                EMAIL_SISTEMA,
+                EMAIL_SENHA
+            )
+
+            servidor.send_message(mensagem)
+
+        flash(
+            "Mensagem enviada com sucesso! Entraremos em contato em breve.",
+            "sucesso"
+        )
+
+    except Exception as erro:
+
+        print("Erro ao enviar email:", erro)
+
+        flash(
+            "Não foi possível enviar a mensagem. Tente novamente.",
+            "erro"
+        )
+
+    return redirect(url_for("landingpage"))
+
+
 
 # -----> Fim: Landing Page
 ############################################################################################################
