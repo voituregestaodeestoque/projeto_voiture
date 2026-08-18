@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,34 @@
     <link rel="stylesheet" href="../static/landing_page.css">
     <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
 </head>
+
 <body>
+    <header style="width: max-content; display: flex; justify-content: center; align-items: center;">
+        <div id="logo" style="width: max-content;">
+            <img src="../static/images/logo_lp.png" style="
+                height: 115px;
+                width: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;" alt="logo">
+        </div>
+        <!--Botão de menu para versão com responsividade-->
+        <button class="menu-toggle" id="menu-toggle">
+            ☰
+        </button>
+        <nav class="menu" id="menu" style="display: flex; justify-content: space-between; width: max-content; ">
+            <ul style="display: flex; justify-content: space-between; gap: 20px;">
+                <li><a href="#sistema">Sistema</li></a>
+                <li><a href="#planos">Planos</a></li>
+                <li><a href="#contato">Contato</a></li>
+                <li><a href="#banner-empresas">Clientes</a></li>
+                <li><a href="#sobre_nos">Sobre</a></li>
+                <li> <a href="{{ url_for('loginfuncionario') }}">Login</a></li>
+                <li id="demonstracao">Demonstração</li>
+
+            </ul>
+        </nav>
+    </header>
     <header id="header-og">
         <nav id="topo-esquerda">
             <img src="../static/images/logo_lp.png" alt="logo">
@@ -25,12 +53,13 @@
         </nav>
     </header>
     <!--Seção Main-->
-    <main id="secao-main">        
+    <main id="secao-main">
         <section class="pai-container-main">
             <div class="container-main">
                 <h1>Domine o fluxo de suas peças com inteligência e precisão</h1>
                 <p>Visualize cada etapa da logística de seu estoque em um único sistema de gestão.</p>
-                <p>Monitore entradas, rastreie saídas para a oficina e identifique gargalos antes de se tornarem prejuízo.</p>
+                <p>Monitore entradas, rastreie saídas para a oficina e identifique gargalos antes de se tornarem
+                    prejuízo.</p>
                 <a href="#" class="butao-main">Experimente nosso sistema</a>
             </div>
 
@@ -39,31 +68,78 @@
             </div>
         </section>
     </main>
-    <!--Seção sistema-->
     <section id="sistema">
         <h1>Por que escolher a Voiture?</h1>
-        <div class="sistema-container">
-            <div class="sistema-texto">
-                <div id="c1">
-                    <img src="../static/images/check_preto.png" alt="check">
-                    <h2>Eficiência e lucratividade</h2>
-                </div>
-                <div id="c2">
-                    <img src="../static/images/check_azul.png" alt="azul">
-                    <div id="texto-c2">
-                        <h2>Agilização no armazenamento e distribuição</h2>
-                        <p>Rastreamento e identificação automática de peças e <br>visualização de entrada e saída de
-                            produtos do
-                            estoque em tempo real.</p>
+        <div class="grid">
+
+            <div id="lista-secao-sistema" style="display:flex; flex-direction:column; gap:14px;">
+
+                <div class="feat" data-key="agilizacao"
+                    style="border-radius:14px; padding:24px 26px; transition:background 0.2s ease, border-color 0.2s ease;">
+                    <div style="display:flex; align-items:center; gap:14px;">
+                        <div class="feat-mark"
+                            style="width:34px;height:34px;border-radius:9px; display:flex;align-items:center;justify-content:center; flex-shrink:0; transition:background 0.2s ease;">
+                            <svg class="feat-icon" viewBox="0 0 24 24" fill="none" width="18" height="18"
+                                style="transition:stroke 0.2s ease;">
+                                <path d="M5 12.5L9.5 17L19 7" stroke="currentColor" stroke-width="2.4"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <span class="feat-title"
+                            style="font-size:18px; font-weight:500; transition:color 0.2s ease;">Agilização no
+                            armazenamento e distribuição</span>
                     </div>
+                    <div class="feat-desc"
+                        style="color:#8fa2b3; font-size:14.5px; line-height:1.65; margin:0 0 0 48px; max-height:0; opacity:0; overflow:hidden; transition:max-height 0.25s ease, opacity 0.2s ease, margin-top 0.25s ease;">
+                        Rastreamento automático de peças e visualização de entrada e saída em tempo real.</div>
                 </div>
-                <div id="c3">
-                    <img src="../static/images/check_preto.png" alt="check">
-                    <h2>Gestão visual e descomplicada</h2>
+
+                <div class="feat" data-key="eficiencia"
+                    style="border-radius:14px; padding:24px 26px; transition:background 0.2s ease, border-color 0.2s ease;">
+                    <div style="display:flex; align-items:center; gap:14px;">
+                        <div class="feat-mark"
+                            style="width:34px;height:34px;border-radius:9px; display:flex;align-items:center;justify-content:center; flex-shrink:0; transition:background 0.2s ease;">
+                            <svg class="feat-icon" viewBox="0 0 24 24" fill="none" width="18" height="18"
+                                style="transition:stroke 0.2s ease;">
+                                <path d="M5 12.5L9.5 17L19 7" stroke="currentColor" stroke-width="2.4"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <span class="feat-title topico-sistema"
+                            style="font-size:18px; font-weight:500; transition:color 0.2s ease;">Eficiência e
+                            lucratividade</span>
+                    </div>
+                    <div class="feat-desc"
+                        style="color:#8fa2b3; font-size:14.5px; line-height:1.65; margin:0 0 0 48px; max-height:0; opacity:0; overflow:hidden; transition:max-height 0.25s ease, opacity 0.2s ease, margin-top 0.25s ease;">
+                        Menos peças paradas e menos compras duplicadas, com o estoque sempre visível.</div>
                 </div>
+
+                <div class="feat" data-key="gestao"
+                    style="border-radius:14px; padding:24px 26px; transition:background 0.2s ease, border-color 0.2s ease;">
+                    <div style="display:flex; align-items:center; gap:14px;">
+                        <div class="feat-mark"
+                            style="width:34px;height:34px;border-radius:9px; display:flex;align-items:center;justify-content:center; flex-shrink:0; transition:background 0.2s ease;">
+                            <svg class="feat-icon" viewBox="0 0 24 24" fill="none" width="18" height="18"
+                                style="transition:stroke 0.2s ease;">
+                                <path d="M5 12.5L9.5 17L19 7" stroke="currentColor" stroke-width="2.4"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <span class="feat-title"
+                            style="font-size:18px; font-weight:500; transition:color 0.2s ease;">Gestão visual e
+                            descomplicada</span>
+                    </div>
+                    <div class="feat-desc"
+                        style="color:#8fa2b3; font-size:14.5px; line-height:1.65; margin:0 0 0 48px; max-height:0; opacity:0; overflow:hidden; transition:max-height 0.25s ease, opacity 0.2s ease, margin-top 0.25s ease;">
+                        Painéis e indicadores claros, sem planilhas, para qualquer pessoa da equipe entender de
+                        imediato.</div>
+                </div>
+
             </div>
-            <div class="sistema-img">
-                <img src="../static/images/grafico_neon.png" alt="sistema">
+
+            <div class="panel-wrap">
+                <img src="../static/images/grafico-secao-sistema.png" alt=""
+                    style="border-radius: 35px; max-width: 100%;">
             </div>
         </div>
     </section>
@@ -76,7 +152,8 @@
         <section class="planos_container">
             <div class="planos-card">
                 <h2>Starter</h2>
-                <p class="description">Ideal para empresas de pequeno porte que desejam gerir eficientemente seu estoque.</p>
+                <p class="description">Ideal para empresas de pequeno porte que desejam gerir eficientemente seu
+                    estoque.</p>
                 <ul class="informacao">
                     <li><span>✓</span> 1000 assinaturas</li>
                     <li><span>✓</span> Acesso a todos os recursos do sistema</li>
@@ -87,7 +164,8 @@
 
             <div class="planos-card">
                 <h2>Business</h2>
-                <p class="description">Ideal para empresas de médio porte que desejam gerir eficientemente seu estoque.</p>
+                <p class="description">Ideal para empresas de médio porte que desejam gerir eficientemente seu estoque.
+                </p>
                 <ul class="informacao">
                     <li><span>✓</span> 5000 assinaturas</li>
                     <li><span>✓</span> Acesso a todos os recursos do sistema</li>
@@ -98,7 +176,8 @@
 
             <div class="planos-card">
                 <h2>Enterprise</h2>
-                <p class="description">Ideal para empresas de grande porte que desejam gerir eficientemente seu estoque.</p>
+                <p class="description">Ideal para empresas de grande porte que desejam gerir eficientemente seu estoque.
+                </p>
                 <ul class="informacao">
                     <li><span>✓</span> 10000 assinaturas</li>
                     <li><span>✓</span> Acesso a todos os recursos do sistema</li>
@@ -113,7 +192,8 @@
         <main class="container_contato">
             <section class="info_contato">
                 <h1>Entre em contato conosco para esclarecer dúvidas</h1>
-                <p>Preencha seus dados e em breve te enviaremos um email marcando uma reunião para apresentação do sistema e esclarecimentos.</p>
+                <p>Preencha seus dados e em breve te enviaremos um email marcando uma reunião para apresentação do
+                    sistema e esclarecimentos.</p>
             </section>
 
             <section class="forms">
@@ -169,8 +249,12 @@
     <section id="sobre_nos">
         <div id="sobre_superior" class="sobre_nos">
             <div id="missao_texto" class="sobre_quadro sobre_texto">
-                <div class="sobre_titulo"><h1>Nossa missão</h1></div>
-                <p>Proporcionar um <span class="negrito">sistema de gerenciamento de estoque automatizado</span> perfeito para sua empresa e entregar <span class="negrito">soluções inteligentes</span> para a segurança de seus trabalhos!</p>
+                <div class="sobre_titulo">
+                    <h1>Nossa missão</h1>
+                </div>
+                <p>Proporcionar um <span class="negrito">sistema de gerenciamento de estoque automatizado</span>
+                    perfeito para sua empresa e entregar <span class="negrito">soluções inteligentes</span> para a
+                    segurança de seus trabalhos!</p>
             </div>
 
             <div id="missao_imagem" class="sobre_quadro">
@@ -181,13 +265,18 @@
         <div id="sobre_inferior" class="sobre_nos">
             <div id="diferenciais_video" class="sobre_quadro ">
                 <video autoplay muted loop playsinline>
-                <source src="../static/images/sobre_video.mp4" type="video/mp4">
+                    <source src="../static/images/sobre_video.mp4" type="video/mp4">
                 </video>
             </div>
 
             <div id="diferenciais_texto" class="sobre_quadro sobre_texto">
-                <div class="sobre_titulo"><h1>Nossos diferenciais</h1></div>
-                <p>Nosso sistema possui <span class="negrito">organização</span> de ponta para sua empresa ao <span class="negrito">gerenciar o estoque.</span> Visamos uma interface intuitiva e facilitada, garantindo acessibilidade a todos! Você poderá ter acesso às movimentações de entrada e saída de peças do estoque e poderá <span class="negrito">otimizar os processos</span> de seu negócio!</p>
+                <div class="sobre_titulo">
+                    <h1>Nossos diferenciais</h1>
+                </div>
+                <p>Nosso sistema possui <span class="negrito">organização</span> de ponta para sua empresa ao <span
+                        class="negrito">gerenciar o estoque.</span> Visamos uma interface intuitiva e facilitada,
+                    garantindo acessibilidade a todos! Você poderá ter acesso às movimentações de entrada e saída de
+                    peças do estoque e poderá <span class="negrito">otimizar os processos</span> de seu negócio!</p>
             </div>
 
         </div>
@@ -214,9 +303,15 @@
             <div id="footer_planos" class="coluna_footer">
                 <ul>
                     <li class="footer_titulo">Planos</li>
-                    <a href="#planos" class="footer_link"><li class="footer_texto">Starter</li></a>
-                    <a href="#planos" class="footer_link"><li class="footer_texto">Business</li></a>
-                    <a href="#planos" class="footer_link"><li class="footer_texto">Enterprise</li> </a>
+                    <a href="#planos" class="footer_link">
+                        <li class="footer_texto">Starter</li>
+                    </a>
+                    <a href="#planos" class="footer_link">
+                        <li class="footer_texto">Business</li>
+                    </a>
+                    <a href="#planos" class="footer_link">
+                        <li class="footer_texto">Enterprise</li>
+                    </a>
                 </ul>
             </div>
         </div>
@@ -234,7 +329,7 @@
             </div>
             <ul id="footer-contato">
                 <li>voituregestaodeestoque@gmail.com</li>
-                <li id="footer_telefone"><img src="../static/images/telefone.png"alt="telefone"> (19) 99998-9998</li>                    
+                <li id="footer_telefone"><img src="../static/images/telefone.png" alt="telefone"> (19) 99998-9998</li>
                 <li>Av. Paulo Afonso P. Ulbricht,</li>
                 <li>Itapira - SP</li>
                 <li>00.000.000/0000-00</li>
@@ -245,4 +340,103 @@
     </footer>
 
 </body>
+<script>
+    // ===============================
+    // MENU RESPONSIVO
+    // ===============================
+
+    const menuToggle = document.getElementById("menu-toggle");
+    const menu = document.getElementById("menu");
+    const menuLinks = document.querySelectorAll(".menu a");
+
+    // Abrir/Fechar menu
+    menuToggle.addEventListener("click", function (event) {
+        event.stopPropagation();
+
+        menu.classList.toggle("active");
+
+        if (menu.classList.contains("active")) {
+            menuToggle.innerHTML = "✕";
+        } else {
+            menuToggle.innerHTML = "☰";
+        }
+    });
+
+    // Fechar menu ao clicar em um link
+    menuLinks.forEach(link => {
+        link.addEventListener("click", function () {
+            menu.classList.remove("active");
+            menuToggle.innerHTML = "☰";
+        });
+    });
+
+    // Fechar menu ao clicar fora dele
+    document.addEventListener("click", function (event) {
+
+        const clicouNoMenu = menu.contains(event.target);
+        const clicouNoBotao = menuToggle.contains(event.target);
+
+        if (!clicouNoMenu && !clicouNoBotao) {
+            menu.classList.remove("active");
+            menuToggle.innerHTML = "☰";
+        }
+
+    });
+
+    // Ao voltar para Desktop remove o menu mobile
+    window.addEventListener("resize", function () {
+
+        if (window.innerWidth > 900) {
+            menu.classList.remove("active");
+            menuToggle.innerHTML = "☰";
+        }
+
+    });
+
+    (function () {
+        var feats = document.querySelectorAll('.feat');
+
+        function setActive(el, active) {
+            var mark = el.querySelector('.feat-mark');
+            var icon = el.querySelector('.feat-icon');
+            var title = el.querySelector('.feat-title');
+            var desc = el.querySelector('.feat-desc');
+            if (active) {
+                el.style.background = 'linear-gradient(0deg, #0f1d2e, #0f1d2e)';
+                el.style.background = '#0f1d2e';
+                el.style.border = '0.5px solid #1b3a3a';
+                mark.style.background = '#2dd4bf';
+                icon.style.color = '#04140f';
+                title.style.color = '#5eead4';
+                desc.style.maxHeight = '60px';
+                desc.style.opacity = '1';
+                desc.style.marginTop = '6px';
+            } else {
+                el.style.background = 'transparent';
+                el.style.border = '0.5px solid transparent';
+                mark.style.background = '#0f1d2e';
+                mark.style.border = '0.5px solid #24384a';
+                icon.style.color = '#71879c';
+                title.style.color = '#f3f7fa';
+                desc.style.maxHeight = '0';
+                desc.style.opacity = '0';
+                desc.style.marginTop = '0';
+            }
+        }
+
+        feats.forEach(function (f) {
+            f.addEventListener('mouseenter', function () {
+                feats.forEach(function (other) { setActive(other, other === f); });
+            });
+        });
+
+        feats.forEach(function (f, i) { setActive(f, i === 0); });
+
+        var list = document.getElementById('lista-secao-sistema');
+        list.addEventListener('mouseleave', function () {
+            feats.forEach(function (f, i) { setActive(f, i === 0); });
+        });
+    })();
+</script>
+
 </html>
