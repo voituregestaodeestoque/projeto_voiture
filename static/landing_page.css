@@ -791,114 +791,69 @@ header.scrolled {
 
 
 /*-----SEÇÃO: SOBRE NÓS-----*/
-@media (max-width: 950px) {
-    #sobre_superior {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    #sobre_inferior {
-        display: flex;
-        flex-direction: column-reverse;
-        align-items: center;
-    }
-
-}
-
 #sobre_nos {
-    width: 100%;
-
+    padding: 40px;
+    box-sizing: border-box;
 }
 
 .sobre_nos {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
     width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
 
-.sobre_quadro {
-    width: 50%;
-
-}
-
-/*------SOBRE: TEXTOS-----*/
-#missao_texto,
-#diferenciais_texto {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    text-align: justify;
-    height: 100%;
-}
-
-.sobre_texto {
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-#missao_texto h1,
-#diferenciais_texto h1 {
-    padding-left: 40px;
-    align-items: flex-start;
-    font-style: italic;
-    color: #193d60;
-    font-size: 40px;
-    margin-bottom: 0;
-    margin-top: 20px;
-}
-
-#missao_texto p,
-#diferenciais_texto p {
-    padding-top: 5px;
-    align-items: flex-start;
-    font-size: 21px;
-    margin: 0;
-    height: 70%;
-    width: 89%;
-    line-height: 40px
-}
+.card {
+    border-radius: 12px;
+    padding: 32px;
+    border-top: 3px solid #3fb8a3;
+    box-sizing: border-box;
+    min-width: 0;
+  }
 
 .negrito {
-    font-weight: bold;
-    color: #053266;
+    color: #5fd6bd;
+    font-weight: 600;
+
 }
 
 .sobre_titulo {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 16px 0 10px;
+}
+
+.card-icon {
+    font-size: 26px;
+    color: #3fb8a3;
     display: block;
-    width: 100%;
-    height: 20%;
+}
+
+.card-text {
+    color: #a9c4bf;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+#missao_texto, #diferenciais_texto{
+    background-color: #132a33;
 }
 
 
-/*-----SOBRE: IMAGEM E VÍDEO-----*/
+@media (max-width: 768px) {
 
-#missao_imagem img,
-#diferenciais_video video {
-    width: 100%;
-}
-
-#diferenciais_video video {
-    border-bottom-right-radius: 5px;
-}
-
-#missao_imagem {
-    height: 414px;
-}
-
-@media (max-width: 950px) {
-
-    #missao_imagem {
-        height: 100%;
+    #sobre_nos {
+        padding: 20px;
     }
 
-    #missao_imagem img,
-    #diferenciais_video video {
-        margin-top: 5px;
+    .sobre_nos {
+        grid-template-columns: 1fr;
     }
 
 }
