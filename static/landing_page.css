@@ -135,6 +135,7 @@ header.scrolled {
     background-color: #077274;
     border: 1px solid #06c1c4ac;
     box-shadow: 0 0 30px 8px #06c1c45c;
+    cursor:pointer;
 }
 
 @media (max-width: 1100px) {
