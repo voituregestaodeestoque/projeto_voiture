@@ -278,3 +278,15 @@ select#funcionario_id {
     background-color: #127ea1;
 }
 
+
+.btn-accent {
+    background-color: #2ba1cc;
+    color: #0f1115;
+    font-weight: 500;
+    border: none;
+}
+
+.btn-accent:hover {
+    background-color: #197999;
+    color: #0f1115;
+}
