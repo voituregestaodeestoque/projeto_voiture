@@ -46,7 +46,10 @@ header {
     width: 100%; 
     position: sticky;
     align-items: center;
-    background-color: #ffffff13;
+    background-image:
+        /* Glow sutil no topo/cabeçalho */
+        radial-gradient(circle at 50% 0%, rgba(6, 158, 135, 0.351) 0%, transparent 35%);
+
     box-shadow: 0 20px 60px 2px #ffffff29;
 }
 
@@ -71,6 +74,18 @@ header li {
 header a {
     color: inherit;
     text-decoration: none;
+}
+
+header.scrolled {
+    animation: header-transition 0.5s forwards
+}
+
+@keyframes header-transition {
+    to {
+
+        background-color: #1e2a29;
+    }
+
 }
 
 #header-menu-toggle{
@@ -108,7 +123,7 @@ header a {
 
 #nav-direita {
     display: flex;
-    flex-wrap: wrap-reverse;
+    flex-wrap: wrap;
     justify-content: flex-end;
     gap: 10px;
     align-items: center;
@@ -166,7 +181,7 @@ header a {
     #nav-direita {
         flex-direction: column;
         width: 100%;
-        align-items: flex-start;
+        align-items: center;
         padding: 10px 20px;
         margin-left: 0;
     }

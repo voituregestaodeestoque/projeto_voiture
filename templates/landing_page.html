@@ -28,19 +28,18 @@
         </div>
 
         <nav class="menu" id="menu">
-            <div id="nav-esquerda">
+
+            <ul id="nav-esquerda">
                 <li><a href="#sistema">Sistema</a></li>
                 <li><a href="#planos">Planos</a></li>
                 <li><a href="#contato">Contato</a></li>
                 <li><a href="#banner-empresas">Clientes</a></li>
                 <li><a href="#sobre_nos">Sobre</a></li>
-            </div>
-
-            <div id="nav-direita">
+            </ul>
+            <ul id="nav-direita">
                 <li> <a href="{{ url_for('loginfuncionario') }}">Login</a></li>
                 <li id="demonstracao">Demonstração</li>
-            </div>
-
+            </ul>
         </nav>
     </header>
 
@@ -215,17 +214,17 @@
                             <label for="nome">Nome do representante</label>
                             <input type="text" id="nome" name="nome" required>
                         </div>
-                    
+
                         <div class="item_contato">
                             <label for="email">Email de contato</label>
                             <input type="email" id="email" name="email" required>
                         </div>
-                    
+
                         <div class="item_contato">
                             <label for="cnpj">CNPJ da empresa</label>
                             <input type="text" id="cnpj" name="cnpj" required>
                         </div>
-                    
+
                         <button type="submit" class="botao_contato">Enviar</button>
                     </form>
                 </div>
@@ -448,6 +447,17 @@
             feats.forEach(function (f, i) { setActive(f, i === 0); });
         });
     })();
+    
+    window.addEventListener("scroll", function () {
+        const header = document.querySelector("header");
+
+        if (window.scrollY > 70) {
+            header.classList.add("scrolled");
+        } else {
+            header.classList.remove("scrolled");
+        }
+    });
+
 </script>
 
 </html>
