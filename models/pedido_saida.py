@@ -114,7 +114,7 @@ class Pedido_saida(CrudBase):
             for item in itens:
                 cursor.execute(
                     "SELECT * FROM estoque WHERE id = %s",
-                    (item["estoque_id"],)
+                    (item["produto_id"],)
                 )
                 estoque = cursor.fetchone()
                 
@@ -157,12 +157,6 @@ class Pedido_saida(CrudBase):
         except ValueError:
             conexao.rollback()
             raise
-
-        except Exception as e:
-            conexao.rollback()
-            raise Exception(
-             f"Erro ao atualizar pedido de saída: {e}"
-        )
 
         finally:
             cursor.close()
