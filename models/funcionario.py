@@ -27,7 +27,7 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
     #campos que existe na tabela
 
     #metodo pra criar um objeto e no self passando os dados de cada campo
-    def __init__(self, funcionario_nome, funcionario_senha, funcionario_cpf, funcionario_cep, funcionario_email, funcionario_ddi, funcionario_ddd, funcionario_telefone, funcionario_cargo, funcionario_permissao,funcionario_acesso,imagem_nome,imagem_tipo, imagem_blob):
+    def __init__(self, funcionario_nome, funcionario_senha, funcionario_cpf, funcionario_cep, funcionario_email, funcionario_ddi, funcionario_ddd, funcionario_telefone, funcionario_cargo, funcionario_permissao,funcionario_acesso,imagem_nome=None,imagem_tipo=None, imagem_blob=None):
         self.funcionario_nome = funcionario_nome
         self.funcionario_senha = funcionario_senha
         self.funcionario_cpf = funcionario_cpf
@@ -81,6 +81,19 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
                 ).decode("utf-8")
 
         return funcionarios
+
+    @classmethod
+    def preparar_imagem(cls, funcionario):
+
+        #print("for ->", funcionario)
+        funcionario["imagem_base64"] = None
+
+        if funcionario.get("imagem_blob"):
+            funcionario["imagem_base64"] = base64.b64encode(
+                funcionario["imagem_blob"]
+            ).decode("utf-8")
+
+        return funcionario
     
     #função pra logar no sistema
     @classmethod
@@ -115,15 +128,31 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
 
     #Função para listar todos os funcionarios registrados
     @classmethod
-    def funcionario_listagem(cls):
+    def funcionario_listagem(cls ,):
         conexao = Database.connect() #conecta no banco
         cursor = conexao.cursor(dictionary=True) #objeto
         try:
             #seleciona tudo de funcionario
-            sql = "SELECT * FROM funcionario"
+            sql = "SELECT * FROM funcionario where id = %s"
             cursor.execute(sql) #executa o comando sql do select
             funcionarios = cursor.fetchall()
             return cls.preparar_imagens(funcionarios)  #retorna os dados após o comando select
+        finally: # fecha o objeto e a conexão
+            cursor.close()
+            conexao.close()
+    
+    @classmethod
+    def funcionario_listagem_id(cls, id):
+        conexao = Database.connect() #conecta no banco
+        cursor = conexao.cursor(dictionary=True) #objeto
+        try:
+            #seleciona tudo de funcionario pelo id
+            sql = "SELECT * FROM funcionario where id = %s"
+            cursor.execute(sql, (id,))
+             #executa o comando sql do select
+            funcionarios = cursor.fetchone()
+            #print(funcionarios)
+            return cls.preparar_imagem(funcionarios)  #retorna os dados após o comando select
         finally: # fecha o objeto e a conexão
             cursor.close()
             conexao.close()

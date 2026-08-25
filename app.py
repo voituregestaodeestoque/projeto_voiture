@@ -140,15 +140,15 @@ def logout():
 
 # -----> Fim: Login
 ############################################################################################################
-
 #-----> Início: Perfil
 
 @app.route('/perfil')
 @login_obrigatorio
 def perfil():
 
-    funcionario = Funcionario.find_by_id(session["usuario_id"])
-
+    #funcionario = Funcionario.find_by_id(session["usuario_id"])
+    funcionario = Funcionario.funcionario_listagem_id(session["usuario_id"])
+    print(funcionario['funcionario_nome'])
     return render_template(
         'perfil.html',
         funcionario=funcionario
@@ -161,24 +161,60 @@ def atualizar_perfil():
 
     id = session["usuario_id"]
 
+    # Busca os dados atuais do funcionário no banco
+    funcionario_atual = Funcionario.find_by_id(id)
+
+    if not funcionario_atual:
+        flash("Funcionário não encontrado.", "erro")
+        return redirect(url_for("perfil"))
+
+    # Pega somente os dados enviados pelo formulário
     dados = get_funcionario_form()
 
+    # Se algum campo vier vazio, mantém o valor antigo
+    for campo in dados:
+        if dados[campo] == "":
+            dados[campo] = funcionario_atual[campo]
+
+    #Recebe imagem 
+    arquivo = request.files.get("foto_perfil")
+
+    if arquivo and arquivo.filename != "":
+        if not imagem_permitida(arquivo.content_type):
+            flash(
+                "Formato da imagem inválida. Use PNG, JPG, JPEG ou WEBP"
+                "Erro"
+            )
+            return redirect(url_for("perfil"))
+        
+        dados["imagem_nome"]= arquivo.filename
+        dados["imagem_tipo"]= arquivo.content_type
+        dados["imagem_blob"]= arquivo.read()
+    else:
+        #Mantém a imagem atual 
+        dados["imagem_nome"]= funcionario_atual["imagem_nome"]
+        dados["imagem_tipo"]= funcionario_atual["imagem_tipo"]
+        dados["imagem_blob"]= funcionario_atual["imagem_blob"]
+
+
+    # Cria o objeto com os dados completos
     funcionario = Funcionario(**dados)
 
+    # Valida os dados
     erros = funcionario.validate()
 
     if erros:
-
         for erro in erros:
             flash(erro, "erro")
 
-        funcionario.id = id
+        dados["id"] = id
 
         return render_template(
             "perfil.html",
-            funcionario=funcionario
+            funcionario=dados
         )
 
+    # Atualiza no banco
     funcionario.update(id)
 
     flash("Perfil atualizado com sucesso.", "sucesso")
@@ -186,6 +222,7 @@ def atualizar_perfil():
     return redirect(url_for("perfil"))
 
 # -----> Fim: Perfil
+
 ################################################################
 
 ############################################################################################################
@@ -1449,6 +1486,7 @@ def get_funcionario_form():
         "funcionario_telefone": request.form.get("funcionario_telefone", "").strip(),
         "funcionario_cargo": request.form.get("funcionario_cargo", "").strip(),
         "funcionario_permissao": request.form.get("funcionario_permissao", "").strip(),
+        "funcionario_acesso": request.form.get("funcionario_acesso", "").strip(),
     }
 
 # Registro de funcionário no banco de dados
