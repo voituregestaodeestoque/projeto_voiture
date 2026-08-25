@@ -40,6 +40,7 @@ dados = {
     "funcionario_telefone": "123456789",
     "funcionario_cargo": "Admin",
     "funcionario_permissao": "administrador",
+    "funcionario_acesso": True,
     "imagem_nome": None,
     "imagem_tipo": None,
     "imagem_blob": None

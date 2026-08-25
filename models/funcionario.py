@@ -19,6 +19,7 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
         'funcionario_telefone',
         'funcionario_cargo',
         'funcionario_permissao',
+        'funcionario_acesso',
         'imagem_nome',
         'imagem_tipo',
         'imagem_blob',
@@ -26,7 +27,7 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
     #campos que existe na tabela
 
     #metodo pra criar um objeto e no self passando os dados de cada campo
-    def __init__(self, funcionario_nome, funcionario_senha, funcionario_cpf, funcionario_cep, funcionario_email, funcionario_ddi, funcionario_ddd, funcionario_telefone, funcionario_cargo, funcionario_permissao,imagem_nome,imagem_tipo, imagem_blob):
+    def __init__(self, funcionario_nome, funcionario_senha, funcionario_cpf, funcionario_cep, funcionario_email, funcionario_ddi, funcionario_ddd, funcionario_telefone, funcionario_cargo, funcionario_permissao,funcionario_acesso,imagem_nome,imagem_tipo, imagem_blob):
         self.funcionario_nome = funcionario_nome
         self.funcionario_senha = funcionario_senha
         self.funcionario_cpf = funcionario_cpf
@@ -37,6 +38,7 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
         self.funcionario_telefone = funcionario_telefone
         self.funcionario_cargo = funcionario_cargo
         self.funcionario_permissao = funcionario_permissao
+        self.funcionario_acesso = funcionario_acesso
         self.imagem_nome = imagem_nome
         self.imagem_tipo = imagem_tipo
         self.imagem_blob = imagem_blob
@@ -241,5 +243,39 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
 
         finally: #fecha o objeto e a conexão
 
+            cursor.close()
+            conexao.close()
+
+    #Procura no banco algum funcionário com o mesmo email
+    @classmethod
+    def email_existente(cls, email):
+        conexao = Database.connect() #conecta no banco
+        cursor = conexao.cursor(dictionary=True, buffered=True) #objeto
+        try:
+            #procura se existe um funcionario com um email especifico
+            sql = f"SELECT * FROM {cls.table} WHERE funcionario_email = %s"
+            cursor.execute(sql, (email,)) #executa o query
+            return cursor.fetchone() #retorna o resultado da query
+        finally: # fecha o objeto e a conexão
+            cursor.close()
+            conexao.close()
+
+    #bloqueia o acesso do funcionario no login
+    @classmethod
+    def bloquear_acesso(cls, id):
+        conexao = Database.connect()
+        cursor = conexao.cursor()
+
+        try:
+            sql = """
+                UPDATE funcionario
+                SET funcionario_acesso = FALSE
+                WHERE id = %s
+            """
+
+            cursor.execute(sql, (id,))
+            conexao.commit()
+
+        finally:
             cursor.close()
             conexao.close()

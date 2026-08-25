@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS funcionario (
   funcionario_telefone VARCHAR(20) NOT NULL,
   funcionario_cargo VARCHAR(50) NOT NULL,
   funcionario_permissao VARCHAR(50) NOT NULL,
+  funcionario_acesso BOOLEAN NOT NULL,
   imagem_nome VARCHAR(255) NULL,
   imagem_tipo VARCHAR(100) NULL,
   imagem_blob LONGBLOB NULL,

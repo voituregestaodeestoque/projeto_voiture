@@ -66,7 +66,8 @@ def enviar_contato():
 def inicio():
     if "usuario_id" in session: #se já estiver logado, não precisa de login
         return redirect(url_for("base"))
-    
+    if "usuario_tentativas" not in session:
+        session["usuario_tentativas"] = 0
     return redirect(url_for("loginfuncionario")) #direciona para o rota loginfuncionario
 
 
@@ -77,22 +78,39 @@ def loginfuncionario():
     return render_template('loginfuncionario.html')
 
 
+
 @app.route('/loginfunciona', methods=["POST"])
 def login():
-    #pega o email e senha do usuário para procurar no banco se já existe um funcionário com as informações
     email = request.form.get("funcionario_email")   
     senha = request.form.get("funcionario_senha")
 
-    funcionario = Funcionario.autenticar(email,senha) #procura no banco um funcionário que bate com a senha e o email passado antes
+    funcionario = Funcionario.autenticar(email, senha)
 
-    if funcionario: #se achar um funcionario, faz o login
-        #cria uma sessão no sistema para poder usar o site
-        session["usuario_id"] = funcionario["id"]
-        session["funcionario_nome"] = funcionario["funcionario_nome"]
-        session["funcionario_permissao"] = funcionario["funcionario_permissao"]
-        return redirect(url_for("base"))#retorna para o site
-    #se a senha ou email não bater
-    flash("Login e/ou senha inválidos","erro")
+    if funcionario:
+        if funcionario["funcionario_acesso"] == 1:
+            session["usuario_id"] = funcionario["id"]
+            session["funcionario_nome"] = funcionario["funcionario_nome"]
+            session["funcionario_permissao"] = funcionario["funcionario_permissao"]
+            session["usuario_tentativas"] = 0  # <-- reseta ao logar com sucesso
+            return redirect(url_for("base"))
+        else:
+            session["usuario_tentativas"] = 0  # <-- reseta se já está bloqueado
+            flash("Funcionário bloqueado - espere até um administrador desbloquear")
+            return render_template("loginfuncionario.html")
+    
+    # garante que a chave exista antes de incrementar
+    session["usuario_tentativas"] = session.get("usuario_tentativas", 0) + 1
+
+    if session["usuario_tentativas"] >= 3:
+        funcionario = Funcionario.email_existente(email)
+        if funcionario:
+            Funcionario.bloquear_acesso(funcionario["id"]) 
+            flash("Email bloqueado - Espere até um admin desbloquear", "erro")
+            session["usuario_tentativas"] = 0  # já estava resetando aqui, ok
+        else:
+            flash("Email errado")
+    
+    flash("Login e/ou senha inválidos", "erro")
     return render_template("loginfuncionario.html")
 
 #desloga do sistema
@@ -1419,9 +1437,6 @@ def get_funcionario_form():
 @app.route("/salvar_funcionario", methods=["POST"])
 @login_obrigatorio
 def salvar_funcionario():
-    print("FORM:", request.form)
-    print("FILES:", request.files)
-    print("CONTENT-TYPE:", request.content_type)
     arquivo = request.files.get("imagem")
 
     imagem_nome = None
@@ -1437,7 +1452,7 @@ def salvar_funcionario():
         imagem_tipo = arquivo.content_type
         imagem_blob = arquivo.read()
     dados = get_funcionario_form() #pega os dados do formulário do funcionário e coloca dentro da variavel dados
-
+    dados["funcionario_acesso"] = True
     dados["imagem_nome"] = imagem_nome
     dados["imagem_tipo"] = imagem_tipo
     dados["imagem_blob"] = imagem_blob
