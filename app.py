@@ -20,7 +20,16 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = "chave_secreta"
 
+
+
 EXTENSOES_PERMITIDAS = {"image/png", "image/jpeg", "image/jpg", "image/webp"}
+
+
+def to_int(value, default=0):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
 
 
 def imagem_permitida(tipo_arquivo):
