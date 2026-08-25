@@ -269,118 +269,94 @@
     </section>
 
     <section id="contato">
-    <main class="container_contato">
+        <main class="container_contato">
 
-        <section class="info_contato">
-            <span class="contato-tag">VOITURE • CONTATO</span>
+            <section class="info_contato">
+                <span class="contato-tag">VOITURE • CONTATO</span>
 
-            <h1>
-                Vamos conversar sobre o
-                <span>futuro da sua gestão.</span>
-            </h1>
+                <h1>
+                    Vamos conversar sobre o
+                    <span>futuro da sua gestão.</span>
+                </h1>
 
-            <p>
-                Preencha seus dados e nossa equipe entrará em contato para
-                apresentar o sistema e esclarecer todas as suas dúvidas.
-            </p>
-
-            <div class="contato-beneficios">
-                <div class="beneficio">
-                    <div class="beneficio-icone">✓</div>
-                    <span>Atendimento personalizado</span>
-                </div>
-
-                <div class="beneficio">
-                    <div class="beneficio-icone">✓</div>
-                    <span>Demonstração completa do sistema</span>
-                </div>
-
-                <div class="beneficio">
-                    <div class="beneficio-icone">✓</div>
-                    <span>Mais eficiência para sua empresa</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="forms">
-            <div class="card_contato">
-                <div class="form-header">
-                    <span class="form-status"></span>
-                    <span>FORMULÁRIO DE CONTATO</span>
-                </div>
-
-                <h2>Preencha seus dados</h2>
-
-                <p class="form-subtitulo">
-                    Estamos prontos para ajudar sua empresa.
+                <p>
+                    Preencha seus dados e nossa equipe entrará em contato para
+                    apresentar o sistema e esclarecer todas as suas dúvidas.
                 </p>
 
-                <form action="{{ url_for('enviar_contato') }}" method="POST">
-
-                    <div class="item_contato">
-                        <label for="nome">Nome do representante</label>
-                        <input
-                            type="text"
-                            id="nome"
-                            name="nome"
-                            placeholder="Digite seu nome"
-                            required
-                        >
+                <div class="contato-beneficios">
+                    <div class="beneficio">
+                        <div class="beneficio-icone">✓</div>
+                        <span>Atendimento personalizado</span>
                     </div>
 
-                    <div class="item_contato">
-                        <label for="email">Email de contato</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="exemplo@empresa.com"
-                            required
-                        >
+                    <div class="beneficio">
+                        <div class="beneficio-icone">✓</div>
+                        <span>Demonstração completa do sistema</span>
                     </div>
 
-                    <div class="item_contato">
-                        <label for="cnpj">CNPJ da empresa</label>
-                        <input
-                            type="text"
-                            id="cnpj"
-                            name="cnpj"
-                            placeholder="00.000.000/0000-00"
-                            required
-                        >
+                    <div class="beneficio">
+                        <div class="beneficio-icone">✓</div>
+                        <span>Mais eficiência para sua empresa</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="forms">
+                <div class="card_contato">
+                    <div class="form-header">
+                        <span class="form-status"></span>
+                        <span>FORMULÁRIO DE CONTATO</span>
                     </div>
 
-                    <button type="submit" class="botao_contato">
-                        Enviar solicitação
-                        <span>→</span>
-                    </button>
-                </form>
-            </div>
-        </section>
+                    <h2>Preencha seus dados</h2>
 
-    </main>
-</section>
+                    <p class="form-subtitulo">
+                        Estamos prontos para ajudar sua empresa.
+                    </p>
 
-    <div id="banner-empresas" class="banner-empresas">
-        <h2>Líderes do setor não buscam apenas fornecedores, eles escolhem a Voiture</h2>
-        <div class="slider">
+                    <form action="{{ url_for('enviar_contato') }}" method="POST">
+
+                        <div class="item_contato">
+                            <label for="nome">Nome do representante</label>
+                            <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+                        </div>
+
+                        <div class="item_contato">
+                            <label for="email">Email de contato</label>
+                            <input type="email" id="email" name="email" placeholder="exemplo@empresa.com" required>
+                        </div>
+
+                        <div class="item_contato">
+                            <label for="cnpj">CNPJ da empresa</label>
+                            <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" required>
+                        </div>
+
+                        <button type="submit" class="botao_contato">
+                            Enviar solicitação
+                            <span>→</span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+        </main>
+    </section>
+
+    <div class="secao-empresas">
+        <div id="banner-empresas" class="banner-empresas">
+            <div class="eyebrow">Confiança comprovada</div>
+            <h1>Líderes do setor não buscam apenas fornecedores,<br>eles escolhem a <em>Voiture</em></h1>
+
             <div class="logos">
-                <img src="../static/images/fiat.png" alt="Fiat">
-                <img src="../static/images/audi.png" alt="Audi">
-                <img src="../static/images/toyota.png" alt="Toyota">
-                <img src="../static/images/BMW.png" alt="BMW">
-                <img src="../static/images/honda.png" alt="Honda">
-                <img src="../static/images/hyundai.png" alt="Hyundai">
-                <img src="../static/images/fiat.png" alt="Fiat">
-                <img src="../static/images/audi.png" alt="Audi">
-                <img src="../static/images/toyota.png" alt="Toyota">
-                <img src="../static/images/BMW.png" alt="BMW">
-                <img src="../static/images/honda.png" alt="Honda">
-                <img src="../static/images/hyundai.png" alt="Hyundai">
-                <img src="../static/images/fiat.png" alt="Fiat">
-                <img src="../static/images/audi.png" alt="Audi">
-                <img src="../static/images/toyota.png" alt="Toyota">
+                <div class="logo-item"><img src="../static/images/toyota_logo.png" alt="Toyota"></div>
+                <div class="logo-item"><img src="../static/images/audi_logo.png" alt="Audi"></div>
+                <div class="logo-item"><img src="../static/images/honda_logo.png" alt="HONDA"></div>
+                <div class="logo-item"><img src="../static/images/hyundai_logo.png" alt="hiunday"></div>
+                <div class="logo-item"><img src="../static/images/fiat_logo.png" alt="Fiat"></div>
+                <div class="logo-item"><img src="../static/images/volkswagen_log.png" alt="Volkswagen"></div>
             </div>
+
         </div>
     </div>
 
