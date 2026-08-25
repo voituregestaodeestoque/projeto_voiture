@@ -133,7 +133,7 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
         cursor = conexao.cursor(dictionary=True) #objeto
         try:
             #seleciona tudo de funcionario
-            sql = "SELECT * FROM funcionario where id = %s"
+            sql = "SELECT * FROM funcionario"
             cursor.execute(sql) #executa o comando sql do select
             funcionarios = cursor.fetchall()
             return cls.preparar_imagens(funcionarios)  #retorna os dados após o comando select

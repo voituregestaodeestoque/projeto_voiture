@@ -467,7 +467,31 @@ def editar_produto(id):
 @app.route("/atualizar_produto/<int:id>", methods=["POST"])
 @login_obrigatorio
 def atualizar_produto(id):
+    produto_existente = Produto.find_by_id(id)
+    if not produto_existente:
+        flash("Produto não encontrado.", "erro")
+        return redirect(url_for("listagem_produto"))
+
+    arquivo = request.files.get("imagem")
+
     dados = get_produto_form()
+
+    if arquivo and arquivo.filename != "":
+        # Nova imagem enviada: valida e substitui
+        if not imagem_permitida(arquivo.content_type):
+            flash("Formato de imagem inválido. Use PNG, JPG, JPEG ou WEBP.", "danger")
+            dados["id"] = id
+            return render_template("cadastroproduto.html", produto=dados)
+
+        dados["imagem_nome"] = arquivo.filename
+        dados["imagem_tipo"] = arquivo.content_type
+        dados["imagem_blob"] = arquivo.read()
+    else:
+        # Nenhuma imagem nova: mantém a que já existe no banco
+        dados["imagem_nome"] = produto_existente["imagem_nome"]
+        dados["imagem_tipo"] = produto_existente["imagem_tipo"]
+        dados["imagem_blob"] = produto_existente["imagem_blob"]
+
     produto = Produto(**dados)
     erros = produto.validate()
 
@@ -1562,31 +1586,45 @@ def editar_funcionario(id):
 @app.route("/atualizar_funcionario/<int:id>", methods=["POST"])
 @login_obrigatorio
 def atualizar_funcionario(id):
-    dados = get_funcionario_form() #pega os dados do formulário do funcionário e coloca dentro da variavel dados
-    funcionario = Funcionario(**dados) #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
+    funcionario_existente = Funcionario.find_by_id(id)
+    if not funcionario_existente:
+        flash("Funcionario não encontrado.", "erro")
+        return redirect(url_for("listagem_funcionario"))
 
-    #Validação dos campos
+    arquivo = request.files.get("imagem")
+
+    dados = get_funcionario_form() #pega os dados do formulário do funcionário e coloca dentro da variavel dados
+    dados["funcionario_acesso"] = funcionario_existente["funcionario_acesso"]
+
+    if arquivo and arquivo.filename != "":
+        if not imagem_permitida(arquivo.content_type):
+            flash("Formato de imagem inválido. Use PNG, JPG, JPEG ou WEBP.", "danger")
+            dados["id"] = id
+            return render_template("cadastrofuncionario.html", funcionario=dados)
+
+        dados["imagem_nome"] = arquivo.filename
+        dados["imagem_tipo"] = arquivo.content_type
+        dados["imagem_blob"] = arquivo.read()
+    else:
+        dados["imagem_nome"] = funcionario_existente["imagem_nome"]
+        dados["imagem_tipo"] = funcionario_existente["imagem_tipo"]
+        dados["imagem_blob"] = funcionario_existente["imagem_blob"]
+
+    funcionario = Funcionario(**dados)
+
     erros = funcionario.validate()
 
-    #Tratativa de erro
-    if erros: #se tiver algum erro dentro do validate, ele cai nesse if
+    if erros:
         for erro in erros:
             flash(erro, "erro")
         dados["id"] = id
         return render_template("cadastrofuncionario.html", funcionario=dados)
 
-    #Procura da empilhadeira por id
     try:
-        #ID não encontrado
-        if not Funcionario.find_by_id(id): #se não encontrar o id do funcionário
-            flash("Funcionario não encontrado.", "erro")
-            return redirect(url_for("listagem_funcionario"))
-
-        #Id encontrado, atualização possível
-        funcionario.update(id) #encontrou a empilhadeira e atualiza os dados
+        funcionario.update(id)
         flash("Funcionário atualizado com sucesso.", "sucesso")
         return redirect(url_for("listagem_funcionario"))
-    except Exception as e: #se não conseguir inserir, é um erro diferente dos possiveis e cai aqui
+    except Exception as e:
         dados["id"] = id
         flash(f"Erro ao atualizar funcionário: {e}", "erro")
         return render_template("cadastrofuncionario.html", funcionario=dados)

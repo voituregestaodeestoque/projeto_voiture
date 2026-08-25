@@ -124,9 +124,22 @@
                     </span>
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
                     <select id="funcionario_permissao" name="funcionario_permissao" class="form-select">
+
+                        {% if not funcionario %}
                         <option value="">Selecione</option>
                         <option value="administrador">Administrador</option>
                         <option value="funcionario">Funcionário</option>
+
+                        {%else%}
+                            {% if funcionario.funcionario_permissao == 'administrador' %}
+                            <option value="administrador">Administrador</option>
+                            <option value="funcionario">Funcionário</option>
+                            {%else%}
+                            <option value="funcionario">Funcionário</option>
+                            <option value="administrador">Administrador</option>
+                            {%endif%} 
+                        {%endif%} 
+
                     </select>
                 </div>
             </div>
