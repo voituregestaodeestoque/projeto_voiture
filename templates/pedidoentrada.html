@@ -2,6 +2,7 @@
 
 {% block conteudo %}
 
+<!--Topo-->
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -11,12 +12,12 @@
             <p class="text-muted mb-0">Pedido de entrada</p>
         </div>
 
-        <a href="{{ url_for('nova_entrada') }}" class="btn botao-add">
+        <a href="{{ url_for('nova_entrada') }}" class="btn botao-add"> <!--quando clicar no botao redireciona para a rota nova entrada-->
             <i class="bi bi-plus-lg"></i> Novo Pedido de Entrada
         </a>
 
     </div>
-
+    <!--tabela que mostra os dados de id, produto, quantidade, status, data do pedido e dara do processamento-->
     <div class="table-responsive">
         <table id="tabela-movimentacao" class="table table-hover align-middle">
             <thead class="table-light">
@@ -27,11 +28,12 @@
                     <th>Status</th>
                     <th>Data do pedido</th>
                     <th>Data do processamento</th>
-                    <th class="text-end">Ações</th>
+                    <th class="text-end">Ações</th> <!--nessa parte vão aparecer botões de ação dos pedidos-->
                 </tr>
             </thead>
 
             <tbody>
+                <!--resgata os dados do pedido-->
                 {% for pedido in pedidos %}
                 <tr>
                     <td>{{ pedido.pedido_entrada_id }}</td>
@@ -39,15 +41,16 @@
                     <td>{{ pedido.detalhe_entrada_quantidade }}</td>
                     <td>{{ pedido.status_pedido_entrada }}</td>
                     <td>{{ pedido.data_pedido_entrada }}</td>
-                    <td>{{ pedido.data_processamento or '-' }}</td>
+                    <td>{{ pedido.data_processamento or '-' }}</td> <!--aparece a data do processamento, mas se for cancelado aparece um - -->
                     <td class="text-end">
-                        {% if pedido.status_pedido_entrada == 'PENDENTE' %}
+                        {% if pedido.status_pedido_entrada == 'PENDENTE' %} <!--se o status do pedido for pendente vai aparecer os botões com a rota de processar, cancelar e editar-->
+                        <!--Ação para processar o pedido-->
                         <a href="{{ url_for('processar_pedido_entrada', pedido_entrada_id=pedido.pedido_entrada_id) }}"
                             class="btn btn-sm btn-success">Processar</a>
-
+                        
+                        <!--Botão de cancelar-->
                         <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
                             data-bs-target="#Modal{{pedido.id}}"> Cancelar
-                         
                         </button>
 
                         <!-- Modal -->
@@ -64,7 +67,7 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Sair</button>
-                                        <!--Ação para excluir o produto-->
+                                        <!--Ação para cancelar o pedido-->
                                         <a href="{{ url_for('cancelar_pedido_entrada', pedido_entrada_id= pedido.pedido_entrada_id) }}"
                                             class="btn btn-danger">
                                             <strong>Cancelar</strong>
@@ -73,15 +76,15 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!--Ação para editar o pedido-->
                         <a href="{{ url_for('editar_entrada', pedido_entrada_id=pedido.pedido_entrada_id) }}"
                             class="btn btn-sm btn-warning">Editar</a>
                         {% else %}
                         -
-                        {% endif %}
+                        {% endif %} <!--fecha o if-->
                     </td>
                 </tr>
-                {% endfor %}
+                {% endfor %} <!--fecha o for-->
             </tbody>
         </table>
 
