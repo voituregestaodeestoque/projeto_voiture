@@ -712,7 +712,6 @@ width:6px;height:6px;border-radius:50%;flex:none;
 /* =========================================================
    SEÇÃO CONTATO - NOVO DESIGN
 ========================================================= */
-
 #contato {
     position: relative;
     min-height: 100vh;
@@ -725,27 +724,29 @@ width:6px;height:6px;border-radius:50%;flex:none;
 
     overflow: hidden;
 
-    background:
+    background-color: #080d1a;
+
+    background-image:
         radial-gradient(
-            circle at 85% 15%,
-            rgba(26, 174, 177, 0.16) 0%,
-            transparent 28%
+            circle at 15% 85%,
+            rgba(12, 149, 128, 0.456) 0%,
+            transparent 45%
         ),
         radial-gradient(
-            circle at 15% 80%,
-            rgba(13, 83, 119, 0.22) 0%,
+            circle at 75% 50%,
+            rgba(13, 137, 135, 0.518) 0%,
+            transparent 50%
+        ),
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(6, 158, 135, 0.351) 0%,
             transparent 35%
-        ),
-        linear-gradient(
-            135deg,
-            #071522 0%,
-            #0a1d2c 50%,
-            #07111f 100%
         );
+
+    background-repeat: no-repeat;
 
     color: #ffffff;
 }
-
 
 /* Linhas decorativas no fundo */
 
@@ -1005,7 +1006,7 @@ width:6px;height:6px;border-radius:50%;flex:none;
 
     margin-bottom: 9px;
 
-    color: #c8d6df;
+    color: #ffffff;
 
     font-size: 0.9rem;
     font-weight: 600;
@@ -1192,6 +1193,21 @@ width:6px;height:6px;border-radius:50%;flex:none;
     }
 
 }
+@media (max-width: 600px) {
+    .container_contato {
+        width: 100%;
+    }
+
+    .info_contato h1 {
+        font-size: clamp(2rem, 10vw, 2.5rem);
+    }
+
+    .card_contato {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
 
 /*Seção Clientes e empresas*/
 
