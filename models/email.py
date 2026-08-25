@@ -47,6 +47,31 @@ Sistema Voiture - Gestão de Estoque
 
         return mensagem
 
+    def _montar_mensagem_bloqueio(self, email_destino, funcionario_nome, funcionario_email):
+        mensagem = EmailMessage()
+
+        mensagem["Subject"] = "Funcionário bloqueado - Voiture"
+        mensagem["From"] = self.email_sistema
+        mensagem["To"] = email_destino
+
+        mensagem.set_content(f"""
+Olá!
+
+O funcionário abaixo foi bloqueado após 3 tentativas de login incorretas:
+
+Nome: {funcionario_nome}
+
+Email: {funcionario_email}
+
+Acesse o painel administrativo para desbloquear o acesso, caso necessário.
+
+Atenciosamente,
+
+Sistema Voiture - Gestão de Estoque
+""")
+
+        return mensagem
+
     def _enviar(self, mensagem):
         with smtplib.SMTP_SSL(self.SMTP_HOST, self.SMTP_PORT) as servidor:
             servidor.login(self.email_sistema, self.email_senha)
@@ -60,10 +85,21 @@ Sistema Voiture - Gestão de Estoque
             return True
 
         except Exception as erro:
-            
+
+            return False
+
+    def enviar_email_bloqueio(self, email_destino, funcionario_nome, funcionario_email):
+        try:
+            mensagem = self._montar_mensagem_bloqueio(email_destino, funcionario_nome, funcionario_email)
+            self._enviar(mensagem)
+
+            return True
+
+        except Exception as erro:
+
             return False
 
 
 # Uso:
 # email_service = EmailService()
-# email_service.enviar_email(nome, email_cliente, cnpj)
+# email_service.enviar_email_bloqueio(email_admin, funcionario_nome, funcionario_email)
