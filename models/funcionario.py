@@ -279,3 +279,23 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
         finally:
             cursor.close()
             conexao.close()
+
+
+    @classmethod
+    def desbloquear_acesso(cls, id):
+        conexao = Database.connect()
+        cursor = conexao.cursor()
+
+        try:
+            sql = """
+                UPDATE funcionario
+                SET funcionario_acesso = TRUE
+                WHERE id = %s
+            """
+
+            cursor.execute(sql, (id,))
+            conexao.commit()
+
+        finally:
+            cursor.close()
+            conexao.close()

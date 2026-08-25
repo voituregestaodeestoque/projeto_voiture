@@ -59,6 +59,38 @@
                             <td>{{ funcionario.funcionario_telefone}}</td>
                             <td>{{ funcionario.funcionario_cargo }}</td>
                             <td class="text-end">
+
+                                {% if funcionario.funcionario_acesso == 0%}
+
+
+                                <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
+                                    data-bs-target="#Modal{{funcionario.id}}">
+                                    <i class="bi bi-unlock-fill"></i>
+                                </button>
+
+                                <div class="modal fade" id="Modal{{funcionario.id}}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja desbloquear esse funcionário?</strong></h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancelar</button>
+                                                <!--Ação para excluir o funcionário-->
+                                                <a href="{{ url_for('acesso_desbloquear', id=funcionario.id) }}"
+                                                    class="btn btn-success">
+                                                    <strong>Desbloquear</strong>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+
                                 <!--Botão de edição-->
                                 <a href="{{ url_for('editar_funcionario', id=funcionario.id) }}"
                                     class="btn btn-sm btn-outline-primary">

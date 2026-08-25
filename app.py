@@ -104,7 +104,14 @@ def login():
     if session["usuario_tentativas"] >= 3:
         funcionario = Funcionario.email_existente(email)
         if funcionario:
+
             Funcionario.bloquear_acesso(funcionario["id"]) 
+            email_service = EmailService()
+            email_service.enviar_email_bloqueio(
+                email_destino="voituregestaodeestoque@gmail.com",  # aqui entra o email específico que você quer notificar
+                funcionario_nome=funcionario["funcionario_nome"],
+                funcionario_email=funcionario["funcionario_email"]
+            )
             flash("Email bloqueado - Espere até um admin desbloquear", "erro")
             session["usuario_tentativas"] = 0  # já estava resetando aqui, ok
         else:
@@ -112,6 +119,17 @@ def login():
     
     flash("Login e/ou senha inválidos", "erro")
     return render_template("loginfuncionario.html")
+
+@app.route("/login_desbloquear/<int:id>")
+def acesso_desbloquear(id):
+    dados = get_funcionario_form()
+
+    funcionario = Funcionario.desbloquear_acesso(id)
+
+    return redirect(url_for("listagem_funcionario"))
+
+   
+
 
 #desloga do sistema
 @app.route("/logout")
