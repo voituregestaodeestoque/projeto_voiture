@@ -402,8 +402,12 @@ def get_estoque_form():
 def listagem_produto():
 
     produtos = Produto.produto_listagem()
-    return render_template('listagem_produto.html',
-        produto=produtos)
+
+    # Verifica se o cliente pede explicitamente JSON (comum em Apps Mobile/API Clients)
+    if request.is_json or 'application/json' in request.headers.get('Accept', ''):
+        return jsonify(dados_usuario), 200
+
+    return render_template('listagem_produto.html', produto=produtos)
 
 
 
@@ -1657,7 +1661,13 @@ def deletar_funcionario(id):
 ############################################################################################################
 
 
-#Fim        
+#Fim      
+
+@app.route("/historico", methods=["GET"])
+#@login_obrigatorio
+def listagem_historico():
+    movimentos = Estoque.historico()
+    return movimentos
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host = "0.0.0.0", debug=True)

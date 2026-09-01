@@ -343,3 +343,46 @@ class Estoque(CrudBase):
 
 #---> Fim: Pesquisa de produtos
 ######################################################################################
+
+
+######################################################################################
+#---> Início: historico movimentos
+
+
+    @classmethod #Define um método da classe
+    def historico(cls): #Define uma função
+
+        #Conecta com o banco de dados
+        conexao = Database.connect()
+
+        #Ativa o cursor para selecionar linhas do banco de dados
+        cursor = conexao.cursor(dictionary=True)
+
+        #Inicia uma tentativa de listar
+        try:
+            
+            #Define o comando SQL que fará a seleção dos produtos
+            sql = '''select datahora_movimentacao_entrada as data_movimento,
+                    data_pedido_entrada as data_entrada,
+                    status_pedido_entrada as status,
+                    detalhe_entrada_quantidade as quantidade,
+                    pr.produto_descricao as descricao
+                    from movimentacao_entrada me
+                    join pedido_entrada pe on pe.id = me.detalhe_entrada_id
+                    join detalhe_entrada de on de.id = me.detalhe_entrada_id
+                    join produto as pr on pr.id = de.produto_id'''
+
+            cursor.execute(sql) #Executa o comando
+            movimentos = cursor.fetchall()
+
+            return  movimentos #Retorna a seleção dos produtos
+        
+        except Exception as e: #Erro
+            raise #Limpa
+
+        finally:
+            cursor.close() #Fecha o cursor
+            conexao.close() #Encerra a conexão
+
+#---> Fim: Pesquisa de produtos
+######################################################################################
