@@ -15,11 +15,7 @@
 
     <div class="card shadow-sm border-0">
 
-        <form 
-            action="{{ url_for('atualizar_perfil') }}" 
-            method="POST"
-            enctype="multipart/form-data"
-        >
+        <form action="{{ url_for('atualizar_perfil') }}" method="POST" enctype="multipart/form-data">
 
             <div class="row">
 
@@ -28,24 +24,27 @@
 
                     <h5>Foto de perfil</h5>
 
-                    <div
-                        class="bg-light rounded-circle mx-auto"
-                        style="width: 160px; height: 160px;"
-                    >
-                    {% if funcionario %}
-                        <img 
-                        src="data:{{ funcionario.imagem_tipo }};base64,{{ funcionario.imagem_base64 }}" 
-                        alt="Imagem do Perfil"
-                        style="
-                        max-width: 160px; 
-                        max-height: 160px;
-                        object-fit: cover;
-                        border-radius: 50%;
-                        display: block;"
-                        >
-                    {% else %}
+                    <div class="bg-light rounded-circle mx-auto" style="
+            width: 160px;
+            height: 160px;
+            overflow: hidden;
+            border-radius: 50%;
+        ">
+
+                        {% if funcionario %}
+                        <img src="data:{{ funcionario.imagem_tipo }};base64,{{ funcionario.imagem_base64 }}"
+                            alt="Imagem do Perfil" style="
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    object-position: center;
+                    display: block;
+                    border-radius: 50%;
+                ">
+                        {% else %}
                         <i class="bi bi-person-fill text-secondary"></i>
-                    {% endif %}
+                        {% endif %}
+
                     </div>
 
                     <p class="text-secondary">
@@ -53,23 +52,16 @@
                         Máximo 2MB.
                     </p>
 
-                    <label
-                        for="foto_perfil"
-                        class="btn btn-outline-primary"
-                    >
+                    <label for="foto_perfil" class="btn btn-outline-primary">
                         <i class="bi bi-camera"></i>
                         Alterar foto
                     </label>
 
-                    <input
-                        type="file"
-                        id="foto_perfil"
-                        name="foto_perfil"
-                        class="d-none"
-                        accept="image/png,image/jpeg,image/gif"
-                    >
+                    <input type="file" id="foto_perfil" name="foto_perfil" class="d-none"
+                        accept="image/png,image/jpeg,image/gif">
 
                 </div>
+
 
 
                 <!-- INFORMAÇÕES -->
@@ -93,14 +85,9 @@
                                     <i class="bi bi-person-fill"></i>
                                 </span>
 
-                                <input
-                                    type="text"
-                                    name="funcionario_nome"
-                                    class="form-control"
-                                    placeholder="Digite o nome"
-                                    required
-                                    value="{{ funcionario.funcionario_nome if funcionario else '' }}"
-                                >
+                                <input type="text" name="funcionario_nome" class="form-control"
+                                    placeholder="Digite o nome" required
+                                    value="{{ funcionario.funcionario_nome if funcionario else '' }}">
 
                             </div>
                         </div>
@@ -118,14 +105,9 @@
                                     <i class="bi bi-envelope-fill"></i>
                                 </span>
 
-                                <input
-                                    type="email"
-                                    name="funcionario_email"
-                                    class="form-control"
-                                    placeholder="Digite o e-mail"
-                                    required
-                                    value="{{ funcionario.funcionario_email if funcionario else '' }}"
-                                >
+                                <input type="email" name="funcionario_email" class="form-control"
+                                    placeholder="Digite o e-mail" required
+                                    value="{{ funcionario.funcionario_email if funcionario else '' }}">
 
                             </div>
                         </div>
@@ -143,13 +125,8 @@
                                     <i class="bi bi-lock-fill"></i>
                                 </span>
 
-                                <input
-                                    type="password"
-                                    name="funcionario_senha"
-                                    class="form-control"
-                                    placeholder="Digite a senha"
-                                    {% if not funcionario %}required{% endif %}
-                                >
+                                <input type="password" name="funcionario_senha" class="form-control"
+                                    placeholder="Digite a senha" {% if not funcionario %}required{% endif %}>
 
                             </div>
 
@@ -174,14 +151,9 @@
                                     <i class="bi bi-person-vcard-fill"></i>
                                 </span>
 
-                                <input
-                                    type="text"
-                                    name="funcionario_cpf"
-                                    class="form-control"
-                                    placeholder="000.000.000-00"
-                                    required
-                                    value="{{ funcionario.funcionario_cpf if funcionario else '' }}"
-                                >
+                                <input type="text" name="funcionario_cpf" class="form-control"
+                                    placeholder="000.000.000-00" required
+                                    value="{{ funcionario.funcionario_cpf if funcionario else '' }}">
 
                             </div>
                         </div>
@@ -199,14 +171,8 @@
                                     <i class="bi bi-geo-alt-fill"></i>
                                 </span>
 
-                                <input
-                                    type="text"
-                                    name="funcionario_cep"
-                                    class="form-control"
-                                    placeholder="00000-000"
-                                    required
-                                    value="{{ funcionario.funcionario_cep if funcionario else '' }}"
-                                >
+                                <input type="text" name="funcionario_cep" class="form-control" placeholder="00000-000"
+                                    required value="{{ funcionario.funcionario_cep if funcionario else '' }}">
 
                             </div>
                         </div>
@@ -224,14 +190,9 @@
                                     <i class="bi bi-briefcase-fill"></i>
                                 </span>
 
-                                <input
-                                    type="text"
-                                    name="funcionario_cargo"
-                                    class="form-control"
-                                    placeholder="Digite o cargo"
-                                    required
-                                    value="{{ funcionario.funcionario_cargo if funcionario else '' }}"
-                                >
+                                <input type="text" name="funcionario_cargo" class="form-control"
+                                    placeholder="Digite o cargo" required
+                                    value="{{ funcionario.funcionario_cargo if funcionario else '' }}">
 
                             </div>
                         </div>
@@ -242,14 +203,8 @@
                                 DDI
                             </label>
 
-                            <input
-                                type="text"
-                                name="funcionario_ddi"
-                                class="form-control"
-                                placeholder="+55"
-                                required
-                                value="{{ funcionario.funcionario_ddi if funcionario else '' }}"
-                            >
+                            <input type="text" name="funcionario_ddi" class="form-control" placeholder="+55" required
+                                value="{{ funcionario.funcionario_ddi if funcionario else '' }}">
                         </div>
 
 
@@ -259,14 +214,8 @@
                                 DDD
                             </label>
 
-                            <input
-                                type="text"
-                                name="funcionario_ddd"
-                                class="form-control"
-                                placeholder="11"
-                                required
-                                value="{{ funcionario.funcionario_ddd if funcionario else '' }}"
-                            >
+                            <input type="text" name="funcionario_ddd" class="form-control" placeholder="11" required
+                                value="{{ funcionario.funcionario_ddd if funcionario else '' }}">
                         </div>
 
 
@@ -276,14 +225,8 @@
                                 Telefone
                             </label>
 
-                            <input
-                                type="text"
-                                name="funcionario_telefone"
-                                class="form-control"
-                                placeholder="99999-9999"
-                                required
-                                value="{{ funcionario.funcionario_telefone if funcionario else '' }}"
-                            >
+                            <input type="text" name="funcionario_telefone" class="form-control" placeholder="99999-9999"
+                                required value="{{ funcionario.funcionario_telefone if funcionario else '' }}">
                         </div>
 
                     </div>
@@ -292,17 +235,11 @@
                     <!-- BOTÕES -->
                     <div class="border-top pt-3 mt-3 text-end">
 
-                        <button
-                            type="button"
-                            class="btn btn-outline-secondary"
-                        >
+                        <button type="button" class="btn btn-outline-secondary">
                             Cancelar
                         </button>
 
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                        >
+                        <button type="submit" class="btn btn-primary">
                             <i class="bi bi-save"></i>
                             {{ 'Salvar alterações' if funcionario and funcionario.id else 'Cadastrar' }}
                         </button>
