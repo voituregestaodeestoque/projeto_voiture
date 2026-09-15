@@ -1051,6 +1051,76 @@ def cancelar_pedido_saida(pedido_saida_id):
         flash(f"Erro ao cancelar pedido: {e}", "erro")
     return redirect(url_for("pedidosaida"))
     
+
+
+#Pedido Saida Mobile
+
+@app.route("/api/listagem_cliente", methods=["GET"])
+def api_listagem_cliente():
+    clientes = Cliente.find_all()  # ou um método clientes_mobile() se precisar só id+nome
+    return jsonify(clientes), 200
+
+@app.route("/api/saida_rapida", methods=["POST"])
+def api_saida_rapida():
+    data = request.get_json(silent=True) or {}
+    produto_id = data.get("produto_id")
+    cliente_id = data.get("cliente_id")
+    quantidade = data.get("quantidade")
+
+    if not produto_id:
+        return jsonify({"erro": "Selecione o produto."}), 400
+    if not cliente_id:
+        return jsonify({"erro": "Selecione o cliente."}), 400
+    try:
+        quantidade = int(quantidade)
+        if quantidade <= 0:
+            raise ValueError
+    except (TypeError, ValueError):
+        return jsonify({"erro": "Quantidade inválida."}), 400
+
+    pedido = Pedido_saida(
+        status_pedido_saida="PENDENTE",
+        cliente_id=int(cliente_id),
+        data_pedido_saida=datetime.now()
+    )
+    erros = pedido.validate()
+    if erros:
+        return jsonify({"erro": erros[0]}), 400
+
+    try:
+        pedido_saida_id = pedido.insert()
+        Detalhe_saida.adicionar_item(
+            pedido_saida_id=pedido_saida_id,
+            produto_id=int(produto_id),
+            detalhe_saida_quantidade=quantidade,
+            detalhe_saida_item=1
+        )
+        mensagem = Pedido_saida.processar(pedido_saida_id)
+
+        # busca o estoque atualizado pra devolver pro app
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            cursor.execute(
+                "SELECT estoque_quantidade FROM estoque WHERE produto_id = %s",
+                (produto_id,)
+            )
+            estoque = cursor.fetchone()
+        finally:
+            cursor.close()
+            conexao.close()
+
+        return jsonify({
+            "mensagem": mensagem,
+            "pedido_saida_id": pedido_saida_id,
+            "estoque_restante": estoque["estoque_quantidade"] if estoque else None
+        }), 201
+
+    except ValueError as e:
+        return jsonify({"erro": str(e)}), 400
+    except Exception as e:
+        return jsonify({"erro": f"Erro ao registrar saída: {e}"}), 500
+        
 # -----> Fim: Pedido Saída
 ############################################################################################################
 
