@@ -1,4 +1,5 @@
 # Editado por Ryan em 11/08/2026 às 10h12
+from core.database import Database
 from models.email import EmailService
 from core.security import login_obrigatorio, admin_obrigatorio
 from flask import Flask, render_template, request, redirect, url_for, flash, json, session, jsonify
