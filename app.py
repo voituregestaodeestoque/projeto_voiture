@@ -88,6 +88,60 @@ def loginfuncionario():
         return redirect(url_for("base"))
     return render_template('loginfuncionario.html')
 
+# Login Mobile
+@app.route('/api/login_mobile', methods=['POST'])
+def login_mobile():
+
+    try:
+
+        # Recebe os dados enviados pelo React Native
+        dados = request.get_json()
+
+        email = dados.get('email')
+        senha = dados.get('senha')
+
+        # Verifica se os campos foram preenchidos
+        if not email or not senha:
+            return jsonify({
+                "sucesso": False,
+                "mensagem": "Preencha o e-mail e a senha."
+            }), 400
+
+        # Autentica o funcionário
+        funcionario = Funcionario.autenticar(email, senha)
+
+        # E-mail e/ou senha incorretos
+        if not funcionario:
+            return jsonify({
+                "sucesso": False,
+                "mensagem": "E-mail e/ou senha inválidos."
+            }), 401
+
+        # Verifica se o funcionário possui acesso ao sistema
+        if not funcionario.get('funcionario_acesso'):
+            return jsonify({
+                "sucesso": False,
+                "mensagem": "Seu acesso ao sistema está bloqueado."
+            }), 403
+
+        # Remove informações que não devem ser enviadas para o aplicativo
+        funcionario.pop('funcionario_senha', None)
+        funcionario.pop('imagem_blob', None)
+
+        return jsonify({
+            "sucesso": True,
+            "mensagem": "Login realizado com sucesso.",
+            "funcionario": funcionario
+        }), 200
+
+    except Exception as e:
+
+        print("ERRO LOGIN MOBILE:", e)
+
+        return jsonify({
+            "sucesso": False,
+            "mensagem": "Erro interno ao realizar o login."
+        }), 500
 
 
 @app.route('/loginfunciona', methods=["POST"])
