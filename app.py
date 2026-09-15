@@ -354,10 +354,6 @@ def dashboard():
 
 
 @app.route("/api/dashboard")
-
-# Não é possível navegar por essa tela sem estar logado
-@login_obrigatorio
-
 #Função que define as funcionalidades do dashboard
 
 def api_dashboard():
@@ -370,27 +366,23 @@ def api_dashboard():
 
     #Seleciona a chave do estoque total na tabela temporária de contagem
     total_estoque = dic_total['quantidade_total']
-
+   
     #Recebe a soma de todos os tipos de produtos cadastrados no sistema
     pod_total=Produto.produto_total()
 
     #Seleciona a chave de quantidade de produto na tabela temporária de contagem
     total_produto = pod_total['quantidade_produto']
 
-
     entrada_total = Pedido_entrada.contar_pedidoentrada()
 
     total_entrada = entrada_total['pedido_entrada_total']
-
 
     saida_total = Pedido_saida.contar_pedidosaida()
 
     total_saida = saida_total['pedido_saida_total']
 
-
     #Recebe os produtos que estão com estoque baixo
     baixo_estoque = Estoque.estoque_baixo()
-
 
     pedido_entrada_pendente= Pedido_entrada.pedidoentrada_pendente()
 
