@@ -403,7 +403,6 @@ def get_estoque_form():
 @app.route("/api/listagem_produto", methods=["GET"])
 def api_listagem_produto():
     produtos = Estoque.produtos_mobile()
-    print(produtos)
     return jsonify(produtos), 200
 
 @app.route("/listagem_produto")
