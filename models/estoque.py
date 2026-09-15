@@ -4,6 +4,7 @@ from datetime import datetime
 from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
+from core.database import Database
 import base64
 
 
@@ -120,6 +121,57 @@ class Estoque(CrudBase):
 #---> Fim: Listagem de estoque
 ######################################################################################
 
+##Celular
+    @classmethod
+    def produtos_mobile(cls):
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+
+        try:
+            sql = """
+                SELECT
+                    e.estoque_quantidade,
+                    p.id,
+                    p.produto_nome,
+                    p.produto_descricao,
+                    p.produto_categoria,
+                    p.produto_quantidade_minima,
+                    p.produto_preco_custo,
+                    p.produto_preco_venda,
+                    p.produto_peso,
+                    p.produto_localizacao,
+                    p.imagem_nome,
+                    p.imagem_tipo,
+                    p.imagem_blob
+                FROM estoque AS e
+                INNER JOIN produto AS p
+                    ON p.id = e.produto_id
+                ORDER BY p.id DESC
+            """
+
+            cursor.execute(sql)
+            produtos = cursor.fetchall()
+
+            for produto in produtos:
+
+                if produto["imagem_blob"]:
+                    produto["imagem_base64"] = base64.b64encode(
+                        produto["imagem_blob"]
+                    ).decode("utf-8")
+
+                    produto["possui_imagem"] = True
+                else:
+                    produto["imagem_base64"] = None
+                    produto["possui_imagem"] = False
+
+                # Remove o BLOB para não tentar enviar bytes no JSON
+                produto.pop("imagem_blob", None)
+
+            return produtos
+
+        finally:
+            cursor.close()
+            conexao.close()
 
 ######################################################################################
 #---> Início: Filtros de ordenação

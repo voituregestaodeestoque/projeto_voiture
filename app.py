@@ -1,7 +1,7 @@
 # Editado por Ryan em 11/08/2026 às 10h12
 from models.email import EmailService
 from core.security import login_obrigatorio, admin_obrigatorio
-from flask import Flask, render_template, request, redirect, url_for, flash, json, session
+from flask import Flask, render_template, request, redirect, url_for, flash, json, session, jsonify
 from models.funcionario import Funcionario
 from models.empilhadeira import Empilhadeira
 from models.uso_empilhadeira import Uso_empilhadeira
@@ -17,7 +17,9 @@ from datetime import datetime
 
 
 
+
 app = Flask(__name__)
+
 app.secret_key = "chave_secreta"
 
 
@@ -397,17 +399,52 @@ def get_estoque_form():
         "estoque_quantidade":request.form.get("estoque_quantidade", "").strip()
     }
 
+
+@app.route("/api/listagem_produto", methods=["GET"])
+def api_listagem_produto():
+    produtos = Estoque.produtos_mobile()
+    print(produtos)
+    return jsonify(produtos), 200
+
 @app.route("/listagem_produto")
 @login_obrigatorio
 def listagem_produto():
 
     produtos = Produto.produto_listagem()
 
-    # Verifica se o cliente pede explicitamente JSON (comum em Apps Mobile/API Clients)
-    if request.is_json or 'application/json' in request.headers.get('Accept', ''):
-        return jsonify(dados_usuario), 200
+    
+    # ==========================================
+    # REQUISIÇÃO DO REACT NATIVE
+    # ==========================================
 
-    return render_template('listagem_produto.html', produto=produtos)
+    '''if 'application/json' in request.headers.get('Accept', ''):
+
+        produtos_mobile = []
+
+        for produto in produtos:
+
+            produto_mobile = produto.copy()
+
+            # A imagem não será enviada pelo JSON.
+            # O aplicativo busca a imagem separadamente.
+            for campo in list(produto_mobile.keys()):
+
+                if isinstance(produto_mobile[campo], bytes):
+
+                    produto_mobile[campo] = None
+
+            produtos_mobile.append(produto_mobile)
+
+        return jsonify(produtos_mobile), 200
+
+    # ==========================================
+    # REQUISIÇÃO DO SITE
+    # =========================================='''
+
+    return render_template(
+        'listagem_produto.html',
+        produto=produtos
+    )
 
 
 
@@ -1670,4 +1707,4 @@ def listagem_historico():
     return movimentos
 
 if __name__ == "__main__":
-    app.run(host = "0.0.0.0", debug=True)
+    app.run(host = "0.0.0.0", port=5000, debug=True)
