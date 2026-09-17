@@ -1125,7 +1125,71 @@ def api_saida_rapida():
 # -----> Fim: Pedido Saída
 ############################################################################################################
 
+@app.route("/api/listagem_fornecedor", methods=["GET"])
+def api_listagem_fornecedor():
+    fornecedores = Fornecedor.find_all()  # ou um método clientes_mobile() se precisar só id+nome
+    return jsonify(fornecedores), 200
 
+@app.route("/api/entrada_rapida", methods=["POST"])
+def api_entrada_rapida():
+    data = request.get_json(silent=True) or {}
+    produto_id = data.get("produto_id")
+    fornecedor_id = data.get("fornecedor_id")
+    quantidade = data.get("quantidade")
+
+    if not produto_id:
+        return jsonify({"erro": "Selecione o produto."}), 400
+    if not fornecedor_id:
+        return jsonify({"erro": "Selecione o fornecedor."}), 400
+    try:
+        quantidade = int(quantidade)
+        if quantidade <= 0:
+            raise ValueError
+    except (TypeError, ValueError):
+        return jsonify({"erro": "Quantidade inválida."}), 400
+
+    pedido = Pedido_entrada(
+        status_pedido_entrada="PENDENTE",
+        fornecedor_id=int(fornecedor_id),
+        data_pedido_entrada=datetime.now()
+    )
+    erros = pedido.validate()
+    if erros:
+        return jsonify({"erro": erros[0]}), 400
+
+    try:
+        pedido_entrada_id = pedido.insert()
+        Detalhe_entrada.adicionar_item(
+            pedido_entrada_id=pedido_entrada_id,
+            produto_id=int(produto_id),
+            detalhe_entrada_quantidade=quantidade,
+            detalhe_entrada_item=1
+        )
+        mensagem = Pedido_entrada.processar(pedido_entrada_id)
+
+        # busca o estoque atualizado pra devolver pro app
+        conexao = Database.connect()
+        cursor = conexao.cursor(dictionary=True)
+        try:
+            cursor.execute(
+                "SELECT estoque_quantidade FROM estoque WHERE produto_id = %s",
+                (produto_id,)
+            )
+            estoque = cursor.fetchone()
+        finally:
+            cursor.close()
+            conexao.close()
+
+        return jsonify({
+            "mensagem": mensagem,
+            "pedido_entrada_id": pedido_entrada_id,
+            "estoque_restante": estoque["estoque_quantidade"] if estoque else None
+        }), 201
+
+    except ValueError as e:
+        return jsonify({"erro": str(e)}), 400
+    except Exception as e:
+        return jsonify({"erro": f"Erro ao registrar entrada: {e}"}), 500
 ############################################################################################################
 # -----> Início: Empilhadeira
 
