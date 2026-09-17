@@ -1,4 +1,6 @@
 # Editado por Ryan em 11/08/2026 às 10h12
+from apscheduler.schedulers.background import BackgroundScheduler
+from models.notificacao import Notificacao
 from core.database import Database
 from models.email import EmailService
 from core.security import login_obrigatorio, admin_obrigatorio
@@ -23,7 +25,9 @@ app = Flask(__name__)
 
 app.secret_key = "chave_secreta"
 
-
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=Notificacao.verificar_e_gerar, trigger='interval', minutes=5)
+scheduler.start()
 
 EXTENSOES_PERMITIDAS = {"image/png", "image/jpeg", "image/jpg", "image/webp"}
 
@@ -37,6 +41,35 @@ def to_int(value, default=0):
 
 def imagem_permitida(tipo_arquivo):
     return tipo_arquivo in EXTENSOES_PERMITIDAS
+#######################################################################
+# -----> Início: Notificações
+
+@app.route('/api/notificacoes')
+def api_notificacoes():
+    notificacoes = Notificacao.listar()
+    return jsonify({
+        "total": len(notificacoes),
+        "notificacoes": [
+            {
+                "id": n['id_notificacao'],
+                "tipo": n['notificacao'],
+                "mensagem": n['mensagem'],
+                "data": n['data_hora'].strftime('%d/%m/%Y %H:%M')
+            } for n in notificacoes
+        ]
+    })
+
+@app.route('/api/notificacoes/<int:id_notificacao>', methods=['DELETE'])
+def api_deletar_notificacao(id_notificacao):
+    Notificacao.deletar(id_notificacao)
+    return jsonify({"sucesso": True})
+
+@app.route('/api/notificacoes', methods=['DELETE'])
+def api_deletar_todas_notificacoes():
+    Notificacao.deletar_todas()
+    return jsonify({"sucesso": True})
+
+######################################################################
 
 @app.errorhandler(404)
 def pagina_nao_encontrada(error):
@@ -918,7 +951,7 @@ def adicionar_item_saida(pedido_saida_id):
         detalhe_saida_item= proximo_item_numero,
     )
 
-    flash(mensagem)
+    flash(mensagem, "sucesso")
     return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
 
 
@@ -926,7 +959,7 @@ def adicionar_item_saida(pedido_saida_id):
 @login_obrigatorio
 def remover_item_saida(detalhe_saida_id, pedido_saida_id):
     mensagem = Detalhe_saida.remover_item(detalhe_saida_id)
-    flash(mensagem)
+    flash(mensagem, "sucesso")
     return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
 
 
@@ -1893,7 +1926,7 @@ def atualizar_funcionario(id):
 
     funcionario = Funcionario(**dados)
 
-    erros = funcionario.validate()
+    erros = funcionario.validate_edicao()
 
     if erros:
         for erro in erros:
@@ -1902,7 +1935,7 @@ def atualizar_funcionario(id):
         return render_template("cadastrofuncionario.html", funcionario=dados)
 
     try:
-        funcionario.update(id)
+        funcionario.atualizar_funcionario(id, dados)
         flash("Funcionário atualizado com sucesso.", "sucesso")
         return redirect(url_for("listagem_funcionario"))
     except Exception as e:
