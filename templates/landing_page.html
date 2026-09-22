@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -10,21 +10,21 @@
 </head>
 
 <body>
-    <header>
+    <header aria-label="Cabeçalho principal">
         <div id="header-logo" style="width: max-content;">
             <img src="../static/images/logo_lp.png" style="
                 height: 115px;
                 width: 120px;
                 display: flex;
                 justify-content: center;
-                align-items: center;" alt="logo">
+                align-items: center;" alt="Voiture - Gestão de Estoque">
         </div>
 
         <div id="header-menu-toggle">
-            <button class="menu-toggle" id="menu-toggle">☰</button>
+            <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="menu">☰</button>
         </div>
 
-        <nav class="menu" id="menu">
+        <nav class="menu" id="menu" aria-label="Navegação principal">
             <ul id="nav-esquerda">
                 <li><a href="#sistema">Sistema</a></li>
                 <li><a href="#planos">Planos</a></li>
@@ -40,21 +40,21 @@
     </header>
 
     <main id="secao-main">
-        <section class="pai-container-main">
+        <section class="pai-container-main" aria-labelledby="titulo-principal">
             <div class="container-main">
-                <h1>Domine o fluxo de suas peças com inteligência e precisão</h1>
+                <h1 id="titulo-principal">Domine o fluxo de suas peças com inteligência e precisão</h1>
                 <p>Visualize cada etapa da logística de seu estoque em um único sistema de gestão.</p>
                 <p>Monitore entradas, rastreie saídas para a oficina e identifique gargalos antes de se tornarem
                     prejuízo.</p>
-                <a href="#" class="butao-main">Experimente nosso sistema</a>
+                <a href="#contato" class="butao-main">Experimente nosso sistema</a>
             </div>
-            <div class="painel">
+            <div class="painel" role="region" aria-labelledby="titulo-painel">
                 <div class="painel-head">
-                    <span class="titulo-painel">Painel Voiture</span>
+                    <span class="titulo-painel" id="titulo-painel">Painel Voiture</span>
                 </div>
 
                 <div class="stage" id="stage">
-                    <svg class="car-svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="car-svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                         <!-- carroceria (estilo flat/pill, frente à direita) -->
                         <path class="car-fill"
                             d="M65,110 L65,135 Q65,160 90,160 L330,160 Q355,160 355,135 L355,120 Q355,110 345,108 L300,102 L275,72 Q267,62 253,62 L165,62 Q152,62 145,70 L115,102 L80,106 Q65,107 65,110 Z" />
@@ -132,8 +132,8 @@
         </section>
     </main>
 
-    <section id="sistema">
-        <h1>Por que escolher a Voiture?</h1>
+    <section id="sistema" aria-labelledby="titulo-sistema">
+        <h1 id="titulo-sistema">Por que escolher a Voiture?</h1>
         <div class="grid">
             <div id="lista-secao-sistema" style="display:flex; flex-direction:column; gap:14px;">
                 <div class="feat" data-key="agilizacao"
@@ -142,7 +142,7 @@
                         <div class="feat-mark"
                             style="width:34px;height:34px;border-radius:9px; display:flex;align-items:center;justify-content:center; flex-shrink:0; transition:background 0.2s ease;">
                             <svg class="feat-icon" viewBox="0 0 24 24" fill="none" width="18" height="18"
-                                style="transition:stroke 0.2s ease;">
+                                style="transition:stroke 0.2s ease;" aria-hidden="true" focusable="false">
                                 <path d="M5 12.5L9.5 17L19 7" stroke="currentColor" stroke-width="2.4"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
@@ -162,7 +162,7 @@
                         <div class="feat-mark"
                             style="width:34px;height:34px;border-radius:9px; display:flex;align-items:center;justify-content:center; flex-shrink:0; transition:background 0.2s ease;">
                             <svg class="feat-icon" viewBox="0 0 24 24" fill="none" width="18" height="18"
-                                style="transition:stroke 0.2s ease;">
+                                style="transition:stroke 0.2s ease;" aria-hidden="true" focusable="false">
                                 <path d="M5 12.5L9.5 17L19 7" stroke="currentColor" stroke-width="2.4"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
@@ -182,7 +182,7 @@
                         <div class="feat-mark"
                             style="width:34px;height:34px;border-radius:9px; display:flex;align-items:center;justify-content:center; flex-shrink:0; transition:background 0.2s ease;">
                             <svg class="feat-icon" viewBox="0 0 24 24" fill="none" width="18" height="18"
-                                style="transition:stroke 0.2s ease;">
+                                style="transition:stroke 0.2s ease;" aria-hidden="true" focusable="false">
                                 <path d="M5 12.5L9.5 17L19 7" stroke="currentColor" stroke-width="2.4"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
@@ -205,9 +205,9 @@
         </div>
     </section>
 
-    <section id="planos">
+    <section id="planos" aria-labelledby="titulo-planos">
         <div class="header1">
-            <h1>Onde cada peça conta e <br> nenhum centavo é desperdiçado</h1>
+            <h1 id="titulo-planos">Onde cada peça conta e <br> nenhum centavo é desperdiçado</h1>
             <p>Escolha o plano de gestão de estoque que acompanha o ritmo do seu negócio</p>
         </div>
 
@@ -268,13 +268,13 @@
         </section>
     </section>
 
-    <section id="contato">
-        <main class="container_contato">
+    <section id="contato" aria-labelledby="titulo-contato">
+        <div class="container_contato">
 
             <section class="info_contato">
                 <span class="contato-tag">VOITURE • CONTATO</span>
 
-                <h1>
+                <h1 id="titulo-contato">
                     Vamos conversar sobre o
                     <span>futuro da sua gestão.</span>
                 </h1>
@@ -309,27 +309,27 @@
                         <span>FORMULÁRIO DE CONTATO</span>
                     </div>
 
-                    <h2>Preencha seus dados</h2>
+                    <h2 id="titulo-formulario">Preencha seus dados</h2>
 
                     <p class="form-subtitulo">
                         Estamos prontos para ajudar sua empresa.
                     </p>
 
-                    <form action="{{ url_for('enviar_contato') }}" method="POST">
+                    <form action="{{ url_for('enviar_contato') }}" method="POST" aria-labelledby="titulo-formulario">
 
                         <div class="item_contato">
                             <label for="nome">Nome do representante</label>
-                            <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+                            <input type="text" id="nome" name="nome" placeholder="Digite seu nome" autocomplete="name" required>
                         </div>
 
                         <div class="item_contato">
                             <label for="email">Email de contato</label>
-                            <input type="email" id="email" name="email" placeholder="exemplo@empresa.com" required>
+                            <input type="email" id="email" name="email" placeholder="exemplo@empresa.com" autocomplete="email" required>
                         </div>
 
                         <div class="item_contato">
                             <label for="cnpj">CNPJ da empresa</label>
-                            <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" required>
+                            <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" autocomplete="off" inputmode="numeric" required>
                         </div>
 
                         <button type="submit" class="botao_contato">
@@ -340,19 +340,19 @@
                 </div>
             </section>
 
-        </main>
+        </div>
     </section>
 
     <div class="secao-empresas">
-        <div id="banner-empresas" class="banner-empresas">
+        <div id="banner-empresas" class="banner-empresas" aria-labelledby="titulo-clientes">
             <div class="eyebrow">Confiança comprovada</div>
-            <h1>Líderes do setor não buscam apenas fornecedores,<br>eles escolhem a <em>Voiture</em></h1>
+            <h1 id="titulo-clientes">Líderes do setor não buscam apenas fornecedores,<br>eles escolhem a <em>Voiture</em></h1>
 
             <div class="logos">
                 <div class="logo-item"><img src="../static/images/toyota_logo.png" alt="Toyota"></div>
                 <div class="logo-item"><img src="../static/images/audi_logo.png" alt="Audi"></div>
                 <div class="logo-item"><img src="../static/images/honda_logo.png" alt="HONDA"></div>
-                <div class="logo-item"><img src="../static/images/hyundai_logo.png" alt="hiunday"></div>
+                <div class="logo-item"><img src="../static/images/hyundai_logo.png" alt="Hyundai"></div>
                 <div class="logo-item"><img src="../static/images/fiat_logo.png" alt="Fiat"></div>
                 <div class="logo-item"><img src="../static/images/volkswagen_log.png" alt="Volkswagen"></div>
             </div>
@@ -360,10 +360,10 @@
         </div>
     </div>
 
-    <section id="sobre_nos">
+    <section id="sobre_nos" aria-label="Sobre a Voiture">
         <div id="sobre_superior" class="sobre_nos">
             <div id="missao_texto" class="card">
-                <i class="ti ti-target-arrow card-icon"></i>
+                <i class="ti ti-target-arrow card-icon" aria-hidden="true"></i>
                 <h3 class="sobre_titulo">Nossa missão</h3>
                 <p class="card-text">
                     Proporcionar um <span class="negrito">sistema de gerenciamento de estoque automatizado</span>,
@@ -373,7 +373,7 @@
             </div>
 
             <div id="diferenciais_texto" class="card">
-                <i class="ti ti-sparkles card-icon"></i>
+                <i class="ti ti-sparkles card-icon" aria-hidden="true"></i>
                 <h3 class="sobre_titulo">Nossos diferenciais</h3>
                 <p class="card-text">Nosso sistema possui <span class="negrito">organização</span> de ponta para sua
                     empresa ao <span class="negrito">gerenciar o estoque.</span> Visamos uma interface intuitiva e
@@ -385,17 +385,17 @@
     </section>
 
     <!-- FOOTER ALTERADO -->
-    <footer class="footer-novo">
+    <footer class="footer-novo" aria-label="Rodapé">
         <div class="footer-principal">
             <div class="footer-coluna footer-marca">
                 <img src="../static/images/logo.png" alt="Voiture Gestão de Estoque" class="footer-logo-novo">
                 <p>Soluções inteligentes para<br>gerenciar seu estoque com<br>eficiência e praticidade.</p>
-                <span class="footer-linha"></span>
+                <span class="footer-linha" aria-hidden="true"></span>
             </div>
 
             <div class="footer-coluna footer-links">
                 <h3>EMPRESA</h3>
-                <span class="footer-titulo-linha"></span>
+                <span class="footer-titulo-linha" aria-hidden="true"></span>
 
                 <a href="#sobre_superior" class="footer-item">
                     <span class="footer-svg">
@@ -423,7 +423,7 @@
 
             <div class="footer-coluna footer-links">
                 <h3>PLANOS</h3>
-                <span class="footer-titulo-linha"></span>
+                <span class="footer-titulo-linha" aria-hidden="true"></span>
 
                 <a href="#planos" class="footer-item">
                     <span class="footer-svg">
@@ -461,7 +461,7 @@
 
             <div class="footer-coluna footer-direita-nova">
                 <h3>REDES SOCIAIS</h3>
-                <span class="footer-titulo-linha"></span>
+                <span class="footer-titulo-linha" aria-hidden="true"></span>
 
                 <div class="footer-redes">
                     <a href="#" aria-label="LinkedIn">
@@ -501,7 +501,7 @@
                 </div>
 
                 <h3 class="footer-contato-titulo">CONTATO</h3>
-                <span class="footer-titulo-linha"></span>
+                <span class="footer-titulo-linha" aria-hidden="true"></span>
 
                 <div class="footer-contato-novo">
                     <div class="footer-contato-item">

@@ -296,7 +296,21 @@ ENGINE = InnoDB;
 
 SHOW WARNINGS;
 
+-- -----------------------------------------------------
+-- Table notificacao
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS notificacao (
+    id_notificacao INT AUTO_INCREMENT PRIMARY KEY,
+    notificacao VARCHAR(100) NOT NULL,
+    referencia_id INT NOT NULL,
+    mensagem TEXT NOT NULL,
+    data_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_notif (notificacao, referencia_id)
+) ENGINE = InnoDB;
+
+ 
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
