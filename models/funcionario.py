@@ -68,6 +68,29 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
 
         return erros
 
+    def validate_edicao(self):
+        erros = []
+
+        #valida cada campo da tabela
+        validacoes = [
+            Validator.validar_nome(self.funcionario_nome, "funcionario_nome"),
+            Validator.validar_cpf(self.funcionario_cpf, "funcionario_cpf"),
+            Validator.validar_cep(self.funcionario_cep, "funcionario_cep"),
+            Validator.validar_email(self.funcionario_email, "funcionario_email"),
+            Validator.validar_email(self.funcionario_email, "funcionario_email"),
+            Validator.validar_ddi_ddd(self.funcionario_ddi, "funcionario_ddi"),
+            Validator.validar_ddi_ddd(self.funcionario_ddd, "funcionario_ddd"),
+            Validator.validar_telefone(self.funcionario_telefone, "funcionario_telefone"),
+            Validator.validar_cargo(self.funcionario_cargo, "funcionario_cargo"),
+            Validator.validar_permissao(self.funcionario_permissao, "funcionario_permissao"),
+        ]
+        #se der algum erro
+        for itens in validacoes:
+            if not itens['valida']:
+                erros.append(itens["mensagem"])
+
+        return erros
+
     @classmethod
     def preparar_imagens(cls, funcionarios):
 
@@ -227,14 +250,12 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
 
     def atualizar_funcionario(self, id_funcionario, dados):
         senha = dados.get("funcionario_senha")
-
         if senha:
-
-            dados["funcionario_senha"] = gerar_hash_senha(
-                senha
-            )
-
-        self.update(id_funcionario, dados)
+            self.funcionario_senha = gerar_hash_senha(senha)
+        else:
+            atual = Funcionario.find_by_id(id_funcionario)
+            self.funcionario_senha = atual["funcionario_senha"]
+        self.update(id_funcionario)
 
 
     @classmethod
