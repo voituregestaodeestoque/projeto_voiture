@@ -10,23 +10,17 @@
     <div>
 
         <!--TOPO-->
-        <div style="width: 99%; margin-left: 10px;" class="d-flex">
+        <div style="width: 99%; margin-left: 10px; max-height: 37.6px ;" class="d-flex">
 
             <!--Barra de pesquisa-->
-            <form action="{{ url_for('listagem_estoque')}}" class="input-group form-card" aria-label="Pesquisar produtos no estoque">
+            <form action="{{ url_for('listagem_estoque')}}" style="width:95%;" class="input-group form-card"
+                aria-label="Pesquisar produtos no estoque">
 
-                <input
-                    name="chave_pesquisa"
-                    type="text"
-                    class="form-control"
-                    placeholder="Pesquisa"
+                <input name="chave_pesquisa" type="text" class="form-control" placeholder="Pesquisa"
                     aria-label="Pesquisar produto">
 
                 <!--Botão de envio-->
-                <button
-                    type="submit"
-                    class="input-group-text bg-dark border-secondary"
-                    aria-label="Pesquisar">
+                <button type="submit" class="input-group-text bg-dark border-secondary" aria-label="Pesquisar">
 
                     <i class="bi bi-search text-white" aria-hidden="true"></i>
 
@@ -35,17 +29,11 @@
             </form>
 
             <!--Filtro de ordenação-->
-            <form
-                method="GET"
-                class="form-card ms-3"
-                style="width: 29%; margin-right: 10px;"
+            <form method="GET" class="form-card ms-3" style="width: 35%; margin-right: 10px;"
                 aria-label="Ordenar produtos do estoque">
 
                 <!--Menu de opções de ordenação-->
-                <select
-                    name="filtro"
-                    class="filtrar form-select"
-                    onchange="this.form.submit()"
+                <select name="filtro" class="filtrar form-select" onchange="this.form.submit()"
                     aria-label="Ordenar produtos por">
 
                     <!--Opção: adicionados recentemente-->
@@ -82,6 +70,10 @@
 
             </form>
 
+            <a href="{{ url_for('produtos') }}" class="botao-add btn" style="width: 25%;">
+                <i class="bi bi-plus-lg"></i> Novo Produto
+            </a>
+
         </div>
 
     </div>
@@ -89,7 +81,7 @@
     <!--ESTOQUE-->
     <section class="container mt-5" aria-label="Lista de produtos em estoque">
 
-        {%if estoque%}
+        {%if estoque %}
 
         <!--LINHA-->
         <div class="row">
@@ -100,24 +92,18 @@
             <div class="col-md-3">
 
                 <!--CARD-->
-                <div
-                    class="card mb-4"
-                    style="max-width: 100%;"
-                    aria-label="Produto {{ estoque_produto.produto_nome }}">
+                <div class="card mb-4" style="max-width: 100%;" aria-label="Produto {{ estoque_produto.produto_nome }}">
 
                     {% if estoque_produto.imagem_base64 %}
 
-                    <img
-                        class="card-img-top"
+                    <img class="card-img-top"
                         src="data:{{ estoque_produto.imagem_tipo }};base64,{{ estoque_produto.imagem_base64 }}"
                         alt="Imagem do produto {{ estoque_produto.produto_nome }}"
                         style="width: 100%; height: 180px; object-fit: cover;">
 
                     {% else %}
 
-                    <img
-                        class="card-img-top"
-                        src="{{ url_for('static', filename='images/produto-sem-imagem.png') }}"
+                    <img class="card-img-top" src="{{ url_for('static', filename='images/produto-sem-imagem.png') }}"
                         alt="Produto {{ estoque_produto.produto_nome }} sem imagem">
 
                     {% endif %}
@@ -144,10 +130,7 @@
                         </p>
 
                         <!-- Botão pra ativar o modal -->
-                        <button
-                            type="button"
-                            class="botao-add btn w-100"
-                            data-bs-toggle="modal"
+                        <button type="button" class="botao-add btn w-100" data-bs-toggle="modal"
                             data-bs-target="#modal{{estoque_produto.id}}"
                             aria-label="Mais detalhes do produto {{ estoque_produto.produto_nome }}">
 
@@ -156,33 +139,22 @@
                         </button>
 
                         <!-- Modal -->
-                        <div
-                            class="modal fade"
-                            id="modal{{estoque_produto.id}}"
-                            tabindex="-1"
-                            aria-labelledby="modalLabel{{estoque_produto.id}}"
-                            aria-hidden="true">
+                        <div class="modal fade" id="modal{{estoque_produto.id}}" tabindex="-1"
+                            aria-labelledby="modalLabel{{estoque_produto.id}}" aria-hidden="true">
 
-                            <div
-                                class="modal-dialog modal-lg modal-dialog-centered"
-                                role="document">
+                            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
 
                                 <div class="modal-content">
 
                                     <div class="modal-header">
 
-                                        <h5
-                                            class="modal-title"
-                                            id="modalLabel{{estoque_produto.id}}">
+                                        <h5 class="modal-title" id="modalLabel{{estoque_produto.id}}">
 
                                             <strong>{{estoque_produto.produto_nome}}</strong>
 
                                         </h5>
 
-                                        <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="modal"
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Fechar janela de detalhes do produto {{ estoque_produto.produto_nome }}">
 
                                         </button>
@@ -191,29 +163,24 @@
 
                                     <div class="modal-body">
 
-                                        <section
-                                            class="container d-flex justify-content-between"
+                                        <section class="container d-flex justify-content-between"
                                             aria-label="Detalhes do produto {{ estoque_produto.produto_nome }}"
                                             style="background-color: #DCE3EE; width: 100%; height: 550px; border-radius: 10px;">
 
                                             <!-- LADO ESQUERDO -->
                                             <div class="d-flex flex-column gap-3 m-3">
 
-                                                <div
-                                                    class="bg-white"
+                                                <div class="bg-white"
                                                     style="width: 300px; border-radius: 10px !important;">
 
-                                                    <img
-                                                        class="card-img-top"
+                                                    <img class="card-img-top"
                                                         src="data:{{ estoque_produto.imagem_tipo }};base64,{{ estoque_produto.imagem_base64 }}"
                                                         alt="Imagem do produto {{ estoque_produto.produto_nome }}"
                                                         style="width: 100%; height: 180px; object-fit: cover;">
 
                                                 </div>
 
-                                                <div
-                                                    class="bg-white w-100"
-                                                    style="height: 285px; border-radius: 10px;">
+                                                <div class="bg-white w-100" style="height: 285px; border-radius: 10px;">
 
                                                     <p style="margin: 15px;">
                                                         <strong>Descrição:</strong>
@@ -224,12 +191,9 @@
 
                                             </div>
 
-                                            <div
-                                                class="d-flex flex-column m-3 mx-auto"
-                                                style="width: 320px;">
+                                            <div class="d-flex flex-column m-3 mx-auto" style="width: 320px;">
 
-                                                <div
-                                                    class="bg-white mb-3 w-100 d-flex align-items-center px-3"
+                                                <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                     style=" height: 70px; border-radius: 10px;">
 
                                                     <p>
@@ -239,8 +203,7 @@
 
                                                 </div>
 
-                                                <div
-                                                    class="bg-white mb-3 w-100 d-flex align-items-center px-3"
+                                                <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                     style="height: 70px; border-radius: 10px;">
 
                                                     <p>
@@ -250,8 +213,7 @@
 
                                                 </div>
 
-                                                <div
-                                                    class="bg-white mb-3 w-100 d-flex align-items-center px-3"
+                                                <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                     style="height: 70px; border-radius: 10px;">
 
                                                     <p>
@@ -261,8 +223,7 @@
 
                                                 </div>
 
-                                                <div
-                                                    class="bg-white mb-3 w-100 d-flex align-items-center px-3"
+                                                <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                     style="height: 70px; border-radius: 10px;">
 
                                                     <p>
@@ -272,8 +233,7 @@
 
                                                 </div>
 
-                                                <div
-                                                    class="bg-white mb-3 w-100 d-flex align-items-center px-3"
+                                                <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                     style="height: 70px; border-radius: 10px;">
 
                                                     <p>
@@ -283,8 +243,7 @@
 
                                                 </div>
 
-                                                <div
-                                                    class="bg-white mb-3 w-100 d-flex align-items-center px-3"
+                                                <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                     style="height: 70px; border-radius: 10px;">
 
                                                     <p>
@@ -305,6 +264,38 @@
                             </div>
 
                         </div>
+                        <a href="{{ url_for('editar_produto', id=produto.id) }}" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+
+                        <!-- Botão do modal pra excluir -->
+                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                            data-bs-target="#Modal{{produto.id}}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="Modal{{produto.id}}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja excluir esse
+                                                produto?</strong></h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancelar</button>
+                                        <a href="{{ url_for('deletar_produto', id=produto.id) }}"
+                                            class="btn btn-danger">
+                                            <strong>Excluir</strong>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -319,10 +310,7 @@
         {%else%}
 
         <!--Mensagem em caso de não ter estoque de produtos cadastrados-->
-        <div
-            class="alert alert-info mb-0"
-            role="status"
-            aria-live="polite">
+        <div class="alert alert-info mb-0" role="status" aria-live="polite">
 
             <i class="bi bi-info-circle" aria-hidden="true"></i>
 
@@ -337,4 +325,3 @@
 </div>
 
 {% endblock %}
-
