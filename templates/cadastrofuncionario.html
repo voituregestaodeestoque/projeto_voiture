@@ -1,222 +1,501 @@
-{% extends 'base.html' %}
 <!--Atualização dia 13/06/2026 às 18:18-->
+<!--atualizado por raica dia 24/09/26 às 09:37-->
+
+{% extends 'base.html' %}
+
 {% block conteudo %}
+
 <!--tela divida em duas partes-->
+
 <!--parte de cima que tem o tiulo e o botão pra visualizar funcionarios-->
+
 <div class="d-flex justify-content-between align-items-center mb-4">
+
     <div>
+
         <h2 class="titulo-pagina">
-            <i class="bi bi-person"></i>
+
+            <i class="bi bi-person" aria-hidden="true"></i>
+
             {{ 'Editar Funcionário' if funcionario and funcionario.id else 'Cadastrar Funcionário' }}
+
             <!--se passarem um id, o titulo vira outro-->
+
         </h2>
+
     </div>
+
     <div>
+
         <!--rota para ir visualizar os funcionarios já cadastrados-->
-        <a href="{{ url_for('listagem_funcionario') }}" class="btn btn-success">
-            <i></i>Visualizar Funcionários</a>
+
+        <a
+            href="{{ url_for('listagem_funcionario') }}"
+            class="btn btn-success"
+            aria-label="Visualizar funcionários cadastrados"
+        >
+            <i aria-hidden="true"></i>
+            Visualizar Funcionários
+        </a>
+
     </div>
+
 </div>
+
 <!--parte de baixo que possui todo o formulário-->
+
 <div class="container-fluid Card-principal text-center bg-white rounded">
 
-    <form class="mb-3"
+    <form
+        class="mb-3"
         action="{% if funcionario and funcionario.id %}{{ url_for('atualizar_funcionario', id=funcionario.id) }}{% else %}{{ url_for('salvar_funcionario') }}{% endif %}"
         method="POST"
-        enctype="multipart/form-data">
+        enctype="multipart/form-data"
+        aria-label="{{ 'Formulário para editar funcionário' if funcionario and funcionario.id else 'Formulário para cadastrar funcionário' }}"
+    >
+
         <!--ação que executa o cadastro de um funcionario e se ja existir um parametro de id, ele edita um funcionario existente-->
+
         <div class="row">
+
             <!--Campo Nome-->
+
             <div class="col-md-6 mb-3 text-start">
+
                 <label for="funcionario_nome" class="form-label">Nome</label>
+
                 <div class="input-group">
+
                     <!--icone do lado do campo input-->
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-person-fill text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-person-fill text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
+
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                    <input type="text" name="funcionario_nome" id="funcionario_nome" class="form-control"
-                        placeholder="Digite o nome" required
-                        value="{{ funcionario.funcionario_nome if funcionario else '' }}">
+
+                    <input
+                        type="text"
+                        name="funcionario_nome"
+                        id="funcionario_nome"
+                        class="form-control"
+                        placeholder="Digite o nome"
+                        required
+                        value="{{ funcionario.funcionario_nome if funcionario else '' }}"
+                    >
 
                 </div>
+
             </div>
+
+
             <!--Campo Email-->
+
             <div class="col-md-6 mb-3 text-start">
+
                 <label for="funcionario_email" class="form-label">Email</label>
+
                 <div class="input-group">
+
                     <!--icone do lado do campo input-->
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-envelope text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-envelope text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
+
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                    <input type="email" name="funcionario_email" id="funcionario_email" class="form-control"
-                        placeholder="Digite o Email" required
-                        value="{{ funcionario.funcionario_email if funcionario else '' }}">
+
+                    <input
+                        type="email"
+                        name="funcionario_email"
+                        id="funcionario_email"
+                        class="form-control"
+                        placeholder="Digite o Email"
+                        required
+                        value="{{ funcionario.funcionario_email if funcionario else '' }}"
+                    >
 
                 </div>
+
             </div>
+
+
             <!--Campo Senha-->
+
             <div class="col-md-6 mb-3 text-start">
-                <label for="funcionario_senha" class="form-label">{{ 'Senha - (Deixe em branco caso não queira mudar a Senha)' if funcionario and funcionario.id else 'Senha' }}</label>
+
+                <label for="funcionario_senha" class="form-label">
+                    {{ 'Senha - (Deixe em branco caso não queira mudar a Senha)' if funcionario and funcionario.id else 'Senha' }}
+                </label>
+
                 <div class="input-group">
+
                     <!--icone do lado do campo input-->
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-lock-fill text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-lock-fill text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
 
-                    <input type="password" name="funcionario_senha" id="funcionario_senha" class="form-control"
+                    <input
+                        type="password"
+                        name="funcionario_senha"
+                        id="funcionario_senha"
+                        class="form-control"
                         placeholder="Digite a senha"
-                        value="">
+                        value=""
+                    >
 
                 </div>
+
             </div>
+
+
             <!--Campo CEP-->
+
             <div class="col-md-6 mb-3 text-start">
+
                 <label for="funcionario_cep" class="form-label">CEP</label>
+
                 <div class="input-group">
+
                     <!--icone do lado do campo input-->
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-geo-fill text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-geo-fill text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
+
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                    <input type="text" name="funcionario_cep" id="funcionario_cep" class="form-control"
-                        placeholder="Digite o CEP" required
-                        value="{{ funcionario.funcionario_cep if funcionario else '' }}">
+
+                    <input
+                        type="text"
+                        name="funcionario_cep"
+                        id="funcionario_cep"
+                        class="form-control"
+                        placeholder="Digite o CEP"
+                        required
+                        value="{{ funcionario.funcionario_cep if funcionario else '' }}"
+                    >
 
                 </div>
+
             </div>
+
+
+            <!--Cpf-->
+
             <div class="col-md-4 mb-3 text-start">
-                <!--Cpf-->
+
                 <label for="funcionario_cpf" class="form-label">CPF</label>
+
                 <div class="input-group">
+
                     <!--icone do lado do campo input-->
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-wallet text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-wallet text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
+
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                    <input type="text" name="funcionario_cpf" id="funcionario_cpf" class="form-control"
-                        placeholder="Digite o CPF" required maxlength="14"
-                    value="{{ funcionario.funcionario_cpf if funcionario else '' }}">
+
+                    <input
+                        type="text"
+                        name="funcionario_cpf"
+                        id="funcionario_cpf"
+                        class="form-control"
+                        placeholder="Digite o CPF"
+                        required
+                        maxlength="14"
+                        value="{{ funcionario.funcionario_cpf if funcionario else '' }}"
+                    >
+
                 </div>
+
             </div>
+
+
+            <!--Cargo-->
+
             <div class="col-md-4 mb-3 text-start">
-                <!--Cargo-->
+
                 <label for="funcionario_cargo" class="form-label">Cargo</label>
+
                 <div class="input-group">
+
                     <!--icone do lado do campo input-->
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-person-vcard text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-person-vcard text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
+
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                    <input type="text" name="funcionario_cargo" id="funcionario_cargo" class="form-control"
-                        placeholder="Digite o cargo" required
-                    value="{{ funcionario.funcionario_cargo if funcionario else '' }}">
+
+                    <input
+                        type="text"
+                        name="funcionario_cargo"
+                        id="funcionario_cargo"
+                        class="form-control"
+                        placeholder="Digite o cargo"
+                        required
+                        value="{{ funcionario.funcionario_cargo if funcionario else '' }}"
+                    >
+
                 </div>
+
             </div>
+
+
+            <!--Nível de Permissão-->
+
             <div class="col-md-4 mb-3 text-start">
-                <!--Cargo-->
-                <label for="funcionario_cargo" class="form-label">Nível de Permissão</label>
+
+                <label for="funcionario_permissao" class="form-label">
+                    Nível de Permissão
+                </label>
+
                 <div class="input-group">
+
                     <!--icone do lado do campo input-->
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-person-vcard text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-person-vcard text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
-                    <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                    <select id="funcionario_permissao" name="funcionario_permissao" class="form-select">
+
+                    <select
+                        id="funcionario_permissao"
+                        name="funcionario_permissao"
+                        class="form-select"
+                    >
 
                         {% if not funcionario %}
+
                         <option value="">Selecione</option>
                         <option value="administrador">Administrador</option>
                         <option value="funcionario">Funcionário</option>
 
                         {%else%}
+
                             {% if funcionario.funcionario_permissao == 'administrador' %}
+
                             <option value="administrador">Administrador</option>
                             <option value="funcionario">Funcionário</option>
+
                             {%else%}
+
                             <option value="funcionario">Funcionário</option>
                             <option value="administrador">Administrador</option>
-                            {%endif%} 
-                        {%endif%} 
+
+                            {%endif%}
+
+                        {%endif%}
 
                     </select>
+
                 </div>
+
             </div>
+
+
+            <!--Campo DDI-->
+
             <div class="col-md-3 mb-3 text-start">
 
-                <!--Campo DDI-->
                 <label for="funcionario_ddi" class="form-label">DDI</label>
+
                 <div class="input-group">
+
                     <!--icone do lado do campo input-->
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-telephone-fill text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-telephone-fill text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
+
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                    <input type="text" name="funcionario_ddi" id="funcionario_ddi" class="form-control"
-                        placeholder="Código Internacional" required
-                        value="{{ funcionario.funcionario_ddi if funcionario else '' }}">
+
+                    <input
+                        type="text"
+                        name="funcionario_ddi"
+                        id="funcionario_ddi"
+                        class="form-control"
+                        placeholder="Código Internacional"
+                        required
+                        value="{{ funcionario.funcionario_ddi if funcionario else '' }}"
+                    >
+
                 </div>
+
             </div>
+
+
+            <!--Campo DDD-->
 
             <div class="col-md-3 mb-3 text-start">
 
-                <!--Campo DDD-->
                 <label for="funcionario_ddd" class="form-label">DDD</label>
+
                 <div class="input-group">
+
                     <!--icone do lado do campo input-->
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-telephone-fill text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-telephone-fill text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
+
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                    <input type="text" name="funcionario_ddd" id="funcionario_ddd" class="form-control"
-                        placeholder="Código Regional" required
-                        value="{{ funcionario.funcionario_ddd if funcionario else '' }}">
+
+                    <input
+                        type="text"
+                        name="funcionario_ddd"
+                        id="funcionario_ddd"
+                        class="form-control"
+                        placeholder="Código Regional"
+                        required
+                        value="{{ funcionario.funcionario_ddd if funcionario else '' }}"
+                    >
 
                 </div>
+
             </div>
+
+
+            <!--Campo Telefone-->
 
             <div class="col-md-6 mb-3 text-start">
 
-                <!--Campo Telefone-->
-                <label for="fornecedor_telefone" class="form-label">Telefone</label>
+                <label for="funcionario_telefone" class="form-label">
+                    Telefone
+                </label>
+
                 <div class="input-group">
+
                     <!--icone do lado do campo input-->
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-telephone-fill text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-telephone-fill text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
+
                     <!--se estiver editando um funcionario, as informações do input já vai automatico com o value-->
-                    <input type="text" name="funcionario_telefone" id="funcionario_telefone" class="form-control"
-                        placeholder="Telefone de Contato" required
-                        value="{{ funcionario.funcionario_telefone if funcionario else '' }}">
+
+                    <input
+                        type="text"
+                        name="funcionario_telefone"
+                        id="funcionario_telefone"
+                        class="form-control"
+                        placeholder="Telefone de Contato"
+                        required
+                        value="{{ funcionario.funcionario_telefone if funcionario else '' }}"
+                    >
 
                 </div>
+
             </div>
+
+
+            <!--Campo Imagem-->
+
             <div class="col-md-6 mb-3">
+
                 <label for="imagem" class="form-label">
                     Imagem do Funcionário
                 </label>
-        
-                <input 
-                    type="file" 
-                    class="form-control" 
-                    id="imagem" 
+
+                <input
+                    type="file"
+                    class="form-control"
+                    id="imagem"
                     name="imagem"
                     accept="image/png, image/jpeg, image/jpg, image/webp"
+                    aria-describedby="imagem-formatos"
                 >
-        
-                <small class="text-muted">
+
+                <small
+                    id="imagem-formatos"
+                    class="text-muted"
+                >
                     Formatos permitidos: PNG, JPG, JPEG ou WEBP.
                 </small>
+
             </div>
+
         </div>
+
+
         <div class="botao-direita">
+
             <!--botão pra cadastrar ou atualizar de acordo com a ação-->
-            <button class="botao-add btn" type="submit">{{ 'Atualizar' if funcionario and funcionario.id else
-                'Cadastrar' }}</button>
+
+            <button
+                class="botao-add btn"
+                type="submit"
+                aria-label="{{ 'Atualizar funcionário' if funcionario and funcionario.id else 'Cadastrar funcionário' }}"
+            >
+                {{ 'Atualizar' if funcionario and funcionario.id else 'Cadastrar' }}
+            </button>
+
         </div>
 
     </form>
 
 </div>
+
 {% endblock %}
+

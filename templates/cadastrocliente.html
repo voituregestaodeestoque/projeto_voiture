@@ -1,40 +1,79 @@
 <!--atualizado por ryan dia 12/05/26 às 11:50-->
+<!--atualizado por raica dia 24/09/26 às 09:30-->
+
 {% extends 'base.html' %}
 
 {% block conteudo %}
+
 <!--Titulo + botao de volta para a tabelad clientes-->
+
 <div class="d-flex justify-content-between align-items-center mb-4">
+
     <div>
+
         <h2 class="titulo-pagina">
+
             <!--Icone BS-->
-            <i class="bi bi-person-fill"></i>
+            <i class="bi bi-person-fill" aria-hidden="true"></i>
+
             {{ 'Editar Cliente' if cliente and cliente.id else 'Cadastrar Cliente' }}
+
         </h2>
+
     </div>
+
     <div>
-        <a href="{{ url_for('listagem_cliente') }}" class="btn btn-success">
-            <i></i>Visualizar Clientes</a>
+
+        <a
+            href="{{ url_for('listagem_cliente') }}"
+            class="btn btn-success"
+            aria-label="Visualizar clientes cadastrados"
+        >
+            <i aria-hidden="true"></i>
+            Visualizar Clientes
+        </a>
+
     </div>
+
 </div>
+
 <!--Salva atualização dos cliente-->
+
 <form
     action="{% if cliente and cliente.id %}{{ url_for('atualizar_cliente', id=cliente.id) }}{% else %}{{ url_for('salvar_cliente') }}{% endif %}"
-    method="POST">
-
+    method="POST"
+    aria-label="{{ 'Formulário para editar cliente' if cliente and cliente.id else 'Formulário para cadastrar cliente' }}"
+>
 
     <div class="row">
+
         <!--coluna-->
+
         <div class="col-md-6 mb-3">
 
             <!--Campo Nome-->
+
             <label for="cliente_nome" class="form-label">Nome</label>
+
             <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary">
+
+                <span class="input-group-text bg-dark border-secondary" aria-hidden="true">
+
                     <!--Icone BS-->
-                    <i class="bi bi-person-fill text-white"></i>
+                    <i class="bi bi-person-fill text-white" aria-hidden="true"></i>
+
                 </span>
-                <input type="text" name="cliente_nome" id="cliente_nome" class="form-control"
-                    placeholder="Digite seu nome" required value="{{ cliente.cliente_nome if cliente else '' }}">
+
+                <input
+                    type="text"
+                    name="cliente_nome"
+                    id="cliente_nome"
+                    class="form-control"
+                    placeholder="Digite seu nome"
+                    required
+                    value="{{ cliente.cliente_nome if cliente else '' }}"
+                >
+
             </div>
 
         </div>
@@ -43,108 +82,236 @@
         <div class="col-md-6 mb-3">
 
             <!--Campo CNPJ-->
+
             <label for="cliente_cnpj" class="form-label">CNPJ</label>
+
             <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary">
+
+                <span class="input-group-text bg-dark border-secondary" aria-hidden="true">
+
                     <!--Icone BS-->
-                    <i class="bi bi-person-vcard-fill text-white"></i>
+                    <i class="bi bi-person-vcard-fill text-white" aria-hidden="true"></i>
+
                 </span>
-                <input type="text" name="cliente_cnpj" id="cliente_cnpj" class="form-control" maxlength="18"
-                    placeholder="Digite seu CNPJ" required value="{{ cliente.cliente_cnpj if cliente else '' }}">
+
+                <input
+                    type="text"
+                    name="cliente_cnpj"
+                    id="cliente_cnpj"
+                    class="form-control"
+                    maxlength="18"
+                    placeholder="Digite seu CNPJ"
+                    required
+                    value="{{ cliente.cliente_cnpj if cliente else '' }}"
+                >
+
             </div>
+
         </div>
+
 
         <div class="col-md-6 mb-3">
 
             <!--Campo CEP-->
+
             <label for="cliente_cep" class="form-label">CEP</label>
+
             <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary">
+
+                <span class="input-group-text bg-dark border-secondary" aria-hidden="true">
+
                     <!--Icone BS-->
-                    <i class="bi bi-geo-alt text-white"></i>
+                    <i class="bi bi-geo-alt text-white" aria-hidden="true"></i>
+
                 </span>
-                <input type="text" name="cliente_cep" id="cliente_cep" class="form-control" placeholder="Digite seu CEP"
-                    required value="{{ cliente.cliente_cep if cliente else '' }}">
+
+                <input
+                    type="text"
+                    name="cliente_cep"
+                    id="cliente_cep"
+                    class="form-control"
+                    placeholder="Digite seu CEP"
+                    required
+                    value="{{ cliente.cliente_cep if cliente else '' }}"
+                >
+
             </div>
+
         </div>
+
 
         <div class="col-md-6 mb-3">
 
             <!--Campo Email-->
+
             <label for="cliente_email" class="form-label">Email</label>
+
             <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary">
+
+                <span class="input-group-text bg-dark border-secondary" aria-hidden="true">
+
                     <!--Icone BS-->
-                    <i class="bi bi-envelope text-white"></i>
+                    <i class="bi bi-envelope text-white" aria-hidden="true"></i>
+
                 </span>
-                <input type="email" name="cliente_email" id="cliente_email" class="form-control"
-                    placeholder="Digite seu email" required value="{{ cliente.cliente_email if cliente else '' }}">
+
+                <input
+                    type="email"
+                    name="cliente_email"
+                    id="cliente_email"
+                    class="form-control"
+                    placeholder="Digite seu email"
+                    required
+                    value="{{ cliente.cliente_email if cliente else '' }}"
+                >
+
             </div>
+
         </div>
+
 
         <div class="col-md-3 mb-3">
 
             <!--Campo DDI-->
+
             <label for="cliente_ddi" class="form-label">DDI</label>
+
             <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary">
+
+                <span class="input-group-text bg-dark border-secondary" aria-hidden="true">
+
                     <!--Icone BS-->
-                    <i class="bi bi-telephone-fill text-white"></i>
+                    <i class="bi bi-telephone-fill text-white" aria-hidden="true"></i>
+
                 </span>
-                <input type="text" name="cliente_ddi" id="cliente_ddi" class="form-control" placeholder="DDI" required
-                    value="{{ cliente.cliente_ddi if cliente else '' }}">
+
+                <input
+                    type="text"
+                    name="cliente_ddi"
+                    id="cliente_ddi"
+                    class="form-control"
+                    placeholder="DDI"
+                    required
+                    value="{{ cliente.cliente_ddi if cliente else '' }}"
+                >
+
             </div>
+
         </div>
+
 
         <div class="col-md-3 mb-3">
 
             <!--Campo DDD-->
+
             <label for="cliente_ddd" class="form-label">DDD</label>
+
             <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary">
+
+                <span class="input-group-text bg-dark border-secondary" aria-hidden="true">
+
                     <!--Icone BS-->
-                    <i class="bi bi-telephone-fill text-white"></i>
+                    <i class="bi bi-telephone-fill text-white" aria-hidden="true"></i>
+
                 </span>
-                <input type="text" name="cliente_ddd" id="cliente_ddd" class="form-control" placeholder="DDD" required
-                    value="{{ cliente.cliente_ddd if cliente else '' }}">
+
+                <input
+                    type="text"
+                    name="cliente_ddd"
+                    id="cliente_ddd"
+                    class="form-control"
+                    placeholder="DDD"
+                    required
+                    value="{{ cliente.cliente_ddd if cliente else '' }}"
+                >
+
             </div>
+
         </div>
+
 
         <div class="col-md-6 mb-3">
 
             <!--Campo Telefone-->
+
             <label for="cliente_telefone" class="form-label">Telefone</label>
+
             <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary">
+
+                <span class="input-group-text bg-dark border-secondary" aria-hidden="true">
+
                     <!--Icone BS-->
-                    <i class="bi bi-telephone-fill text-white"></i>
+                    <i class="bi bi-telephone-fill text-white" aria-hidden="true"></i>
+
                 </span>
-                <input type="text" name="cliente_telefone" id="cliente_telefone" class="form-control"
-                    placeholder="Telefone" required value="{{ cliente.cliente_telefone if cliente else '' }}">
+
+                <input
+                    type="text"
+                    name="cliente_telefone"
+                    id="cliente_telefone"
+                    class="form-control"
+                    placeholder="Telefone"
+                    required
+                    value="{{ cliente.cliente_telefone if cliente else '' }}"
+                >
+
             </div>
+
         </div>
+
 
         <div class="mb-3">
 
             <!--Campo Descrição-->
+
             <label for="cliente_descricao" class="form-label">Descrição</label>
-            <textarea name="cliente_descricao" class="form-control" id="cliente_descricao" rows="3"></textarea>
+
+            <textarea
+                name="cliente_descricao"
+                class="form-control"
+                id="cliente_descricao"
+                rows="3"
+                aria-label="Descrição do cliente"
+            ></textarea>
+
         </div>
 
     </div>
+
+
     <div class="botao-direita">
+
         <!--Botão que envia o formulário em caso de cadastro-->
+
         {% if cliente and cliente.id %}
-        <button type="submit" class="botao-add btn ">Atualizar</button>
+
+        <button
+            type="submit"
+            class="botao-add btn"
+            aria-label="Atualizar cliente"
+        >
+            Atualizar
+        </button>
 
         <!--Botão que envia o formulário em caso de atualização-->
+
         {%else%}
-        <button type="submit" class="botao-add btn ">Cadastrar</button>
+
+        <button
+            type="submit"
+            class="botao-add btn"
+            aria-label="Cadastrar cliente"
+        >
+            Cadastrar
+        </button>
 
         {%endif%}
+
     </div>
 
 </form>
+
 </div>
 
 {% endblock %}
+```

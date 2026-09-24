@@ -1,167 +1,382 @@
+<!--atualizado por raica dia 24/09/26 às 11:43-->
+
 {% extends 'base.html' %}
 
 {% block conteudo %}
+
 <div>
-    <h2 class="titulo-pagina">
-        <i class="bi bi-box-seam"></i> Pedido de Saída nº {{ pedido.id }}
-    </h2>
+
+
+<h2 class="titulo-pagina">
+
+    <i class="bi bi-box-seam" aria-hidden="true"></i>
+    Pedido de Saída nº {{ pedido.id }}
+
+</h2>
+
+
 </div>
 
 <div class="card-info"
-    style="padding: 10px; margin-left: 20px; margin-top: 30px; margin-bottom: 50px; background-color: #fff; border-radius: 10px; width: auto;">
-    <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
-    <p><strong>Data:</strong> {{ pedido.data_pedido_saida }}</p>
-    <p><strong>Status:</strong> {{ pedido.status_pedido_saida }}</p>
+    style="padding: 10px; margin-left: 20px; margin-top: 30px; margin-bottom: 50px; background-color: #fff; border-radius: 10px; width: auto;"
+    aria-label="Informações do pedido de saída">
+
+
+<p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
+
+<p><strong>Data:</strong> {{ pedido.data_pedido_saida }}</p>
+
+<p><strong>Status:</strong> {{ pedido.status_pedido_saida }}</p>
+
+
 </div>
 
 {% if pedido.status_pedido_saida == 'PENDENTE' %}
+
 <div class="container-fluid detalhe-container d-flex justify-content-between">
-    <div class="pedido-card text-dark mb-4" style="width: 100%; display: flex; justify-content: space-around;">
 
-        <!-- Formulário de Adicionar Item -->
-        <div class="form-itens" style="width: 45%;">
-            <h3><strong><i class="bi bi-plus-circle"></i> Adicionar itens</strong></h3>
-            <form id="form-adicionar" method="POST"
-                action="{{ url_for('adicionar_item_saida', pedido_saida_id=pedido.id) }}"
-                onsubmit="return validarEstoque(event)">
-                <div class="col-md-6 mb-3">
-                    <label for="produto">Produto:</label>
-                    <select id="produto" class="form-select" name="produto_id" required>
-                        <option value="">Selecione</option>
-                        {% for produto in produto %}
-                        <option value="{{ produto.id }}" data-nome="{{ produto.produto_nome }}"
-                            data-estoque="{{ produto.estoque_quantidade }}">
-                            {{ produto.produto_nome }} - Estoque: {{ produto.estoque_quantidade }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
 
-                <div class="mb-3">
-                    <label for="produto_quantidade">Quantidade</label>
-                    <div class="input-group">
-                        <input type="number" name="quantidade" class="form-control" id="produto_quantidade"
-                            placeholder="Quantidade do produto" min="1" required>
-                    </div>
-                </div>
+<div class="pedido-card text-dark mb-4"
+    style="width: 100%; display: flex; justify-content: space-around;">
 
-                <button type="submit" class="btn botao-add btn-primary">Adicionar Item</button>
-            </form>
-        </div>
+    <!-- Formulário de Adicionar Item -->
 
-        <!-- Tabela de Itens -->
-        <div class="table-responsive" style="width: 45%;">
-            <h3><strong><i class="bi bi-basket"></i> Itens do pedido</strong></h3>
-            <table id="tabela-movimentacao" class="table table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Produto</th>
-                        <th>Quantidade</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in itens %}
-                    <tr>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.produto }}</td>
-                        <td>{{ item.detalhe_saida_quantidade }}</td>
-                        <td>
-                            <!-- Botão do modal pra excluir -->
-                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                                data-bs-target="#ModalExcluir{{ item.id }}">
-                                <i class="bi bi-trash"></i>
-                            </button>
+    <div class="form-itens" style="width: 45%;">
 
-                            <!-- Modal de Confirmação de Exclusão -->
-                            <div class="modal fade" id="ModalExcluir{{ item.id }}" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title"><strong>Deseja excluir esse produto?</strong></h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Cancelar</button>
-                                            <a href="{{ url_for('remover_item_saida', detalhe_saida_id=item.id, pedido_saida_id=pedido.id) }}"
-                                                class="btn btn-danger">Excluir</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+        <h3>
+            <strong>
+                <i class="bi bi-plus-circle" aria-hidden="true"></i>
+                Adicionar itens
+            </strong>
+        </h3>
+
+        <form id="form-adicionar"
+            method="POST"
+            action="{{ url_for('adicionar_item_saida', pedido_saida_id=pedido.id) }}"
+            onsubmit="return validarEstoque(event)"
+            aria-label="Adicionar item ao pedido de saída">
+
+            <div class="col-md-6 mb-3">
+
+                <label for="produto">Produto:</label>
+
+                <select id="produto"
+                    class="form-select"
+                    name="produto_id"
+                    required>
+
+                    <option value="">Selecione</option>
+
+                    {% for produto in produto %}
+
+                    <option value="{{ produto.id }}"
+                        data-nome="{{ produto.produto_nome }}"
+                        data-estoque="{{ produto.estoque_quantidade }}">
+
+                        {{ produto.produto_nome }} - Estoque: {{ produto.estoque_quantidade }}
+
+                    </option>
+
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
+
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label for="produto_quantidade">Quantidade</label>
+
+                <div class="input-group">
+
+                    <input type="number"
+                        name="quantidade"
+                        class="form-control"
+                        id="produto_quantidade"
+                        placeholder="Quantidade do produto"
+                        min="1"
+                        required>
+
+                </div>
+
+            </div>
+
+            <button type="submit"
+                class="btn botao-add btn-primary"
+                aria-label="Adicionar item ao pedido">
+
+                Adicionar Item
+
+            </button>
+
+        </form>
+
     </div>
+
+    <!-- Tabela de Itens -->
+
+    <div class="table-responsive" style="width: 45%;">
+
+        <h3>
+            <strong>
+                <i class="bi bi-basket" aria-hidden="true"></i>
+                Itens do pedido
+            </strong>
+        </h3>
+
+        <table id="tabela-movimentacao"
+            class="table table-hover align-middle"
+            aria-label="Itens do pedido de saída">
+
+            <thead class="table-light">
+
+                <tr>
+
+                    <th scope="col">ID</th>
+
+                    <th scope="col">Produto</th>
+
+                    <th scope="col">Quantidade</th>
+
+                    <th scope="col">Ações</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for item in itens %}
+
+                <tr>
+
+                    <td>{{ item.id }}</td>
+
+                    <td>{{ item.produto }}</td>
+
+                    <td>{{ item.detalhe_saida_quantidade }}</td>
+
+                    <td>
+
+                        <!-- Botão do modal pra excluir -->
+
+                        <button type="button"
+                            class="btn btn-sm btn-outline-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#ModalExcluir{{ item.id }}"
+                            aria-label="Excluir produto {{ item.produto }}">
+
+                            <i class="bi bi-trash" aria-hidden="true"></i>
+
+                        </button>
+
+                        <!-- Modal de Confirmação de Exclusão -->
+
+                        <div class="modal fade"
+                            id="ModalExcluir{{ item.id }}"
+                            tabindex="-1"
+                            aria-labelledby="ModalExcluirLabel{{ item.id }}"
+                            aria-hidden="true">
+
+                            <div class="modal-dialog">
+
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+
+                                        <h5 class="modal-title"
+                                            id="ModalExcluirLabel{{ item.id }}">
+
+                                            <strong>
+                                                Deseja excluir esse produto?
+                                            </strong>
+
+                                        </h5>
+
+                                        <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Fechar janela de confirmação">
+                                        </button>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+
+                                        <button type="button"
+                                            class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+
+                                            Cancelar
+
+                                        </button>
+
+                                        <a href="{{ url_for('remover_item_saida', detalhe_saida_id=item.id, pedido_saida_id=pedido.id) }}"
+                                            class="btn btn-danger"
+                                            aria-label="Excluir {{ item.produto }}">
+
+                                            Excluir
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
 </div>
 
 <h2 style="margin-left: 40px;">
-    <a href="{{ url_for('finalizar_saida', pedido_saida_id=pedido.id) }}" class="btn btn-success">Atualizar</a>
+
+
+<a href="{{ url_for('finalizar_saida', pedido_saida_id=pedido.id) }}"
+    class="btn btn-success"
+    aria-label="Atualizar pedido de saída">
+
+    Atualizar
+
+</a>
+
+
 </h2>
+
 {% endif %}
 
 <!-- MODAL DE ALERTA: ESTOQUE INSUFICIENTE -->
-<div class="modal fade" id="modalEstoqueInsuficiente" tabindex="-1" aria-labelledby="modalEstoqueLabel"
+
+<div class="modal fade"
+    id="modalEstoqueInsuficiente"
+    tabindex="-1"
+    aria-labelledby="modalEstoqueLabel"
     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header text-dark">
-                <h5 class="modal-title" id="modalEstoqueLabel"> Estoque
-                    Insuficiente</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p id="mensagemEstoqueErro">A quantidade informada é maior do que o estoque disponível.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Entendido</button>
-            </div>
+
+
+<div class="modal-dialog">
+
+    <div class="modal-content">
+
+        <div class="modal-header text-dark">
+
+            <h5 class="modal-title"
+                id="modalEstoqueLabel">
+
+                Estoque Insuficiente
+
+            </h5>
+
+            <button type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Fechar janela de estoque insuficiente">
+            </button>
+
         </div>
+
+        <div class="modal-body">
+
+            <p id="mensagemEstoqueErro"
+                role="alert"
+                aria-live="assertive">
+
+                A quantidade informada é maior do que o estoque disponível.
+
+            </p>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button type="button"
+                class="btn btn-success"
+                data-bs-dismiss="modal">
+
+                Entendido
+
+            </button>
+
+        </div>
+
     </div>
+
 </div>
 
 
+</div>
+
 <script>
+
     function validarEstoque(event) {
+
         const selectProduto = document.getElementById("produto");
+
         const quantidadeInput = document.getElementById("produto_quantidade");
 
         const produtoId = selectProduto.value;
+
         const quantidade = parseInt(quantidadeInput.value, 10);
 
         if (!produtoId || isNaN(quantidade) || quantidade <= 0) {
+
             return true; // Deixa a validação padrão do HTML5 (required) agir
+
         }
 
         const optionSelecionada = selectProduto.options[selectProduto.selectedIndex];
+
         const estoqueDisponivel = parseInt(optionSelecionada.getAttribute("data-estoque"), 10);
+
         const nomeProduto = optionSelecionada.getAttribute("data-nome");
 
         // Valida se a quantidade solicitada ultrapassa o estoque disponível
+
         if (quantidade > estoqueDisponivel) {
+
             // Bloqueia o envio do formulário
+
             event.preventDefault();
 
             // Preenche o texto da mensagem no Modal
+
             document.getElementById("mensagemEstoqueErro").innerText =
+
                 `A quantidade solicitada (${quantidade}) para o produto "${nomeProduto}" é superior ao estoque disponível (${estoqueDisponivel}).`;
 
             // Exibe o modal via Bootstrap JS API
+
             const modalElement = document.getElementById('modalEstoqueInsuficiente');
+
             const bsModal = new bootstrap.Modal(modalElement);
+
             bsModal.show();
 
             return false;
+
         }
 
         // Se a quantidade for permitida, deixa o formulário ser enviado para o servidor Flask
+
         return true;
+
     }
+
 </script>
+
 {% endblock %}
