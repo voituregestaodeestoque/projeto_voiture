@@ -6,417 +6,420 @@
 
 <div class="container-fluid py-4">
 
-<div class="mb-4">
+    <div class="mb-4">
 
-    <h2 id="titulo-perfil">
+        <h2 id="titulo-perfil">
 
-        <i class="bi bi-person-badge" aria-hidden="true"></i> Meu Perfil
+            <i class="bi bi-person-badge" aria-hidden="true"></i> Meu Perfil
 
-    </h2>
+        </h2>
 
-    <p class="text-secondary" id="descricao-perfil">
+        <p class="text-secondary" id="descricao-perfil">
 
-        Gerencie suas informações pessoais e de contato.
+            Gerencie suas informações pessoais e de contato.
 
-    </p>
+        </p>
 
-</div>
+    </div>
 
-<div class="card shadow-sm border-0">
+    <div class="card shadow-sm border-0">
 
-    <form action="{{ url_for('atualizar_perfil') }}" method="POST"
-        enctype="multipart/form-data"
-        aria-labelledby="titulo-perfil"
-        aria-describedby="descricao-perfil">
+        <form action="{{ url_for('atualizar_perfil') }}" method="POST"
+            enctype="multipart/form-data"
+            aria-labelledby="titulo-perfil"
+            aria-describedby="descricao-perfil">
 
-        <div class="row">
+            <div class="row">
 
-            <!-- FOTO -->
+                <!-- FOTO -->
 
-            <div class="col-md-4 border-end text-center p-4">
+                <div class="col-md-4 border-end text-center p-4">
 
-                <h5 id="titulo-foto-perfil">Foto de perfil</h5>
+                    <h5 id="titulo-foto-perfil">Foto de perfil</h5>
 
-                <div class="bg-light rounded-circle mx-auto"
-                    style="
-                        width: 160px;
-                        height: 160px;
-                        overflow: hidden;
-                        border-radius: 50%;
-                    "
-                    role="img"
-                    aria-label="Foto de perfil do funcionário">
-
-                    {% if funcionario %}
-
-                    <img src="data:{{ funcionario.imagem_tipo }};base64,{{ funcionario.imagem_base64 }}"
-                        alt="Imagem do perfil"
+                    <div class="bg-light rounded-circle mx-auto"
                         style="
-                            width: 100%;
-                            height: 100%;
-                            object-fit: cover;
-                            object-position: center;
-                            display: block;
+                            width: 160px;
+                            height: 160px;
+                            overflow: hidden;
                             border-radius: 50%;
-                        ">
+                        "
+                        role="img"
+                        aria-label="Foto de perfil do funcionário">
 
-                    {% else %}
+                        {% if funcionario and funcionario.imagem_base64 %}
 
-                    <i class="bi bi-person-fill text-secondary"
-                        aria-hidden="true"></i>
+                        <img src="data:{{ funcionario.imagem_tipo }};base64,{{ funcionario.imagem_base64 }}"
+                            alt="Imagem do perfil"
+                            style="
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                                object-position: center;
+                                display: block;
+                                border-radius: 50%;
+                            ">
 
-                    {% endif %}
+                        {% else %}
 
-                </div>
-
-                <p class="text-secondary" id="descricao-foto">
-
-                    PNG .<br>
-
-                    Máximo 2MB.
-
-                </p>
-
-                <label for="foto_perfil" class="btn btn-outline-primary"
-                    aria-label="Alterar foto de perfil">
-
-                    <i class="bi bi-camera" aria-hidden="true"></i>
-
-                    Alterar foto
-
-                </label>
-
-                <input type="file"
-                    id="foto_perfil"
-                    name="foto_perfil"
-                    class="d-none"
-                    accept="image/png,image/jpeg,image/gif"
-                    aria-label="Selecionar nova foto de perfil"
-                    aria-describedby="descricao-foto">
-
-            </div>
-
-
-            <!-- INFORMAÇÕES -->
-
-            <div class="col-md-8 p-4">
-
-                <h5 class="text-primary border-bottom pb-3 mb-4"
-                    id="titulo-informacoes-pessoais">
-
-                    Informações pessoais
-
-                </h5>
-
-                <div class="row">
-
-                    <!-- NOME -->
-
-                    <div class="col-md-6 mb-3">
-
-                        <label for="funcionario_nome" class="form-label">
-
-                            Nome
-
-                        </label>
-
-                        <div class="input-group">
-
-                            <span class="input-group-text" aria-hidden="true">
-
-                                <i class="bi bi-person-fill"></i>
-
-                            </span>
-
-                            <input type="text"
-                                id="funcionario_nome"
-                                name="funcionario_nome"
-                                class="form-control"
-                                placeholder="Digite o nome"
-                                required
-                                aria-required="true"
-                                value="{{ funcionario.funcionario_nome if funcionario else '' }}">
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- EMAIL -->
-
-                    <div class="col-md-6 mb-3">
-
-                        <label for="funcionario_email" class="form-label">
-
-                            E-mail
-
-                        </label>
-
-                        <div class="input-group">
-
-                            <span class="input-group-text" aria-hidden="true">
-
-                                <i class="bi bi-envelope-fill"></i>
-
-                            </span>
-
-                            <input type="email"
-                                id="funcionario_email"
-                                name="funcionario_email"
-                                class="form-control"
-                                placeholder="Digite o e-mail"
-                                required
-                                aria-required="true"
-                                autocomplete="email"
-                                value="{{ funcionario.funcionario_email if funcionario else '' }}">
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- SENHA -->
-
-                    <div class="col-md-6 mb-3">
-
-                        <label for="funcionario_senha" class="form-label">
-
-                            Senha
-
-                        </label>
-
-                        <div class="input-group">
-
-                            <span class="input-group-text" aria-hidden="true">
-
-                                <i class="bi bi-lock-fill"></i>
-
-                            </span>
-
-                            <input type="password"
-                                id="funcionario_senha"
-                                name="funcionario_senha"
-                                class="form-control"
-                                placeholder="Digite a senha"
-                                {% if not funcionario %}required{% endif %}
-                                {% if not funcionario %}aria-required="true"{% endif %}
-                                autocomplete="new-password">
-
-                        </div>
-
-                        {% if funcionario %}
-
-                        <p class="text-secondary"
-                            id="descricao-senha">
-
-                            Deixe em branco para manter a senha atual.
-
-                        </p>
+                        <i class="bi bi-person-fill text-secondary"
+                            aria-hidden="true"
+                            style="font-size: 70px; line-height: 160px;">
+                        </i>
 
                         {% endif %}
 
                     </div>
 
+                    <p class="text-secondary" id="descricao-foto">
 
-                    <!-- CPF -->
+                        PNG .<br>
 
-                    <div class="col-md-6 mb-3">
+                        Máximo 2MB.
 
-                        <label for="funcionario_cpf" class="form-label">
+                    </p>
 
-                            CPF
+                    <label for="foto_perfil" class="btn btn-outline-primary"
+                        aria-label="Alterar foto de perfil">
 
-                        </label>
+                        <i class="bi bi-camera" aria-hidden="true"></i>
 
-                        <div class="input-group">
+                        Alterar foto
 
-                            <span class="input-group-text" aria-hidden="true">
+                    </label>
 
-                                <i class="bi bi-person-vcard-fill"></i>
-
-                            </span>
-
-                            <input type="text"
-                                id="funcionario_cpf"
-                                name="funcionario_cpf"
-                                class="form-control"
-                                placeholder="000.000.000-00"
-                                required
-                                aria-required="true"
-                                value="{{ funcionario.funcionario_cpf if funcionario else '' }}">
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- CEP -->
-
-                    <div class="col-md-6 mb-3">
-
-                        <label for="funcionario_cep" class="form-label">
-
-                            CEP
-
-                        </label>
-
-                        <div class="input-group">
-
-                            <span class="input-group-text" aria-hidden="true">
-
-                                <i class="bi bi-geo-alt-fill"></i>
-
-                            </span>
-
-                            <input type="text"
-                                id="funcionario_cep"
-                                name="funcionario_cep"
-                                class="form-control"
-                                placeholder="00000-000"
-                                required
-                                aria-required="true"
-                                value="{{ funcionario.funcionario_cep if funcionario else '' }}">
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- CARGO -->
-
-                    <div class="col-md-6 mb-3">
-
-                        <label for="funcionario_cargo" class="form-label">
-
-                            Cargo
-
-                        </label>
-
-                        <div class="input-group">
-
-                            <span class="input-group-text" aria-hidden="true">
-
-                                <i class="bi bi-briefcase-fill"></i>
-
-                            </span>
-
-                            <input type="text"
-                                id="funcionario_cargo"
-                                name="funcionario_cargo"
-                                class="form-control"
-                                placeholder="Digite o cargo"
-                                required
-                                aria-required="true"
-                                value="{{ funcionario.funcionario_cargo if funcionario else '' }}">
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- DDI -->
-
-                    <div class="col-md-3 mb-3">
-
-                        <label for="funcionario_ddi" class="form-label">
-
-                            DDI
-
-                        </label>
-
-                        <input type="text"
-                            id="funcionario_ddi"
-                            name="funcionario_ddi"
-                            class="form-control"
-                            placeholder="+55"
-                            required
-                            aria-required="true"
-                            value="{{ funcionario.funcionario_ddi if funcionario else '' }}">
-
-                    </div>
-
-
-                    <!-- DDD -->
-
-                    <div class="col-md-3 mb-3">
-
-                        <label for="funcionario_ddd" class="form-label">
-
-                            DDD
-
-                        </label>
-
-                        <input type="text"
-                            id="funcionario_ddd"
-                            name="funcionario_ddd"
-                            class="form-control"
-                            placeholder="11"
-                            required
-                            aria-required="true"
-                            value="{{ funcionario.funcionario_ddd if funcionario else '' }}">
-
-                    </div>
-
-
-                    <!-- TELEFONE -->
-
-                    <div class="col-md-6 mb-3">
-
-                        <label for="funcionario_telefone" class="form-label">
-
-                            Telefone
-
-                        </label>
-
-                        <input type="text"
-                            id="funcionario_telefone"
-                            name="funcionario_telefone"
-                            class="form-control"
-                            placeholder="99999-9999"
-                            required
-                            aria-required="true"
-                            value="{{ funcionario.funcionario_telefone if funcionario else '' }}">
-
-                    </div>
+                    <input type="file"
+                        id="foto_perfil"
+                        name="foto_perfil"
+                        class="d-none"
+                        accept="image/png,image/jpeg,image/gif"
+                        aria-label="Selecionar nova foto de perfil"
+                        aria-describedby="descricao-foto">
 
                 </div>
 
 
-                <!-- BOTÕES -->
+                <!-- INFORMAÇÕES -->
 
-                <div class="border-top pt-3 mt-3 text-end">
+                <div class="col-md-8 p-4">
 
-                    <a href="{{ url_for('logout') }}"
-                        class="logout btn"
-                        style="border-color: rgb(0, 0, 0);"
-                        aria-label="Sair do sistema">
+                    <h5 class="text-primary border-bottom pb-3 mb-4"
+                        id="titulo-informacoes-pessoais">
 
-                        <i class="bi bi-box-arrow-left"
-                            aria-hidden="true"></i> Sair
+                        Informações pessoais
 
-                    </a>
+                    </h5>
 
-                    <button type="submit"
-                        class="btn btn-primary"
-                        aria-label="{{ 'Salvar alterações do perfil' if funcionario and funcionario.id else 'Cadastrar funcionário' }}">
+                    <div class="row">
 
-                        <i class="bi bi-save"
-                            aria-hidden="true"></i>
+                        <!-- NOME -->
 
-                        {{ 'Salvar alterações' if funcionario and funcionario.id else 'Cadastrar' }}
+                        <div class="col-md-6 mb-3">
 
-                    </button>
+                            <label for="funcionario_nome" class="form-label">
+
+                                Nome
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text" aria-hidden="true">
+
+                                    <i class="bi bi-person-fill"></i>
+
+                                </span>
+
+                                <input type="text"
+                                    id="funcionario_nome"
+                                    name="funcionario_nome"
+                                    class="form-control"
+                                    placeholder="Digite o nome"
+                                    required
+                                    aria-required="true"
+                                    value="{{ funcionario.funcionario_nome if funcionario else '' }}">
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="funcionario_email" class="form-label">
+
+                                E-mail
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text" aria-hidden="true">
+
+                                    <i class="bi bi-envelope-fill"></i>
+
+                                </span>
+
+                                <input type="email"
+                                    id="funcionario_email"
+                                    name="funcionario_email"
+                                    class="form-control"
+                                    placeholder="Digite o e-mail"
+                                    required
+                                    aria-required="true"
+                                    autocomplete="email"
+                                    value="{{ funcionario.funcionario_email if funcionario else '' }}">
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- SENHA -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="funcionario_senha" class="form-label">
+
+                                Senha
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text" aria-hidden="true">
+
+                                    <i class="bi bi-lock-fill"></i>
+
+                                </span>
+
+                                <input type="password"
+                                    id="funcionario_senha"
+                                    name="funcionario_senha"
+                                    class="form-control"
+                                    placeholder="Digite a senha"
+                                    {% if not funcionario %}required{% endif %}
+                                    {% if not funcionario %}aria-required="true"{% endif %}
+                                    autocomplete="new-password">
+
+                            </div>
+
+                            {% if funcionario %}
+
+                            <p class="text-secondary"
+                                id="descricao-senha">
+
+                                Deixe em branco para manter a senha atual.
+
+                            </p>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- CPF -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="funcionario_cpf" class="form-label">
+
+                                CPF
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text" aria-hidden="true">
+
+                                    <i class="bi bi-person-vcard-fill"></i>
+
+                                </span>
+
+                                <input type="text"
+                                    id="funcionario_cpf"
+                                    name="funcionario_cpf"
+                                    class="form-control"
+                                    placeholder="000.000.000-00"
+                                    required
+                                    aria-required="true"
+                                    value="{{ funcionario.funcionario_cpf if funcionario else '' }}">
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CEP -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="funcionario_cep" class="form-label">
+
+                                CEP
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text" aria-hidden="true">
+
+                                    <i class="bi bi-geo-alt-fill"></i>
+
+                                </span>
+
+                                <input type="text"
+                                    id="funcionario_cep"
+                                    name="funcionario_cep"
+                                    class="form-control"
+                                    placeholder="00000-000"
+                                    required
+                                    aria-required="true"
+                                    value="{{ funcionario.funcionario_cep if funcionario else '' }}">
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CARGO -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="funcionario_cargo" class="form-label">
+
+                                Cargo
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text" aria-hidden="true">
+
+                                    <i class="bi bi-briefcase-fill"></i>
+
+                                </span>
+
+                                <input type="text"
+                                    id="funcionario_cargo"
+                                    name="funcionario_cargo"
+                                    class="form-control"
+                                    placeholder="Digite o cargo"
+                                    required
+                                    aria-required="true"
+                                    value="{{ funcionario.funcionario_cargo if funcionario else '' }}">
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DDI -->
+
+                        <div class="col-md-3 mb-3">
+
+                            <label for="funcionario_ddi" class="form-label">
+
+                                DDI
+
+                            </label>
+
+                            <input type="text"
+                                id="funcionario_ddi"
+                                name="funcionario_ddi"
+                                class="form-control"
+                                placeholder="+55"
+                                required
+                                aria-required="true"
+                                value="{{ funcionario.funcionario_ddi if funcionario else '' }}">
+
+                        </div>
+
+
+                        <!-- DDD -->
+
+                        <div class="col-md-3 mb-3">
+
+                            <label for="funcionario_ddd" class="form-label">
+
+                                DDD
+
+                            </label>
+
+                            <input type="text"
+                                id="funcionario_ddd"
+                                name="funcionario_ddd"
+                                class="form-control"
+                                placeholder="11"
+                                required
+                                aria-required="true"
+                                value="{{ funcionario.funcionario_ddd if funcionario else '' }}">
+
+                        </div>
+
+
+                        <!-- TELEFONE -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="funcionario_telefone" class="form-label">
+
+                                Telefone
+
+                            </label>
+
+                            <input type="text"
+                                id="funcionario_telefone"
+                                name="funcionario_telefone"
+                                class="form-control"
+                                placeholder="99999-9999"
+                                required
+                                aria-required="true"
+                                value="{{ funcionario.funcionario_telefone if funcionario else '' }}">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BOTÕES -->
+
+                    <div class="border-top pt-3 mt-3 text-end">
+
+                        <a href="{{ url_for('logout') }}"
+                            class="logout btn"
+                            style="border-color: rgb(0, 0, 0);"
+                            aria-label="Sair do sistema">
+
+                            <i class="bi bi-box-arrow-left"
+                                aria-hidden="true"></i> Sair
+
+                        </a>
+
+                        <button type="submit"
+                            class="btn btn-primary"
+                            aria-label="{{ 'Salvar alterações do perfil' if funcionario and funcionario.id else 'Cadastrar funcionário' }}">
+
+                            <i class="bi bi-save"
+                                aria-hidden="true"></i>
+
+                            {{ 'Salvar alterações' if funcionario and funcionario.id else 'Cadastrar' }}
+
+                        </button>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+        </form>
 
-    </form>
-
-</div>
+    </div>
 
 </div>
 
 {% endblock %}
+
