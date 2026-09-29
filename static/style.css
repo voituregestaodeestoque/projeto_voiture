@@ -348,3 +348,80 @@ select#funcionario_id {
     color: #888;
     padding: 10px 0;
 }
+
+.acoes-produto {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+    width: 100%;
+}
+
+/* MAIS DETALHES */
+.botao-detalhes {
+    flex: 1;
+    height: 45px;
+
+    border: none;
+    border-radius: 9px;
+
+    background-color: #126b86;
+    color: white;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.botao-detalhes:hover {
+    background-color: #0d586e;
+    transform: translateY(-1px);
+}
+
+/* BOTÕES EDITAR E EXCLUIR */
+.botao-acao {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+    background-color: white;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.botao-acao i {
+    font-size: 17px;
+}
+
+/* EDITAR */
+.botao-editar {
+    color: #0d6efd;
+    border: 1px solid #0d6efd;
+}
+
+.botao-editar:hover {
+    background-color: #0d6efd;
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* EXCLUIR */
+.botao-excluir {
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.botao-excluir:hover {
+    background-color: #dc3545;
+    color: white;
+    transform: translateY(-1px);
+}

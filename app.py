@@ -535,7 +535,7 @@ def get_estoque_form():
 def api_listagem_produto():
     produtos = Estoque.produtos_mobile()
     return jsonify(produtos), 200
-
+'''
 @app.route("/listagem_produto")
 @login_obrigatorio
 def listagem_produto():
@@ -547,7 +547,7 @@ def listagem_produto():
     # REQUISIÇÃO DO REACT NATIVE
     # ==========================================
 
-    '''if 'application/json' in request.headers.get('Accept', ''):
+    if 'application/json' in request.headers.get('Accept', ''):
 
         produtos_mobile = []
 
@@ -569,12 +569,12 @@ def listagem_produto():
 
     # ==========================================
     # REQUISIÇÃO DO SITE
-    # =========================================='''
+    # ==========================================
 
     return render_template(
         'listagem_produto.html',
         produto=produtos
-    )
+    )'''
 
 
 
@@ -627,11 +627,11 @@ def salvar_produto():
             estoque.insert()
         
         flash("Produto cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("listagem_produto"))
+        return redirect(url_for("listagem_estoque"))
 
     except Exception as e:
         flash(f"Erro ao cadastrar produto: {e}", "erro")
-        return render_template("cadastroproduto.html", produto=dados)
+        return render_template("estoque.html", produto=dados)
 
 
 @app.route("/editar_produto/<int:id>")
@@ -640,7 +640,7 @@ def editar_produto(id):
     produto = Produto.find_by_id(id)
     if not produto:
         flash("Produto não encontrado.", "erro")
-        return redirect(url_for("listagem_produto"))
+        return redirect(url_for("listagem_estoque"))
     return render_template("cadastroproduto.html", produto=produto)
 
 
@@ -650,7 +650,7 @@ def atualizar_produto(id):
     produto_existente = Produto.find_by_id(id)
     if not produto_existente:
         flash("Produto não encontrado.", "erro")
-        return redirect(url_for("listagem_produto"))
+        return redirect(url_for("listagem_estoque"))
 
     arquivo = request.files.get("imagem")
 
@@ -684,11 +684,11 @@ def atualizar_produto(id):
     try:
         if not Produto.find_by_id(id):
             flash("Produto não encontrado.", "erro")
-            return redirect(url_for("listagem_produto"))
+            return redirect(url_for("listagem_estoque"))
 
         produto.update(id)
         flash("Produto atualizado com sucesso.", "sucesso")
-        return redirect(url_for("listagem_produto"))
+        return redirect(url_for("listagem_estoque"))
     except Exception as e:
         dados["id"] = id
         flash(f"Erro ao atualizar produto: {e}", "erro")
@@ -704,7 +704,7 @@ def deletar_produto(id):
             flash(
                 "Não é possível excluir o produto porque ele está vinculado a outros serviços.","erro"
             )
-            return redirect(url_for("listagem_produto"))
+            return redirect(url_for("listagem_estoque"))
 
         Estoque.delete_by_produto(id)
         Produto.safe_delete(id)
@@ -714,7 +714,7 @@ def deletar_produto(id):
         flash(str(e), "erro")
     except Exception as e:
         flash(f"Erro ao excluir produto: {e}", "erro")
-    return redirect(url_for("listagem_produto"))
+    return redirect(url_for("listagem_estoque"))
 
 # -----> Fim: Produto
 ############################################################################################################
