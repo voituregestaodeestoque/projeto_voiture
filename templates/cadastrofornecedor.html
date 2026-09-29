@@ -1,29 +1,44 @@
 <!--Editado por Júlia em 07/05/2026 às 15h57-->
+<!--atualizado por raica dia 24/09/26 às 09:30-->
 
 {% extends 'base.html' %}
 
 {% block conteudo %}
-
 
 <!--Fornecedor-->
 
 <div id="template_fornecedor">
 
     <!-- TÍTULO + BOTÃO -->
+
     <div class="d-flex justify-content-between align-items-center mb-4">
+
         <div>
+
             <h2 class="titulo-pagina">
+
                 <!--Icone BS-->
-                <i class="bi bi-briefcase"></i>
+                <i class="bi bi-briefcase" aria-hidden="true"></i>
+
                 {{ 'Editar Fornecedor' if fornecedor and fornecedor.id else 'Cadastrar Fornecedor' }}
+
             </h2>
 
         </div>
 
         <div>
+
             <!--Botão para visualizar fornecedores/voltar para a tela de listagem durante o cadastro-->
-            <a href="{{ url_for('listagem_fornecedor') }}" class="btn btn-success">
-                <i></i>Visualizar fornecedores</a>
+
+            <a
+                href="{{ url_for('listagem_fornecedor') }}"
+                class="btn btn-success"
+                aria-label="Visualizar fornecedores cadastrados"
+            >
+                <i aria-hidden="true"></i>
+                Visualizar fornecedores
+            </a>
+
         </div>
 
     </div>
@@ -31,22 +46,43 @@
 
     <!--Formulário para cadastro de fornecedor-->
 
-    <form id="form_fornecedor"
+    <form
+        id="form_fornecedor"
         action="{% if fornecedor and fornecedor.id %}{{ url_for('atualizar_fornecedor', id=fornecedor.id) }}{% else %}{{ url_for('salvar_fornecedor') }}{% endif %}"
-        method="POST">
+        method="POST"
+        aria-label="{{ 'Formulário para editar fornecedor' if fornecedor and fornecedor.id else 'Formulário para cadastrar fornecedor' }}"
+    >
 
         <div class="row">
+
             <div class="col-md-6 mb-3">
 
                 <!--Campo Nome-->
+
                 <label for="fornecedor_nome" class="form-label">Nome</label>
+
                 <div class="input-group">
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-person-fill text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-person-fill text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
-                    <input name="fornecedor_nome" type="text" class="form-control" id="fornecedor_nome"
-                        placeholder="Nome do Representante" required
-                        value="{{ fornecedor.fornecedor_nome if fornecedor else '' }}">
+
+                    <input
+                        name="fornecedor_nome"
+                        type="text"
+                        class="form-control"
+                        id="fornecedor_nome"
+                        placeholder="Nome do Representante"
+                        required
+                        value="{{ fornecedor.fornecedor_nome if fornecedor else '' }}"
+                    >
+
                 </div>
 
             </div>
@@ -55,114 +91,254 @@
             <div class="col-md-6 mb-3">
 
                 <!--Campo CNPJ-->
+
                 <label for="fornecedor_cnpj" class="form-label">CNPJ</label>
+
                 <div class="input-group">
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-person-vcard-fill text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-person-vcard-fill text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
-                    <input name="fornecedor_cnpj" type="text" class="form-control" id="fornecedor_cnpj"
-                        placeholder="00.000.000/0000-00" required
-                        value="{{ fornecedor.fornecedor_cnpj if fornecedor else '' }}" maxlength="18">
+
+                    <input
+                        name="fornecedor_cnpj"
+                        type="text"
+                        class="form-control"
+                        id="fornecedor_cnpj"
+                        placeholder="00.000.000/0000-00"
+                        required
+                        value="{{ fornecedor.fornecedor_cnpj if fornecedor else '' }}"
+                        maxlength="18"
+                    >
+
                 </div>
+
             </div>
+
 
             <div class="col-md-6 mb-3">
 
                 <!--Campo CEP-->
+
                 <label for="fornecedor_cep" class="form-label">CEP</label>
+
                 <div class="input-group">
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-geo-alt text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-geo-alt text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
-                    <input name="fornecedor_cep" type="text" class="form-control" id="fornecedor_cep"
-                        placeholder="00000-000" required value="{{ fornecedor.fornecedor_cep if fornecedor else '' }}"
-                        maxlength="8">
+
+                    <input
+                        name="fornecedor_cep"
+                        type="text"
+                        class="form-control"
+                        id="fornecedor_cep"
+                        placeholder="00000-000"
+                        required
+                        value="{{ fornecedor.fornecedor_cep if fornecedor else '' }}"
+                        maxlength="8"
+                    >
+
                 </div>
+
             </div>
+
 
             <div class="col-md-6 mb-3">
 
                 <!--Campo Email-->
+
                 <label for="fornecedor_email" class="form-label">Email</label>
+
                 <div class="input-group">
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-envelope text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-envelope text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
-                    <input name="fornecedor_email" type="email" class="form-control" id="fornecedor_email"
-                        placeholder="Email de Contato" required
-                        value="{{ fornecedor.fornecedor_email if fornecedor else '' }}">
+
+                    <input
+                        name="fornecedor_email"
+                        type="email"
+                        class="form-control"
+                        id="fornecedor_email"
+                        placeholder="Email de Contato"
+                        required
+                        value="{{ fornecedor.fornecedor_email if fornecedor else '' }}"
+                    >
+
                 </div>
+
             </div>
+
 
             <div class="col-md-3 mb-3">
 
                 <!--Campo DDI-->
+
                 <label for="fornecedor_ddi" class="form-label">DDI</label>
+
                 <div class="input-group">
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-telephone-fill text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-telephone-fill text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
-                    <input name="fornecedor_ddi" type="text" class="form-control" id="fornecedor_ddi"
-                        placeholder="Código Internacional" required
-                        value="{{ fornecedor.fornecedor_ddi if fornecedor else '' }}">
+
+                    <input
+                        name="fornecedor_ddi"
+                        type="text"
+                        class="form-control"
+                        id="fornecedor_ddi"
+                        placeholder="Código Internacional"
+                        required
+                        value="{{ fornecedor.fornecedor_ddi if fornecedor else '' }}"
+                    >
+
                 </div>
+
             </div>
+
 
             <div class="col-md-3 mb-3">
 
                 <!--Campo DDD-->
+
                 <label for="fornecedor_ddd" class="form-label">DDD</label>
+
                 <div class="input-group">
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-telephone-fill text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-telephone-fill text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
-                    <input name="fornecedor_ddd" type="text" class="form-control" id="fornecedor_ddd"
-                        placeholder="Código Regional" required
-                        value="{{ fornecedor.fornecedor_ddd if fornecedor else '' }}">
+
+                    <input
+                        name="fornecedor_ddd"
+                        type="text"
+                        class="form-control"
+                        id="fornecedor_ddd"
+                        placeholder="Código Regional"
+                        required
+                        value="{{ fornecedor.fornecedor_ddd if fornecedor else '' }}"
+                    >
+
                 </div>
+
             </div>
+
 
             <div class="col-md-6 mb-3">
 
                 <!--Campo Telefone-->
+
                 <label for="fornecedor_telefone" class="form-label">Telefone</label>
+
                 <div class="input-group">
-                    <span class="input-group-text bg-dark border-secondary">
-                        <i class="bi bi-telephone-fill text-white"></i>
+
+                    <span
+                        class="input-group-text bg-dark border-secondary"
+                        aria-hidden="true"
+                    >
+                        <i
+                            class="bi bi-telephone-fill text-white"
+                            aria-hidden="true"
+                        ></i>
                     </span>
-                    <input name="fornecedor_telefone" type="tel" class="form-control" id="fornecedor_telefone"
-                        placeholder="Telefone de Contato" required
-                        value="{{ fornecedor.fornecedor_telefone if fornecedor else '' }}">
+
+                    <input
+                        name="fornecedor_telefone"
+                        type="tel"
+                        class="form-control"
+                        id="fornecedor_telefone"
+                        placeholder="Telefone de Contato"
+                        required
+                        value="{{ fornecedor.fornecedor_telefone if fornecedor else '' }}"
+                    >
+
                 </div>
+
             </div>
+
 
             <div class="mb-3">
 
                 <!--Campo Descrição-->
+
                 <label for="fornecedor_descricao" class="form-label">Descrição</label>
-                <textarea name="fornecedor_descricao" class="form-control" id="fornecedor_descricao"
-                    rows="3"></textarea>
+
+                <textarea
+                    name="fornecedor_descricao"
+                    class="form-control"
+                    id="fornecedor_descricao"
+                    rows="3"
+                ></textarea>
+
             </div>
 
         </div>
 
+
         <div class="botao-direita">
 
             <!--Botão que envia o formulário em caso de cadastro-->
+
             {% if fornecedor and fornecedor.id %}
-            <button type="submit" class="botao-add btn">Atualizar</button>
+
+            <button
+                type="submit"
+                class="botao-add btn"
+                aria-label="Atualizar fornecedor"
+            >
+                Atualizar
+            </button>
 
             <!--Botão que envia o formulário em caso de atualização-->
+
             {%else%}
-            <button type="submit" class="botao-add btn">Cadastrar</button>
+
+            <button
+                type="submit"
+                class="botao-add btn"
+                aria-label="Cadastrar fornecedor"
+            >
+                Cadastrar
+            </button>
 
             {%endif%}
-        </div>
 
+        </div>
 
     </form>
 
 </div>
 
-
 {% endblock %}
+

@@ -1,180 +1,342 @@
+<!--atualizado por raica dia 24/09/26 às 11:36-->
+
 {% extends 'base.html' %}
 
 {% block conteudo %}
+
 <h2></h2>
 
 <div>
-    <h2 class="titulo-pagina">
-        <i class="bi bi-box-seam"></i> Pedido de Entrada <strong>Nº {{ pedido.id }}</strong>
-    </h2>
+
+
+<h2 class="titulo-pagina">
+
+    <i class="bi bi-box-seam" aria-hidden="true"></i> Pedido de Entrada <strong>Nº {{ pedido.id }}</strong>
+
+</h2>
+
 
 </div>
 
 <div class="card-info"
-    style="padding: 10px; margin-left: 20px; margin-top: 30px; margin-bottom: 50px; background-color: #fff; border-radius: 10px; width: auto;">
-    <p><strong>Fornecedor:</strong> {{ pedido.fornecedor }}</p>
-    <p><strong>Data:</strong> {{ pedido.data_pedido_entrada }}</p>
-    <p><strong>Status:</strong> {{ pedido.status_pedido_entrada }}</p>
+    style="padding: 10px; margin-left: 20px; margin-top: 30px; margin-bottom: 50px; background-color: #fff; border-radius: 10px; width: auto;"
+    aria-label="Informações do pedido de entrada">
+
+
+<p><strong>Fornecedor:</strong> {{ pedido.fornecedor }}</p>
+
+<p><strong>Data:</strong> {{ pedido.data_pedido_entrada }}</p>
+
+<p><strong>Status:</strong> {{ pedido.status_pedido_entrada }}</p>
+
+
 </div>
 
 {% if pedido.status_pedido_entrada == 'PENDENTE' %}
 
 <div class="container-fluid detalhe-container d-flex justify-content-between">
 
-    <div class="pedido-card text-dark mb-4" style="width: 100%; display: flex; justify-content: space-around;">
-        <div class="form-itens" style="width: 50%;">
 
-            <h3><strong><i class="bi bi-plus-circle"></i> Adicionar itens</strong></h3>
-            <form method="POST" action="{{ url_for('adicionar_item_entrada', pedido_entrada_id=pedido.id) }}">
+<div class="pedido-card text-dark mb-4"
+    style="width: 100%; display: flex; justify-content: space-around;">
 
-                <div class="col-md-6 mb-3">
-                    <label for="produto">Produto:</label>
-                    <select id="produto" class="form-select" name="produto_id">
-                        <option value="">Selecione</option>
-                        {% for produto in produto %}
-                        <option value="{{ produto.id }}" data-nome="{{ produto.produto_nome }}">
-                            {{ produto.produto_nome }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
+    <div class="form-itens" style="width: 50%;">
 
-                <div class="mb-3">
-                    <label for="produto_quantidade">Quantidade</label>
-                    <div class="input-group">
-                        <input type="number" name="quantidade" class="form-control" id="produto_quantidade"
-                            placeholder="Quantidade do produto" min="1">
-                    </div>
-                </div>
+        <h3>
+            <strong>
+                <i class="bi bi-plus-circle" aria-hidden="true"></i>
+                Adicionar itens
+            </strong>
+        </h3>
 
-                <button type="submit" class="btn botao-add">
-                    Adicionar item
-                </button>
-            </form>
-        </div>
-        {% endif %}
+        <form method="POST"
+            action="{{ url_for('adicionar_item_entrada', pedido_entrada_id=pedido.id) }}"
+            aria-label="Adicionar item ao pedido de entrada">
 
+            <div class="col-md-6 mb-3">
 
+                <label for="produto">Produto:</label>
 
-        <div class="table-responsive" style="width: 45%; ">
-            <h3><strong><i class="bi bi-basket"></i> Itens do pedido</strong></h3>
+                <select id="produto"
+                    class="form-select"
+                    name="produto_id"
+                    aria-label="Selecione o produto">
 
-            <table id="tabela-movimentacao" class="table table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Produto</th>
-                        <th>Quantidade</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in itens %}
-                    <tr>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.produto }}</td>
-                        <td>{{ item.detalhe_entrada_quantidade}}</td>
-                        <td>
-                            {% if pedido.status_pedido_entrada == 'PENDENTE' %}
-                            <!-- Botão do modal pra excluir -->
-                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                                data-bs-target="#Modal{{item.id}}">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                    <option value="">Selecione</option>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="Modal{{item.id}}" tabindex="-1"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja excluir
-                                                    esse produto?</strong></h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Cancelar</button>
-                                            <!--Ação para excluir o produto-->
-                                            <a href="{{ url_for('remover_item_entrada', detalhe_entrada_id=item.id, pedido_entrada_id=pedido.id) }}"
-                                                class="btn btn-danger">
-                                                <strong>Excluir</strong>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% else %}
-                            -
-                            {% endif %}
-                        </td>
-                    </tr>
+                    {% for produto in produto %}
+
+                    <option value="{{ produto.id }}"
+                        data-nome="{{ produto.produto_nome }}">
+                        {{ produto.produto_nome }}
+                    </option>
+
                     {% endfor %}
-                </tbody>
 
-                <tbody id="itens-novos"></tbody>
-            </table>
+                </select>
 
+            </div>
 
-        </div>
+            <div class="mb-3">
+
+                <label for="produto_quantidade">Quantidade</label>
+
+                <div class="input-group">
+
+                    <input type="number"
+                        name="quantidade"
+                        class="form-control"
+                        id="produto_quantidade"
+                        placeholder="Quantidade do produto"
+                        min="1">
+
+                </div>
+
+            </div>
+
+            <button type="submit"
+                class="btn botao-add"
+                aria-label="Adicionar item ao pedido">
+
+                Adicionar item
+
+            </button>
+
+        </form>
+
     </div>
+
+    {% endif %}
+
+    <div class="table-responsive" style="width: 45%; ">
+
+        <h3>
+            <strong>
+                <i class="bi bi-basket" aria-hidden="true"></i>
+                Itens do pedido
+            </strong>
+        </h3>
+
+        <table id="tabela-movimentacao"
+            class="table table-hover align-middle"
+            aria-label="Itens do pedido de entrada">
+
+            <thead class="table-light">
+
+                <tr>
+
+                    <th scope="col">ID</th>
+
+                    <th scope="col">Produto</th>
+
+                    <th scope="col">Quantidade</th>
+
+                    <th scope="col">Ações</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for item in itens %}
+
+                <tr>
+
+                    <td>{{ item.id }}</td>
+
+                    <td>{{ item.produto }}</td>
+
+                    <td>{{ item.detalhe_entrada_quantidade}}</td>
+
+                    <td>
+
+                        {% if pedido.status_pedido_entrada == 'PENDENTE' %}
+
+                        <!-- Botão do modal pra excluir -->
+
+                        <button type="button"
+                            class="btn btn-sm btn-outline-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#Modal{{item.id}}"
+                            aria-label="Excluir produto {{ item.produto }}">
+
+                            <i class="bi bi-trash" aria-hidden="true"></i>
+
+                        </button>
+
+                        <!-- Modal -->
+
+                        <div class="modal fade"
+                            id="Modal{{item.id}}"
+                            tabindex="-1"
+                            aria-labelledby="ModalLabel{{item.id}}"
+                            aria-hidden="true">
+
+                            <div class="modal-dialog">
+
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+
+                                        <h1 class="modal-title fs-5"
+                                            id="ModalLabel{{item.id}}">
+
+                                            <strong>
+                                                Deseja excluir esse produto?
+                                            </strong>
+
+                                        </h1>
+
+                                        <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Fechar janela de confirmação">
+                                        </button>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+
+                                        <button type="button"
+                                            class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+
+                                            Cancelar
+
+                                        </button>
+
+                                        <!--Ação para excluir o produto-->
+
+                                        <a href="{{ url_for('remover_item_entrada', detalhe_entrada_id=item.id, pedido_entrada_id=pedido.id) }}"
+                                            class="btn btn-danger"
+                                            aria-label="Excluir {{ item.produto }}">
+
+                                            <strong>Excluir</strong>
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {% else %}
+
+                        
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+            <tbody id="itens-novos"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
 </div>
 
 {% if pedido.status_pedido_entrada == 'PENDENTE' %}
+
 <h2 style="margin-left: 40px;">
-    <a href="{{ url_for('finalizar_entrada', pedido_entrada_id=pedido.id) }}" class="btn btn-success">Atualizar</a>
+
+
+<a href="{{ url_for('finalizar_entrada', pedido_entrada_id=pedido.id) }}"
+    class="btn btn-success"
+    aria-label="Atualizar pedido de entrada">
+
+    Atualizar
+
+</a>
+
+
 </h2>
+
 {% endif %}
 
-
-
 <script>
+
     let itens = [];
 
     function adicionarItem() {
+
         const selectProduto = document.getElementById("produto");
+
         const quantidadeInput = document.getElementById("produto_quantidade");
 
         const produtoId = selectProduto.value;
+
         const quantidade = parseInt(quantidadeInput.value);
 
         if (!produtoId) {
+
             alert("Selecione um produto.");
+
             return;
+
         }
 
         if (!quantidade || quantidade <= 0) {
+
             alert("Informe uma quantidade maior que zero.");
+
             return;
+
         }
 
         const option = selectProduto.options[selectProduto.selectedIndex];
+
         const nome = option.getAttribute("data-nome");
 
         const itemExistente = itens.find(item => item.produto_id === produtoId);
 
         if (itemExistente) {
+
             const novaQuantidade = itemExistente.quantidade + quantidade;
 
             itemExistente.quantidade = novaQuantidade;
+
         } else {
+
             itens.push({
+
                 produto_id: produtoId,
+
                 nome: nome,
+
                 quantidade: quantidade,
+
             });
+
         }
 
         quantidadeInput.value = "";
+
         selectProduto.value = "";
 
         atualizarTabela();
+
     }
 
     function removerItem(index) {
+
         itens.splice(index, 1);
+
         atualizarTabela();
+
     }
 
     function atualizarTabela() {
@@ -182,29 +344,50 @@
         const tbody = document.getElementById("itens-novos");
 
         // Limpa SOMENTE os itens adicionados pelo JavaScript
+
         tbody.innerHTML = "";
 
         itens.forEach((item, index) => {
 
             const linha = `
+
                 <tr>
+
                     <td>${item.produto_id}</td>
+
                     <td>${item.nome}</td>
+
                     <td>${item.quantidade}</td>
+
                     <td>
-                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerItem(${index})"><i class="bi bi-trash"></i></button>
+
+                        <button type="button"
+                            class="btn btn-sm btn-outline-danger"
+                            onclick="removerItem(${index})"
+                            aria-label="Remover ${item.nome}">
+
+                            <i class="bi bi-trash" aria-hidden="true"></i>
+
+                        </button>
+
                     </td>
+
                 </tr>
+
             `;
 
             tbody.innerHTML += linha;
 
-
         });
+
     }
 
     function prepararEnvio() {
+
         document.getElementById("itens_json").value = JSON.stringify(itens);
+
     }
+
 </script>
+
 {% endblock %}

@@ -1,3 +1,5 @@
+<!--atualizado por raica dia 24/09/26 às 12:04-->
+
 {% extends 'base.html' %}
 
 {% block conteudo %}
@@ -5,220 +7,436 @@
 <div class="container-fluid">
 
     <div class="mb-4">
+
         <h2 class="titulo-pagina">
-            <i class="bi bi-arrow-right-square"></i> Movimentações saída
+            <i class="bi bi-arrow-right-square" aria-hidden="true"></i>
+            Movimentações saída
         </h2>
+
         <p class="text-muted mb-0">Pedido de saída</p>
+
     </div>
-    <div class=" produto-container d-flex justify-content-between">
+
+    <div class="produto-container d-flex justify-content-between">
+
         <!-- Lado Esquerdo: Formulário de Adicionar Itens -->
         <div class="pedido-card text-dark" style="width: 45%;">
-            <form id="form_pedido" method="POST" action="{{ url_for('nova_saida') }}"
-                onsubmit="return prepararEnvio(event)">
+
+            <form
+                id="form_pedido"
+                method="POST"
+                action="{{ url_for('nova_saida') }}"
+                onsubmit="return prepararEnvio(event)"
+                aria-label="Formulário de pedido de saída">
+
                 <div class="row">
+
                     <div class="col-md-12 mb-3">
+
                         <label for="cliente">Cliente</label>
-                        <select id="cliente" name="cliente_id" class="form-select" required>
+
+                        <select
+                            id="cliente"
+                            name="cliente_id"
+                            class="form-select"
+                            required
+                            aria-label="Selecionar cliente">
+
                             <option value="">Cliente</option>
+
                             {% for cliente in clientes %}
+
                             <option value="{{ cliente.id }}">
                                 {{ cliente.cliente_nome }}
                             </option>
+
                             {% endfor %}
+
                         </select>
+
                     </div>
 
                     <h5>Itens do Pedido</h5>
 
                     <div class="mb-3">
+
                         <label for="produto">Produto</label>
-                        <select id="produto" class="form-select">
+
+                        <select
+                            id="produto"
+                            class="form-select"
+                            aria-label="Selecionar produto">
+
                             <option value="">Produto</option>
+
                             {% for produto in produto %}
-                            <option value="{{ produto.id }}" data-nome="{{ produto.produto_nome }}"
+
+                            <option
+                                value="{{ produto.id }}"
+                                data-nome="{{ produto.produto_nome }}"
                                 data-estoque="{{ produto.estoque_quantidade }}">
+
                                 {{ produto.produto_nome }} - Estoque: {{ produto.estoque_quantidade }}
+
                             </option>
+
                             {% endfor %}
+
                         </select>
+
                     </div>
 
                     <div class="col-md-6 mb-3">
+
                         <label for="produto_quantidade">Quantidade</label>
+
                         <div class="input-group">
-                            <input type="number" class="form-control" id="produto_quantidade" placeholder="Quantidade"
-                                min="1">
+
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="produto_quantidade"
+                                placeholder="Quantidade"
+                                min="1"
+                                aria-label="Quantidade do produto">
+
                         </div>
+
                     </div>
 
+                    <button
+                        type="button"
+                        class="btn botao-add btn-primary"
+                        onclick="adicionarItem()"
+                        aria-label="Adicionar item ao pedido">
 
-                    <button type="button" class="btn botao-add btn-primary" onclick="adicionarItem()">
                         Adicionar item
+
                     </button>
 
-
                     <!-- Campo oculto contendo a lista JSON dos itens do pedido -->
-                    <input type="hidden" name="itens_json" id="itens_json">
+                    <input
+                        type="hidden"
+                        name="itens_json"
+                        id="itens_json">
+
                 </div>
+
             </form>
+
         </div>
 
         <!-- Lado Direito: Tabela de Itens Adicionados -->
         <div class="pedido-card text-dark" style="width: 45%;">
-            <div class="table-responsive">
-                <table id="tabela-itens" class="table table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Produto</th>
-                            <th scope="col">Quantidade</th>
-                            <th scope="col" class="text-end">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
 
+            <div class="table-responsive">
+
+                <table
+                    id="tabela-itens"
+                    class="table table-hover align-middle"
+                    aria-label="Itens adicionados ao pedido de saída">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th scope="col">ID</th>
+
+                            <th scope="col">Produto</th>
+
+                            <th scope="col">Quantidade</th>
+
+                            <th scope="col" class="text-end">Ações</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
                     </tbody>
+
                 </table>
 
-                <button type="submit" form="form_pedido" class="btn btn-success mt-3">
+                <button
+                    type="submit"
+                    form="form_pedido"
+                    class="btn btn-success mt-3"
+                    aria-label="Salvar pedido de saída">
+
                     Salvar Pedido
+
                 </button>
+
             </div>
+
         </div>
+
     </div>
+
 
     <!-- MODAL BOOTSTRAP DE ERRO / ESTOQUE INSUFICIENTE -->
-    <div class="modal fade" id="modalAlerta" tabindex="-1" aria-labelledby="modalAlertaLabel" aria-hidden="true">
+    <div
+        class="modal fade"
+        id="modalAlerta"
+        tabindex="-1"
+        aria-labelledby="modalAlertaLabel"
+        aria-hidden="true">
+
         <div class="modal-dialog">
+
             <div class="modal-content">
+
                 <div class="modal-header text-dark">
-                    <h5 class="modal-title" id="modalAlertaLabel">
+
+                    <h5
+                        class="modal-title"
+                        id="modalAlertaLabel">
+
                         Atenção
+
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Fechar janela de alerta">
+                    </button>
+
                 </div>
+
                 <div class="modal-body">
-                    <p id="mensagemAlertaText"></p>
+
+                    <p
+                        id="mensagemAlertaText"
+                        role="alert"
+                        aria-live="assertive">
+                    </p>
+
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Entendido</button>
+
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        data-bs-dismiss="modal"
+                        aria-label="Fechar alerta">
+
+                        Entendido
+
+                    </button>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
 
+
     <script>
+
         let itens = [];
 
         // Função utilitária para exibir alertas usando o Modal do Bootstrap
         function exibirModalAlerta(mensagem) {
+
             document.getElementById("mensagemAlertaText").innerText = mensagem;
+
             const modalElement = document.getElementById('modalAlerta');
+
             const bsModal = new bootstrap.Modal(modalElement);
+
             bsModal.show();
+
         }
 
+
         function adicionarItem() {
+
             const selectProduto = document.getElementById("produto");
+
             const quantidadeInput = document.getElementById("produto_quantidade");
 
             const produtoId = selectProduto.value;
+
             const quantidade = parseInt(quantidadeInput.value, 10);
 
             if (!produtoId) {
+
                 exibirModalAlerta("Selecione um produto antes de adicionar.");
+
                 return;
+
             }
 
             if (isNaN(quantidade) || quantidade <= 0) {
+
                 exibirModalAlerta("Informe uma quantidade válida maior que zero.");
+
                 return;
+
             }
 
             const option = selectProduto.options[selectProduto.selectedIndex];
+
             const nome = option.getAttribute("data-nome");
+
             const estoque = parseInt(option.getAttribute("data-estoque"), 10);
 
             // Verifica se o item já foi adicionado anteriormente à lista
             const itemExistente = itens.find(item => item.produto_id === produtoId);
+
             const quantidadeJaAdicionada = itemExistente ? itemExistente.quantidade : 0;
+
             const quantidadeTotalDesejada = quantidadeJaAdicionada + quantidade;
 
             // Validação de estoque considerando a soma acumulada
             if (quantidadeTotalDesejada > estoque) {
+
                 exibirModalAlerta(
                     `Estoque insuficiente para "${nome}".\n` +
                     `Estoque total: ${estoque}.\n` +
                     `Já no carrinho: ${quantidadeJaAdicionada}.\n` +
                     `Tentando adicionar: ${quantidade}.`
                 );
+
                 return;
+
             }
 
             // Se o item já existe, atualiza a quantidade somando
             if (itemExistente) {
+
                 itemExistente.quantidade = quantidadeTotalDesejada;
+
             } else {
+
                 itens.push({
+
                     produto_id: produtoId,
+
                     nome: nome,
+
                     quantidade: quantidade
+
                 });
+
             }
 
             // Limpa os campos de entrada após adicionar
             quantidadeInput.value = "";
+
             selectProduto.value = "";
 
             atualizarTabela();
+
         }
+
 
         function removerItem(index) {
+
             itens.splice(index, 1);
+
             atualizarTabela();
+
         }
 
+
         function atualizarTabela() {
+
             const tbody = document.querySelector("#tabela-itens tbody");
+
             tbody.innerHTML = "";
 
             if (itens.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">Nenhum item adicionado ao pedido.</td></tr>`;
+
+                tbody.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="4"
+                            class="text-center text-muted">
+
+                            Nenhum item adicionado ao pedido.
+
+                        </td>
+                    </tr>`;
+
                 return;
+
             }
 
             itens.forEach((item, index) => {
+
                 const linha = `
+
                 <tr>
+
                     <td>${item.produto_id}</td>
+
                     <td>${item.nome}</td>
+
                     <td>${item.quantidade}</td>
+
                     <td class="text-end">
-                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerItem(${index})">
-                            <i class="bi bi-trash"></i> Remover
+
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-danger"
+                            onclick="removerItem(${index})"
+                            aria-label="Remover ${item.nome} do pedido">
+
+                            <i
+                                class="bi bi-trash"
+                                aria-hidden="true">
+                            </i>
+
+                            Remover
+
                         </button>
+
                     </td>
+
                 </tr>
+
             `;
+
                 tbody.innerHTML += linha;
+
             });
+
         }
 
+
         function prepararEnvio(event) {
+
             // Impede o envio se não houver itens cadastrados
             if (itens.length === 0) {
+
                 event.preventDefault();
-                exibirModalAlerta("Adicione pelo menos um item à tabela antes de salvar o pedido.");
+
+                exibirModalAlerta(
+                    "Adicione pelo menos um item à tabela antes de salvar o pedido."
+                );
+
                 return false;
+
             }
 
             // Converte a array JS em JSON e grava no campo hidden
             document.getElementById("itens_json").value = JSON.stringify(itens);
+
             return true;
+
         }
+
 
         // Inicializa a tabela mostrando a mensagem de carrinho vazio
         atualizarTabela();
+
     </script>
 
-    {% endblock %}
+{% endblock %}
+

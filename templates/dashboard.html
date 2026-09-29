@@ -1,223 +1,383 @@
 {% extends 'base.html' %}
+
 <!--Atualizado por Ryan dia 17/06/2026 às 19h17-->
+<!--atualizado por raica dia 24/09/26 às 11:27-->
+
 {% block conteudo %}
+
 <div class="container-fluid">
-    <!--Topo da pagina -->
-    <div class="mb-4">
-        <h2 class="titulo-pagina">
-            <!--Icone BS-->
-            <i class="bi bi-graph-up-arrow"></i>
-            Dashboard
-        </h2>
-    </div>
-    <section>
-        <div class="row text-center mb-4">
-            <div class="col">
-                <div class="card shadow-sm p-3">
-                    <!--Quantidade de produtos cadastrados no sistema-->
-                    <h6 class="text-muted">Total de Produtos</h6>
-                    <h3>{{total_produto if total_produto else 0}}</h3><!--Número total de tipos de produto-->
-                </div>
+
+<!--Topo da pagina -->
+
+<div class="mb-4">
+
+    <h2 class="titulo-pagina">
+
+        <!--Icone BS-->
+
+        <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+
+        Dashboard
+
+    </h2>
+
+</div>
+
+<section aria-label="Resumo do dashboard">
+
+    <div class="row text-center mb-4">
+
+        <div class="col">
+
+            <div class="card shadow-sm p-3">
+
+                <!--Quantidade de produtos cadastrados no sistema-->
+
+                <h6 class="text-muted">Total de Produtos</h6>
+
+                <h3 aria-label="Total de produtos cadastrados">
+                    {{total_produto if total_produto else 0}}
+                </h3><!--Número total de tipos de produto-->
+
             </div>
-            <div class="col">
-                <div class="card shadow-sm p-3">
-                    <!--Quantidade total de produtos em estoque-->
-                    <h6 class="text-muted">Total no estoque</h6>
-                    <h3>{{total_estoque if total_estoque else 0}}</h3><!--Número total de produto no estoque-->
-                </div>
-            </div>
-            <div class="col">
-                <div class="card shadow-sm p-3">
-                    <!--Quantidade de pedidos de entrada-->
-                    <h6 class="text-muted">Pedidos de entradas</h6>
-                    <h3>{{total_entrada if total_entrada else 0}}</h3> <!--Número total de pedidos de entrada pendente-->
-                </div>
-            </div>
-            <div class="col">
-                <div class="card shadow-sm p-3">
-                    <!--Quantidade de pedidos de saida-->
-                    <h6 class="text-muted">Pedidos de saída</h6>
-                    <h3>{{total_saida if total_saida else 0}}</h3> <!--Número do total de pedidos de saida pendente-->
-                </div>
-            </div>
+
         </div>
-        <div class="row">
-            <div class="col-6 ">
-                <div class="card shadow-sm p-3 mb-4" style="height: 200px;">
 
-                    <!--Produtos com estoque baixo-->
-                    <h4 class="text-center"><strong>Estoque Baixo</strong></h4>
+        <div class="col">
 
-                    <!--Criação de tabela em caso de produtos com estoque baixo-->
-                    <div class="table-responsive">
-                        {% if baixo_estoque %}<!--se tiver um produto com a quantidade próxima do minimo-->
+            <div class="card shadow-sm p-3">
 
-                        <!--Tabela-->
-                        <table class="table border-secondary">
-                            <thead>
-                                <tr class="table-active">
-                                    <!--Colunas da tabela-->
-                                    <th scope="col" class="ps-3">Nome</th>
-                                    <th scope="col" class="text-center">Qtd. mínima</th>
-                                    <th scope="col" class="text-center">Qtd. atual</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for item in baixo_estoque %}
-                                <tr>
-                                    <!--Valores do banco que deverão aparecer-->
-                                    <th scope="row" class="ps-3">{{ item.produto_nome }}</th>
-                                    <td class="text-center">{{ item.produto_quantidade_minima }}</td>
+                <!--Quantidade total de produtos em estoque-->
 
-                                    <!--Estoque maior que a quantidade mínima -->
-                                    {% if item.estoque_quantidade > item.produto_quantidade_minima %}
-                                    <td class="text-warning text-center"><strong>{{ item.estoque_quantidade }}</strong>
-                                    </td>
+                <h6 class="text-muted">Total no estoque</h6>
 
-                                    {% else %} <!--Estoque menor que a quantidade mínima-->
-                                    <td class="text-danger text-center"><strong>{{ item.estoque_quantidade }}</strong>
-                                    </td>
+                <h3 aria-label="Total de produtos no estoque">
+                    {{total_estoque if total_estoque else 0}}
+                </h3><!--Número total de produto no estoque-->
 
-                                    {% endif %}
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+            </div>
 
-                        {%else%}
+        </div>
 
-                        <!--Mensagem em caso de não ter produtos com estoque baixo-->
-                        <div class="alert alert-info mb-0">
-                            <i class="bi bi-info-circle"></i>
-                            Todos os produtos estão acima do estoque mínimo.
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
+        <div class="col">
 
-                <div class="card shadow-sm p-3 " style="height: 200px;">
-                    <h4 class="text-center"><strong>Pedidos Pendentes</strong></h4>
+            <div class="card shadow-sm p-3">
 
-                    <!--Tabela de pedidos pendentes-->
-                    {% if pedido_entrada_pendente or pedido_saida_pendente%} <!--se tiver um pedido de entrada ou saida pendente-->
-                    <div style="overflow-x: hidden ; overflow-y:auto;" class="d-flex flex-column align-items-center">
-                        {%for pedido in pedido_entrada_pendente %} <!--roda cada pedido deentrada pendente-->
-                        <!--CARD-->
-                        <div class="card mb-1 pedido-entrada-dashboard" style="width: 90%;height: 60px;">
-                            <div class="card-body d-flex justify-content-between align-items-top" style="margin-top: 5px;">
-                                <p class="card-text me-2"><strong>Pedido n°{{pedido.id}}</strong></p>
-                                <p>Entrada</p>
-                                <p class="card-text">Data: {{pedido.data_pedido_entrada}}</p>
-                            </div>
-                        </div>
+                <!--Quantidade de pedidos de entrada-->
 
-                        {%endfor%}
+                <h6 class="text-muted">Pedidos de entradas</h6>
 
-                        {%for pedido in pedido_saida_pendente %} <!--roda cada pedido de saida pendente-->
-                        <!--CARD-->
-                        <div class="card mb-1 pedido-saida-dashboard" style="width: 90%;height: 60px;">
-                            <div class="card-body d-flex justify-content-between" style="margin-top: 5px;">
-                                <p class="card-text me-2"><strong>Pedido n°{{pedido.id}}</strong></p>
-                                <p>Saída</p>
-                                <p class="card-text">Data: {{pedido.data_pedido_saida}}</p>
-                            </div>
-                        </div>
+                <h3 aria-label="Total de pedidos de entrada">
+                    {{total_entrada if total_entrada else 0}}
+                </h3><!--Número total de pedidos de entrada pendente-->
 
-                        {%endfor%}
+            </div>
 
-                    </div>
+        </div>
+
+        <div class="col">
+
+            <div class="card shadow-sm p-3">
+
+                <!--Quantidade de pedidos de saida-->
+
+                <h6 class="text-muted">Pedidos de saída</h6>
+
+                <h3 aria-label="Total de pedidos de saída">
+                    {{total_saida if total_saida else 0}}
+                </h3><!--Número do total de pedidos de saida pendente-->
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-6 ">
+
+            <div class="card shadow-sm p-3 mb-4" style="height: 200px;">
+
+                <!--Produtos com estoque baixo-->
+
+                <h4 class="text-center">
+                    <strong>Estoque Baixo</strong>
+                </h4>
+
+                <!--Criação de tabela em caso de produtos com estoque baixo-->
+
+                <div class="table-responsive">
+
+                    {% if baixo_estoque %}
+                    <!--se tiver um produto com a quantidade próxima do minimo-->
+
+                    <!--Tabela-->
+
+                    <table class="table border-secondary"
+                        aria-label="Produtos com estoque baixo">
+
+                        <thead>
+
+                            <tr class="table-active">
+
+                                <!--Colunas da tabela-->
+
+                                <th scope="col" class="ps-3">Nome</th>
+
+                                <th scope="col" class="text-center">
+                                    Qtd. mínima
+                                </th>
+
+                                <th scope="col" class="text-center">
+                                    Qtd. atual
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for item in baixo_estoque %}
+
+                            <tr>
+
+                                <!--Valores do banco que deverão aparecer-->
+
+                                <th scope="row" class="ps-3">
+                                    {{ item.produto_nome }}
+                                </th>
+
+                                <td class="text-center">
+                                    {{ item.produto_quantidade_minima }}
+                                </td>
+
+                                <!--Estoque maior que a quantidade mínima -->
+
+                                {% if item.estoque_quantidade > item.produto_quantidade_minima %}
+
+                                <td class="text-warning text-center">
+                                    <strong>{{ item.estoque_quantidade }}</strong>
+                                </td>
+
+                                {% else %}
+
+                                <!--Estoque menor que a quantidade mínima-->
+
+                                <td class="text-danger text-center">
+                                    <strong>{{ item.estoque_quantidade }}</strong>
+                                </td>
+
+                                {% endif %}
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
 
                     {%else%}
 
-                    <!--Mensagem em caso de não ter pedidos pendentes-->
-                    <div class="alert alert-info mb-0">
-                        <i class="bi bi-info-circle"></i>
-                        Nenhum pedido pendente no momento.
+                    <!--Mensagem em caso de não ter produtos com estoque baixo-->
+
+                    <div class="alert alert-info mb-0"
+                        role="status">
+
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+
+                        Todos os produtos estão acima do estoque mínimo.
+
                     </div>
 
-                    {%endif%}
+                    {% endif %}
+
                 </div>
+
             </div>
 
-            <div class="col-6">
-                <!--Gráfico de movimentações-->
-                <div class="card shadow-sm p-3 mb-3" style="height: 430px; width: 600px;">
-                    <h4 class="text-center"><strong>Movimentações</strong></h4>
-                    <div style="height: 350px; display: flex; justify-content: center;">
-                        <canvas id="graficoMovimentacao"></canvas>
+            <div class="card shadow-sm p-3 " style="height: 200px;">
+
+                <h4 class="text-center">
+                    <strong>Pedidos Pendentes</strong>
+                </h4>
+
+                <!--Tabela de pedidos pendentes-->
+
+                {% if pedido_entrada_pendente or pedido_saida_pendente%}
+
+                <!--se tiver um pedido de entrada ou saida pendente-->
+
+                <div style="overflow-x: hidden ; overflow-y:auto;"
+                    class="d-flex flex-column align-items-center"
+                    aria-label="Lista de pedidos pendentes">
+
+                    {%for pedido in pedido_entrada_pendente %}
+
+                    <!--roda cada pedido deentrada pendente-->
+
+                    <!--CARD-->
+
+                    <div class="card mb-1 pedido-entrada-dashboard"
+                        style="width: 90%;height: 60px;">
+
+                        <div class="card-body d-flex justify-content-between align-items-top"
+                            style="margin-top: 5px;">
+
+                            <p class="card-text me-2">
+                                <strong>Pedido n°{{pedido.id}}</strong>
+                            </p>
+
+                            <p>Entrada</p>
+
+                            <p class="card-text">
+                                Data: {{pedido.data_pedido_entrada}}
+                            </p>
+
+                        </div>
+
                     </div>
 
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    {%endfor%}
 
-                    <script>
+                    {%for pedido in pedido_saida_pendente %}
 
-                        const entrada = {{ entrada }};
-                        const saida = {{ saida }};
+                    <!--roda cada pedido de saida pendente-->
 
+                    <!--CARD-->
 
-                        const ctx = document
-                            .getElementById('graficoMovimentacao');
+                    <div class="card mb-1 pedido-saida-dashboard"
+                        style="width: 90%;height: 60px;">
 
+                        <div class="card-body d-flex justify-content-between"
+                            style="margin-top: 5px;">
 
-                        new Chart(ctx, {
+                            <p class="card-text me-2">
+                                <strong>Pedido n°{{pedido.id}}</strong>
+                            </p>
 
-                            type: 'pie',
+                            <p>Saída</p>
 
-                            data: {
+                            <p class="card-text">
+                                Data: {{pedido.data_pedido_saida}}
+                            </p>
 
-                                labels: [
-                                    'Entradas',
-                                    'Saídas'
-                                ],
+                        </div>
 
-                                datasets: [{
+                    </div>
 
-                                    data: [
-                                        entrada,
-                                        saida
-                                    ],
+                    {%endfor%}
 
-                                    backgroundColor: [
-                                        '#28a745',
-                                        '#dc3545'
-                                    ],
+                </div>
 
-                                    borderWidth: 1
+                {%else%}
 
-                                }]
+                <!--Mensagem em caso de não ter pedidos pendentes-->
 
-                            },
+                <div class="alert alert-info mb-0"
+                    role="status">
 
+                    <i class="bi bi-info-circle" aria-hidden="true"></i>
 
-                            options: {
+                    Nenhum pedido pendente no momento.
 
-                                responsive: true,
+                </div>
 
-                                plugins: {
-
-                                    legend: {
-
-                                        position: 'bottom'
-
-                                    },
-
-                                    title: {
-
-                                        display: true,
-
-                                        text: 'Movimentação de Produtos'
-
-                                    }
-
-                                }
-
-                            }
-
-                        });
-
-                    </script>
+                {%endif%}
 
             </div>
-    </section>
+
+        </div>
+
+        <div class="col-6">
+
+            <!--Gráfico de movimentações-->
+
+            <div class="card shadow-sm p-3 mb-3"
+                style="height: 430px; width: 600px;">
+
+                <h4 class="text-center">
+                    <strong>Movimentações</strong>
+                </h4>
+
+                <div style="height: 350px; display: flex; justify-content: center;">
+
+                    <canvas id="graficoMovimentacao"
+                        role="img"
+                        aria-label="Gráfico de movimentação de produtos mostrando entradas e saídas">
+                    </canvas>
+
+                </div>
+
+                <!-- Texto alternativo para usuários de leitor de tela -->
+
+                <div class="visually-hidden"
+                    id="descricao-grafico-movimentacao">
+
+                    Gráfico de movimentação de produtos.
+                    Entradas: {{ entrada }}.
+                    Saídas: {{ saida }}.
+
+                </div>
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                <script>
+
+                    const entrada = {{ entrada }};
+                    const saida = {{ saida }};
+
+                    const ctx = document
+                        .getElementById('graficoMovimentacao');
+
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: [
+                                'Entradas',
+                                'Saídas'
+                            ],
+                            datasets: [{
+                                data: [
+                                    entrada,
+                                    saida
+                                ],
+                                backgroundColor: [
+                                    '#28a745',
+                                    '#dc3545'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                },
+
+                                title: {
+                                    display: true,
+                                    text: 'Movimentação de Produtos'
+                                }
+                            }
+                        }
+                    });
+
+                </script>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
 </div>
+
 {% endblock %}
