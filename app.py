@@ -426,8 +426,7 @@ def api_dashboard():
     #Retorna a tela renderizada com todos os valores anteriores informados
     return jsonify({
     "totalProducts": total_estoque,
-    "lowStockCount": len(baixo_estoque),
-    "recentActivities": []
+    "lowStockCount": len(baixo_estoque)
 }), 200
 # -----> Fim: Dashboard
 ############################################################################################################
