@@ -1225,6 +1225,85 @@ def api_entrada_rapida():
 ############################################################################################################
 # -----> Início: Empilhadeira
 
+
+############################################################################################################
+# -----> Início: Histórico de Movimentações
+
+def buscar_movimentacoes(limite=200):
+    sql = """
+        SELECT CONCAT('E-', me.id) AS id,
+               'Entrada' AS tipo,
+               p.produto_nome AS produto,
+               de.detalhe_entrada_quantidade AS quantidade,
+               me.datahora_movimentacao_entrada AS data_hora,
+               f.fornecedor_nome AS parceiro
+        FROM movimentacao_entrada me
+        INNER JOIN detalhe_entrada de
+                ON de.id = me.detalhe_entrada_id
+               AND de.pedido_entrada_id = me.detalhe_entrada_pedido_entrada_id
+        INNER JOIN produto p ON p.id = de.produto_id
+        INNER JOIN pedido_entrada pe ON pe.id = de.pedido_entrada_id
+        INNER JOIN fornecedor f ON f.id = pe.fornecedor_id
+
+        UNION ALL
+
+        SELECT CONCAT('S-', ms.id) AS id,
+               'Saída' AS tipo,
+               p.produto_nome AS produto,
+               ds.detalhe_saida_quantidade AS quantidade,
+               ms.datahora_movimentacao_saida AS data_hora,
+               c.cliente_nome AS parceiro
+        FROM movimentacao_saida ms
+        INNER JOIN detalhe_saida ds
+                ON ds.id = ms.detalhe_saida_id
+               AND ds.pedido_saida_id = ms.detalhe_saida_pedido_saida_id
+        INNER JOIN produto p ON p.id = ds.produto_id
+        INNER JOIN pedido_saida ps ON ps.id = ds.pedido_saida_id
+        INNER JOIN cliente c ON c.id = ps.cliente_id
+
+        ORDER BY data_hora DESC
+        LIMIT %s
+    """
+
+    conexao = Database.connect()
+    cursor = conexao.cursor(dictionary=True)
+    try:
+        cursor.execute(sql, (limite,))
+        linhas = cursor.fetchall()
+    finally:
+        cursor.close()
+        conexao.close()
+
+    return [
+        {
+            "id": l["id"],
+            "type": l["tipo"],
+            "product": l["produto"],
+            "quantity": l["quantidade"],
+            "partner": l["parceiro"],
+            "date": l["data_hora"].strftime("%d/%m/%Y"),
+            "hour": l["data_hora"].strftime("%H:%M"),
+        }
+        for l in linhas
+    ]
+
+
+@app.route("/api/historico", methods=["GET"])
+def api_historico():
+    try:
+        limite = min(int(request.args.get("limit", 200)), 500)
+    except ValueError:
+        limite = 200
+
+    try:
+        return jsonify(buscar_movimentacoes(limite)), 200
+    except Exception as e:
+        return jsonify({"erro": f"Erro ao carregar histórico: {e}"}), 500
+
+# -----> Fim: Histórico de Movimentações
+############################################################################################################
+
+
 # cadastrodeempilhadeira
 
 #essa rota transfere o usuario pra tela de cadastro de empilhadeira
