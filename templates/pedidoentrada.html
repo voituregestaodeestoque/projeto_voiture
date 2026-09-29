@@ -1,93 +1,204 @@
+<!--Editado por Lipe em 29/09/2026 às 9h23-->
+
 {% extends 'base.html' %}
 
 {% block conteudo %}
 
 <!--Topo-->
+
 <div class="container-fluid">
+
     <div class="d-flex justify-content-between align-items-center mb-4">
+
         <div>
-            <h2 class="titulo-pagina">
-                <i class="bi bi-arrow-right-square"></i> Movimentações entrada
+
+            <h2 class="titulo-pagina" id="titulo-movimentacoes">
+
+                <i class="bi bi-arrow-right-square" aria-hidden="true"></i>
+                Movimentações entrada
+
             </h2>
-            <p class="text-muted mb-0">Pedido de entrada</p>
+
+            <p class="text-muted mb-0" id="descricao-movimentacoes">
+                Pedido de entrada
+            </p>
+
         </div>
 
-        <a href="{{ url_for('nova_entrada') }}" class="btn botao-add"> <!--quando clicar no botao redireciona para a rota nova entrada-->
-            <i class="bi bi-plus-lg"></i> Novo Pedido de Entrada
+        <a href="{{ url_for('nova_entrada') }}"
+            class="btn botao-add"
+            aria-label="Criar novo pedido de entrada">
+
+            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+            Novo Pedido de Entrada
+
         </a>
 
     </div>
+
     <!--tabela que mostra os dados de id, produto, quantidade, status, data do pedido e data do processamento-->
+
     <div class="table-responsive">
-        <table id="tabela-movimentacao" class="table table-hover align-middle">
+
+        <table id="tabela-movimentacao"
+            class="table table-hover align-middle"
+            aria-labelledby="titulo-movimentacoes"
+            aria-describedby="descricao-movimentacoes">
+
             <thead class="table-light">
+
                 <tr>
-                    <th>ID</th>
-                    <th>Produto</th>
-                    <th>Quantidade</th>
-                    <th>Status</th>
-                    <th>Data do pedido</th>
-                    <th>Data do processamento</th>
-                    <th class="text-end">Ações</th> <!--nessa parte vão aparecer botões de ação dos pedidos-->
+
+                    <th scope="col">ID</th>
+                    <th scope="col">Produto</th>
+                    <th scope="col">Quantidade</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Data do pedido</th>
+                    <th scope="col">Data do processamento</th>
+                    <th scope="col" class="text-end">Ações</th>
+
                 </tr>
+
             </thead>
 
             <tbody>
+
                 <!--resgata os dados do pedido-->
+
                 {% for pedido in pedidos %}
+
                 <tr>
+
                     <td>{{ pedido.pedido_entrada_id }}</td>
+
                     <td>{{ pedido.produto_nome }}</td>
+
                     <td>{{ pedido.detalhe_entrada_quantidade }}</td>
+
                     <td>{{ pedido.status_pedido_entrada }}</td>
+
                     <td>{{ pedido.data_pedido_entrada }}</td>
-                    <td>{{ pedido.data_processamento or '-' }}</td> <!--aparece a data do processamento, mas se for cancelado aparece um - -->
+
+                    <td>
+                        {{ pedido.data_processamento or '-' }}
+                    </td>
+
                     <td class="text-end">
-                        {% if pedido.status_pedido_entrada == 'PENDENTE' %} <!--se o status do pedido for pendente vai aparecer os botões com a rota de processar, cancelar e editar-->
+
+                        {% if pedido.status_pedido_entrada == 'PENDENTE' %}
+
                         <!--Ação para processar o pedido-->
+
                         <a href="{{ url_for('processar_pedido_entrada', pedido_entrada_id=pedido.pedido_entrada_id) }}"
-                            class="btn btn-sm btn-success">Processar</a>
-                        
+                            class="btn btn-sm btn-success"
+                            aria-label="Processar pedido de entrada número {{ pedido.pedido_entrada_id }}">
+
+                            Processar
+
+                        </a>
+
                         <!--Botão de cancelar-->
-                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#Modal{{pedido.id}}"> Cancelar
+
+                        <button type="button"
+                            class="btn btn-sm btn-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#Modal{{pedido.id}}"
+                            aria-label="Cancelar pedido de entrada número {{ pedido.pedido_entrada_id }}"
+                            aria-controls="Modal{{pedido.id}}">
+
+                            Cancelar
+
                         </button>
 
                         <!-- Modal -->
-                        <div class="modal fade" id="Modal{{pedido.id}}" tabindex="-1"
-                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                        <div class="modal fade"
+                            id="Modal{{pedido.id}}"
+                            tabindex="-1"
+                            aria-labelledby="tituloModal{{pedido.id}}"
+                            aria-hidden="true">
+
                             <div class="modal-dialog">
+
                                 <div class="modal-content">
+
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja
-                                                cancelar esse pedido?</strong></h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
+
+                                        <h1 class="modal-title fs-5"
+                                            id="tituloModal{{pedido.id}}">
+
+                                            <strong>
+                                                Deseja cancelar esse pedido?
+                                            </strong>
+
+                                        </h1>
+
+                                        <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Fechar janela de confirmação de cancelamento">
+                                        </button>
+
                                     </div>
+
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Sair</button>
+
+                                        <button type="button"
+                                            class="btn btn-secondary"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Sair da confirmação de cancelamento do pedido {{ pedido.pedido_entrada_id }}">
+
+                                            Sair
+
+                                        </button>
+
                                         <!--Ação para cancelar o pedido-->
-                                        <a href="{{ url_for('cancelar_pedido_entrada', pedido_entrada_id= pedido.pedido_entrada_id) }}"
-                                            class="btn btn-danger">
+
+                                        <a href="{{ url_for('cancelar_pedido_entrada', pedido_entrada_id=pedido.pedido_entrada_id) }}"
+                                            class="btn btn-danger"
+                                            aria-label="Confirmar cancelamento do pedido de entrada número {{ pedido.pedido_entrada_id }}">
+
                                             <strong>Cancelar</strong>
+
                                         </a>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                         </div>
+
                         <!--Ação para editar o pedido-->
+
                         <a href="{{ url_for('editar_entrada', pedido_entrada_id=pedido.pedido_entrada_id) }}"
-                            class="btn btn-sm btn-warning">Editar</a>
+                            class="btn btn-sm btn-warning"
+                            aria-label="Editar pedido de entrada número {{ pedido.pedido_entrada_id }}">
+
+                            Editar
+
+                        </a>
+
                         {% else %}
+
                         -
-                        {% endif %} <!--fecha o if-->
+
+                        {% endif %}
+
                     </td>
+
                 </tr>
-                {% endfor %} <!--fecha o for-->
+
+                {% endfor %}
+
             </tbody>
+
         </table>
 
     </div>
+
 </div>
+
 {% endblock %}
+

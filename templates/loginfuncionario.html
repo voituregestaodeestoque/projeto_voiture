@@ -1,78 +1,154 @@
+<!--Editado por Lipe em 29/09/2026 às 9h21-->
+
 <!DOCTYPE html>
+
 <html lang="pt-br">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Login - Funcionário</title>
+
     <link rel="stylesheet" href="../static/style.css">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="../static/images-lp/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon"
+        href="../static/images-lp/favicon.ico"
+        type="image/x-icon">
 
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet">
 
     <!-- Ícones -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <!-- Fonte moderna -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
 
-    <!--favicon-->
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicons do voiture/favicon.ico') }}"
+    <!-- favicon -->
+    <link rel="shortcut icon"
+        href="{{ url_for('static', filename='favicons do voiture/favicon.ico') }}"
         type="image/x-icon">
+
 </head>
 
-<body id="body-login" style="margin: 0;padding: 0;box-sizing: border-box;"><!--imagem do fundo da tela de login está aqui pelo css-->
-    <!--card de toda a parte branca do site-->
+<body id="body-login"
+    style="margin: 0;padding: 0;box-sizing: border-box;"
+    aria-labelledby="titulo-login">
+
+    <!-- imagem do fundo da tela de login está aqui pelo css -->
+
+    <!-- card de toda a parte branca do site -->
     <div class="container d-flex justify-content-end login-container">
 
         <div class="login-card text-center bg-white">
-            <h1>Login de Funcionário</h1>
 
+            <h1 id="titulo-login">
+                Login de Funcionário
+            </h1>
 
-            <form class="mb-3" method="POST" action="{{ url_for('login') }}"> <!--Ação que faz o login-->
+            <form class="mb-3"
+                method="POST"
+                action="{{ url_for('login') }}"
+                aria-labelledby="titulo-login">
+
                 <div class="mb-3 text-start mt-4">
+
                     <div class="input-group">
-                        <!--icone do lado do email-->
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-envelope text-white"></i>
+
+                        <!-- ícone do lado do email -->
+                        <span class="input-group-text bg-dark border-secondary"
+                            aria-hidden="true">
+
+                            <i class="bi bi-envelope text-white"
+                                aria-hidden="true"></i>
+
                         </span>
-                        <!--campo pra digitar o email-->
-                        <input type="email" name="funcionario_email" id="email" class="form-control form-login"
-                            placeholder="Digite seu email" required>
+
+                        <!-- campo pra digitar o email -->
+                        <input type="email"
+                            name="funcionario_email"
+                            id="email"
+                            class="form-control form-login"
+                            placeholder="Digite seu email"
+                            aria-label="E-mail do funcionário"
+                            autocomplete="email"
+                            required>
 
                     </div>
+
                 </div>
+
                 <div class="mb-3 text-start mt-4 mb-4">
+
                     <div class="input-group">
-                        <!--icone do lado do input-->
-                        <span class="input-group-text bg-dark border-secondary">
-                            <i class="bi bi-lock text-white"></i>
+
+                        <!-- ícone do lado do input -->
+                        <span class="input-group-text bg-dark border-secondary"
+                            aria-hidden="true">
+
+                            <i class="bi bi-lock text-white"
+                                aria-hidden="true"></i>
+
                         </span>
-                        <!--campo pra digitar a senha-->
-                        <input type="password" name="funcionario_senha" id="password" class="form-control form-login"
-                            placeholder="Digite sua Senha" required>
+
+                        <!-- campo pra digitar a senha -->
+                        <input type="password"
+                            name="funcionario_senha"
+                            id="password"
+                            class="form-control form-login"
+                            placeholder="Digite sua Senha"
+                            aria-label="Senha do funcionário"
+                            autocomplete="current-password"
+                            required>
+
                     </div>
 
                 </div>
+
                 <!-- MENSAGENS DE ERRO -->
                 {% with messages = get_flashed_messages(with_categories=true) %}
+
                 {% if messages %}
+
                 {% for category, message in messages %}
-                <div class="alert alert-danger mensagem {{ category }}" role="alert">
+
+                <div class="alert alert-danger mensagem {{ category }}"
+                    role="alert"
+                    aria-live="assertive">
+
                     {{ message }}
+
                 </div>
+
                 {% endfor %}
+
                 {% endif %}
+
                 {% endwith %}
-                <!--botão pra entrar no sistema-->
-                <button type="submit" class="btn btn-login w-100 text-white mt-2">Entrar</button>
+
+                <!-- botão pra entrar no sistema -->
+                <button type="submit"
+                    class="btn btn-login w-100 text-white mt-2"
+                    aria-label="Entrar no sistema">
+
+                    Entrar
+
+                </button>
+
             </form>
+
         </div>
+
     </div>
 
 </body>
 
 </html>
+

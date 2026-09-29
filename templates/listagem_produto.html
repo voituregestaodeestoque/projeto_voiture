@@ -1,4 +1,4 @@
-<!--Editado por Clarinha em 14/05/2026 às 13h42-->
+<!--Editado por Lipe em 29/09/2026 às 9h19-->
 
 {% extends 'base.html' %}
 
@@ -7,28 +7,53 @@
 <div class="container-fluid">
 
     <!-- TÍTULO + BOTÃO -->
+
     <div class="d-flex justify-content-between align-items-center mb-4">
+
         <div>
-            <h2 class="titulo-pagina">
-                <i class="bi bi-tag"></i> Produtos
+
+            <h2 class="titulo-pagina" id="titulo-produtos">
+
+                <i class="bi bi-tag" aria-hidden="true"></i>
+                Produtos
+
             </h2>
-            <p class="text-muted mb-0">Gerencie os produtos do estoque</p>
+
+            <p class="text-muted mb-0" id="descricao-produtos">
+                Gerencie os produtos do estoque
+            </p>
+
         </div>
 
-        <a href="{{ url_for('produtos') }}" class="botao-add btn">
-            <i class="bi bi-plus-lg"></i> Novo Produto
+        <a href="{{ url_for('produtos') }}"
+            class="botao-add btn"
+            aria-label="Cadastrar novo produto">
+
+            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+            Novo Produto
+
         </a>
+
     </div>
+
     <!-- CARD -->
+
     <div class="card shadow-sm">
+
         <div class="card-body">
 
             <div class="table-responsive">
+
                 {% if produto %}
-                <table class="table table-hover align-middle">
+
+                <table class="table table-hover align-middle"
+                    aria-labelledby="titulo-produtos"
+                    aria-describedby="descricao-produtos">
 
                     <thead class="table-light">
+
                         <tr>
+
                             <th scope="col">#</th>
                             <th scope="col">Produto</th>
                             <th scope="col">Categoria</th>
@@ -37,69 +62,146 @@
                             <th scope="col">Peso</th>
                             <th scope="col">Preço de custo</th>
                             <th scope="col">Preço de venda</th>
-                            <th class="text-end">Ações</th>
+                            <th scope="col">Ações</th>
+
                         </tr>
+
                     </thead>
+
                     <tbody>
+
                         {% for produto in produto %}
+
                         <tr>
+
                             <!--Valores do banco que deverão aparecer-->
+
                             <th scope="row">{{ produto.id }}</th>
+
                             <td>{{ produto.produto_nome }}</td>
                             <td>{{ produto.produto_categoria }}</td>
-                            <td>{{ produto.produto_localizacao}}</td>
+                            <td>{{ produto.produto_localizacao }}</td>
                             <td>{{ produto.produto_quantidade_minima }}</td>
-                            <td>{{ produto.produto_peso}}</td>
+                            <td>{{ produto.produto_peso }}</td>
                             <td>{{ produto.produto_preco_custo }}</td>
-                            <td>{{ produto.produto_preco_venda}}</td>
+                            <td>{{ produto.produto_preco_venda }}</td>
+
                             <td class="text-end">
+
+                                <!-- Botão de edição -->
+
                                 <a href="{{ url_for('editar_produto', id=produto.id) }}"
-                                    class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-pencil"></i>
+                                    class="btn btn-sm btn-outline-primary"
+                                    aria-label="Editar produto {{ produto.produto_nome }}">
+
+                                    <i class="bi bi-pencil" aria-hidden="true"></i>
+
                                 </a>
 
                                 <!-- Botão do modal pra excluir -->
-                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                                    data-bs-target="#Modal{{produto.id}}">
-                                    <i class="bi bi-trash"></i>
+
+                                <button type="button"
+                                    class="btn btn-sm btn-outline-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#Modal{{produto.id}}"
+                                    aria-label="Excluir produto {{ produto.produto_nome }}"
+                                    aria-controls="Modal{{produto.id}}">
+
+                                    <i class="bi bi-trash" aria-hidden="true"></i>
+
                                 </button>
 
                                 <!-- Modal -->
-                                <div class="modal fade" id="Modal{{produto.id}}" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                                <div class="modal fade"
+                                    id="Modal{{produto.id}}"
+                                    tabindex="-1"
+                                    aria-labelledby="tituloModal{{produto.id}}"
+                                    aria-hidden="true">
+
                                     <div class="modal-dialog">
+
                                         <div class="modal-content">
+
                                             <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja excluir esse produto?</strong></h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
+
+                                                <h1 class="modal-title fs-5"
+                                                    id="tituloModal{{produto.id}}">
+
+                                                    <strong>
+                                                        Deseja excluir esse produto?
+                                                    </strong>
+
+                                                </h1>
+
+                                                <button type="button"
+                                                    class="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Fechar janela de confirmação de exclusão">
+                                                </button>
+
                                             </div>
+
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Cancelar</button>
+
+                                                <button type="button"
+                                                    class="btn btn-secondary"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Cancelar exclusão do produto {{ produto.produto_nome }}">
+
+                                                    Cancelar
+
+                                                </button>
+
                                                 <a href="{{ url_for('deletar_produto', id=produto.id) }}"
-                                                    class="btn btn-danger">
+                                                    class="btn btn-danger"
+                                                    aria-label="Confirmar exclusão do produto {{ produto.produto_nome }}">
+
                                                     <strong>Excluir</strong>
+
                                                 </a>
+
                                             </div>
+
                                         </div>
+
                                     </div>
+
                                 </div>
+
                             </td>
+
                         </tr>
+
                         {% endfor %}
+
                     </tbody>
+
                 </table>
-            </div>
-            {%else%}
-            <!--Mensagem em caso de não ter produtos cadastrados-->
-            <div class="alert alert-info mb-0">
-                <i class="bi bi-info-circle"></i>
-                Nenhum produto cadastrado.
+
             </div>
 
-            {%endif%}
+            {% else %}
+
+            <!--Mensagem em caso de não ter produtos cadastrados-->
+
+            <div class="alert alert-info mb-0"
+                role="status"
+                aria-label="Aviso">
+
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+
+                Nenhum produto cadastrado.
+
+            </div>
+
+            {% endif %}
+
         </div>
+
     </div>
+
 </div>
+
 {% endblock %}
+
