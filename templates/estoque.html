@@ -1,4 +1,4 @@
-<!--Editado por Ryan em 11/08/2026 as 10h11-->
+
 <!--atualizado por raica dia 24/09/26 às 11:50-->
 
 {% extends 'base.html' %}
@@ -9,29 +9,36 @@
 
     <div>
 
-        <!--TOPO-->
+        <!-- TOPO DA PÁGINA -->
 
         <div class="">
 
             <h2 class="titulo-pagina">
-        
-                <!--Icone BS-->
-        
+
+                <!-- Ícone do Bootstrap -->
+
                 <i class="bi bi-box-seam"></i> Estoque
-        
+
             </h2>
-        
+
         </div>
+
+        <!-- Área contendo a pesquisa, filtro e botão de novo produto -->
+
         <div style="width: 99%; margin-left: 10px; max-height: 37.6px ;" class="d-flex">
 
-            <!--Barra de pesquisa-->
+            <!-- Barra de pesquisa -->
+
             <form action="{{ url_for('listagem_estoque')}}" style="width:95%;" class="input-group form-card"
                 aria-label="Pesquisar produtos no estoque">
+
+                <!-- Campo onde o usuário informa o produto que deseja pesquisar -->
 
                 <input name="chave_pesquisa" type="text" class="form-control" placeholder="Pesquisa"
                     aria-label="Pesquisar produto">
 
-                <!--Botão de envio-->
+                <!-- Botão responsável por realizar a pesquisa -->
+
                 <button type="submit" class="input-group-text bg-dark border-secondary" aria-label="Pesquisar">
 
                     <i class="bi bi-search text-white" aria-hidden="true"></i>
@@ -40,40 +47,48 @@
 
             </form>
 
-            <!--Filtro de ordenação-->
+            <!-- Filtro de ordenação dos produtos -->
+
             <form method="GET" class="form-card ms-3" style="width: 35%; margin-right: 10px;"
                 aria-label="Ordenar produtos do estoque">
 
-                <!--Menu de opções de ordenação-->
+                <!-- Menu contendo as opções de ordenação -->
+
                 <select name="filtro" class="filtrar form-select" onchange="this.form.submit()"
                     aria-label="Ordenar produtos por">
 
-                    <!--Opção: adicionados recentemente-->
+                    <!-- Opção para mostrar os produtos adicionados recentemente -->
+
                     <option value="adc-recente" {{ 'selected' if filtro=='adc-recente' else '' }}>
                         Adicionados recentemente
                     </option>
 
-                    <!--Opção: ordem alfabética de nome-->
+                    <!-- Opção para ordenar os produtos pelo nome -->
+
                     <option value="nome" {{ 'selected' if filtro=='nome' else '' }}>
                         Ordenar por nome
                     </option>
 
-                    <!--Opção: Estoque decrescente-->
+                    <!-- Opção para ordenar a quantidade do maior para o menor -->
+
                     <option value="maior" {{ 'selected' if filtro=='maior' else '' }}>
                         Quantidade: Maior ao menor
                     </option>
 
-                    <!--Opção: Estoque crescente-->
+                    <!-- Opção para ordenar a quantidade do menor para o maior -->
+
                     <option value="menor" {{ 'selected' if filtro=='menor' else '' }}>
                         Quantidade: Menor ao maior
                     </option>
 
-                    <!--Opção: Preço decrescente-->
+                    <!-- Opção para ordenar o preço do maior para o menor -->
+
                     <option value="preco-maior" {{ 'selected' if filtro=='preco-maior' else '' }}>
                         Preço: Maior ao menor
                     </option>
 
-                    <!--Opção: Preço crescente-->
+                    <!-- Opção para ordenar o preço do menor para o maior -->
+
                     <option value="preco-menor" {{ 'selected' if filtro=='preco-menor' else '' }}>
                         Preço: Menor ao maior
                     </option>
@@ -82,31 +97,48 @@
 
             </form>
 
+            <!-- Botão para acessar o cadastro de um novo produto -->
+
             <a href="{{ url_for('produtos') }}" class="botao-add btn" style="width: 25%;">
+
                 <i class="bi bi-plus-lg"></i> Novo Produto
+
             </a>
 
         </div>
 
     </div>
 
-    <!--ESTOQUE-->
+    <!-- ESTOQUE -->
+
     <section class="container mt-5" aria-label="Lista de produtos em estoque">
+
+        <!-- Verifica se existem produtos no estoque -->
 
         {%if estoque %}
 
-        <!--LINHA-->
+        <!-- LINHA DOS PRODUTOS -->
+
         <div class="row">
+
+            <!-- Percorre todos os produtos encontrados -->
 
             {%for estoque_produto in estoque%}
 
-            <!--COLUNA-->
+            <!-- COLUNA DE CADA PRODUTO -->
+
             <div class="col-md-3">
 
-                <!--CARD-->
-                <div class="card mb-4" style="max-width: 100%;" aria-label="Produto {{ estoque_produto.produto_nome }}">
+                <!-- CARD DO PRODUTO -->
+
+                <div class="card mb-4" style="max-width: 100%;"
+                    aria-label="Produto {{ estoque_produto.produto_nome }}">
+
+                    <!-- Verifica se o produto possui uma imagem -->
 
                     {% if estoque_produto.imagem_base64 %}
+
+                    <!-- Exibe a imagem cadastrada do produto -->
 
                     <img class="card-img-top"
                         src="data:{{ estoque_produto.imagem_tipo }};base64,{{ estoque_produto.imagem_base64 }}"
@@ -115,26 +147,38 @@
 
                     {% else %}
 
+                    <!-- Exibe uma imagem padrão quando o produto não possui imagem -->
+
                     <img class="card-img-top" src="{{ url_for('static', filename='images/produto-sem-imagem.png') }}"
                         alt="Produto {{ estoque_produto.produto_nome }} sem imagem">
 
                     {% endif %}
 
+                    <!-- Informações principais do produto -->
+
                     <div class="card-body">
+
+                        <!-- Nome do produto -->
 
                         <h5 class="card-title">
                             <strong>{{estoque_produto.produto_nome}}</strong>
                         </h5>
+
+                        <!-- Quantidade mínima que deve existir no estoque -->
 
                         <p class="card-text">
                             <strong>Estoque mínimo:</strong>
                             {{estoque_produto.produto_quantidade_minima}}
                         </p>
 
+                        <!-- Quantidade atual disponível -->
+
                         <p class="card-text">
                             <strong>Estoque atual:</strong>
                             {{estoque_produto.estoque_quantidade}}
                         </p>
+
+                        <!-- Localização onde o produto está armazenado -->
 
                         <p class="card-text">
                             <strong>Localização:</strong>
@@ -143,17 +187,22 @@
 
                         <div class="acoes-produto">
 
-                            <!-- Botão pra ativar o modal -->
+                            <!-- Botão para abrir o modal com mais informações -->
+
                             <!-- Mais detalhes -->
+
                             <button type="button"
                                 class="botao-detalhes"
                                 data-bs-toggle="modal"
                                 data-bs-target="#modal{{estoque_produto.id}}"
                                 aria-label="Mais detalhes do produto {{ estoque_produto.produto_nome }}">
+
                                 Mais detalhes
+
                             </button>
 
-                            <!-- Modal -->
+                            <!-- MODAL DE DETALHES DO PRODUTO -->
+
                             <div class="modal fade" id="modal{{estoque_produto.id}}" tabindex="-1"
                                 aria-labelledby="modalLabel{{estoque_produto.id}}" aria-hidden="true">
 
@@ -161,13 +210,19 @@
 
                                     <div class="modal-content">
 
+                                        <!-- Cabeçalho do modal -->
+
                                         <div class="modal-header">
+
+                                            <!-- Nome do produto no título do modal -->
 
                                             <h5 class="modal-title" id="modalLabel{{estoque_produto.id}}">
 
                                                 <strong>{{estoque_produto.produto_nome}}</strong>
 
                                             </h5>
+
+                                            <!-- Botão para fechar o modal -->
 
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Fechar janela de detalhes do produto {{ estoque_produto.produto_nome }}">
@@ -176,14 +231,21 @@
 
                                         </div>
 
+                                        <!-- Corpo do modal -->
+
                                         <div class="modal-body">
+
+                                            <!-- Área contendo todos os detalhes do produto -->
 
                                             <section class="container d-flex justify-content-between"
                                                 aria-label="Detalhes do produto {{ estoque_produto.produto_nome }}"
                                                 style="background-color: #DCE3EE; width: 100%; height: 550px; border-radius: 10px;">
 
                                                 <!-- LADO ESQUERDO -->
+
                                                 <div class="d-flex flex-column gap-3 m-3">
+
+                                                    <!-- Área da imagem do produto -->
 
                                                     <div class="bg-white"
                                                         style="width: 300px; border-radius: 10px !important;">
@@ -195,75 +257,113 @@
 
                                                     </div>
 
-                                                    <div class="bg-white w-100" style="height: 285px; border-radius: 10px;">
+                                                    <!-- Área contendo a descrição do produto -->
+
+                                                    <div class="bg-white w-100"
+                                                        style="height: 285px; border-radius: 10px;">
 
                                                         <p style="margin: 15px;">
+
                                                             <strong>Descrição:</strong>
+
                                                             {{estoque_produto.produto_descricao}}
+
                                                         </p>
 
                                                     </div>
 
                                                 </div>
 
+                                                <!-- LADO DIREITO COM AS INFORMAÇÕES DO PRODUTO -->
+
                                                 <div class="d-flex flex-column m-3 mx-auto" style="width: 320px;">
+
+                                                    <!-- Nome -->
 
                                                     <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                         style=" height: 70px; border-radius: 10px;">
 
                                                         <p>
+
                                                             <strong>Nome:</strong>
+
                                                             {{estoque_produto.produto_nome}}
+
                                                         </p>
 
                                                     </div>
+
+                                                    <!-- Categoria -->
 
                                                     <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                         style="height: 70px; border-radius: 10px;">
 
                                                         <p>
+
                                                             <strong>Categoria:</strong>
+
                                                             {{estoque_produto.produto_categoria}}
+
                                                         </p>
 
                                                     </div>
+
+                                                    <!-- Preço de venda -->
 
                                                     <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                         style="height: 70px; border-radius: 10px;">
 
                                                         <p>
+
                                                             <strong>Preço de Venda:</strong>
+
                                                             {{estoque_produto.produto_preco_venda}}
+
                                                         </p>
 
                                                     </div>
+
+                                                    <!-- Preço de custo -->
 
                                                     <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                         style="height: 70px; border-radius: 10px;">
 
                                                         <p>
+
                                                             <strong>Preço de Custo:</strong>
+
                                                             {{estoque_produto.produto_preco_custo}}
+
                                                         </p>
 
                                                     </div>
+
+                                                    <!-- Quantidade atual do estoque -->
 
                                                     <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                         style="height: 70px; border-radius: 10px;">
 
                                                         <p>
+
                                                             <strong>Quantidade atual:</strong>
+
                                                             {{estoque_produto.estoque_quantidade}}
+
                                                         </p>
 
                                                     </div>
+
+                                                    <!-- Peso do produto -->
 
                                                     <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
                                                         style="height: 70px; border-radius: 10px;">
 
                                                         <p>
+
                                                             <strong>Peso:</strong>
+
                                                             {{estoque_produto.produto_peso}}
+
                                                         </p>
 
                                                     </div>
@@ -279,43 +379,87 @@
                                 </div>
 
                             </div>
+
+                            <!-- Botão para editar o produto -->
+
                             <a href="{{ url_for('editar_produto', id=estoque_produto.id) }}"
                                 class="botao-acao botao-editar"
                                 title="Editar produto">
+
                                 <i class="bi bi-pencil"></i>
+
                             </a>
 
-                            <!-- Botão do modal pra excluir -->
+                            <!-- Botão do modal para excluir -->
+
                             <button type="button"
                                 class="botao-acao botao-excluir"
                                 data-bs-toggle="modal"
                                 data-bs-target="#Modal{{estoque_produto.id}}"
                                 title="Excluir produto">
+
                                 <i class="bi bi-trash"></i>
+
                             </button>
 
-                            <!-- Modal -->
+                            <!-- MODAL DE CONFIRMAÇÃO DA EXCLUSÃO -->
+
                             <div class="modal fade" id="Modal{{estoque_produto.id}}" tabindex="-1"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+
                                 <div class="modal-dialog">
+
                                     <div class="modal-content">
+
+                                        <!-- Cabeçalho do modal -->
+
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Deseja excluir esse
-                                                    produto?</strong></h1>
+
+                                            <!-- Mensagem de confirmação da exclusão -->
+
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+
+                                                <strong>Deseja excluir esse produto?</strong>
+
+                                            </h1>
+
+                                            <!-- Botão para fechar o modal -->
+
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
+
                                         </div>
+
+                                        <!-- Botões de confirmação ou cancelamento -->
+
                                         <div class="modal-footer">
+
+                                            <!-- Cancela a exclusão -->
+
                                             <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Cancelar</button>
+                                                data-bs-dismiss="modal">
+
+                                                Cancelar
+
+                                            </button>
+
+                                            <!-- Confirma a exclusão do produto -->
+
                                             <a href="{{ url_for('deletar_produto', id=estoque_produto.id) }}"
                                                 class="btn btn-danger">
+
                                                 <strong>Excluir</strong>
+
                                             </a>
+
                                         </div>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                         </div>
 
                     </div>
@@ -330,7 +474,8 @@
 
         {%else%}
 
-        <!--Mensagem em caso de não ter estoque de produtos cadastrados-->
+        <!-- Mensagem exibida quando nenhum produto é encontrado no estoque -->
+
         <div class="alert alert-info mb-0" role="status" aria-live="polite">
 
             <i class="bi bi-info-circle" aria-hidden="true"></i>

@@ -1,43 +1,49 @@
-<!--atualizado por Júlia em 19/05/2026 às 14h57-->
+
 <!--atualizado por raica dia 24/09/26 às 11:15-->
+
 
 {% extends 'base.html' %}
 
 {% block conteudo %}
 
+<!-- Área principal da página de produto -->
 <div id="template_produto">
 
-
+<!-- Cabeçalho da página -->
 <div class="mb-4">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
 
+            <!-- Título da página -->
             <h2 class="titulo-pagina">
                 <i class="bi bi-tools" aria-hidden="true"></i>
                 {{ 'Editar Produto' if produto and produto.id else 'Cadastrar Produto' }}
-                <!--se passarem um id, o titulo vira outro-->
+                
             </h2>
 
         </div>
 
         <div>
 
-            <!--rota para ir visualizar as empilhadeiras já cadastradas-->
+            <!-- Link para visualizar os produtos cadastrados -->
             <a href="{{ url_for('listagem_estoque') }}"
                 class="btn btn-success"
                 aria-label="Visualizar produtos cadastrados">
+
                 <i aria-hidden="true"></i>Visualizar produtos</a>
 
         </div>
 
     </div>
 
+    <!-- Área do formulário -->
     <div class="container-fluid produto-container d-flex justify-content-center">
 
         <div class="produto-card text-dark">
 
+            <!-- Formulário de cadastro ou edição -->
             <form id="form_produto"
                 enctype="multipart/form-data"
                 action="{% if produto and produto.id %}{{ url_for('atualizar_produto', id=produto.id) }}{% else %}{{ url_for('salvar_produto') }}{% endif %}"
@@ -46,17 +52,14 @@
 
                 <div class="row">
 
+                    <!-- Campo do nome -->
                     <div class="col-md-6 mb-3">
-
                         <label for="produto_nome">Nome do produto</label>
 
                         <div class="input-group">
-
                             <span class="input-group-text bg-dark border-secondary"
                                 aria-hidden="true">
-
                                 <i class="bi bi-box text-white" aria-hidden="true"></i>
-
                             </span>
 
                             <input type="text"
@@ -66,22 +69,17 @@
                                 placeholder="Nome do produto"
                                 required
                                 value="{{ produto.produto_nome if produto else '' }}">
-
                         </div>
-
                     </div>
 
+                    <!-- Campo da categoria -->
                     <div class="col-md-6 mb-3">
-
                         <label for="produto_categoria">Categoria</label>
 
                         <div class="input-group">
-
                             <span class="input-group-text bg-dark border-secondary"
                                 aria-hidden="true">
-
                                 <i class="bi bi-box text-white" aria-hidden="true"></i>
-
                             </span>
 
                             <input type="text"
@@ -91,22 +89,17 @@
                                 placeholder="Categoria do produto"
                                 required
                                 value="{{ produto.produto_categoria if produto else '' }}">
-
                         </div>
-
                     </div>
 
+                    <!-- Campo da localização -->
                     <div class="col-md-6 mb-3">
-
                         <label for="produto_localizacao">Localização</label>
 
                         <div class="input-group">
-
                             <span class="input-group-text bg-dark border-secondary"
                                 aria-hidden="true">
-
                                 <i class="bi bi-geo-alt-fill text-white" aria-hidden="true"></i>
-
                             </span>
 
                             <input type="text"
@@ -116,22 +109,17 @@
                                 placeholder="Localização do produto"
                                 required
                                 value="{{ produto.produto_localizacao if produto else '' }}">
-
                         </div>
-
                     </div>
 
+                    <!-- Campo do estoque mínimo -->
                     <div class="col-md-6 mb-3">
-
                         <label for="produto_quantidade_minima"> Estoque mínimo</label>
 
                         <div class="input-group">
-
                             <span class="input-group-text bg-dark border-secondary"
                                 aria-hidden="true">
-
                                 <i class="bi bi-basket2-fill text-white" aria-hidden="true"></i>
-
                             </span>
 
                             <input type="text"
@@ -141,22 +129,17 @@
                                 placeholder="Estoque mínimo do produto"
                                 required
                                 value="{{ produto.produto_quantidade_minima if produto else '' }}">
-
                         </div>
-
                     </div>
 
+                    <!-- Campo do peso -->
                     <div class="col-md-4 mb-3">
-
                         <label for="produto_peso">Peso</label>
 
                         <div class="input-group">
-
                             <span class="input-group-text bg-dark border-secondary"
                                 aria-hidden="true">
-
                                 <i class="bi bi-hammer text-white" aria-hidden="true"></i>
-
                             </span>
 
                             <input type="text"
@@ -166,22 +149,17 @@
                                 placeholder="Peso em kg"
                                 required
                                 value="{{ produto.produto_peso if produto else '' }}">
-
                         </div>
-
                     </div>
 
+                    <!-- Campo do preço de custo -->
                     <div class="col-md-4 mb-3">
-
                         <label for="produto_preco_custo">Preço de custo</label>
 
                         <div class="input-group">
-
                             <span class="input-group-text bg-dark border-secondary"
                                 aria-hidden="true">
-
                                 <i class="bi bi-cash-stack text-white" aria-hidden="true"></i>
-
                             </span>
 
                             <input type="text"
@@ -191,22 +169,17 @@
                                 placeholder="Preço de custo em R$"
                                 required
                                 value="{{ produto.produto_preco_custo if produto else '' }}">
-
                         </div>
-
                     </div>
 
+                    <!-- Campo do preço de venda -->
                     <div class="col-md-4 mb-3">
-
                         <label for="produto_preco_venda">Preço de venda</label>
 
                         <div class="input-group">
-
                             <span class="input-group-text bg-dark border-secondary"
                                 aria-hidden="true">
-
                                 <i class="bi bi-cash-coin text-white" aria-hidden="true"></i>
-
                             </span>
 
                             <input type="text"
@@ -216,26 +189,20 @@
                                 placeholder="Preço de venda em R$"
                                 required
                                 value="{{ produto.produto_preco_venda if produto else '' }}">
-
                         </div>
-
                     </div>
 
+                    <!-- Mostra a quantidade somente no cadastro -->
                     {% if produto and produto.id %}
-
                     {%else%}
 
                     <div class="col-md-4 mb-3">
-
                         <label for="estoque_quantidade">Quantidade</label>
 
                         <div class="input-group">
-
                             <span class="input-group-text bg-dark border-secondary"
                                 aria-hidden="true">
-
                                 <i class="bi bi-box text-white" aria-hidden="true"></i>
-
                             </span>
 
                             <input type="text"
@@ -244,15 +211,13 @@
                                 id="estoque_quantidade"
                                 placeholder="Quantidade de produto"
                                 required>
-
                         </div>
-
                     </div>
 
                     {%endif%}
 
+                    <!-- Campo de descrição -->
                     <div class="col-md-12 mb-3">
-
                         <label for="produto_descricao" class="form-label">Descrição</label>
 
                         <input type="text"
@@ -262,11 +227,10 @@
                             required
                             value="{{ produto.produto_descricao if produto else '' }}"
                             style="padding: 20px;">
-
                     </div>
 
+                    <!-- Campo para adicionar imagem -->
                     <div class="col-md-6 mb-3">
-
                         <label for="imagem" class="form-label">
                             Imagem do Produto
                         </label>
@@ -283,29 +247,31 @@
                         <small id="imagem-formatos" class="text-muted">
                             Formatos permitidos: PNG, JPG, JPEG ou WEBP.
                         </small>
-
                     </div>
 
+                    <!-- Botão de ação do formulário -->
                     <div class="botao-direita">
 
                         <!--Botão que envia o formulário em caso de cadastro-->
-
                         {% if produto and produto.id %}
 
                         <button type="submit"
                             class="botao-add btn"
                             aria-label="Atualizar produto">
+
                             Atualizar
+
                         </button>
 
                         <!--Botão que envia o formulário em caso de atualização-->
-
                         {%else%}
 
                         <button type="submit"
                             class="botao-add btn"
                             aria-label="Cadastrar produto">
+
                             Cadastrar
+
                         </button>
 
                         {%endif%}
