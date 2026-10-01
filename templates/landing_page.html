@@ -2,15 +2,19 @@
 <html lang="pt-BR">
 
 <head>
+    <!--configurações básicas da página-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--título e arquivos externos-->
     <title>Landing Page Voiture</title>
     <link rel="stylesheet" href="../static/landing_page.css">
     <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
+    <!--cabeçalho e menu principal-->
     <header aria-label="Cabeçalho principal">
+        <!--logo da voiture-->
         <div id="header-logo" style="width: max-content;">
             <img src="../static/images/logo_lp.png" style="
                 height: 115px;
@@ -19,12 +23,14 @@
                 justify-content: center;
                 align-items: center;" alt="Voiture - Gestão de Estoque">
         </div>
-
+        <!--botão do menu para telas menores-->
         <div id="header-menu-toggle">
             <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="menu">☰</button>
         </div>
-
+        <!--links de navegação-->
         <nav class="menu" id="menu" aria-label="Navegação principal">
+
+            <!--links principais-->
             <ul id="nav-esquerda">
                 <li><a href="#sistema">Sistema</a></li>
                 <li><a href="#planos">Planos</a></li>
@@ -32,6 +38,7 @@
                 <li><a href="#banner-empresas">Clientes</a></li>
                 <li><a href="#sobre_nos">Sobre</a></li>
             </ul>
+            <!--links de acesso-->
             <ul id="nav-direita">
                 <li><a href="{{ url_for('loginfuncionario') }}">Login</a></li>
                 <li id="demonstracao">Demonstração</li>
@@ -39,20 +46,26 @@
         </nav>
     </header>
 
+    <!--seção principal da landing-->
+
     <main id="secao-main">
+        <!--apresentaçaõ da voiture-->
         <section class="pai-container-main" aria-labelledby="titulo-principal">
             <div class="container-main">
+                <!--título e descrição principal-->
                 <h1 id="titulo-principal">Domine o fluxo de suas peças com inteligência e precisão</h1>
                 <p>Visualize cada etapa da logística de seu estoque em um único sistema de gestão.</p>
                 <p>Monitore entradas, rastreie saídas para a oficina e identifique gargalos antes de se tornarem
                     prejuízo.</p>
+                    <!--botão para entrar em contato-->
                 <a href="#contato" class="butao-main">Experimente nosso sistema</a>
             </div>
+            <!--painel visual do sistema-->
             <div class="painel" role="region" aria-labelledby="titulo-painel">
                 <div class="painel-head">
                     <span class="titulo-painel" id="titulo-painel">Painel Voiture</span>
                 </div>
-
+                <!--área do carro e informações das peças -->
                 <div class="stage" id="stage">
                     <svg class="car-svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                         <!-- carroceria (estilo flat/pill, frente à direita) -->
@@ -109,12 +122,25 @@
                         </g>
                     </svg>
 
+                    <!--informações da peça selecionada-->
+
                     <div class="tag" id="tag">
                         <span class="part">Motor</span>
                         <span>Filtro de óleo — <span class="qty ok">18 un</span></span>
                     </div>
                 </div>
+                <!--informações de movimentação do estoque -->
 
+
+
+
+                <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
+
+
+
+
+                
                 <div class="ticker-wrap">
                     <div class="ticker-track">
                         <span class="ticker-item"><span class="flag out"></span>Saída p/ oficina — <b>Pastilha de
