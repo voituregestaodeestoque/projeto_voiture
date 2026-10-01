@@ -1,121 +1,164 @@
-<!--atualizado por raica dia 24/09/26 às 11:36-->
+<!-- atualizado por raica dia 24/09/26 às 11:36 -->
 
 {% extends 'base.html' %}
 
 {% block conteudo %}
 
+<!-- Título da página -->
+
 <h2></h2>
 
 <div>
 
+    <!-- Título indicando que é um pedido de entrada -->
 
-<h2 class="titulo-pagina">
+    <h2 class="titulo-pagina">
 
-    <i class="bi bi-box-seam" aria-hidden="true"></i> Pedido de Entrada <strong>Nº {{ pedido.id }}</strong>
+        <!-- Ícone de caixa -->
 
-</h2>
+        <i class="bi bi-box-seam" aria-hidden="true"></i> Pedido de Entrada <strong>Nº {{ pedido.id }}</strong>
 
+    </h2>
 
 </div>
+
+<!-- Card contendo as principais informações do pedido -->
 
 <div class="card-info"
     style="padding: 10px; margin-left: 20px; margin-top: 30px; margin-bottom: 50px; background-color: #fff; border-radius: 10px; width: auto;"
     aria-label="Informações do pedido de entrada">
 
+    <!-- Fornecedor responsável pelo pedido -->
 
-<p><strong>Fornecedor:</strong> {{ pedido.fornecedor }}</p>
+    <p><strong>Fornecedor:</strong> {{ pedido.fornecedor }}</p>
 
-<p><strong>Data:</strong> {{ pedido.data_pedido_entrada }}</p>
+    <!-- Data em que o pedido foi realizado -->
 
-<p><strong>Status:</strong> {{ pedido.status_pedido_entrada }}</p>
+    <p><strong>Data:</strong> {{ pedido.data_pedido_entrada }}</p>
 
+    <!-- Status atual do pedido -->
+
+    <p><strong>Status:</strong> {{ pedido.status_pedido_entrada }}</p>
 
 </div>
+
+<!-- Verifica se o pedido ainda está pendente -->
 
 {% if pedido.status_pedido_entrada == 'PENDENTE' %}
 
 <div class="container-fluid detalhe-container d-flex justify-content-between">
 
+    <div class="pedido-card text-dark mb-4"
+        style="width: 100%; display: flex; justify-content: space-around;">
 
-<div class="pedido-card text-dark mb-4"
-    style="width: 100%; display: flex; justify-content: space-around;">
+        <!-- Área responsável por adicionar novos itens ao pedido -->
 
-    <div class="form-itens" style="width: 50%;">
+        <div class="form-itens" style="width: 50%;">
 
-        <h3>
-            <strong>
-                <i class="bi bi-plus-circle" aria-hidden="true"></i>
-                Adicionar itens
-            </strong>
-        </h3>
+            <h3>
+                <strong>
 
-        <form method="POST"
-            action="{{ url_for('adicionar_item_entrada', pedido_entrada_id=pedido.id) }}"
-            aria-label="Adicionar item ao pedido de entrada">
+                    <!-- Ícone de adicionar -->
 
-            <div class="col-md-6 mb-3">
+                    <i class="bi bi-plus-circle" aria-hidden="true"></i>
 
-                <label for="produto">Produto:</label>
+                    Adicionar itens
 
-                <select id="produto"
-                    class="form-select"
-                    name="produto_id"
-                    aria-label="Selecione o produto">
+                </strong>
+            </h3>
 
-                    <option value="">Selecione</option>
+            <!-- Formulário para adicionar um produto ao pedido -->
 
-                    {% for produto in produto %}
+            <form method="POST"
+                action="{{ url_for('adicionar_item_entrada', pedido_entrada_id=pedido.id) }}"
+                aria-label="Adicionar item ao pedido de entrada">
 
-                    <option value="{{ produto.id }}"
-                        data-nome="{{ produto.produto_nome }}">
-                        {{ produto.produto_nome }}
-                    </option>
+                <!-- Campo para selecionar o produto -->
 
-                    {% endfor %}
+                <div class="col-md-6 mb-3">
 
-                </select>
+                    <label for="produto">Produto:</label>
 
-            </div>
+                    <select id="produto"
+                        class="form-select"
+                        name="produto_id"
+                        aria-label="Selecione o produto">
 
-            <div class="mb-3">
+                        <!-- Opção padrão do campo -->
 
-                <label for="produto_quantidade">Quantidade</label>
+                        <option value="">Selecione</option>
 
-                <div class="input-group">
+                        <!-- Percorre todos os produtos disponíveis -->
 
-                    <input type="number"
-                        name="quantidade"
-                        class="form-control"
-                        id="produto_quantidade"
-                        placeholder="Quantidade do produto"
-                        min="1">
+                        {% for produto in produto %}
+
+                        <option value="{{ produto.id }}"
+                            data-nome="{{ produto.produto_nome }}">
+
+                            {{ produto.produto_nome }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
 
                 </div>
 
-            </div>
+                <!-- Campo para informar a quantidade do produto -->
 
-            <button type="submit"
-                class="btn botao-add"
-                aria-label="Adicionar item ao pedido">
+                <div class="mb-3">
 
-                Adicionar item
+                    <label for="produto_quantidade">Quantidade</label>
 
-            </button>
+                    <div class="input-group">
 
-        </form>
+                        <input type="number"
+                            name="quantidade"
+                            class="form-control"
+                            id="produto_quantidade"
+                            placeholder="Quantidade do produto"
+                            min="1">
+
+                    </div>
+
+                </div>
+
+                <!-- Botão responsável por adicionar o item -->
+
+                <button type="submit"
+                    class="btn botao-add"
+                    aria-label="Adicionar item ao pedido">
+
+                    Adicionar item
+
+                </button>
+
+            </form>
+
+        </div>
 
     </div>
 
-    {% endif %}
+{% endif %}
+
+    <!-- Área que exibe os itens que já fazem parte do pedido -->
 
     <div class="table-responsive" style="width: 45%; ">
 
         <h3>
             <strong>
+
+                <!-- Ícone de cesta -->
+
                 <i class="bi bi-basket" aria-hidden="true"></i>
+
                 Itens do pedido
+
             </strong>
         </h3>
+
+        <!-- Tabela com os produtos do pedido -->
 
         <table id="tabela-movimentacao"
             class="table table-hover align-middle"
@@ -124,6 +167,8 @@
             <thead class="table-light">
 
                 <tr>
+
+                    <!-- Colunas da tabela -->
 
                     <th scope="col">ID</th>
 
@@ -139,21 +184,31 @@
 
             <tbody>
 
+                <!-- Percorre os itens cadastrados no pedido -->
+
                 {% for item in itens %}
 
                 <tr>
 
+                    <!-- ID do item -->
+
                     <td>{{ item.id }}</td>
 
+                    <!-- Nome do produto -->
+
                     <td>{{ item.produto }}</td>
+
+                    <!-- Quantidade do produto -->
 
                     <td>{{ item.detalhe_entrada_quantidade}}</td>
 
                     <td>
 
+                        <!-- Verifica se o pedido ainda pode ser alterado -->
+
                         {% if pedido.status_pedido_entrada == 'PENDENTE' %}
 
-                        <!-- Botão do modal pra excluir -->
+                        <!-- Botão do modal para excluir o produto -->
 
                         <button type="button"
                             class="btn btn-sm btn-outline-danger"
@@ -165,7 +220,7 @@
 
                         </button>
 
-                        <!-- Modal -->
+                        <!-- Modal de confirmação da exclusão -->
 
                         <div class="modal fade"
                             id="Modal{{item.id}}"
@@ -177,26 +232,39 @@
 
                                 <div class="modal-content">
 
+                                    <!-- Cabeçalho do modal -->
+
                                     <div class="modal-header">
 
                                         <h1 class="modal-title fs-5"
                                             id="ModalLabel{{item.id}}">
 
                                             <strong>
+
+                                                <!-- Mensagem de confirmação -->
+
                                                 Deseja excluir esse produto?
+
                                             </strong>
 
                                         </h1>
+
+                                        <!-- Botão para fechar o modal -->
 
                                         <button type="button"
                                             class="btn-close"
                                             data-bs-dismiss="modal"
                                             aria-label="Fechar janela de confirmação">
+
                                         </button>
 
                                     </div>
 
+                                    <!-- Rodapé do modal com as ações -->
+
                                     <div class="modal-footer">
+
+                                        <!-- Cancela a exclusão -->
 
                                         <button type="button"
                                             class="btn btn-secondary"
@@ -206,7 +274,7 @@
 
                                         </button>
 
-                                        <!--Ação para excluir o produto-->
+                                        <!-- Ação responsável por excluir o produto -->
 
                                         <a href="{{ url_for('remover_item_entrada', detalhe_entrada_id=item.id, pedido_entrada_id=pedido.id) }}"
                                             class="btn btn-danger"
@@ -226,8 +294,6 @@
 
                         {% else %}
 
-                        
-
                         {% endif %}
 
                     </td>
@@ -238,6 +304,8 @@
 
             </tbody>
 
+            <!-- Tbody utilizado para receber itens adicionados pelo JavaScript -->
+
             <tbody id="itens-novos"></tbody>
 
         </table>
@@ -246,22 +314,23 @@
 
 </div>
 
-
 </div>
+
+<!-- Verifica novamente se o pedido está pendente -->
 
 {% if pedido.status_pedido_entrada == 'PENDENTE' %}
 
+<!-- Botão para finalizar/atualizar o pedido -->
+
 <h2 style="margin-left: 40px;">
 
+    <a href="{{ url_for('finalizar_entrada', pedido_entrada_id=pedido.id) }}"
+        class="btn btn-success"
+        aria-label="Atualizar pedido de entrada">
 
-<a href="{{ url_for('finalizar_entrada', pedido_entrada_id=pedido.id) }}"
-    class="btn btn-success"
-    aria-label="Atualizar pedido de entrada">
+        Atualizar
 
-    Atualizar
-
-</a>
-
+    </a>
 
 </h2>
 
@@ -269,17 +338,32 @@
 
 <script>
 
+    // Array utilizado para armazenar temporariamente os novos itens
+    // adicionados pelo usuário
+
     let itens = [];
+
+    // Função responsável por adicionar um novo item
 
     function adicionarItem() {
 
+        // Obtém o campo de seleção do produto
+
         const selectProduto = document.getElementById("produto");
+
+        // Obtém o campo de quantidade
 
         const quantidadeInput = document.getElementById("produto_quantidade");
 
+        // Obtém o ID do produto selecionado
+
         const produtoId = selectProduto.value;
 
+        // Converte a quantidade informada para número
+
         const quantidade = parseInt(quantidadeInput.value);
+
+        // Verifica se algum produto foi selecionado
 
         if (!produtoId) {
 
@@ -289,6 +373,8 @@
 
         }
 
+        // Verifica se a quantidade é válida
+
         if (!quantidade || quantidade <= 0) {
 
             alert("Informe uma quantidade maior que zero.");
@@ -297,11 +383,19 @@
 
         }
 
+        // Obtém a opção selecionada no campo de produtos
+
         const option = selectProduto.options[selectProduto.selectedIndex];
+
+        // Obtém o nome do produto
 
         const nome = option.getAttribute("data-nome");
 
+        // Verifica se o produto já foi adicionado anteriormente
+
         const itemExistente = itens.find(item => item.produto_id === produtoId);
+
+        // Se o produto já existir, soma a nova quantidade
 
         if (itemExistente) {
 
@@ -311,35 +405,50 @@
 
         } else {
 
+            // Caso ainda não exista, adiciona um novo item ao array
+
             itens.push({
 
                 produto_id: produtoId,
-
                 nome: nome,
-
                 quantidade: quantidade,
 
             });
 
         }
 
+        // Limpa o campo de quantidade
+
         quantidadeInput.value = "";
 
+        // Volta o campo de produto para a opção inicial
+
         selectProduto.value = "";
+
+        // Atualiza a tabela na tela
 
         atualizarTabela();
 
     }
+
+    // Função responsável por remover um item do array
 
     function removerItem(index) {
 
         itens.splice(index, 1);
 
+        // Atualiza a tabela depois da remoção
+
         atualizarTabela();
 
     }
 
+    // Função responsável por atualizar os itens adicionados
+    // pelo JavaScript na tabela
+
     function atualizarTabela() {
+
+        // Obtém o tbody destinado aos novos itens
 
         const tbody = document.getElementById("itens-novos");
 
@@ -347,19 +456,31 @@
 
         tbody.innerHTML = "";
 
+        // Percorre todos os itens adicionados
+
         itens.forEach((item, index) => {
+
+            // Cria uma nova linha da tabela para cada item
 
             const linha = `
 
                 <tr>
 
+                    <!-- ID do produto -->
+
                     <td>${item.produto_id}</td>
 
+                    <!-- Nome do produto -->
+
                     <td>${item.nome}</td>
+
+                    <!-- Quantidade adicionada -->
 
                     <td>${item.quantidade}</td>
 
                     <td>
+
+                        <!-- Botão para remover o item -->
 
                         <button type="button"
                             class="btn btn-sm btn-outline-danger"
@@ -376,13 +497,20 @@
 
             `;
 
+            // Adiciona a nova linha ao tbody
+
             tbody.innerHTML += linha;
 
         });
 
     }
 
+    // Função responsável por preparar os itens
+    // antes do envio do formulário
+
     function prepararEnvio() {
+
+        // Converte o array de itens para JSON
 
         document.getElementById("itens_json").value = JSON.stringify(itens);
 
@@ -391,3 +519,5 @@
 </script>
 
 {% endblock %}
+
+
