@@ -42,7 +42,7 @@ def to_int(value, default=0):
 def imagem_permitida(tipo_arquivo):
     return tipo_arquivo in EXTENSOES_PERMITIDAS
 
-    
+
 #######################################################################
 # -----> Início: Notificações
 
@@ -1241,10 +1241,12 @@ def api_entrada_rapida():
 # -----> Início: Empilhadeira
 
 
-############################################################################################################
 # -----> Início: Histórico de Movimentações
 
+# Função responsável por buscar as movimentações do estoque
 def buscar_movimentacoes(limite=200):
+
+    # Comando SQL para buscar entradas e saídas
     sql = """
         SELECT CONCAT('E-', me.id) AS id,
                'Entrada' AS tipo,
@@ -1280,17 +1282,23 @@ def buscar_movimentacoes(limite=200):
         LIMIT %s
     """
 
+    # Abre uma conexão com o banco de dados
     conexao = Database.connect()
     cursor = conexao.cursor(dictionary=True)
+
     try:
+        # Executa o SQL passando o limite de registros
         cursor.execute(sql, (limite,))
         linhas = cursor.fetchall()
+
     finally:
         cursor.close()
         conexao.close()
 
+    # Organiza os resultados em uma lista de dicionários
     return [
         {
+            # ID da movimentação
             "id": l["id"],
             "type": l["tipo"],
             "product": l["produto"],
@@ -1299,23 +1307,33 @@ def buscar_movimentacoes(limite=200):
             "date": l["data_hora"].strftime("%d/%m/%Y"),
             "hour": l["data_hora"].strftime("%H:%M"),
         }
+
+        # Repete para cada movimentação encontrada
         for l in linhas
     ]
 
 
+# Cria a rota da API responsável pelo histórico
 @app.route("/api/historico", methods=["GET"])
 def api_historico():
     try:
+        # Se não for informado, utiliza 200
         limite = min(int(request.args.get("limit", 200)), 500)
+
     except ValueError:
+        # Se o limite não for um número válido, utiliza 200
         limite = 200
-
     try:
+        # O código 200 indica que a requisição foi realizada com sucesso
         return jsonify(buscar_movimentacoes(limite)), 200
-    except Exception as e:
-        return jsonify({"erro": f"Erro ao carregar histórico: {e}"}), 500
 
-# -----> Fim: Histórico de Movimentações
+    except Exception as e:
+        # Caso aconteça algum erro, retorna uma mensagem de erro
+        # O código 500 indica erro interno no servidor
+        return jsonify({
+            "erro": f"Erro ao carregar histórico: {e}"
+        }), 500
+
 ############################################################################################################
 
 
@@ -1778,6 +1796,8 @@ def salvar_uso_empilhadeira():
 ############################################################################################################
 # -----> Início: Cliente
 
+
+#Coleta dados do formulário de cliente
 def get_cliente_form():
         return {
         "cliente_nome": request.form.get("cliente_nome", "").strip(),
@@ -1790,6 +1810,7 @@ def get_cliente_form():
         "cliente_descricao": request.form.get("funcionario_descricao", "").strip(),
     }
 
+#Listagem de clientes
 @app.route("/listagem_cliente")
 @login_obrigatorio
 def listagem_cliente():
@@ -1798,11 +1819,13 @@ def listagem_cliente():
         'listagem_cliente.html',
         clientes=clientes)
 
+#Renderiza a tela de cadastro de cliente
 @app.route('/cliente')
 @login_obrigatorio
 def cliente():
     return render_template('cadastrocliente.html')
 
+#Salva o cadastro do cliente
 @app.route("/salvar_cliente", methods=["POST"])
 @login_obrigatorio
 def salvar_cliente():
