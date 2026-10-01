@@ -41,55 +41,77 @@ def to_int(value, default=0):
 
 def imagem_permitida(tipo_arquivo):
     return tipo_arquivo in EXTENSOES_PERMITIDAS
+
+    
 #######################################################################
 # -----> Início: Notificações
 
+# Rota responsável por buscar as notificações
 @app.route('/api/notificacoes')
 def api_notificacoes():
+    # Busca todas as notificações no banco de dados
     notificacoes = Notificacao.listar()
+    # Retorna as notificações em formato JSON
     return jsonify({
         "total": len(notificacoes),
         "notificacoes": [
             {
+                # ID da notificação
                 "id": n['id_notificacao'],
                 "tipo": n['notificacao'],
                 "mensagem": n['mensagem'],
+                # O strftime transforma a data em um formato mais fácil de ler
                 "data": n['data_hora'].strftime('%d/%m/%Y %H:%M')
-            } for n in notificacoes
+            }
+            # Faz isso para cada notificação encontrada
+            for n in notificacoes
         ]
     })
 
+# Rota responsável por excluir uma única notificação
 @app.route('/api/notificacoes/<int:id_notificacao>', methods=['DELETE'])
 def api_deletar_notificacao(id_notificacao):
+    #metodo que apaga a notificação pelo ID
     Notificacao.deletar(id_notificacao)
-    return jsonify({"sucesso": True})
+    return jsonify({
+        "sucesso": True
+    })
 
+# Rota responsável por excluir todas as notificações
 @app.route('/api/notificacoes', methods=['DELETE'])
 def api_deletar_todas_notificacoes():
+    #metodo que apaga todas as notificações do banco
     Notificacao.deletar_todas()
-    return jsonify({"sucesso": True})
-
+    return jsonify({
+        "sucesso": True
+    })
 ######################################################################
 
+#Rota para a tela 404 (conteúdo não encontrado)
 @app.errorhandler(404)
 def pagina_nao_encontrada(error):
+    #Renderiza a página de erro
     return render_template("404.html"), 404
 
 ############################################################################################################
 # -----> Início: Landing Page
 
+#Rota para a Landing Page do Sistema
 @app.route('/landingpage')
 def landingpage():
     return render_template('landing_page.html')
 
 @app.route("/enviar_contato", methods=["POST"])
+#Envia os dados do cliente interessado para o email da empresa
 def enviar_contato():
 
+    #Dados
     nome = request.form.get("nome")
     email_cliente = request.form.get("email")
     cnpj = request.form.get("cnpj")
     email_service = EmailService()
-    
+
+    #Serviço de envio de email
     email_service.enviar_email(
         nome,
         email_cliente,
@@ -506,12 +528,13 @@ def get_pesquisa_estoque_form():
 ############################################################################################################        
 # -----> Início: Produto
 
+#Rota para cadastro de produto
 @app.route('/produtos')
 @login_obrigatorio
 def produtos():
     return render_template('cadastroproduto.html')
 
-
+#GET dos dados do formulário de cadastro
 def get_produto_form():
     return {
         "produto_nome": request.form.get("produto_nome", "").strip(),
@@ -524,64 +547,25 @@ def get_produto_form():
         "produto_descricao": request.form.get("produto_descricao", "").strip(),
     }
 
+#Coleta quantidade inicial do produto
 def get_estoque_form():
     return{
         "estoque_quantidade":request.form.get("estoque_quantidade", "").strip()
     }
 
-
+#Listagem de produtos no Mobile
 @app.route("/api/listagem_produto", methods=["GET"])
 def api_listagem_produto():
     produtos = Estoque.produtos_mobile()
     return jsonify(produtos), 200
-'''
-@app.route("/listagem_produto")
-@login_obrigatorio
-def listagem_produto():
 
-    produtos = Produto.produto_listagem()
-
-    
-    # ==========================================
-    # REQUISIÇÃO DO REACT NATIVE
-    # ==========================================
-
-    if 'application/json' in request.headers.get('Accept', ''):
-
-        produtos_mobile = []
-
-        for produto in produtos:
-
-            produto_mobile = produto.copy()
-
-            # A imagem não será enviada pelo JSON.
-            # O aplicativo busca a imagem separadamente.
-            for campo in list(produto_mobile.keys()):
-
-                if isinstance(produto_mobile[campo], bytes):
-
-                    produto_mobile[campo] = None
-
-            produtos_mobile.append(produto_mobile)
-
-        return jsonify(produtos_mobile), 200
-
-    # ==========================================
-    # REQUISIÇÃO DO SITE
-    # ==========================================
-
-    return render_template(
-        'listagem_produto.html',
-        produto=produtos
-    )'''
-
-
-
+#Registra os dados do produto
 @app.route("/salvar_produto", methods=["POST"])
 @login_obrigatorio
 def salvar_produto():
     arquivo = request.files.get("imagem")
 
+    #Prepara a imagem
     imagem_nome = None
     imagem_tipo = None
     imagem_blob = None
@@ -604,6 +588,7 @@ def salvar_produto():
 
     produto = Produto(**dados)
 
+    #Valida erros
     erros = produto.validate()
     if erros :
         for erro in erros:
@@ -625,14 +610,17 @@ def salvar_produto():
         if not prod_id == 0:
             estoque.insert()
         
+        #Sucesso no cadastro
         flash("Produto cadastrado com sucesso.", "sucesso")
         return redirect(url_for("listagem_estoque"))
 
     except Exception as e:
+        #Erro ao cadastrar
         flash(f"Erro ao cadastrar produto: {e}", "erro")
         return render_template("estoque.html", produto=dados)
 
 
+#Edição de dados do produto
 @app.route("/editar_produto/<int:id>")
 @login_obrigatorio
 def editar_produto(id):
@@ -643,6 +631,7 @@ def editar_produto(id):
     return render_template("cadastroproduto.html", produto=produto)
 
 
+#Atualizar os dados do produto
 @app.route("/atualizar_produto/<int:id>", methods=["POST"])
 @login_obrigatorio
 def atualizar_produto(id):
@@ -651,6 +640,7 @@ def atualizar_produto(id):
         flash("Produto não encontrado.", "erro")
         return redirect(url_for("listagem_estoque"))
 
+    #Atualiza imagem
     arquivo = request.files.get("imagem")
 
     dados = get_produto_form()
@@ -686,9 +676,11 @@ def atualizar_produto(id):
             return redirect(url_for("listagem_estoque"))
 
         produto.update(id)
+        #Sucesso
         flash("Produto atualizado com sucesso.", "sucesso")
         return redirect(url_for("listagem_estoque"))
     except Exception as e:
+        #Erro
         dados["id"] = id
         flash(f"Erro ao atualizar produto: {e}", "erro")
         return render_template("cadastroproduto.html", produto=dados)
@@ -697,8 +689,9 @@ def atualizar_produto(id):
 @app.route("/deletar_produto/<int:id>")
 @login_obrigatorio
 def deletar_produto(id):
-    #Tenta deletar
+    #Tenta deletar o produto
     try:
+        #Erro de tabela relacionada
         if Produto.has_related_records(id):
             flash(
                 "Não é possível excluir o produto porque ele está vinculado a outros serviços.","erro"
@@ -707,6 +700,7 @@ def deletar_produto(id):
 
         Estoque.delete_by_produto(id)
         Produto.safe_delete(id)
+        #Sucesso
         flash("Produto excluído com sucesso.", "sucesso")
     #Tratativa de erro
     except ValueError as e:
@@ -722,6 +716,7 @@ def deletar_produto(id):
 ############################################################################################################
 # -----> Início: Pedido de entrada
 
+#Listagem de pedidos de entrada
 @app.route("/pedidoentrada")
 @login_obrigatorio
 def pedidoentrada():
@@ -739,6 +734,7 @@ def detalhes_entrada(pedido_entrada_id):
         flash("Pedido de entrada não encontrado.")
         return redirect(url_for("pedidoentrada"))
 
+    #Puxa os dados do pedido
     return render_template(
         "detalhes_entrada.html",
         pedido=pedido,
@@ -749,6 +745,7 @@ def detalhes_entrada(pedido_entrada_id):
 
 @app.route("/entrada/<int:pedido_entrada_id>/adicionar", methods=["POST"])
 @login_obrigatorio
+#Função adicionar item
 def adicionar_item_entrada(pedido_entrada_id):
     produto_id = int(request.form.get("produto_id", 0))
     detalhe_entrada_quantidade = int(request.form.get("quantidade", 0) or 0)
@@ -772,6 +769,7 @@ def adicionar_item_entrada(pedido_entrada_id):
 
 @app.route("/entrada/item/remover/<int:detalhe_entrada_id>/<int:pedido_entrada_id>")
 @login_obrigatorio
+#Remove itens do pedido
 def remover_item_entrada(detalhe_entrada_id, pedido_entrada_id):
     mensagem = Detalhe_entrada.remover_item(detalhe_entrada_id)
     flash(mensagem)
@@ -780,6 +778,7 @@ def remover_item_entrada(detalhe_entrada_id, pedido_entrada_id):
 
 @app.route("/entrada/finalizar/<int:pedido_entrada_id>")
 @login_obrigatorio
+#Finaliza a entrada
 def finalizar_entrada(pedido_entrada_id):
     try:
         mensagem = Pedido_entrada.finalizar(pedido_entrada_id)
@@ -793,6 +792,7 @@ def finalizar_entrada(pedido_entrada_id):
 
 @app.route("/editar_pedido_entrada/<int:pedido_entrada_id>")
 @login_obrigatorio
+#Edição do pedido
 def editar_entrada(pedido_entrada_id):
     pedido = Pedido_entrada.find_by_id(pedido_entrada_id)
     if not pedido:
@@ -804,6 +804,7 @@ def editar_entrada(pedido_entrada_id):
 
 @app.route("/entrada/nova", methods=["GET", "POST"])
 @login_obrigatorio
+#Novo pedido de entradas
 def nova_entrada():
     if request.method == "POST":
         fornecedor_id = int(request.form.get("fornecedor_id", 0))
@@ -815,13 +816,15 @@ def nova_entrada():
         except Exception:
             itens = []
 
-   
+        #Status pendente
         pedido = Pedido_entrada(status_pedido_entrada="PENDENTE",fornecedor_id=fornecedor_id, data_pedido_entrada=datetime.now())
         erros = pedido.validate()
 
+        #Se sem itens
         if not itens:
             erros.append("Adicione pelo menos um item ao pedido.")
 
+        #Verifica se quantidade é maior que zero
         for item in itens:
             if int(item["quantidade"]) <= 0:
                 erros.append("Todos os itens devem ter quantidade maior que zero.")
@@ -853,9 +856,11 @@ def nova_entrada():
                 )
             
                 print("check", teste)
+            #sucesso
             flash("Pedido de entrada criado com sucesso.","sucesso")
             return redirect(url_for("pedidoentrada", pedido_entrada_id=pedido_entrada_id))
 
+        #Erro
         except Exception:
             flash("Erro ao criar pedido de entrada.")
             return render_template(
@@ -875,6 +880,7 @@ def nova_entrada():
     
 @app.route("/pedido/processar/<int:pedido_entrada_id>")
 @login_obrigatorio
+#Processar pedido pendente -> Finalizá-lo
 def processar_pedido_entrada(pedido_entrada_id):
     try:
         mensagem = Pedido_entrada.processar(pedido_entrada_id)
@@ -887,6 +893,7 @@ def processar_pedido_entrada(pedido_entrada_id):
 
 @app.route("/pedido/cancelar/<int:pedido_entrada_id>")
 @login_obrigatorio
+#Cancelar pedido pendente
 def cancelar_pedido_entrada(pedido_entrada_id):
     try:
         mensagem = Pedido_entrada.cancelar(pedido_entrada_id)
@@ -906,6 +913,7 @@ def cancelar_pedido_entrada(pedido_entrada_id):
 
 @app.route("/pedidosaida")
 @login_obrigatorio
+#Renderiza o formulário para pedidos de saída
 def pedidosaida():
     return render_template( 
         "pedidosaida.html",
@@ -914,6 +922,7 @@ def pedidosaida():
 
 @app.route("/saida/<int:pedido_saida_id>")
 @login_obrigatorio
+#Puxa as informações do pedido
 def detalhes_saida(pedido_saida_id):
     pedido = Pedido_saida.find_by_id(pedido_saida_id)
 
@@ -931,6 +940,7 @@ def detalhes_saida(pedido_saida_id):
 
 @app.route("/saida/<int:pedido_saida_id>/adicionar", methods=["POST"])
 @login_obrigatorio
+#Adicionar itens no pedido
 def adicionar_item_saida(pedido_saida_id):
     produto_id = int(request.form.get("produto_id", 0))
     detalhe_saida_quantidade = int(request.form.get("quantidade", 0) or 0)
@@ -954,6 +964,7 @@ def adicionar_item_saida(pedido_saida_id):
     return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
 
 
+#Remover itens
 @app.route("/saida/item/remover/<int:detalhe_saida_id>/<int:pedido_saida_id>")
 @login_obrigatorio
 def remover_item_saida(detalhe_saida_id, pedido_saida_id):
@@ -961,7 +972,7 @@ def remover_item_saida(detalhe_saida_id, pedido_saida_id):
     flash(mensagem, "sucesso")
     return redirect(url_for("detalhes_saida", pedido_saida_id=pedido_saida_id))
 
-
+#Finalizar pedido
 @app.route("/saida/finalizar/<int:pedido_saida_id>")
 @login_obrigatorio
 def finalizar_saida(pedido_saida_id):
@@ -975,6 +986,7 @@ def finalizar_saida(pedido_saida_id):
     return redirect(url_for("pedidosaida"))
 
 
+#Editar(atualizar) pedido de saída
 @app.route("/editar_pedido_saida/<int:pedido_saida_id>")
 @login_obrigatorio
 def editar_saida(pedido_saida_id):
@@ -986,6 +998,7 @@ def editar_saida(pedido_saida_id):
         produto=Estoque.card_estoque_nome())
     
 
+#Criar novo pedido
 @app.route("/saida/nova", methods=["GET", "POST"])
 @login_obrigatorio
 def nova_saida():
@@ -1001,9 +1014,11 @@ def nova_saida():
         pedido = Pedido_saida(status_pedido_saida="PENDENTE", cliente_id=cliente_id, data_pedido_saida = datetime.now())
         erros = pedido.validate()
 
+        #Se sem itens
         if not itens:
             erros.append("Adicione pelo menos um item ao pedido.")
 
+        #Verifica se a quantidade de produtos é maior que zero
         for item in itens:
             if int(item["quantidade"]) <= 0:
                 erros.append("Todos os itens devem ter quantidade maior que zero.")
@@ -1057,7 +1072,7 @@ def nova_saida():
     )
 
 
-
+#Processar -> Finalizar pedido pendente
 @app.route("/pedido_saida/processar/<int:pedido_saida_id>")
 @login_obrigatorio
 def processar_pedido_saida(pedido_saida_id):
@@ -1072,6 +1087,7 @@ def processar_pedido_saida(pedido_saida_id):
     return redirect(url_for("pedidosaida"))
 
 
+#Cancelar pedido pendente
 @app.route("/pedido_saida/cancelar/<int:pedido_saida_id>")
 @login_obrigatorio
 def cancelar_pedido_saida(pedido_saida_id):
@@ -1087,7 +1103,6 @@ def cancelar_pedido_saida(pedido_saida_id):
 
 
 #Pedido Saida Mobile
-
 @app.route("/api/listagem_cliente", methods=["GET"])
 def api_listagem_cliente():
     clientes = Cliente.find_all()  # ou um método clientes_mobile() se precisar só id+nome
