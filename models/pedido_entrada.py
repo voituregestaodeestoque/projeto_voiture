@@ -25,6 +25,7 @@ class Pedido_entrada(CrudBase):
     def pedido_entrada_join(cls):
         conexao = Database.connect() #conexão com o banco
         cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
+        #
         try:
             sql = """select f.fornecedor_nome, d.detalhe_entrada_quantidade, d.detalhe_entrada_item, me.datahora_movimentacao_entrada, p.* from pedido_entrada as p 
             INNER JOIN fornecedor as f 
