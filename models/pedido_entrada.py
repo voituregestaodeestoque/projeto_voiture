@@ -1,8 +1,10 @@
+#importações usadas na classe pedido_entrada
 from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
 from datetime import datetime
 
+#classe pedido_entrada
 class Pedido_entrada(CrudBase):
     table = "pedido_entrada"
     fields = [
@@ -11,16 +13,18 @@ class Pedido_entrada(CrudBase):
         'data_pedido_entrada'
     ]
 
+    #define os valores para cada campo
     def __init__(self, status_pedido_entrada, fornecedor_id, data_pedido_entrada):
         self.status_pedido_entrada = status_pedido_entrada
         self.fornecedor_id = fornecedor_id
         self.data_pedido_entrada = data_pedido_entrada
 
-    
+    #método para coletar informações de quatro tabelas
     @classmethod
+    #função que reúne informações de quatro tabelas: fornecedor, detalhe_entrada, movimentacao_entrada e pedido_entrada
     def pedido_entrada_join(cls):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
+        conexao = Database.connect() #conexão com o banco
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
         try:
             sql = """select f.fornecedor_nome, d.detalhe_entrada_quantidade, d.detalhe_entrada_item, me.datahora_movimentacao_entrada, p.* from pedido_entrada as p 
             INNER JOIN fornecedor as f 
@@ -36,18 +40,19 @@ class Pedido_entrada(CrudBase):
             conexao.close()
 
 
-    
+    #função de validação
     def validate(self):
         erros = []
 
+        #valida os campos
         validacoes = [
             Validator.required(self.status_pedido_entrada, "status_pedido_entrada"),
             Validator.required(self.fornecedor_id, "fornecedor_id")
         ]
 
         for itens in validacoes:
-            if not itens['valida']:
-                erros.append(itens["mensagem"])
+            if not itens['valida']: #verifica se o retorno é False
+                erros.append(itens["mensagem"]) #adiciona em uma lista todas as mensagens de erro
 
         return erros
 

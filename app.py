@@ -1333,18 +1333,40 @@ def get_empilhadeira_form():
     }
 
 
-# Registro de empilhadeira no banco de dados
+# ============================================================
+# TABELA DE EMPILHADEIRAS
+# ============================================================
+
+@app.route('/tabelaempilhadeira')
+@login_obrigatorio
+def tabelaempilhadeira():
+
+    uso = Empilhadeira.tabelatudojunto()
+
+    empilhadeiras = Empilhadeira.empilhadeirasemuso()
+
+    funcionarios = Funcionario.funcionario_listagem()
+
+    return render_template(
+        'tabelaempilhadeira.html',
+        uso=uso,
+        empilhadeiras=empilhadeiras,
+        funcionarios=funcionarios
+    )
+
+
+# ============================================================
+# REGISTRO DE EMPILHADEIRA NO BANCO DE DADOS
+# ============================================================
+
 @app.route("/salvar_empilhadeira", methods=["POST"])
 @login_obrigatorio
 def salvar_empilhadeira():
 
-    # Pega os dados do formulário
     dados = get_empilhadeira_form()
 
-    # Junta os dados com a classe
     empilhadeira = Empilhadeira(**dados)
 
-    # Validação
     erros = empilhadeira.validate()
 
     if erros:
@@ -1352,18 +1374,24 @@ def salvar_empilhadeira():
         for erro in erros:
             flash(erro, "erro")
 
+        uso = Empilhadeira.tabelatudojunto()
+        empilhadeiras = Empilhadeira.empilhadeirasemuso()
+        funcionarios = Funcionario.funcionario_listagem()
+
         return render_template(
-            "cadastroempilhadeira.html",
-            empilhadeiras=dados
+            "tabelaempilhadeira.html",
+            uso=uso,
+            empilhadeiras=empilhadeiras,
+            funcionarios=funcionarios,
+            dados_empilhadeira=dados,
+            abrir_modal_cadastro=True
         )
 
-    # Pega somente o chassi
     chassi = request.form.get(
         "empilhadeira_chassi",
         ""
     ).strip()
 
-    # Verifica se o chassi já está cadastrado
     chassi_cadastrado = Empilhadeira.chassi_existente(chassi)
 
     if chassi_cadastrado:
@@ -1373,12 +1401,19 @@ def salvar_empilhadeira():
             "erro"
         )
 
+        uso = Empilhadeira.tabelatudojunto()
+        empilhadeiras = Empilhadeira.empilhadeirasemuso()
+        funcionarios = Funcionario.funcionario_listagem()
+
         return render_template(
-            "cadastroempilhadeira.html",
-            empilhadeiras=dados
+            "tabelaempilhadeira.html",
+            uso=uso,
+            empilhadeiras=empilhadeiras,
+            funcionarios=funcionarios,
+            dados_empilhadeira=dados,
+            abrir_modal_cadastro=True
         )
 
-    # Cadastro
     try:
 
         empilhadeira.insert()
@@ -1399,13 +1434,24 @@ def salvar_empilhadeira():
             "erro"
         )
 
+        uso = Empilhadeira.tabelatudojunto()
+        empilhadeiras = Empilhadeira.empilhadeirasemuso()
+        funcionarios = Funcionario.funcionario_listagem()
+
         return render_template(
-            "cadastroempilhadeira.html",
-            empilhadeiras=dados
+            "tabelaempilhadeira.html",
+            uso=uso,
+            empilhadeiras=empilhadeiras,
+            funcionarios=funcionarios,
+            dados_empilhadeira=dados,
+            abrir_modal_cadastro=True
         )
 
 
-# Alterar status da empilhadeira
+# ============================================================
+# ALTERAR STATUS
+# ============================================================
+
 @app.route("/alternar_status_empilhadeira/<int:id>")
 @login_obrigatorio
 def alternar_status_empilhadeira(id):
@@ -1438,7 +1484,10 @@ def alternar_status_empilhadeira(id):
     )
 
 
-# Edição de uma empilhadeira já cadastrada
+# ============================================================
+# EDITAR
+# ============================================================
+
 @app.route("/editar_empilhadeira/<int:id>")
 @login_obrigatorio
 def editar_empilhadeira(id):
@@ -1462,7 +1511,10 @@ def editar_empilhadeira(id):
     )
 
 
-# Atualização do cadastro de uma empilhadeira
+# ============================================================
+# ATUALIZAR
+# ============================================================
+
 @app.route(
     "/atualizar_empilhadeira/<int:id>",
     methods=["POST"]
@@ -1470,13 +1522,10 @@ def editar_empilhadeira(id):
 @login_obrigatorio
 def atualizar_empilhadeira(id):
 
-    # Pega os dados do formulário
     dados = get_empilhadeira_form()
 
-    # Junta os dados com a classe
     empilhadeira = Empilhadeira(**dados)
 
-    # Validação
     erros = empilhadeira.validate()
 
     if erros:
@@ -1493,7 +1542,6 @@ def atualizar_empilhadeira(id):
 
     try:
 
-        # Verifica se a empilhadeira existe
         if not Empilhadeira.find_by_id(id):
 
             flash(
@@ -1505,7 +1553,6 @@ def atualizar_empilhadeira(id):
                 url_for("tabelaempilhadeira")
             )
 
-        # Atualiza a empilhadeira
         empilhadeira.update(id)
 
         flash(
@@ -1532,7 +1579,10 @@ def atualizar_empilhadeira(id):
         )
 
 
-# Deleta uma empilhadeira
+# ============================================================
+# DELETE
+# ============================================================
+
 @app.route("/deletar_empilhadeira/<int:id>")
 @login_obrigatorio
 def deletar_empilhadeira(id):
@@ -1566,20 +1616,17 @@ def deletar_empilhadeira(id):
 
 
 # ============================================================
-# TELA PRINCIPAL DAS EMPILHADEIRAS
+# TABELA PRINCIPAL DE EMPILHADEIRAS
 # ============================================================
 
 @app.route('/tabelaempilhadeira')
 @login_obrigatorio
-def tabelaempilhadeira():
+def tabelaempilhadeira_principal():
 
-    # Empilhadeiras que estão sendo utilizadas
     uso = Empilhadeira.tabelatudojunto()
 
-    # Empilhadeiras que não estão sendo utilizadas
     empilhadeiras = Empilhadeira.empilhadeirasemuso()
 
-    # Funcionários para aparecer no modal
     funcionarios = Funcionario.funcionario_listagem()
 
     return render_template(
@@ -1590,15 +1637,10 @@ def tabelaempilhadeira():
     )
 
 
-# -----> Fim: Empilhadeira
-############################################################################################################
+# ============================================================
+# USO DA EMPILHADEIRA
+# ============================================================
 
-
-############################################################################################################
-# -----> Início: Uso de Empilhadeira
-
-
-# Desocupar uma empilhadeira
 @app.route("/desocupar_empilhadeira/<int:id>")
 @login_obrigatorio
 def desocupar_empilhadeira(id):
@@ -1624,12 +1666,6 @@ def desocupar_empilhadeira(id):
     )
 
 
-# ============================================================
-# FORMULÁRIO DE USO DA EMPILHADEIRA
-# ============================================================
-# Essa rota pode continuar existindo caso você ainda queira
-# acessar o formulário de uso em uma página separada.
-
 @app.route('/usoempilhadeira')
 @login_obrigatorio
 def usoempilhadeira():
@@ -1644,10 +1680,6 @@ def usoempilhadeira():
         empilhadeiras=empilhadeiras
     )
 
-
-# ============================================================
-# FUNÇÃO DO FORMULÁRIO DE USO DA EMPILHADEIRA
-# ============================================================
 
 def get_uso_empilhadeira_form():
 
@@ -1664,10 +1696,6 @@ def get_uso_empilhadeira_form():
     }
 
 
-# ============================================================
-# SALVAR USO DA EMPILHADEIRA
-# ============================================================
-
 @app.route(
     "/salvar_uso_empilhadeira",
     methods=["POST"]
@@ -1679,7 +1707,6 @@ def salvar_uso_empilhadeira():
 
     print("empilhadeira", dados)
 
-    # Verifica empilhadeira
     if not dados["empilhadeira_id"]:
 
         flash(
@@ -1691,7 +1718,6 @@ def salvar_uso_empilhadeira():
             url_for("tabelaempilhadeira")
         )
 
-    # Verifica funcionário
     if not dados["funcionario_id"]:
 
         flash(
@@ -1703,12 +1729,10 @@ def salvar_uso_empilhadeira():
             url_for("tabelaempilhadeira")
         )
 
-    # Cria o objeto
     uso_empilhadeira = Uso_empilhadeira(**dados)
 
     try:
 
-        # Insere no banco
         uso_empilhadeira.insert()
 
         flash(
@@ -1730,7 +1754,6 @@ def salvar_uso_empilhadeira():
         return redirect(
             url_for("tabelaempilhadeira")
         )
-
 
 # -----> Fim: Uso de Empilhadeira
 ############################################################################################################

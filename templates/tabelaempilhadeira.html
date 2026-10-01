@@ -10,7 +10,6 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
-
             <h2 class="titulo-pagina"
                 id="titulo-empilhadeiras">
 
@@ -18,33 +17,32 @@
                    aria-hidden="true"></i>
 
                 Empilhadeiras
-
             </h2>
 
             <p class="text-muted mb-0"
                id="descricao-empilhadeiras">
 
                 Gerencie as empilhadeiras do estoque
-
             </p>
-
         </div>
-
 
         <div class="d-flex gap-2">
 
-            <!-- ROTA PARA CADASTRAR NOVA EMPILHADEIRA -->
+            <!-- BOTÃO QUE ABRE O MODAL DE CADASTRO -->
 
-            <a href="{{ url_for('cadastroempilhadeira') }}"
-               class="botao-add btn"
-               aria-label="Cadastrar nova empilhadeira">
+            <button type="button"
+                    class="botao-add btn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#ModalCadastroEmpilhadeira"
+                    aria-label="Cadastrar nova empilhadeira"
+                    aria-controls="ModalCadastroEmpilhadeira">
 
                 <i class="bi bi-plus-lg"
                    aria-hidden="true"></i>
 
                 Nova Empilhadeira
 
-            </a>
+            </button>
 
 
             <!-- BOTÃO QUE ABRE O MODAL DE USO -->
@@ -136,7 +134,6 @@
 
                     <tbody>
 
-
                         <!-- EMPILHADEIRAS QUE ESTÃO SENDO UTILIZADAS -->
 
                         {% for uso in uso %}
@@ -147,59 +144,35 @@
                                 {{ uso.uso_id }}
                             </td>
 
-
                             <td>
-
                                 <strong>
                                     {{ uso.empilhadeira_chassi }}
                                 </strong>
-
                             </td>
 
-
                             <td>
-
                                 <span class="badge bg-secondary">
-
                                     {{ uso.empilhadeira_modelo }}
-
                                 </span>
-
                             </td>
 
-
                             <td>
-
                                 <span class="badge bg-secondary">
-
                                     {{ uso.empilhadeira_marca }}
-
                                 </span>
-
                             </td>
 
-
                             <td>
-
                                 <span class="badge bg-danger">
-
                                     OCUPADO
-
                                 </span>
-
                             </td>
-
 
                             <td>
-
                                 <span class="badge bg-secondary">
-
                                     {{ uso.funcionario_nome }}
-
                                 </span>
-
                             </td>
-
 
                             <td>
 
@@ -231,17 +204,11 @@
 
                             </td>
 
-
                             <td>
-
                                 <span class="badge bg-secondary">
-
                                     {{ uso.uso_empilhadeira_datahora }}
-
                                 </span>
-
                             </td>
-
 
                             <td class="text-end">
 
@@ -291,7 +258,6 @@
 
                                             </div>
 
-
                                             <div class="modal-footer">
 
                                                 <button type="button"
@@ -331,7 +297,6 @@
                         {% endfor %}
 
 
-
                         <!-- EMPILHADEIRAS QUE NÃO ESTÃO SENDO UTILIZADAS -->
 
                         {% for empilhadeira in empilhadeiras %}
@@ -342,59 +307,35 @@
                                 {{ empilhadeira.id }}
                             </td>
 
-
                             <td>
-
                                 <strong>
                                     {{ empilhadeira.empilhadeira_chassi }}
                                 </strong>
-
                             </td>
 
-
                             <td>
-
                                 <span class="badge bg-secondary">
-
                                     {{ empilhadeira.empilhadeira_modelo }}
-
                                 </span>
-
                             </td>
 
-
                             <td>
-
                                 <span class="badge bg-secondary">
-
                                     {{ empilhadeira.empilhadeira_marca }}
-
                                 </span>
-
                             </td>
 
-
                             <td>
-
                                 <span class="badge bg-success">
-
                                     DESOCUPADO
-
                                 </span>
-
                             </td>
-
 
                             <td>
-
                                 <span class="badge bg-secondary">
-
                                     {{ empilhadeira.funcionario_nome }}
-
                                 </span>
-
                             </td>
-
 
                             <td>
 
@@ -426,13 +367,10 @@
 
                             </td>
 
-
                             <td>
 
                                 <span class="badge bg-secondary">
-
                                     {{ empilhadeira.uso_empilhadeira_datahora }}
-
                                 </span>
 
                             </td>
@@ -441,7 +379,6 @@
                             <!-- AÇÕES -->
 
                             <td class="text-end">
-
 
                                 <!-- EDITAR -->
 
@@ -493,16 +430,13 @@
 
                                                 </h1>
 
-
                                                 <button type="button"
                                                         class="btn-close"
                                                         data-bs-dismiss="modal"
                                                         aria-label="Fechar janela de confirmação de exclusão">
-
                                                 </button>
 
                                             </div>
-
 
                                             <div class="modal-footer">
 
@@ -570,6 +504,190 @@
 
     </div>
 
+
+    <!-- ====================================================== -->
+    <!-- MODAL - CADASTRAR EMPILHADEIRA -->
+    <!-- ====================================================== -->
+
+    <div class="modal fade"
+         id="ModalCadastroEmpilhadeira"
+         tabindex="-1"
+         aria-labelledby="tituloModalCadastroEmpilhadeira"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <!-- CABEÇALHO DO MODAL -->
+
+                <div class="modal-header"
+                     style="background-color: #08617f; color: white;">
+
+                    <h1 class="modal-title fs-3"
+                        id="tituloModalCadastroEmpilhadeira">
+
+                        <i class="bi bi-tools"
+                           aria-hidden="true"></i>
+
+                        Cadastrar empilhadeira
+
+                    </h1>
+
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Fechar janela de cadastro de empilhadeira">
+                    </button>
+
+                </div>
+
+
+                <!-- FORMULÁRIO DE CADASTRO -->
+
+                <form action="{{ url_for('salvar_empilhadeira') }}"
+                      method="POST"
+                      aria-labelledby="tituloModalCadastroEmpilhadeira">
+
+                    <div class="modal-body"
+                         style="padding: 38px 40px 45px 40px;">
+
+
+                        <!-- NÚMERO DO CHASSI -->
+
+                        <div class="mb-4">
+
+                            <label for="modal_empilhadeira_chassi"
+                                   class="form-label fw-semibold">
+
+                                Número de Chassi
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text bg-dark border-secondary"
+                                      aria-hidden="true">
+
+                                    <i class="bi bi-envelope text-white"
+                                       aria-hidden="true"></i>
+
+                                </span>
+
+                                <input type="text"
+                                       id="modal_empilhadeira_chassi"
+                                       name="empilhadeira_chassi"
+                                       class="form-control"
+                                       placeholder="Número do Chassi"
+                                       aria-label="Número do Chassi"
+                                       required>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MARCA -->
+
+                        <div class="mb-4">
+
+                            <label for="modal_empilhadeira_marca"
+                                   class="form-label fw-semibold">
+
+                                Marca da empilhadeira
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text bg-dark border-secondary"
+                                      aria-hidden="true">
+
+                                    <i class="bi bi-envelope text-white"
+                                       aria-hidden="true"></i>
+
+                                </span>
+
+                                <input type="text"
+                                       id="modal_empilhadeira_marca"
+                                       name="empilhadeira_marca"
+                                       class="form-control"
+                                       placeholder="Marca"
+                                       aria-label="Marca da empilhadeira"
+                                       required>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MODELO -->
+
+                        <div class="mb-2">
+
+                            <label for="modal_empilhadeira_modelo"
+                                   class="form-label fw-semibold">
+
+                                Modelo da empilhadeira
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text bg-dark border-secondary"
+                                      aria-hidden="true">
+
+                                    <i class="bi bi-envelope text-white"
+                                       aria-hidden="true"></i>
+
+                                </span>
+
+                                <input type="text"
+                                       id="modal_empilhadeira_modelo"
+                                       name="empilhadeira_modelo"
+                                       class="form-control"
+                                       placeholder="Modelo"
+                                       aria-label="Modelo da empilhadeira"
+                                       required>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RODAPÉ DO MODAL -->
+
+                    <div class="modal-footer"
+                         style="padding: 22px 40px;">
+
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                                aria-label="Cancelar cadastro da empilhadeira">
+
+                            Cancelar
+
+                        </button>
+
+                        <button type="submit"
+                                class="btn botao-add"
+                                aria-label="Cadastrar empilhadeira">
+
+                            Cadastrar
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
 
 
     <!-- ====================================================== -->
@@ -678,7 +796,6 @@
                             </div>
 
 
-
                             <!-- EMPILHADEIRA -->
 
                             <div class="col-md-6">
@@ -771,7 +888,6 @@
         </div>
 
     </div>
-
 
 </div>
 
