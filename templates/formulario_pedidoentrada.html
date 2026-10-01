@@ -1,25 +1,39 @@
-<!--Atualizado por Clarinha 05/05 às 16h10-->
+<!-- Atualizado por Clarinha 05/05 às 16h10 -->
 
 {% extends 'base.html' %}
 
 {% block conteudo %}
+
+<!-- Container principal da página -->
 <div class="container-fluid">
+
+    <!-- Título e descrição da página -->
     <div class="mb-4">
         <h2 class="titulo-pagina">
             <i class="bi bi-arrow-right-square"></i> Movimentações entrada
         </h2>
         <p class="text-muted mb-0">Pedido de entrada</p>
     </div>
-    <div class=" produto-container d-flex justify-content-between">
 
+    <!-- Área principal com formulário e tabela -->
+    <div class="produto-container d-flex justify-content-between">
+
+        <!-- Card do formulário do pedido -->
         <div class="pedido-card text-dark" style="width: 45%;">
 
+            <!-- Formulário para criar um novo pedido -->
             <form id="form_pedido" method="POST" action="{{ url_for('nova_entrada') }}" onsubmit="prepararEnvio()">
+
                 <div class="row">
+
+                    <!-- Seleção do fornecedor -->
                     <div class="col-md-6 mb-3">
                         <label for="fornecedor_nome">Fornecedor</label>
+
                         <select id="fornecedor" name="fornecedor_id" class="form-select">
                             <option value="0">Selecione</option>
+
+                            <!-- Lista de fornecedores cadastrados -->
                             {% for fornecedor in fornecedores %}
                             <option value="{{ fornecedor.id }}">
                                 {{ fornecedor.fornecedor_nome }}
@@ -28,14 +42,20 @@
                         </select>
                     </div>
 
+                    <!-- Título da seção de itens -->
                     <h5>Itens do Pedido</h5>
 
+                    <!-- Seleção do produto -->
                     <div class=" mb-3">
                         <label for="produto">Produto</label>
+
                         <select id="produto" class="form-select">
                             <option value="">Selecione</option>
+
+                            <!-- Lista de produtos cadastrados -->
                             {% for produto in produto %}
-                            <option value="{{ produto.id }}" data-nome="{{ produto.produto_nome }}"
+                            <option value="{{ produto.id }}"
+                                data-nome="{{ produto.produto_nome }}"
                                 data-estoque="{{ produto.estoque_quantidade }}">
                                 {{ produto.produto_nome }}
                             </option>
@@ -43,30 +63,37 @@
                         </select>
                     </div>
 
+                    <!-- Campo para informar a quantidade -->
                     <div class="col-md-6 mb-3">
                         <label for="produto_quantidade">Quantidade</label>
+
                         <div class="input-group">
                             <input type="number" class="form-control" id="produto_quantidade"
                                 placeholder="Quantidade do produto" min="1">
                         </div>
                     </div>
 
-
-
+                    <!-- Botão para adicionar o produto ao pedido -->
                     <button type="button" class="btn botao-add" onclick="adicionarItem()">
                         Adicionar item
                     </button>
 
-
+                    <!-- Campo oculto que recebe os itens em JSON -->
                     <input type="hidden" name="itens_json" id="itens_json">
+
                 </div>
             </form>
         </div>
+
+        <!-- Card da tabela de itens -->
         <div class="pedido-card text-dark" style="width: 45%;">
 
             <div class="table-responsive">
+
+                <!-- Tabela que mostra os produtos adicionados -->
                 <table id="tabela-itens" class="table table-hover align-middle">
 
+                    <!-- Cabeçalho da tabela -->
                     <thead class="table-light">
                         <tr>
                             <th scope="col">Item</th>
@@ -75,75 +102,123 @@
                             <th class="col">Ações</th>
                         </tr>
                     </thead>
+
+                    <!-- Itens são inseridos aqui pelo JavaScript -->
                     <tbody>
                     </tbody>
 
                 </table>
+
+                <!-- Botão para salvar o pedido -->
                 <button type="submit" form="form_pedido" class="btn btn-success">
                     Salvar Pedido
                 </button>
+
             </div>
         </div>
+
     </div>
 </div>
 
 
+<!-- Modal utilizado para exibir mensagens de alerta -->
 <div class="modal fade" id="modalAlerta" tabindex="-1" aria-labelledby="modalAlertaLabel" aria-hidden="true">
+
     <div class="modal-dialog">
+
         <div class="modal-content">
+
+            <!-- Cabeçalho do modal -->
             <div class="modal-header text-dark">
                 <h5 class="modal-title" id="modalAlertaLabel">
                     Atenção
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                <button type="button" class="btn-close"
+                    data-bs-dismiss="modal" aria-label="Close">
+                </button>
             </div>
+
+            <!-- Mensagem exibida no modal -->
             <div class="modal-body">
                 <p id="mensagemAlertaText"></p>
             </div>
+
+            <!-- Botão para fechar o modal -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Entendido</button>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                    Entendido
+                </button>
             </div>
+
         </div>
     </div>
 </div>
 
+
 <script>
+
+    // Armazena os itens adicionados ao pedido
     let itens = [];
 
+
+    // Exibe o modal com uma mensagem de alerta
     function exibirModalAlerta(mensagem) {
+
         document.getElementById("mensagemAlertaText").innerText = mensagem;
+
         const modalElement = document.getElementById('modalAlerta');
+
         const bsModal = new bootstrap.Modal(modalElement);
+
         bsModal.show();
     }
 
+
+    // Adiciona um produto à lista de itens
     function adicionarItem() {
+
         const selectProduto = document.getElementById("produto");
         const quantidadeInput = document.getElementById("produto_quantidade");
 
         const produtoId = selectProduto.value;
         const quantidade = parseInt(quantidadeInput.value);
 
+
+        // Verifica se um produto foi selecionado
         if (!produtoId) {
             exibirModalAlerta("Selecione um produto.");
             return;
         }
 
+
+        // Verifica se a quantidade é válida
         if (!quantidade || quantidade <= 0) {
             exibirModalAlerta("Informe uma quantidade maior que zero.");
             return;
         }
 
+
+        // Obtém os dados do produto selecionado
         const option = selectProduto.options[selectProduto.selectedIndex];
+
         const nome = option.getAttribute("data-nome");
 
+
+        // Verifica se o produto já foi adicionado
         const itemExistente = itens.find(item => item.produto_id === produtoId);
 
+
+        // Soma a quantidade caso o produto já exista
         if (itemExistente) {
+
             const novaQuantidade = itemExistente.quantidade + quantidade;
 
             itemExistente.quantidade = novaQuantidade;
+
         } else {
+
+            // Adiciona um novo produto à lista
             itens.push({
                 produto_id: produtoId,
                 nome: nome,
@@ -151,31 +226,49 @@
             });
         }
 
+
+        // Limpa os campos após adicionar o produto
         quantidadeInput.value = "";
         selectProduto.value = "";
 
+
+        // Atualiza a tabela
         atualizarTabela();
     }
 
+
+    // Remove um item da lista
     function removerItem(index) {
+
         itens.splice(index, 1);
+
         atualizarTabela();
     }
 
+
+    // Atualiza a tabela com os itens adicionados
     function atualizarTabela() {
+
         const tbody = document.querySelector("#tabela-itens tbody");
 
         tbody.innerHTML = "";
 
+
+        // Exibe mensagem caso não existam itens
         if (itens.length === 0) {
+
             tbody.innerHTML = `
                 <tr>
                     <td colspan="4" class="text-center text-muted py-3">
                         Nenhum item adicionado ao pedido.
                     </td>
                 </tr>`;
+
             return;
         }
+
+
+        // Percorre os itens e cria as linhas da tabela
         itens.forEach((item, index) => {
 
             const linha = `
@@ -183,8 +276,13 @@
                     <td>${item.produto_id}</td>
                     <td>${item.nome}</td>
                     <td>${item.quantidade}</td>
+
                     <td>
-                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerItem(${index})"><i class="bi bi-trash"></i></button>
+                        <!-- Botão para remover o item -->
+                        <button type="button" class="btn btn-sm btn-outline-danger"
+                            onclick="removerItem(${index})">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </td>
                 </tr>
             `;
@@ -194,10 +292,17 @@
 
     }
 
+
+    // Prepara os itens para serem enviados ao servidor
     function prepararEnvio() {
+
         document.getElementById("itens_json").value = JSON.stringify(itens);
     }
 
+
+    // Carrega a tabela ao abrir a página
     atualizarTabela();
+
 </script>
+
 {% endblock %}
