@@ -1304,57 +1304,114 @@ def api_historico():
 ############################################################################################################
 
 
-# cadastrodeempilhadeira
+# -----> Início: Empilhadeira
+############################################################################################################
 
-#essa rota transfere o usuario pra tela de cadastro de empilhadeira
+
+# Cadastro de empilhadeira
+# Essa rota transfere o usuário para a tela de cadastro de empilhadeira
 @app.route('/cadastroempilhadeira')
 @login_obrigatorio
 def cadastroempilhadeira():
     return render_template('cadastroempilhadeira.html')
-    
-#função que pega todos os dados do formulário da empilhadeira
+
+
+# Função que pega todos os dados do formulário da empilhadeira
 def get_empilhadeira_form():
     return {
-        "empilhadeira_chassi": request.form.get("empilhadeira_chassi", "").strip(),
-        "empilhadeira_modelo": request.form.get("empilhadeira_modelo", "").strip(),
-        "empilhadeira_marca": request.form.get("empilhadeira_marca", "").strip()
+        "empilhadeira_chassi": request.form.get(
+            "empilhadeira_chassi", ""
+        ).strip(),
+
+        "empilhadeira_modelo": request.form.get(
+            "empilhadeira_modelo", ""
+        ).strip(),
+
+        "empilhadeira_marca": request.form.get(
+            "empilhadeira_marca", ""
+        ).strip()
     }
+
 
 # Registro de empilhadeira no banco de dados
 @app.route("/salvar_empilhadeira", methods=["POST"])
 @login_obrigatorio
 def salvar_empilhadeira():
-    dados = get_empilhadeira_form() #pega os dados do formulário de empilhadeira e coloca dentro da variavel dados
-    empilhadeira = Empilhadeira(**dados) #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
 
-    #Validação
+    # Pega os dados do formulário
+    dados = get_empilhadeira_form()
+
+    # Junta os dados com a classe
+    empilhadeira = Empilhadeira(**dados)
+
+    # Validação
     erros = empilhadeira.validate()
 
-    if erros : #se tiver algum erro dentro do validate, ele cai nesse if
-        for erro in erros: #mostra erro por erro
-            flash(erro,"erro")
-        return render_template("cadastroempilhadeira.html", empilhadeiras=dados) #volta os erros para a tela do formulario das empilhadeiras
+    if erros:
 
-    chassi = request.form.get("empilhadeira_chassi", "").strip() #pega só o chassi do formulario
-    chassi_cadastrado = Empilhadeira.chassi_existente(chassi) #faz a função que verifica se já existe uma empilhadeira com aquele chassi
-    if chassi_cadastrado: #se tiver alguma empilhadeira com aquele chassi, cai nesse if 
-        flash("Chassi já existe no sistema! ","erro")
-        return render_template("cadastroempilhadeira.html",empilhadeiras=dados) #mostra o erro na tela
+        for erro in erros:
+            flash(erro, "erro")
 
-    #Cadastro - depois que passou de todas as validações, insere no banco
+        return render_template(
+            "cadastroempilhadeira.html",
+            empilhadeiras=dados
+        )
+
+    # Pega somente o chassi
+    chassi = request.form.get(
+        "empilhadeira_chassi",
+        ""
+    ).strip()
+
+    # Verifica se o chassi já está cadastrado
+    chassi_cadastrado = Empilhadeira.chassi_existente(chassi)
+
+    if chassi_cadastrado:
+
+        flash(
+            "Chassi já existe no sistema!",
+            "erro"
+        )
+
+        return render_template(
+            "cadastroempilhadeira.html",
+            empilhadeiras=dados
+        )
+
+    # Cadastro
     try:
-        empilhadeira.insert() #insere as informações no banco
-        flash("Empilhadeira cadastrada com sucesso.", "sucesso")
-        return redirect(url_for("tabelaempilhadeira")) #volta para a tela onde mostra as empilhadeiras 
-    except Exception as e: #se não conseguir inserir, é um erro diferente dos possiveis e cai aqui
-        flash(f"Erro ao cadastrar empilhadeira: {e}", "erro") #mostra o erro
-        return render_template("tabelaempilhadeira.html", empilhadeiras=dados)
 
+        empilhadeira.insert()
+
+        flash(
+            "Empilhadeira cadastrada com sucesso.",
+            "sucesso"
+        )
+
+        return redirect(
+            url_for("tabelaempilhadeira")
+        )
+
+    except Exception as e:
+
+        flash(
+            f"Erro ao cadastrar empilhadeira: {e}",
+            "erro"
+        )
+
+        return render_template(
+            "cadastroempilhadeira.html",
+            empilhadeiras=dados
+        )
+
+
+# Alterar status da empilhadeira
 @app.route("/alternar_status_empilhadeira/<int:id>")
 @login_obrigatorio
 def alternar_status_empilhadeira(id):
 
     try:
+
         novo_status = Empilhadeira.alternar_status(id)
 
         flash(
@@ -1363,81 +1420,175 @@ def alternar_status_empilhadeira(id):
         )
 
     except ValueError as e:
-        flash(str(e), "erro")
+
+        flash(
+            str(e),
+            "erro"
+        )
 
     except Exception as e:
-        flash(f"Erro ao alterar status da empilhadeira: {e}", "erro")
 
-    return redirect(url_for("tabelaempilhadeira"))
+        flash(
+            f"Erro ao alterar status da empilhadeira: {e}",
+            "erro"
+        )
 
-#Edição de uma empilhadeira já cadastrada
+    return redirect(
+        url_for("tabelaempilhadeira")
+    )
+
+
+# Edição de uma empilhadeira já cadastrada
 @app.route("/editar_empilhadeira/<int:id>")
 @login_obrigatorio
 def editar_empilhadeira(id):
-    empilhadeira = Empilhadeira.find_by_id(id) #procura o id da empilhadeira que você clicou 
-    if not empilhadeira: #se der algum erro e não achar
-        flash("Empilhadeira não encontrada.", "erro")
-        return redirect(url_for("tabelaempilhadeira"))
-    return render_template("cadastroempilhadeira.html", empilhadeira=empilhadeira) #mostra a tela de informações de uma empilhadeira já cadastrada
 
-#Atualização do cadastro de uma empilhadeira
-@app.route("/atualizar_empilhadeira/<int:id>", methods=["POST"])
+    empilhadeira = Empilhadeira.find_by_id(id)
+
+    if not empilhadeira:
+
+        flash(
+            "Empilhadeira não encontrada.",
+            "erro"
+        )
+
+        return redirect(
+            url_for("tabelaempilhadeira")
+        )
+
+    return render_template(
+        "cadastroempilhadeira.html",
+        empilhadeira=empilhadeira
+    )
+
+
+# Atualização do cadastro de uma empilhadeira
+@app.route(
+    "/atualizar_empilhadeira/<int:id>",
+    methods=["POST"]
+)
 @login_obrigatorio
 def atualizar_empilhadeira(id):
-    dados = get_empilhadeira_form() #pega os dados do formulário de empilhadeira e coloca dentro da variavel dados
-    empilhadeira = Empilhadeira(**dados) #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
 
-    #Validação dos campos
+    # Pega os dados do formulário
+    dados = get_empilhadeira_form()
+
+    # Junta os dados com a classe
+    empilhadeira = Empilhadeira(**dados)
+
+    # Validação
     erros = empilhadeira.validate()
 
-    #Tratativa de erro
-    if erros: #se tiver algum erro dentro do validate, ele cai nesse if
-        for erro in erros: #mostra erro por erro
+    if erros:
+
+        for erro in erros:
             flash(erro, "erro")
-        dados["id"] = id
-        return render_template("cadastroempilhadeira.html", empilhadeira=dados)
 
-    #Procura da empilhadeira por id
+        dados["id"] = id
+
+        return render_template(
+            "cadastroempilhadeira.html",
+            empilhadeira=dados
+        )
+
     try:
-        #ID não encontrado
-        if not Empilhadeira.find_by_id(id): #se não encontrar o id da empilhadeira
-            flash("Empilhadeira não encontrada.", "erro")
-            return redirect(url_for("tabelaempilhadeira"))
 
-        #Id encontrado, atualização possível
-        empilhadeira.update(id) #encontrou a empilhadeira e atualiza os dados
-        flash("Empilhadeira atualizada com sucesso.", "sucesso")
-        return redirect(url_for("tabelaempilhadeira"))
-    except Exception as e: #se não conseguir inserir, é um erro diferente dos possiveis e cai aqui
+        # Verifica se a empilhadeira existe
+        if not Empilhadeira.find_by_id(id):
+
+            flash(
+                "Empilhadeira não encontrada.",
+                "erro"
+            )
+
+            return redirect(
+                url_for("tabelaempilhadeira")
+            )
+
+        # Atualiza a empilhadeira
+        empilhadeira.update(id)
+
+        flash(
+            "Empilhadeira atualizada com sucesso.",
+            "sucesso"
+        )
+
+        return redirect(
+            url_for("tabelaempilhadeira")
+        )
+
+    except Exception as e:
+
         dados["id"] = id
-        flash(f"Erro ao atualizar empilhadeira: {e}", "erro") #mostra o erro
-        return render_template("tabelaempilhadeira.html", empilhadeira=dados)
+
+        flash(
+            f"Erro ao atualizar empilhadeira: {e}",
+            "erro"
+        )
+
+        return render_template(
+            "cadastroempilhadeira.html",
+            empilhadeira=dados
+        )
+
 
 # Deleta uma empilhadeira
 @app.route("/deletar_empilhadeira/<int:id>")
 @login_obrigatorio
 def deletar_empilhadeira(id):
-    #Tenta deletar
+
     try:
-        Empilhadeira.delete(id) #deleta a empilhadeira com parametro do id
-        flash("Empilhadeira excluída com sucesso.", "sucesso")
-    #Tratativa de erro
+
+        Empilhadeira.delete(id)
+
+        flash(
+            "Empilhadeira excluída com sucesso.",
+            "sucesso"
+        )
+
     except ValueError as e:
-        flash(str(e), "erro")
+
+        flash(
+            str(e),
+            "erro"
+        )
+
     except Exception as e:
-        flash(f"Erro ao excluir empilhadeira: {e}", "erro")
-    return redirect(url_for("tabelaempilhadeira"))
+
+        flash(
+            f"Erro ao excluir empilhadeira: {e}",
+            "erro"
+        )
+
+    return redirect(
+        url_for("tabelaempilhadeira")
+    )
+
+
+# ============================================================
+# TELA PRINCIPAL DAS EMPILHADEIRAS
+# ============================================================
 
 @app.route('/tabelaempilhadeira')
 @login_obrigatorio
 def tabelaempilhadeira():
-    uso = Empilhadeira.tabelatudojunto() #função select pra mostrar as empilhadeira que estão sendo utilizadas
-    empilhadeiras=Empilhadeira.empilhadeirasemuso() #função select pra mostrar as empilhadeira que não estão sendo utilizadas
+
+    # Empilhadeiras que estão sendo utilizadas
+    uso = Empilhadeira.tabelatudojunto()
+
+    # Empilhadeiras que não estão sendo utilizadas
+    empilhadeiras = Empilhadeira.empilhadeirasemuso()
+
+    # Funcionários para aparecer no modal
+    funcionarios = Funcionario.funcionario_listagem()
+
     return render_template(
         'tabelaempilhadeira.html',
         uso=uso,
-        empilhadeiras=empilhadeiras
+        empilhadeiras=empilhadeiras,
+        funcionarios=funcionarios
     )
+
 
 # -----> Fim: Empilhadeira
 ############################################################################################################
@@ -1446,81 +1597,143 @@ def tabelaempilhadeira():
 ############################################################################################################
 # -----> Início: Uso de Empilhadeira
 
+
+# Desocupar uma empilhadeira
 @app.route("/desocupar_empilhadeira/<int:id>")
 @login_obrigatorio
 def desocupar_empilhadeira(id):
 
     try:
+
         Uso_empilhadeira.delete(id)
-        flash("Empilhadeira desocupada com sucesso.", "sucesso")
+
+        flash(
+            "Empilhadeira desocupada com sucesso.",
+            "sucesso"
+        )
 
     except Exception as e:
-        flash(f"Erro ao desocupar empilhadeira: {e}", "erro")
 
-    return redirect(url_for("tabelaempilhadeira"))
+        flash(
+            f"Erro ao desocupar empilhadeira: {e}",
+            "erro"
+        )
 
+    return redirect(
+        url_for("tabelaempilhadeira")
+    )
+
+
+# ============================================================
+# FORMULÁRIO DE USO DA EMPILHADEIRA
+# ============================================================
+# Essa rota pode continuar existindo caso você ainda queira
+# acessar o formulário de uso em uma página separada.
 
 @app.route('/usoempilhadeira')
 @login_obrigatorio
 def usoempilhadeira():
-    #empilhadeira = Empilhadeira()
-    lista_empilhadeiras = empilhadeira.query.all()
-    return render_template('usoempilhadeira.html' ,empilhadeiras=lista_empilhadeiras)
 
+    funcionarios = Funcionario.funcionario_listagem()
+
+    empilhadeiras = Empilhadeira.find_all()
+
+    return render_template(
+        'usoempilhadeira.html',
+        funcionarios=funcionarios,
+        empilhadeiras=empilhadeiras
+    )
+
+
+# ============================================================
+# FUNÇÃO DO FORMULÁRIO DE USO DA EMPILHADEIRA
+# ============================================================
 
 def get_uso_empilhadeira_form():
+
     return {
         "uso_empilhadeira_datahora": datetime.now(),
-        "funcionario_id": to_int(request.form.get("funcionario_id")),
-        "empilhadeira_id": request.form.get("empilhadeira_id"),
+
+        "funcionario_id": to_int(
+            request.form.get("funcionario_id")
+        ),
+
+        "empilhadeira_id": request.form.get(
+            "empilhadeira_id"
+        )
     }
 
-@app.route("/salvar_uso_empilhadeira", methods=["POST"])
+
+# ============================================================
+# SALVAR USO DA EMPILHADEIRA
+# ============================================================
+
+@app.route(
+    "/salvar_uso_empilhadeira",
+    methods=["POST"]
+)
 @login_obrigatorio
 def salvar_uso_empilhadeira():
 
     dados = get_uso_empilhadeira_form()
-    print("empilhadeira ",dados)
 
+    print("empilhadeira", dados)
+
+    # Verifica empilhadeira
     if not dados["empilhadeira_id"]:
-        flash("Selecione uma empilhadeira.", "erro")
-        return redirect(url_for("usoempilhadeira"))
 
+        flash(
+            "Selecione uma empilhadeira.",
+            "erro"
+        )
+
+        return redirect(
+            url_for("tabelaempilhadeira")
+        )
+
+    # Verifica funcionário
     if not dados["funcionario_id"]:
-        flash("Selecione um funcionário.", "erro")
-        return redirect(url_for("usoempilhadeira"))
 
+        flash(
+            "Selecione um funcionário.",
+            "erro"
+        )
+
+        return redirect(
+            url_for("tabelaempilhadeira")
+        )
+
+    # Cria o objeto
     uso_empilhadeira = Uso_empilhadeira(**dados)
 
     try:
+
+        # Insere no banco
         uso_empilhadeira.insert()
-        flash("Uso de empilhadeira cadastrado com sucesso.", "sucesso")
-        return redirect(url_for("tabelaempilhadeira"))
+
+        flash(
+            "Uso de empilhadeira cadastrado com sucesso.",
+            "sucesso"
+        )
+
+        return redirect(
+            url_for("tabelaempilhadeira")
+        )
 
     except Exception as e:
-        flash(f"Erro ao cadastrar uso de empilhadeira: {e}", "erro")
-        return redirect(url_for("usoempilhadeira"))
-    
-@app.route('/uso_empilhadeira_estrangeiro')
-@login_obrigatorio
-def uso_empilhadeira():
 
-    funcionarios = Funcionario.funcionario_listagem()
-    empilhadeiras = Empilhadeira.find_all()
-    
-    return render_template('usoempilhadeira.html',
-     funcionarios=funcionarios,
-     empilhadeiras=empilhadeiras
-)
+        flash(
+            f"Erro ao cadastrar uso de empilhadeira: {e}",
+            "erro"
+        )
 
+        return redirect(
+            url_for("tabelaempilhadeira")
+        )
 
-@app.route('/seu-formulario')
-@login_obrigatorio
-def exibir_formulario():
-    lista_empilhadeiras = empilhadeira.query.all() 
-    return render_template('usoempilhadeira.html', empilhadeiras=lista_empilhadeiras)
 
 # -----> Fim: Uso de Empilhadeira
+############################################################################################################
 ############################################################################################################
 
 
