@@ -1,50 +1,91 @@
-<!--Editado por Júlia em 07/05/2026 às 15h57-->
-<!--atualizado por raica dia 24/09/26 às 09:30-->
 
+<!-- Atualizado por Raica dia 24/09/26 às 09:30 -->
+
+<!-- Define que esta página utiliza o template base.html -->
 {% extends 'base.html' %}
 
+
+<!-- Início do bloco principal de conteúdo -->
 {% block conteudo %}
 
-<!--Fornecedor-->
 
+<!-- Área relacionada ao fornecedor -->
+<!-- Fornecedor -->
+
+
+<!-- Container principal da página de fornecedor -->
 <div id="template_fornecedor">
+
 
     <!-- TÍTULO + BOTÃO -->
 
+
+    <!-- Área que organiza o título e o botão de visualização -->
     <div class="d-flex justify-content-between align-items-center mb-4">
 
+
+        <!-- Área do título -->
         <div>
 
+
+            <!-- Título da página -->
             <h2 class="titulo-pagina">
 
-                <!--Icone BS-->
+
+                <!-- Ícone utilizado junto ao título -->
+                <!-- Icone BS -->
                 <i class="bi bi-briefcase" aria-hidden="true"></i>
 
+
+                <!-- Exibe "Editar Fornecedor" quando existe um fornecedor
+                     sendo editado ou "Cadastrar Fornecedor" quando é um novo cadastro -->
                 {{ 'Editar Fornecedor' if fornecedor and fornecedor.id else 'Cadastrar Fornecedor' }}
+
 
             </h2>
 
+
         </div>
 
+
+        <!-- Área do botão -->
         <div>
 
-            <!--Botão para visualizar fornecedores/voltar para a tela de listagem durante o cadastro-->
+
+            <!-- Botão para visualizar fornecedores ou voltar
+                 para a tela de listagem durante o cadastro -->
+
 
             <a
                 href="{{ url_for('listagem_fornecedor') }}"
                 class="btn btn-success"
                 aria-label="Visualizar fornecedores cadastrados"
             >
+
+
+                <!-- Ícone do botão -->
                 <i aria-hidden="true"></i>
+
+
+                <!-- Texto exibido no botão -->
                 Visualizar fornecedores
+
+
             </a>
 
+
         </div>
+
 
     </div>
 
 
-    <!--Formulário para cadastro de fornecedor-->
+
+    <!-- Formulário utilizado para cadastrar ou editar um fornecedor -->
+
+
+    <!-- Formulário para cadastro de fornecedor -->
+
 
     <form
         id="form_fornecedor"
@@ -53,26 +94,46 @@
         aria-label="{{ 'Formulário para editar fornecedor' if fornecedor and fornecedor.id else 'Formulário para cadastrar fornecedor' }}"
     >
 
+
+        <!-- Linha que organiza os campos do formulário -->
+
+
         <div class="row">
 
+
+            <!-- Área do campo Nome -->
             <div class="col-md-6 mb-3">
 
-                <!--Campo Nome-->
 
+                <!-- Campo Nome -->
+
+
+                <!-- Texto que identifica o campo Nome -->
                 <label for="fornecedor_nome" class="form-label">Nome</label>
 
+
+                <!-- Grupo que contém o ícone e o campo de texto -->
                 <div class="input-group">
 
+
+                    <!-- Área do ícone do campo -->
                     <span
                         class="input-group-text bg-dark border-secondary"
                         aria-hidden="true"
                     >
+
+
+                        <!-- Ícone de pessoa -->
                         <i
                             class="bi bi-person-fill text-white"
                             aria-hidden="true"
                         ></i>
+
+
                     </span>
 
+
+                    <!-- Campo para informar o nome do representante -->
                     <input
                         name="fornecedor_nome"
                         type="text"
@@ -83,29 +144,47 @@
                         value="{{ fornecedor.fornecedor_nome if fornecedor else '' }}"
                     >
 
+
                 </div>
+
 
             </div>
 
 
+
+            <!-- Área do campo CNPJ -->
             <div class="col-md-6 mb-3">
 
-                <!--Campo CNPJ-->
 
+                <!-- Campo CNPJ -->
+
+
+                <!-- Texto que identifica o campo CNPJ -->
                 <label for="fornecedor_cnpj" class="form-label">CNPJ</label>
 
+
+                <!-- Grupo que contém o ícone e o campo CNPJ -->
                 <div class="input-group">
 
+
+                    <!-- Área do ícone do campo -->
                     <span
                         class="input-group-text bg-dark border-secondary"
                         aria-hidden="true"
                     >
+
+
+                        <!-- Ícone relacionado ao documento -->
                         <i
                             class="bi bi-person-vcard-fill text-white"
                             aria-hidden="true"
                         ></i>
+
+
                     </span>
 
+
+                    <!-- Campo para informar o CNPJ -->
                     <input
                         name="fornecedor_cnpj"
                         type="text"
@@ -117,29 +196,47 @@
                         maxlength="18"
                     >
 
+
                 </div>
+
 
             </div>
 
 
+
+            <!-- Área do campo CEP -->
             <div class="col-md-6 mb-3">
 
-                <!--Campo CEP-->
 
+                <!-- Campo CEP -->
+
+
+                <!-- Texto que identifica o campo CEP -->
                 <label for="fornecedor_cep" class="form-label">CEP</label>
 
+
+                <!-- Grupo que contém o ícone e o campo CEP -->
                 <div class="input-group">
 
+
+                    <!-- Área do ícone do campo -->
                     <span
                         class="input-group-text bg-dark border-secondary"
                         aria-hidden="true"
                     >
+
+
+                        <!-- Ícone de localização -->
                         <i
                             class="bi bi-geo-alt text-white"
                             aria-hidden="true"
                         ></i>
+
+
                     </span>
 
+
+                    <!-- Campo para informar o CEP -->
                     <input
                         name="fornecedor_cep"
                         type="text"
@@ -151,29 +248,47 @@
                         maxlength="8"
                     >
 
+
                 </div>
+
 
             </div>
 
 
+
+            <!-- Área do campo Email -->
             <div class="col-md-6 mb-3">
 
-                <!--Campo Email-->
 
+                <!-- Campo Email -->
+
+
+                <!-- Texto que identifica o campo de e-mail -->
                 <label for="fornecedor_email" class="form-label">Email</label>
 
+
+                <!-- Grupo que contém o ícone e o campo de e-mail -->
                 <div class="input-group">
 
+
+                    <!-- Área do ícone do campo -->
                     <span
                         class="input-group-text bg-dark border-secondary"
                         aria-hidden="true"
                     >
+
+
+                        <!-- Ícone de e-mail -->
                         <i
                             class="bi bi-envelope text-white"
                             aria-hidden="true"
                         ></i>
+
+
                     </span>
 
+
+                    <!-- Campo para informar o e-mail -->
                     <input
                         name="fornecedor_email"
                         type="email"
@@ -184,29 +299,47 @@
                         value="{{ fornecedor.fornecedor_email if fornecedor else '' }}"
                     >
 
+
                 </div>
+
 
             </div>
 
 
+
+            <!-- Área do campo DDI -->
             <div class="col-md-3 mb-3">
 
-                <!--Campo DDI-->
 
+                <!-- Campo DDI -->
+
+
+                <!-- Texto que identifica o campo DDI -->
                 <label for="fornecedor_ddi" class="form-label">DDI</label>
 
+
+                <!-- Grupo que contém o ícone e o campo DDI -->
                 <div class="input-group">
 
+
+                    <!-- Área do ícone do campo -->
                     <span
                         class="input-group-text bg-dark border-secondary"
                         aria-hidden="true"
                     >
+
+
+                        <!-- Ícone de telefone -->
                         <i
                             class="bi bi-telephone-fill text-white"
                             aria-hidden="true"
                         ></i>
+
+
                     </span>
 
+
+                    <!-- Campo para informar o código internacional -->
                     <input
                         name="fornecedor_ddi"
                         type="text"
@@ -217,29 +350,47 @@
                         value="{{ fornecedor.fornecedor_ddi if fornecedor else '' }}"
                     >
 
+
                 </div>
+
 
             </div>
 
 
+
+            <!-- Área do campo DDD -->
             <div class="col-md-3 mb-3">
 
-                <!--Campo DDD-->
 
+                <!-- Campo DDD -->
+
+
+                <!-- Texto que identifica o campo DDD -->
                 <label for="fornecedor_ddd" class="form-label">DDD</label>
 
+
+                <!-- Grupo que contém o ícone e o campo DDD -->
                 <div class="input-group">
 
+
+                    <!-- Área do ícone do campo -->
                     <span
                         class="input-group-text bg-dark border-secondary"
                         aria-hidden="true"
                     >
+
+
+                        <!-- Ícone de telefone -->
                         <i
                             class="bi bi-telephone-fill text-white"
                             aria-hidden="true"
                         ></i>
+
+
                     </span>
 
+
+                    <!-- Campo para informar o código regional -->
                     <input
                         name="fornecedor_ddd"
                         type="text"
@@ -250,29 +401,47 @@
                         value="{{ fornecedor.fornecedor_ddd if fornecedor else '' }}"
                     >
 
+
                 </div>
+
 
             </div>
 
 
+
+            <!-- Área do campo Telefone -->
             <div class="col-md-6 mb-3">
 
-                <!--Campo Telefone-->
 
+                <!-- Campo Telefone -->
+
+
+                <!-- Texto que identifica o campo telefone -->
                 <label for="fornecedor_telefone" class="form-label">Telefone</label>
 
+
+                <!-- Grupo que contém o ícone e o campo telefone -->
                 <div class="input-group">
 
+
+                    <!-- Área do ícone do campo -->
                     <span
                         class="input-group-text bg-dark border-secondary"
                         aria-hidden="true"
                     >
+
+
+                        <!-- Ícone de telefone -->
                         <i
                             class="bi bi-telephone-fill text-white"
                             aria-hidden="true"
                         ></i>
+
+
                     </span>
 
+
+                    <!-- Campo para informar o telefone -->
                     <input
                         name="fornecedor_telefone"
                         type="tel"
@@ -283,17 +452,26 @@
                         value="{{ fornecedor.fornecedor_telefone if fornecedor else '' }}"
                     >
 
+
                 </div>
+
 
             </div>
 
 
+
+            <!-- Área do campo Descrição -->
             <div class="mb-3">
 
-                <!--Campo Descrição-->
 
+                <!-- Campo Descrição -->
+
+
+                <!-- Texto que identifica o campo descrição -->
                 <label for="fornecedor_descricao" class="form-label">Descrição</label>
 
+
+                <!-- Campo de texto para descrição do fornecedor -->
                 <textarea
                     name="fornecedor_descricao"
                     class="form-control"
@@ -301,44 +479,72 @@
                     rows="3"
                 ></textarea>
 
+
             </div>
+
 
         </div>
 
 
+
+        <!-- Área dos botões do formulário -->
         <div class="botao-direita">
 
-            <!--Botão que envia o formulário em caso de cadastro-->
 
+            <!-- Botão que envia o formulário em caso de cadastro -->
+
+
+            <!-- Verifica se existe um fornecedor com ID -->
             {% if fornecedor and fornecedor.id %}
 
-            <button
-                type="submit"
-                class="botao-add btn"
-                aria-label="Atualizar fornecedor"
-            >
-                Atualizar
-            </button>
 
-            <!--Botão que envia o formulário em caso de atualização-->
+                <!-- Botão responsável por atualizar o fornecedor -->
+                <button
+                    type="submit"
+                    class="botao-add btn"
+                    aria-label="Atualizar fornecedor"
+                >
+
+
+                    <!-- Texto exibido no botão -->
+                    Atualizar
+
+
+                </button>
+
+
+                <!-- Botão que envia o formulário em caso de atualização -->
+
 
             {%else%}
 
-            <button
-                type="submit"
-                class="botao-add btn"
-                aria-label="Cadastrar fornecedor"
-            >
-                Cadastrar
-            </button>
+
+                <!-- Botão responsável por cadastrar um novo fornecedor -->
+                <button
+                    type="submit"
+                    class="botao-add btn"
+                    aria-label="Cadastrar fornecedor"
+                >
+
+
+                    <!-- Texto exibido no botão -->
+                    Cadastrar
+
+
+                </button>
+
 
             {%endif%}
 
+
         </div>
+
 
     </form>
 
+
 </div>
 
-{% endblock %}
 
+<!-- Finaliza o bloco principal de conteúdo -->
+{% endblock %}

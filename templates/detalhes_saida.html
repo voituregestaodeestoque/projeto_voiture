@@ -5,9 +5,10 @@
 {% block conteudo %}
 
 <div>
-
+<!--Título da página -->
 
 <h2 class="titulo-pagina">
+    <!-- ícone de bootstrap-->
 
     <i class="bi bi-box-seam" aria-hidden="true"></i>
     Pedido de Saída nº {{ pedido.id }}
@@ -16,10 +17,12 @@
 
 
 </div>
+<!-- card com as informações principais do pedido-->
 
 <div class="card-info"
     style="padding: 10px; margin-left: 20px; margin-top: 30px; margin-bottom: 50px; background-color: #fff; border-radius: 10px; width: auto;"
     aria-label="Informações do pedido de saída">
+    <!--cliente relaciona o pedido-->
 
 
 <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
@@ -31,6 +34,7 @@
 
 </div>
 
+<!--verificar se o pedido ainda está pendente -->
 {% if pedido.status_pedido_saida == 'PENDENTE' %}
 
 <div class="container-fluid detalhe-container d-flex justify-content-between">
@@ -50,11 +54,14 @@
             </strong>
         </h3>
 
+        <!--responsável por adicionar produtos ao pedido -->
         <form id="form-adicionar"
             method="POST"
             action="{{ url_for('adicionar_item_saida', pedido_saida_id=pedido.id) }}"
             onsubmit="return validarEstoque(event)"
             aria-label="Adicionar item ao pedido de saída">
+            
+            <!--campo para selecionar o produto-->
 
             <div class="col-md-6 mb-3">
 
@@ -64,6 +71,8 @@
                     class="form-select"
                     name="produto_id"
                     required>
+
+                    
 
                     <option value="">Selecione</option>
 
@@ -82,7 +91,8 @@
                 </select>
 
             </div>
-
+           
+            <!--campo para informar a quantidade desejada -->
             <div class="mb-3">
 
                 <label for="produto_quantidade">Quantidade</label>
@@ -101,6 +111,8 @@
 
             </div>
 
+            <!--Botão para adicionar o item ao pedido-->
+
             <button type="submit"
                 class="btn botao-add btn-primary"
                 aria-label="Adicionar item ao pedido">
@@ -118,18 +130,20 @@
     <div class="table-responsive" style="width: 45%;">
 
         <h3>
+
+            <!-- ícones representando os itens do pedido -->
             <strong>
                 <i class="bi bi-basket" aria-hidden="true"></i>
                 Itens do pedido
             </strong>
         </h3>
-
+        <!--tabela que apresenta os itens adicionados ao pedido -->
         <table id="tabela-movimentacao"
             class="table table-hover align-middle"
             aria-label="Itens do pedido de saída">
 
             <thead class="table-light">
-
+                <!--cabeçalho das colunas -->
                 <tr>
 
                     <th scope="col">ID</th>
@@ -146,6 +160,7 @@
 
             <tbody>
 
+                <!--percorre todos os itens existentes no pedido -->
                 {% for item in itens %}
 
                 <tr>
