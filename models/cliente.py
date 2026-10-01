@@ -69,7 +69,7 @@ class Cliente(CrudBase):#cria a classe Cliente
         conexao = Database.connect()
         cursor = conexao.cursor(dictionary=True)
         try:
-            #Define o comando SQL que buscará todos os fornecedores
+            #Define o comando SQL que buscará todos os clientes
             sql = "SELECT * FROM cliente"
             cursor.execute(sql)
             return cursor.fetchall()
