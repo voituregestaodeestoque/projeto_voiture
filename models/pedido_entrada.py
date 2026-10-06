@@ -43,6 +43,7 @@ class Pedido_entrada(CrudBase):
 
     #função de validação
     def validate(self):
+        #lista para armazenar erros
         erros = []
 
         #valida os campos
@@ -50,7 +51,7 @@ class Pedido_entrada(CrudBase):
             Validator.required(self.status_pedido_entrada, "status_pedido_entrada"),
             Validator.required(self.fornecedor_id, "fornecedor_id")
         ]
-
+        #percorre por cada validação
         for itens in validacoes:
             if not itens['valida']: #verifica se o retorno é False
                 erros.append(itens["mensagem"]) #adiciona em uma lista todas as mensagens de erro
@@ -94,7 +95,7 @@ class Pedido_entrada(CrudBase):
         try:
             #inicia uma transação no banco, ou seja, agrupa operações para que possam ser confirmadas ou desfeitas
             conexao.start_transaction()
-            #executa comando sql
+            #executa comando sql para procurar pedido
             cursor.execute("SELECT * FROM pedido_entrada WHERE id = %s", (pedido_entrada_id,))
             pedido = cursor.fetchone() #retorna uma única linha(um registro)
 
@@ -107,7 +108,7 @@ class Pedido_entrada(CrudBase):
             if pedido["status_pedido_entrada"] != "PENDENTE":
                 conexao.rollback()
                 return "Somente pedidos abertos podem ser finalizados."
-            #executa comando sql
+            #executa comando sql para encontrar os itens do pedido
             cursor.execute(
                 "SELECT * FROM detalhe_entrada WHERE pedido_entrada_id = %s",
                 (pedido_entrada_id,)
@@ -116,7 +117,7 @@ class Pedido_entrada(CrudBase):
 
             #se o pedido não tiver nenhum item, verifica se tem pelo menos um item
             if not itens:
-                conexao.rollback()
+                conexao.rollback() #desfaz alterações não confirmadas pela transação
                 return "Não é possível finalizar um pedido sem itens."
 
             #percorre por todos os itens de um pedido para atualizar seu estoque
@@ -133,7 +134,7 @@ class Pedido_entrada(CrudBase):
 
                 estoque = cursor.fetchone() #retorna um registro
                 if not estoque:#se não encontrar o registro de estoque do produto
-                    conexao.rollback()
+                    conexao.rollback() #desfaz alterações não confirmadas pela transação
                     return "Produto não encontrado no pedido."
 
                 #cálculo da nova quantidade
@@ -162,7 +163,7 @@ class Pedido_entrada(CrudBase):
     @classmethod
     def find_by_id(cls, pedido_entrada_id):
         conexao = Database.connect() #conexão com o banco de dados
-        cursor = conexao.cursor(dictionary=True)
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
 
         #seleciona dados, relaciona com a tabela fornecedor
         try:
@@ -185,11 +186,12 @@ class Pedido_entrada(CrudBase):
     @classmethod
     def processar(cls, pedido_entrada_id):
         conexao = Database.connect() #conexão com o banco de dados
-        cursor = conexao.cursor(dictionary=True)
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
         try:
             #inicia uma transação no banco, ou seja, agrupa operações para que possam ser confirmadas ou desfeitas
             conexao.start_transaction()
-            #executa comando sql
+            #executa comando sql para buscar pedido de entrada
+            #FOR UPDATE: bloqueia o registro durante a transação
             cursor.execute("SELECT * FROM pedido_entrada WHERE id = %s FOR UPDATE", (pedido_entrada_id,))
             pedido = cursor.fetchone()#retorna um único registro
             if not pedido: #se não encontrar pedido
@@ -280,7 +282,7 @@ class Pedido_entrada(CrudBase):
     @classmethod
     def cancelar(cls, pedido_entrada_id):
         conexao = Database.connect()#conexão com o banco de dados
-        cursor = conexao.cursor(dictionary=True)
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
         try:
             #executa comando sql
             cursor.execute("SELECT * FROM pedido_entrada WHERE id = %s", (pedido_entrada_id,))
@@ -313,9 +315,9 @@ class Pedido_entrada(CrudBase):
     #função que  busca pedidos de entrada pendentes
     def pedidoentrada_pendente(cls):
         conexao = Database.connect() #conexão com o banco de dados
-        cursor = conexao.cursor(dictionary=True)
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
         try:
-            #executa comando sql
+            #executa comando sql para verificar pedidos pendentes
             sql = "SELECT * FROM pedido_entrada WHERE status_pedido_entrada = 'pendente';"
             cursor.execute(sql)
             return cursor.fetchall() #retorna todos os registros
@@ -328,7 +330,7 @@ class Pedido_entrada(CrudBase):
     #função que conta quantos pedidos de entrada estão pendentes
     def contar_pedidoentrada(cls):
         conexao = Database.connect() #conexão com o banco de dados
-        cursor = conexao.cursor(dictionary=True)
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
         try:
             #executa comando sql para contar
             sql = "SELECT COUNT(status_pedido_entrada) as pedido_entrada_total FROM pedido_entrada WHERE status_pedido_entrada = 'pendente';"
@@ -342,10 +344,10 @@ class Pedido_entrada(CrudBase):
     @classmethod
     def total_entradas(cls):
         conexao = Database.connect()#conexão com o banco de dados
-        cursor = conexao.cursor(dictionary=True)
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
 
         try:
-            #executa comando sql
+            #executa comando sql para contar quantidade de itens
             sql = """
                 SELECT SUM(ds.detalhe_entrada_quantidade) AS total
                 FROM detalhe_entrada ds
