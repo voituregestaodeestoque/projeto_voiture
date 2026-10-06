@@ -1,419 +1,1168 @@
-
-<!--atualizado por raica dia 24/09/26 às 11:50-->
+<!-- atualizado por Raica dia 24/09/26 às 11:50 -->
 
 {% extends 'base.html' %}
 
 {% block conteudo %}
 
+<!-- =========================================================
+     ESTILOS DO MODAL DE DETALHES DO PRODUTO
+     O CSS abaixo deixa o modal menor, organizado e alinhado.
+========================================================= -->
+<style>
+
+    /* =========================================================
+       MODAL PRINCIPAL
+    ========================================================= */
+
+    /* Define o tamanho máximo do modal */
+    .modal-produto .modal-dialog {
+        max-width: 900px;
+        width: 90%;
+    }
+
+    /* Caixa principal do modal */
+    .modal-produto .modal-content {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+    }
+
+
+    /* =========================================================
+       CABEÇALHO DO MODAL
+    ========================================================= */
+
+    /* Cabeçalho azul-petróleo */
+    .modal-produto .modal-header {
+        background: linear-gradient(135deg, #063f50, #0b657b);
+        color: white;
+        border: none;
+
+        height: 65px;
+        padding: 15px 22px;
+
+        display: flex;
+        align-items: center;
+    }
+
+    /* Título do produto */
+    .modal-produto .modal-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+
+        display: flex;
+        align-items: center;
+
+        gap: 10px;
+    }
+
+    /* Ícone ao lado do nome */
+    .modal-produto .icone-titulo {
+        font-size: 1.5rem;
+    }
+
+    /* Botão de fechar */
+    .modal-produto .btn-close {
+        filter: brightness(0) invert(1);
+        opacity: 1;
+    }
+
+
+    /* =========================================================
+       CORPO DO MODAL
+    ========================================================== */
+
+    /* Fundo do corpo */
+    .modal-produto .modal-body {
+        background: #eef3f8;
+        padding: 18px;
+    }
+
+
+    /* =========================================================
+       ÁREA PRINCIPAL DO PRODUTO
+       Divide em duas colunas:
+       esquerda = imagem e descrição
+       direita = informações
+    ========================================================== */
+
+    .detalhes-produto {
+
+        display: grid;
+
+        /* Duas colunas do mesmo tamanho */
+        grid-template-columns: 1fr 1fr;
+
+        /* Espaçamento entre as colunas */
+        gap: 18px;
+
+        /* Fundo azul-claro */
+        background: #dce5ef;
+
+        /* Espaçamento interno */
+        padding: 18px;
+
+        /* Cantos arredondados */
+        border-radius: 14px;
+
+        /* Mantém os dois lados alinhados */
+        align-items: stretch;
+    }
+
+
+    /* =========================================================
+       LADO ESQUERDO
+    ========================================================== */
+
+    .produto-lado-esquerdo {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 14px;
+
+        min-width: 0;
+    }
+
+
+    /* =========================================================
+       IMAGEM DO PRODUTO
+    ========================================================== */
+
+    .produto-imagem-box {
+
+        /* Altura menor para deixar o modal compacto */
+        height: 210px;
+
+        background: white;
+
+        border-radius: 12px;
+
+        /* Centraliza a imagem */
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        overflow: hidden;
+
+        padding: 10px;
+
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Imagem dentro da caixa */
+    .produto-imagem-box img {
+
+        max-width: 90%;
+
+        max-height: 90%;
+
+        width: auto;
+
+        height: auto;
+
+        /* Mantém a proporção da imagem */
+        object-fit: contain;
+
+        display: block;
+    }
+
+
+    /* =========================================================
+       DESCRIÇÃO
+    ========================================================== */
+
+    .produto-descricao {
+
+        background: white;
+
+        border-radius: 12px;
+
+        overflow: hidden;
+
+        min-height: 205px;
+
+        /* Faz a descrição ocupar o espaço disponível */
+        flex: 1;
+
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+
+    /* Cabeçalho da descrição */
+    .produto-descricao-titulo {
+
+        background: #07566b;
+
+        color: white;
+
+        height: 55px;
+
+        padding: 12px 18px;
+
+        font-size: 1rem;
+
+        font-weight: 700;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+    }
+
+
+    /* Texto da descrição */
+    .produto-descricao-texto {
+
+        padding: 16px 18px;
+
+        color: #17324d;
+
+        font-size: 0.92rem;
+
+        line-height: 1.55;
+
+        /* Evita que textos grandes estourem o card */
+        overflow-wrap: anywhere;
+
+        word-break: break-word;
+    }
+
+
+    /* =========================================================
+       DESTAQUE DA DESCRIÇÃO
+    ========================================================== */
+
+    .produto-destaque {
+
+        margin: 5px 18px 14px;
+
+        padding-top: 10px;
+
+        border-top: 1px solid #d9e5ed;
+
+        color: #07566b;
+
+        font-weight: 700;
+
+        letter-spacing: 1px;
+
+        font-size: 0.72rem;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+    }
+
+
+    /* =========================================================
+       LADO DIREITO
+    ========================================================== */
+
+    .produto-lado-direito {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 12px;
+
+        min-width: 0;
+
+        /* Mantém os cards alinhados no topo */
+        justify-content: flex-start;
+    }
+
+
+    /* =========================================================
+       CARDS DAS INFORMAÇÕES
+    ========================================================== */
+
+    .info-produto {
+
+        background: white;
+
+        /* Todos os cards possuem a mesma altura */
+        height: 70px;
+
+        min-height: 70px;
+
+        border-radius: 12px;
+
+        padding: 10px 16px;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 14px;
+
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+
+    /* =========================================================
+       ÍCONE DAS INFORMAÇÕES
+    ========================================================== */
+
+    .info-produto-icone {
+
+        width: 46px;
+
+        height: 46px;
+
+        min-width: 46px;
+
+        border-radius: 50%;
+
+        background: #e7f0f6;
+
+        color: #07566b;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 1.2rem;
+    }
+
+
+    /* Nome do campo */
+    .info-produto-label {
+
+        color: #55718d;
+
+        font-size: 0.82rem;
+
+        margin-bottom: 1px;
+    }
+
+
+    /* Valor do campo */
+    .info-produto-valor {
+
+        color: #102f4d;
+
+        font-size: 1.05rem;
+
+        font-weight: 700;
+
+        overflow-wrap: anywhere;
+    }
+
+
+    /* =========================================================
+       RESPONSIVIDADE
+       Quando a tela ficar pequena, as duas colunas
+       passam a ficar uma embaixo da outra.
+    ========================================================== */
+
+    @media (max-width: 750px) {
+
+        .modal-produto .modal-dialog {
+
+            width: 95%;
+        }
+
+        .detalhes-produto {
+
+            grid-template-columns: 1fr;
+        }
+
+        .produto-imagem-box {
+
+            height: 200px;
+        }
+    }
+
+
+    /* =========================================================
+       RESPONSIVIDADE PARA CELULAR
+    ========================================================== */
+
+    @media (max-width: 500px) {
+
+        .modal-produto .modal-body {
+
+            padding: 10px;
+        }
+
+        .detalhes-produto {
+
+            padding: 10px;
+        }
+
+        .modal-produto .modal-header {
+
+            height: auto;
+
+            min-height: 60px;
+        }
+
+        .modal-produto .modal-title {
+
+            font-size: 1rem;
+        }
+    }
+
+</style>
+
+
+<!-- =========================================================
+     CONTEÚDO PRINCIPAL DA PÁGINA
+========================================================= -->
+
 <div>
+
+
+    <!-- =========================================================
+         TOPO DA PÁGINA
+    ========================================================== -->
 
     <div>
 
-        <!-- TOPO DA PÁGINA -->
+        <h2 class="titulo-pagina">
 
-        <div class="">
+            <!-- Ícone do estoque -->
+            <i
+                class="bi bi-box-seam"
+                aria-hidden="true"
+            ></i>
 
-            <h2 class="titulo-pagina">
+            Estoque
 
-                <!-- Ícone do Bootstrap -->
-
-                <i class="bi bi-box-seam"></i> Estoque
-
-            </h2>
-
-        </div>
-
-        <!-- Área contendo a pesquisa, filtro e botão de novo produto -->
-
-        <div style="width: 99%; margin-left: 10px; max-height: 37.6px;" class="d-flex">
-
-            <!-- Barra de pesquisa -->
-
-            <form action="{{ url_for('listagem_estoque')}}" style="width:95%;" class="input-group form-card"
-                aria-label="Pesquisar produtos no estoque">
-
-                <!-- Campo onde o usuário informa o produto que deseja pesquisar -->
-
-                <input name="chave_pesquisa" type="text" class="form-control" placeholder="Pesquisa"
-                    aria-label="Pesquisar produto">
-
-                <!-- Botão responsável por realizar a pesquisa -->
-
-                <button type="submit" class="input-group-text bg-dark border-secondary" aria-label="Pesquisar">
-
-                    <i class="bi bi-search text-white" aria-hidden="true"></i>
-
-                </button>
-
-            </form>
-
-            <!-- Filtro de ordenação dos produtos -->
-
-            <form method="GET" class="form-card ms-3" style="width: 35%; margin-right: 10px;"
-                aria-label="Ordenar produtos do estoque">
-
-                <!-- Menu contendo as opções de ordenação -->
-
-                <select name="filtro" class="filtrar form-select" onchange="this.form.submit()"
-                    aria-label="Ordenar produtos por">
-
-                    <!-- Opção para mostrar os produtos adicionados recentemente -->
-
-                    <option value="adc-recente" {{ 'selected' if filtro=='adc-recente' else '' }}>
-                        Adicionados recentemente
-                    </option>
-
-                    <!-- Opção para ordenar os produtos pelo nome -->
-
-                    <option value="nome" {{ 'selected' if filtro=='nome' else '' }}>
-                        Ordenar por nome
-                    </option>
-
-                    <!-- Opção para ordenar a quantidade do maior para o menor -->
-
-                    <option value="maior" {{ 'selected' if filtro=='maior' else '' }}>
-                        Quantidade: Maior ao menor
-                    </option>
-
-                    <!-- Opção para ordenar a quantidade do menor para o maior -->
-
-                    <option value="menor" {{ 'selected' if filtro=='menor' else '' }}>
-                        Quantidade: Menor ao maior
-                    </option>
-
-                    <!-- Opção para ordenar o preço do maior para o menor -->
-
-                    <option value="preco-maior" {{ 'selected' if filtro=='preco-maior' else '' }}>
-                        Preço: Maior ao menor
-                    </option>
-
-                    <!-- Opção para ordenar o preço do menor para o maior -->
-
-                    <option value="preco-menor" {{ 'selected' if filtro=='preco-menor' else '' }}>
-                        Preço: Menor ao maior
-                    </option>
-
-                </select>
-
-            </form>
-
-            <!-- Botão para acessar o cadastro de um novo produto -->
-
-            <a href="{{ url_for('produtos') }}" class="botao-add btn" style="width: 25%;">
-
-                <i class="bi bi-plus-lg"></i> Novo Produto
-
-            </a>
-
-        </div>
+        </h2>
 
     </div>
 
-    <!-- ESTOQUE -->
 
-    <section class="container mt-5" aria-label="Lista de produtos em estoque">
+    <!-- =========================================================
+         PESQUISA, FILTRO E NOVO PRODUTO
+    ========================================================== -->
 
-        <!-- Verifica se existem produtos no estoque -->
+    <div
+        style="width: 99%; margin-left: 10px; max-height: 37.6px;"
+        class="d-flex"
+    >
 
+
+        <!-- =====================================================
+             BARRA DE PESQUISA
+        ====================================================== -->
+
+        <form
+            action="{{ url_for('listagem_estoque') }}"
+            style="width:95%;"
+            class="input-group form-card"
+            aria-label="Pesquisar produtos no estoque"
+        >
+
+            <!-- Campo de pesquisa -->
+            <input
+                name="chave_pesquisa"
+                type="text"
+                class="form-control"
+                placeholder="Pesquisa"
+                aria-label="Pesquisar produto"
+            >
+
+
+            <!-- Botão de pesquisa -->
+            <button
+                type="submit"
+                class="input-group-text bg-dark border-secondary"
+                aria-label="Pesquisar"
+            >
+
+                <i
+                    class="bi bi-search text-white"
+                    aria-hidden="true"
+                ></i>
+
+            </button>
+
+        </form>
+
+
+        <!-- =====================================================
+             FILTRO DE ORDENAÇÃO
+        ====================================================== -->
+
+        <form
+            method="GET"
+            class="form-card ms-3"
+            style="width: 35%; margin-right: 10px;"
+            aria-label="Ordenar produtos do estoque"
+        >
+
+            <select
+                name="filtro"
+                class="filtrar form-select"
+                onchange="this.form.submit()"
+                aria-label="Ordenar produtos por"
+            >
+
+
+                <!-- Adicionados recentemente -->
+                <option
+                    value="adc-recente"
+                    {{ 'selected' if filtro == 'adc-recente' else '' }}
+                >
+
+                    Adicionados recentemente
+
+                </option>
+
+
+                <!-- Ordenar por nome -->
+                <option
+                    value="nome"
+                    {{ 'selected' if filtro == 'nome' else '' }}
+                >
+
+                    Ordenar por nome
+
+                </option>
+
+
+                <!-- Maior quantidade -->
+                <option
+                    value="maior"
+                    {{ 'selected' if filtro == 'maior' else '' }}
+                >
+
+                    Quantidade: Maior ao menor
+
+                </option>
+
+
+                <!-- Menor quantidade -->
+                <option
+                    value="menor"
+                    {{ 'selected' if filtro == 'menor' else '' }}
+                >
+
+                    Quantidade: Menor ao maior
+
+                </option>
+
+
+                <!-- Maior preço -->
+                <option
+                    value="preco-maior"
+                    {{ 'selected' if filtro == 'preco-maior' else '' }}
+                >
+
+                    Preço: Maior ao menor
+
+                </option>
+
+
+                <!-- Menor preço -->
+                <option
+                    value="preco-menor"
+                    {{ 'selected' if filtro == 'preco-menor' else '' }}
+                >
+
+                    Preço: Menor ao maior
+
+                </option>
+
+            </select>
+
+        </form>
+
+
+        <!-- =====================================================
+             BOTÃO NOVO PRODUTO
+        ====================================================== -->
+
+        <a
+            href="{{ url_for('produtos') }}"
+            class="botao-add btn"
+            style="width: 25%;"
+        >
+
+            <i
+                class="bi bi-plus-lg"
+                aria-hidden="true"
+            ></i>
+
+            Novo Produto
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================================================
+         ESTOQUE
+    ========================================================== -->
+
+    <section
+        class="container mt-5"
+        aria-label="Lista de produtos em estoque"
+    >
+
+
+        <!-- Verifica se existem produtos -->
         {% if estoque %}
 
-        <!-- LINHA DOS PRODUTOS -->
+
+        <!-- =====================================================
+             LINHA DOS PRODUTOS
+        ====================================================== -->
 
         <div class="row">
 
-            <!-- Percorre todos os produtos encontrados -->
 
+            <!-- Percorre os produtos -->
             {% for estoque_produto in estoque %}
 
-            <!-- COLUNA DE CADA PRODUTO -->
+
+            <!-- =================================================
+                 COLUNA DE CADA PRODUTO
+            ================================================== -->
 
             <div class="col-md-3">
 
-                <!-- CARD DO PRODUTO -->
 
-                <div class="card mb-4" style="max-width: 100%;"
-                    aria-label="Produto {{ estoque_produto.produto_nome }}">
+                <!-- =================================================
+                     CARD DO PRODUTO
+                ================================================== -->
 
-                    <!-- Verifica se o produto possui uma imagem -->
+                <div
+                    class="card mb-4"
+                    style="max-width: 100%;"
+                    aria-label="Produto {{ estoque_produto.produto_nome }}"
+                >
+
+
+                    <!-- =================================================
+                         IMAGEM DO PRODUTO
+                    ================================================== -->
 
                     {% if estoque_produto.imagem_base64 %}
 
-                    <!-- Exibe a imagem cadastrada do produto -->
 
-                    <img class="card-img-top"
+                    <!-- Imagem cadastrada -->
+                    <img
+                        class="card-img-top"
                         src="data:{{ estoque_produto.imagem_tipo }};base64,{{ estoque_produto.imagem_base64 }}"
                         alt="Imagem do produto {{ estoque_produto.produto_nome }}"
-                        style="width: 100%; height: 180px; object-fit: cover;">
+                        style="width: 100%; height: 180px; object-fit: cover;"
+                    >
+
 
                     {% else %}
 
-                    <!-- Exibe uma imagem padrão quando o produto não possui imagem -->
 
-                    <img class="card-img-top"
+                    <!-- Imagem padrão -->
+                    <img
+                        class="card-img-top"
                         src="{{ url_for('static', filename='images/produto-sem-imagem.png') }}"
                         alt="Produto {{ estoque_produto.produto_nome }} sem imagem"
-                        style="width: 100%; height: 180px; object-fit: cover;">
+                        style="width: 100%; height: 180px; object-fit: cover;"
+                    >
+
 
                     {% endif %}
 
-                    <!-- Informações principais do produto -->
+
+                    <!-- =================================================
+                         INFORMAÇÕES DO CARD
+                    ================================================== -->
 
                     <div class="card-body">
 
-                        <!-- Nome do produto -->
 
+                        <!-- Nome -->
                         <h5 class="card-title">
 
-                            <strong>{{ estoque_produto.produto_nome }}</strong>
+                            <strong>
+                                {{ estoque_produto.produto_nome }}
+                            </strong>
 
                         </h5>
 
-                        <!-- Quantidade mínima que deve existir no estoque -->
 
+                        <!-- Estoque mínimo -->
                         <p class="card-text">
 
-                            <strong>Estoque mínimo:</strong>
+                            <strong>
+                                Estoque mínimo:
+                            </strong>
 
                             {{ estoque_produto.produto_quantidade_minima }}
 
                         </p>
 
-                        <!-- Quantidade atual disponível -->
 
+                        <!-- Estoque atual -->
                         <p class="card-text">
 
-                            <strong>Estoque atual:</strong>
+                            <strong>
+                                Estoque atual:
+                            </strong>
 
                             {{ estoque_produto.estoque_quantidade }}
 
                         </p>
 
-                        <!-- Localização onde o produto está armazenado -->
 
+                        <!-- Localização -->
                         <p class="card-text">
 
-                            <strong>Localização:</strong>
+                            <strong>
+                                Localização:
+                            </strong>
 
                             {{ estoque_produto.produto_localizacao }}
 
                         </p>
 
+
+                        <!-- =================================================
+                             BOTÕES DO PRODUTO
+                        ================================================== -->
+
                         <div class="acoes-produto">
 
-                            <!-- Botão para abrir o modal com mais informações -->
 
-                            <button type="button"
+                            <!-- =================================================
+                                 BOTÃO MAIS DETALHES
+                            ================================================== -->
+
+                            <button
+                                type="button"
                                 class="botao-detalhes"
                                 data-bs-toggle="modal"
                                 data-bs-target="#modal{{ estoque_produto.id }}"
-                                aria-label="Mais detalhes do produto {{ estoque_produto.produto_nome }}">
+                                aria-label="Mais detalhes do produto {{ estoque_produto.produto_nome }}"
+                            >
 
                                 Mais detalhes
 
                             </button>
 
-                            <!-- MODAL DE DETALHES DO PRODUTO -->
 
-                            <div class="modal fade"
+                            <!-- =================================================
+                                 MODAL DE DETALHES DO PRODUTO
+                            ================================================== -->
+
+                            <div
+                                class="modal fade modal-produto"
                                 id="modal{{ estoque_produto.id }}"
                                 tabindex="-1"
                                 aria-labelledby="modalLabel{{ estoque_produto.id }}"
-                                aria-hidden="true">
+                                aria-hidden="true"
+                            >
 
-                                <div class="modal-dialog modal-lg modal-dialog-centered"
-                                    role="document">
+
+                                <!--
+                                    modal-lg deixa o modal menor que o modal-xl.
+                                    modal-dialog-centered mantém o modal centralizado.
+                                -->
+
+                                <div
+                                    class="modal-dialog modal-lg modal-dialog-centered"
+                                >
+
 
                                     <div class="modal-content">
 
-                                        <!-- Cabeçalho do modal -->
+
+                                        <!-- =================================================
+                                             CABEÇALHO DO MODAL
+                                        ================================================== -->
 
                                         <div class="modal-header">
 
-                                            <!-- Nome do produto no título do modal -->
 
-                                            <h5 class="modal-title"
-                                                id="modalLabel{{ estoque_produto.id }}">
+                                            <h5
+                                                class="modal-title"
+                                                id="modalLabel{{ estoque_produto.id }}"
+                                            >
 
-                                                <strong>
+
+                                                <!-- Ícone -->
+                                                <i
+                                                    class="bi bi-box-seam icone-titulo"
+                                                    aria-hidden="true"
+                                                ></i>
+
+
+                                                <!-- Nome do produto -->
+                                                <span>
+
                                                     {{ estoque_produto.produto_nome }}
-                                                </strong>
+
+                                                </span>
+
 
                                             </h5>
 
-                                            <!-- Botão para fechar o modal -->
 
-                                            <button type="button"
+                                            <!-- Botão fechar -->
+                                            <button
+                                                type="button"
                                                 class="btn-close"
                                                 data-bs-dismiss="modal"
-                                                aria-label="Fechar janela de detalhes do produto {{ estoque_produto.produto_nome }}">
+                                                aria-label="Fechar janela de detalhes do produto {{ estoque_produto.produto_nome }}"
+                                            ></button>
 
-                                            </button>
 
                                         </div>
 
-                                        <!-- Corpo do modal -->
+
+                                        <!-- =================================================
+                                             CORPO DO MODAL
+                                        ================================================== -->
 
                                         <div class="modal-body">
 
-                                            <!-- Área contendo todos os detalhes do produto -->
 
-                                            <section class="container d-flex justify-content-between"
+                                            <!--
+                                                Área que divide o modal
+                                                em duas colunas.
+                                            -->
+
+                                            <section
+                                                class="detalhes-produto"
                                                 aria-label="Detalhes do produto {{ estoque_produto.produto_nome }}"
-                                                style="background-color: #DCE3EE; width: 100%; height: 550px; border-radius: 10px;">
+                                            >
 
-                                                <!-- LADO ESQUERDO -->
 
-                                                <div class="d-flex flex-column gap-3 m-3"
-                                                    style="width: 300px; min-width: 300px; max-width: 300px;">
+                                                <!-- =================================================
+                                                     LADO ESQUERDO
+                                                     Imagem + descrição
+                                                ================================================== -->
 
-                                                    <!-- Área da imagem do produto -->
+                                                <div class="produto-lado-esquerdo">
 
-                                                    <div class="bg-white"
-                                                        style="width: 300px; height: 180px; min-height: 180px; max-height: 180px; border-radius: 10px !important; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+
+                                                    <!-- =================================================
+                                                         IMAGEM
+                                                    ================================================== -->
+
+                                                    <div class="produto-imagem-box">
+
 
                                                         {% if estoque_produto.imagem_base64 %}
 
+
                                                         <!--
-                                                            A imagem é limitada ao tamanho da caixa.
-                                                            Mesmo que a imagem original seja muito grande,
-                                                            ela será reduzida sem deformar.
+                                                            Mostra a imagem cadastrada.
+                                                            O CSS mantém a proporção.
                                                         -->
 
                                                         <img
                                                             src="data:{{ estoque_produto.imagem_tipo }};base64,{{ estoque_produto.imagem_base64 }}"
                                                             alt="Imagem do produto {{ estoque_produto.produto_nome }}"
-                                                            style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block;">
+                                                        >
+
 
                                                         {% else %}
 
-                                                        <!-- Imagem padrão -->
+
+                                                        <!--
+                                                            Caso o produto não tenha imagem,
+                                                            mostra a imagem padrão.
+                                                        -->
 
                                                         <img
                                                             src="{{ url_for('static', filename='images/produto-sem-imagem.png') }}"
                                                             alt="Produto {{ estoque_produto.produto_nome }} sem imagem"
-                                                            style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block;">
+                                                        >
+
 
                                                         {% endif %}
 
+
                                                     </div>
 
-                                                    <!-- Área contendo a descrição do produto -->
 
-                                                    <div class="bg-white"
-                                                        style="width: 300px; height: 285px; min-height: 285px; max-height: 285px; border-radius: 10px; overflow-y: auto; overflow-x: hidden;">
+                                                    <!-- =================================================
+                                                         DESCRIÇÃO
+                                                    ================================================== -->
 
-                                                        <p style="margin: 15px; max-width: 270px; overflow-wrap: anywhere; word-break: break-word; white-space: normal;">
+                                                    <div class="produto-descricao">
 
-                                                            <strong>Descrição:</strong>
+
+                                                        <!-- Título -->
+                                                        <div class="produto-descricao-titulo">
+
+
+                                                            <i
+                                                                class="bi bi-file-text"
+                                                                aria-hidden="true"
+                                                            ></i>
+
+
+                                                            Descrição
+
+
+                                                        </div>
+
+
+                                                        <!-- Texto -->
+                                                        <div class="produto-descricao-texto">
 
                                                             {{ estoque_produto.produto_descricao }}
 
-                                                        </p>
+                                                        </div>
+
+
+                                                        <!-- Frase de destaque -->
+                                                        <div class="produto-destaque">
+
+
+                                                            <i
+                                                                class="bi bi-wind"
+                                                                aria-hidden="true"
+                                                            ></i>
+
+
+                                                            MAIS FLUXO, MAIS PERFORMANCE
+
+
+                                                        </div>
+
 
                                                     </div>
+
 
                                                 </div>
 
-                                                <!-- LADO DIREITO COM AS INFORMAÇÕES DO PRODUTO -->
 
-                                                <div class="d-flex flex-column m-3 mx-auto"
-                                                    style="width: 320px; min-width: 320px; max-width: 320px;">
+                                                <!-- =================================================
+                                                     LADO DIREITO
+                                                     Informações do produto
+                                                ================================================== -->
 
-                                                    <!-- Nome -->
+                                                <div class="produto-lado-direito">
 
-                                                    <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
-                                                        style="height: 70px; min-height: 70px; border-radius: 10px; overflow: hidden;">
 
-                                                        <p style="margin-bottom: 0; overflow-wrap: anywhere;">
+                                                    <!-- =================================================
+                                                         CATEGORIA
+                                                    ================================================== -->
 
-                                                            <strong>Nome:</strong>
+                                                    <div class="info-produto">
 
-                                                            {{ estoque_produto.produto_nome }}
 
-                                                        </p>
+                                                        <!-- Ícone -->
+                                                        <div class="info-produto-icone">
 
-                                                    </div>
+                                                            <i
+                                                                class="bi bi-grid-3x3-gap"
+                                                                aria-hidden="true"
+                                                            ></i>
 
-                                                    <!-- Categoria -->
+                                                        </div>
 
-                                                    <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
-                                                        style="height: 70px; min-height: 70px; border-radius: 10px; overflow: hidden;">
 
-                                                        <p style="margin-bottom: 0; overflow-wrap: anywhere;">
+                                                        <!-- Informação -->
+                                                        <div>
 
-                                                            <strong>Categoria:</strong>
+                                                            <div class="info-produto-label">
 
-                                                            {{ estoque_produto.produto_categoria }}
+                                                                Categoria
 
-                                                        </p>
+                                                            </div>
 
-                                                    </div>
 
-                                                    <!-- Preço de venda -->
+                                                            <div class="info-produto-valor">
 
-                                                    <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
-                                                        style="height: 70px; min-height: 70px; border-radius: 10px; overflow: hidden;">
+                                                                {{ estoque_produto.produto_categoria }}
 
-                                                        <p style="margin-bottom: 0; overflow-wrap: anywhere;">
+                                                            </div>
 
-                                                            <strong>Preço de Venda:</strong>
+                                                        </div>
 
-                                                            {{ estoque_produto.produto_preco_venda }}
-
-                                                        </p>
 
                                                     </div>
 
-                                                    <!-- Preço de custo -->
 
-                                                    <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
-                                                        style="height: 70px; min-height: 70px; border-radius: 10px; overflow: hidden;">
+                                                    <!-- =================================================
+                                                         PREÇO DE VENDA
+                                                    ================================================== -->
 
-                                                        <p style="margin-bottom: 0; overflow-wrap: anywhere;">
+                                                    <div class="info-produto">
 
-                                                            <strong>Preço de Custo:</strong>
 
-                                                            {{ estoque_produto.produto_preco_custo }}
+                                                        <!-- Ícone -->
+                                                        <div class="info-produto-icone">
 
-                                                        </p>
+                                                            <i
+                                                                class="bi bi-tag"
+                                                                aria-hidden="true"
+                                                            ></i>
+
+                                                        </div>
+
+
+                                                        <!-- Informação -->
+                                                        <div>
+
+                                                            <div class="info-produto-label">
+
+                                                                Preço de Venda
+
+                                                            </div>
+
+
+                                                            <div class="info-produto-valor">
+
+                                                                R$
+                                                                {{ estoque_produto.produto_preco_venda }}
+
+                                                            </div>
+
+                                                        </div>
+
+
+                                                    </div>
+
+
+                                                    <!-- =================================================
+                                                         PREÇO DE CUSTO
+                                                    ================================================== -->
+
+                                                    <div class="info-produto">
+
+
+                                                        <!-- Ícone -->
+                                                        <div class="info-produto-icone">
+
+                                                            <i
+                                                                class="bi bi-coin"
+                                                                aria-hidden="true"
+                                                            ></i>
+
+                                                        </div>
+
+
+                                                        <!-- Informação -->
+                                                        <div>
+
+                                                            <div class="info-produto-label">
+
+                                                                Preço de Custo
+
+                                                            </div>
+
+
+                                                            <div class="info-produto-valor">
+
+                                                                R$
+                                                                {{ estoque_produto.produto_preco_custo }}
+
+                                                            </div>
+
+                                                        </div>
+
 
                                                     </div>
 
-                                                    <!-- Quantidade atual do estoque -->
 
-                                                    <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
-                                                        style="height: 70px; min-height: 70px; border-radius: 10px; overflow: hidden;">
+                                                    <!-- =================================================
+                                                         QUANTIDADE ATUAL
+                                                    ================================================== -->
 
-                                                        <p style="margin-bottom: 0; overflow-wrap: anywhere;">
+                                                    <div class="info-produto">
 
-                                                            <strong>Quantidade atual:</strong>
 
-                                                            {{ estoque_produto.estoque_quantidade }}
+                                                        <!-- Ícone -->
+                                                        <div class="info-produto-icone">
 
-                                                        </p>
+                                                            <i
+                                                                class="bi bi-box-seam"
+                                                                aria-hidden="true"
+                                                            ></i>
+
+                                                        </div>
+
+
+                                                        <!-- Informação -->
+                                                        <div>
+
+                                                            <div class="info-produto-label">
+
+                                                                Quantidade atual
+
+                                                            </div>
+
+
+                                                            <div class="info-produto-valor">
+
+                                                                {{ estoque_produto.estoque_quantidade }}
+
+                                                            </div>
+
+                                                        </div>
+
 
                                                     </div>
 
-                                                    <!-- Peso do produto -->
 
-                                                    <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
-                                                        style="height: 70px; min-height: 70px; border-radius: 10px; overflow: hidden;">
+                                                    <!-- =================================================
+                                                         PESO
+                                                    ================================================== -->
 
-                                                        <p style="margin-bottom: 0; overflow-wrap: anywhere;">
+                                                    <div class="info-produto">
 
-                                                            <strong>Peso:</strong>
 
-                                                            {{ estoque_produto.produto_peso }}
+                                                        <!-- Ícone -->
+                                                        <div class="info-produto-icone">
 
-                                                        </p>
+                                                            <i
+                                                                class="bi bi-speedometer2"
+                                                                aria-hidden="true"
+                                                            ></i>
+
+                                                        </div>
+
+
+                                                        <!-- Informação -->
+                                                        <div>
+
+                                                            <div class="info-produto-label">
+
+                                                                Peso
+
+                                                            </div>
+
+
+                                                            <div class="info-produto-valor">
+
+                                                                {{ estoque_produto.produto_peso }}
+                                                                kg
+
+                                                            </div>
+
+                                                        </div>
+
 
                                                     </div>
+
 
                                                 </div>
+
 
                                             </section>
 
+
                                         </div>
+
 
                                     </div>
 
@@ -421,90 +1170,129 @@
 
                             </div>
 
-                            <!-- Botão para editar o produto -->
 
-                            <a href="{{ url_for('editar_produto', id=estoque_produto.id) }}"
+                            <!-- =================================================
+                                 BOTÃO EDITAR
+                            ================================================== -->
+
+                            <a
+                                href="{{ url_for('editar_produto', id=estoque_produto.id) }}"
                                 class="botao-acao botao-editar"
-                                title="Editar produto">
+                                title="Editar produto"
+                                aria-label="Editar produto {{ estoque_produto.produto_nome }}"
+                            >
 
-                                <i class="bi bi-pencil"></i>
+                                <i
+                                    class="bi bi-pencil"
+                                    aria-hidden="true"
+                                ></i>
 
                             </a>
 
-                            <!-- Botão do modal para excluir -->
 
-                            <button type="button"
+                            <!-- =================================================
+                                 BOTÃO EXCLUIR
+                            ================================================== -->
+
+                            <button
+                                type="button"
                                 class="botao-acao botao-excluir"
                                 data-bs-toggle="modal"
                                 data-bs-target="#Modal{{ estoque_produto.id }}"
-                                title="Excluir produto">
+                                title="Excluir produto"
+                                aria-label="Excluir produto {{ estoque_produto.produto_nome }}"
+                            >
 
-                                <i class="bi bi-trash"></i>
+                                <i
+                                    class="bi bi-trash"
+                                    aria-hidden="true"
+                                ></i>
 
                             </button>
 
-                            <!-- MODAL DE CONFIRMAÇÃO DA EXCLUSÃO -->
 
-                            <div class="modal fade"
+                            <!-- =================================================
+                                 MODAL DE CONFIRMAÇÃO DA EXCLUSÃO
+                            ================================================== -->
+
+                            <div
+                                class="modal fade"
                                 id="Modal{{ estoque_produto.id }}"
                                 tabindex="-1"
                                 aria-labelledby="exampleModalLabel{{ estoque_produto.id }}"
-                                aria-hidden="true">
+                                aria-hidden="true"
+                            >
+
 
                                 <div class="modal-dialog">
 
+
                                     <div class="modal-content">
 
-                                        <!-- Cabeçalho do modal -->
 
+                                        <!-- Cabeçalho -->
                                         <div class="modal-header">
 
-                                            <!-- Mensagem de confirmação da exclusão -->
 
-                                            <h1 class="modal-title fs-5"
-                                                id="exampleModalLabel{{ estoque_produto.id }}">
+                                            <h1
+                                                class="modal-title fs-5"
+                                                id="exampleModalLabel{{ estoque_produto.id }}"
+                                            >
 
                                                 <strong>
+
                                                     Deseja excluir esse produto?
+
                                                 </strong>
 
                                             </h1>
 
-                                            <!-- Botão para fechar o modal -->
 
-                                            <button type="button"
+                                            <!-- Fechar -->
+                                            <button
+                                                type="button"
                                                 class="btn-close"
                                                 data-bs-dismiss="modal"
-                                                aria-label="Fechar janela de confirmação">
+                                                aria-label="Fechar janela de confirmação"
+                                            ></button>
 
-                                            </button>
 
                                         </div>
 
-                                        <!-- Botões de confirmação ou cancelamento -->
 
+                                        <!-- Rodapé com os botões -->
                                         <div class="modal-footer">
 
-                                            <!-- Cancela a exclusão -->
 
-                                            <button type="button"
+                                            <!-- Cancelar -->
+                                            <button
+                                                type="button"
                                                 class="btn btn-secondary"
-                                                data-bs-dismiss="modal">
+                                                data-bs-dismiss="modal"
+                                            >
 
                                                 Cancelar
 
                                             </button>
 
-                                            <!-- Confirma a exclusão do produto -->
 
-                                            <a href="{{ url_for('deletar_produto', id=estoque_produto.id) }}"
-                                                class="btn btn-danger">
+                                            <!-- Excluir -->
+                                            <a
+                                                href="{{ url_for('deletar_produto', id=estoque_produto.id) }}"
+                                                class="btn btn-danger"
+                                            >
 
-                                                <strong>Excluir</strong>
+                                                <strong>
+
+                                                    Excluir
+
+                                                </strong>
 
                                             </a>
 
+
                                         </div>
+
 
                                     </div>
 
@@ -512,36 +1300,55 @@
 
                             </div>
 
+
                         </div>
+
 
                     </div>
 
+
                 </div>
+
 
             </div>
 
+
             {% endfor %}
+
 
         </div>
 
+
         {% else %}
 
-        <!-- Mensagem exibida quando nenhum produto é encontrado no estoque -->
 
-        <div class="alert alert-info mb-0"
+        <!-- =========================================================
+             MENSAGEM QUANDO NÃO EXISTEM PRODUTOS
+        ========================================================== -->
+
+        <div
+            class="alert alert-info mb-0"
             role="status"
-            aria-live="polite">
+            aria-live="polite"
+        >
 
-            <i class="bi bi-info-circle" aria-hidden="true"></i>
+            <i
+                class="bi bi-info-circle"
+                aria-hidden="true"
+            ></i>
 
             Nenhum produto encontrado.
 
         </div>
 
+
         {% endif %}
+
 
     </section>
 
+
 </div>
+
 
 {% endblock %}
