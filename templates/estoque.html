@@ -1,3 +1,4 @@
+
 <!--atualizado por raica dia 24/09/26 às 11:50-->
 
 {% extends 'base.html' %}
@@ -162,28 +163,39 @@
                         <!-- Nome do produto -->
 
                         <h5 class="card-title">
+
                             <strong>{{ estoque_produto.produto_nome }}</strong>
+
                         </h5>
 
                         <!-- Quantidade mínima que deve existir no estoque -->
 
                         <p class="card-text">
+
                             <strong>Estoque mínimo:</strong>
+
                             {{ estoque_produto.produto_quantidade_minima }}
+
                         </p>
 
                         <!-- Quantidade atual disponível -->
 
                         <p class="card-text">
+
                             <strong>Estoque atual:</strong>
+
                             {{ estoque_produto.estoque_quantidade }}
+
                         </p>
 
                         <!-- Localização onde o produto está armazenado -->
 
                         <p class="card-text">
+
                             <strong>Localização:</strong>
+
                             {{ estoque_produto.produto_localizacao }}
+
                         </p>
 
                         <div class="acoes-produto">
@@ -208,7 +220,8 @@
                                 aria-labelledby="modalLabel{{ estoque_produto.id }}"
                                 aria-hidden="true">
 
-                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                <div class="modal-dialog modal-lg modal-dialog-centered"
+                                    role="document">
 
                                     <div class="modal-content">
 
@@ -218,9 +231,12 @@
 
                                             <!-- Nome do produto no título do modal -->
 
-                                            <h5 class="modal-title" id="modalLabel{{ estoque_produto.id }}">
+                                            <h5 class="modal-title"
+                                                id="modalLabel{{ estoque_produto.id }}">
 
-                                                <strong>{{ estoque_produto.produto_nome }}</strong>
+                                                <strong>
+                                                    {{ estoque_produto.produto_nome }}
+                                                </strong>
 
                                             </h5>
 
@@ -247,19 +263,20 @@
 
                                                 <!-- LADO ESQUERDO -->
 
-                                                <div class="d-flex flex-column gap-3 m-3">
+                                                <div class="d-flex flex-column gap-3 m-3"
+                                                    style="width: 300px; min-width: 300px; max-width: 300px;">
 
                                                     <!-- Área da imagem do produto -->
 
                                                     <div class="bg-white"
-                                                        style="width: 300px; height: 180px; border-radius: 10px !important; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                                                        style="width: 300px; height: 180px; min-height: 180px; max-height: 180px; border-radius: 10px !important; overflow: hidden; display: flex; align-items: center; justify-content: center;">
 
                                                         {% if estoque_produto.imagem_base64 %}
 
                                                         <!--
-                                                            A imagem fica limitada ao tamanho da área.
-                                                            O contain impede que imagens muito grandes
-                                                            ultrapassem o espaço ou sejam deformadas.
+                                                            A imagem é limitada ao tamanho da caixa.
+                                                            Mesmo que a imagem original seja muito grande,
+                                                            ela será reduzida sem deformar.
                                                         -->
 
                                                         <img
@@ -269,7 +286,7 @@
 
                                                         {% else %}
 
-                                                        <!-- Imagem padrão caso o produto não possua imagem -->
+                                                        <!-- Imagem padrão -->
 
                                                         <img
                                                             src="{{ url_for('static', filename='images/produto-sem-imagem.png') }}"
@@ -282,10 +299,10 @@
 
                                                     <!-- Área contendo a descrição do produto -->
 
-                                                    <div class="bg-white w-100"
-                                                        style="height: 285px; border-radius: 10px; overflow: auto;">
+                                                    <div class="bg-white"
+                                                        style="width: 300px; height: 285px; min-height: 285px; max-height: 285px; border-radius: 10px; overflow-y: auto; overflow-x: hidden;">
 
-                                                        <p style="margin: 15px;">
+                                                        <p style="margin: 15px; max-width: 270px; overflow-wrap: anywhere; word-break: break-word; white-space: normal;">
 
                                                             <strong>Descrição:</strong>
 
@@ -299,14 +316,15 @@
 
                                                 <!-- LADO DIREITO COM AS INFORMAÇÕES DO PRODUTO -->
 
-                                                <div class="d-flex flex-column m-3 mx-auto" style="width: 320px;">
+                                                <div class="d-flex flex-column m-3 mx-auto"
+                                                    style="width: 320px; min-width: 320px; max-width: 320px;">
 
                                                     <!-- Nome -->
 
                                                     <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
-                                                        style="height: 70px; border-radius: 10px;">
+                                                        style="height: 70px; min-height: 70px; border-radius: 10px; overflow: hidden;">
 
-                                                        <p>
+                                                        <p style="margin-bottom: 0; overflow-wrap: anywhere;">
 
                                                             <strong>Nome:</strong>
 
@@ -319,9 +337,9 @@
                                                     <!-- Categoria -->
 
                                                     <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
-                                                        style="height: 70px; border-radius: 10px;">
+                                                        style="height: 70px; min-height: 70px; border-radius: 10px; overflow: hidden;">
 
-                                                        <p>
+                                                        <p style="margin-bottom: 0; overflow-wrap: anywhere;">
 
                                                             <strong>Categoria:</strong>
 
@@ -334,9 +352,9 @@
                                                     <!-- Preço de venda -->
 
                                                     <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
-                                                        style="height: 70px; border-radius: 10px;">
+                                                        style="height: 70px; min-height: 70px; border-radius: 10px; overflow: hidden;">
 
-                                                        <p>
+                                                        <p style="margin-bottom: 0; overflow-wrap: anywhere;">
 
                                                             <strong>Preço de Venda:</strong>
 
@@ -349,9 +367,9 @@
                                                     <!-- Preço de custo -->
 
                                                     <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
-                                                        style="height: 70px; border-radius: 10px;">
+                                                        style="height: 70px; min-height: 70px; border-radius: 10px; overflow: hidden;">
 
-                                                        <p>
+                                                        <p style="margin-bottom: 0; overflow-wrap: anywhere;">
 
                                                             <strong>Preço de Custo:</strong>
 
@@ -364,9 +382,9 @@
                                                     <!-- Quantidade atual do estoque -->
 
                                                     <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
-                                                        style="height: 70px; border-radius: 10px;">
+                                                        style="height: 70px; min-height: 70px; border-radius: 10px; overflow: hidden;">
 
-                                                        <p>
+                                                        <p style="margin-bottom: 0; overflow-wrap: anywhere;">
 
                                                             <strong>Quantidade atual:</strong>
 
@@ -379,9 +397,9 @@
                                                     <!-- Peso do produto -->
 
                                                     <div class="bg-white mb-3 w-100 d-flex align-items-center px-3"
-                                                        style="height: 70px; border-radius: 10px;">
+                                                        style="height: 70px; min-height: 70px; border-radius: 10px; overflow: hidden;">
 
-                                                        <p>
+                                                        <p style="margin-bottom: 0; overflow-wrap: anywhere;">
 
                                                             <strong>Peso:</strong>
 
@@ -446,7 +464,9 @@
                                             <h1 class="modal-title fs-5"
                                                 id="exampleModalLabel{{ estoque_produto.id }}">
 
-                                                <strong>Deseja excluir esse produto?</strong>
+                                                <strong>
+                                                    Deseja excluir esse produto?
+                                                </strong>
 
                                             </h1>
 
@@ -508,7 +528,9 @@
 
         <!-- Mensagem exibida quando nenhum produto é encontrado no estoque -->
 
-        <div class="alert alert-info mb-0" role="status" aria-live="polite">
+        <div class="alert alert-info mb-0"
+            role="status"
+            aria-live="polite">
 
             <i class="bi bi-info-circle" aria-hidden="true"></i>
 
