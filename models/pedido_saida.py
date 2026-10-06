@@ -1,8 +1,10 @@
+#importações usadas na classe pedido_saida
 from core.crud_base import CrudBase
 from core.database import Database
 from core.validator import Validator
 from datetime import datetime
 
+#classe pedido_saida
 class Pedido_saida(CrudBase):
     table = "pedido_saida"
     fields = [
@@ -10,51 +12,61 @@ class Pedido_saida(CrudBase):
         'cliente_id',
         'data_pedido_saida' 
     ]
-
+    #define os valores para cada campo
     def __init__(self, status_pedido_saida, cliente_id, data_pedido_saida):
         self.status_pedido_saida = status_pedido_saida
         self.cliente_id = cliente_id
         self.data_pedido_saida = data_pedido_saida
 
-    
+    #método que busca informações de várias tabelas relacionadas ao pedido saída
     @classmethod
     def pedido_saida_join(cls):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
+        conexao = Database.connect() #conexão com o banco
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
         try:
+            #busca informações da tabela pedido_saida: nome do cliente, quantidade e item
+            #INNER JOIN cliente: relaciona pedido ao cliente
+            #INNER JOIN detalhe_saida: relaciona pedido aos seus itens
             sql = """select c.cliente_nome, d.detalhe_saida_quantidade, d.detalhe_saida_item, p.* from pedido_saida as p 
             INNER JOIN cliente as c 
             ON p.cliente_id = c.id 
             INNER JOIN detalhe_saida d 
             ON p.id = d.pedido_saida_id;"""
-            cursor.execute(sql)
-            return cursor.fetchall()
-        finally:
-            cursor.close()
+            cursor.execute(sql) #executa comando sql
+            return cursor.fetchall()#retorna todos os registros encontrados
+        finally: #encerra cursor e a conexão com o banco
+            cursor.close() #cursor = objeto que permite python enviar comnados sql ao banco e receber resultados
             conexao.close()
 
-
+    #função de validação
     def validate(self):
+        #lista para armazenar erros
         erros = []
-
+        
+        #valida os campos
         validacoes = [
             Validator.required(self.status_pedido_saida, "status_pedido_saida"),
             Validator.required(self.cliente_id, "cliente_id")
         ]
-
+        #percorre por cada validação
         for itens in validacoes:
-            if not itens['valida']:
-                erros.append(itens["mensagem"])
+            if not itens['valida']: #verifica se o retorno é False
+                erros.append(itens["mensagem"]) #adiciona em uma lista todas as mensagens de erro
 
         return erros
 
-    
+    #método para buscar pedidos de saída
     @classmethod
+    #função que busca pedidos de saída e organiza os pedidos dos mais recentes para os mais antigos
     def find_all_ordered(cls):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
+        conexao = Database.connect() #conexão com o banco
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
 
         try:
+            #SELECT: seleciona as tabelas que serão utilizadas
+            #LEFT JOIN: relaciona diferentes tabelas
+            #GROUP BY: agrupa os registros pelas colunas indicadas
+            #ORDER BY: ordena os pedidos pelo id em ordem decrescente
             sql = """SELECT p.id as pedido_saida_id, p.status_pedido_saida, p.data_pedido_saida, p.cliente_id, pr.produto_nome, de.detalhe_saida_quantidade, 
                 MAX(m.datahora_movimentacao_saida) AS data_processamento
                 FROM pedido_saida p
@@ -64,36 +76,39 @@ class Pedido_saida(CrudBase):
                 LEFT JOIN produto pr ON e.produto_id = pr.id
                 GROUP BY p.id, p.status_pedido_saida, p.cliente_id, pr.produto_nome, de.detalhe_saida_quantidade
                 ORDER BY p.id desc"""
-            cursor.execute(sql)
-            return cursor.fetchall()
-        finally:
+            cursor.execute(sql) #executa comando sql
+            return cursor.fetchall() #retorna todos os registros encontrados
+        finally: #finaliza cursor e conexão com o banco
             cursor.close()
             conexao.close()
 
-
+    #método para finalizar um pedido de saída
     @classmethod
+    #função que atualiza a quantidade de produtos de um pedido de saída
     def finalizar(cls, pedido_saida_id):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
+        conexao = Database.connect()#conexão com o banco de dados
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
 
         try:
+            #inicia uma transação no banco, ou seja, agrupa operações para que possam ser confirmadas ou desfeitas
             conexao.start_transaction()
-
+            #executa comando sql para procurar pedido
             cursor.execute(
                 "SELECT * FROM pedido_saida WHERE id = %s",
                 (pedido_saida_id,)
             )
 
-            pedido = cursor.fetchone()
+            pedido = cursor.fetchone() #retorna um único registro
 
-            if not pedido:
+            if not pedido: #se não encontrar pedido
                 raise ValueError("Pedido não encontrado.")
 
-            if pedido["status_pedido_saida"] != "PENDENTE":
+            if pedido["status_pedido_saida"] != "PENDENTE": #se o status do pedido for diferente de pendente
                 raise ValueError(
                     "Somente pedidos pendentes podem ser atualizados."
                 )
 
+            #executa comando sql para buscar itens do pedido
             cursor.execute(
                 """
                 SELECT *
@@ -103,35 +118,35 @@ class Pedido_saida(CrudBase):
                 (pedido_saida_id,)
             )
 
-            itens = cursor.fetchall()
+            itens = cursor.fetchall() #retorna uma lista com os itens encontrados
 
-            if not itens:
+            if not itens: #se o pedido não tiver nenhum item, verifica se tem pelo menos um item
                raise ValueError(
                  "Não é possível atualizar um pedido sem itens."
                 )
 
-            #Raica
+            #percorre por todos os itens de um pedido para atualizar seu estoque
             for item in itens:
+                #executa comando sql para procurar estoque do produto
                 cursor.execute(
                     "SELECT * FROM estoque WHERE id = %s",
                     (item["produto_id"],)
                 )
-                estoque = cursor.fetchone()
+                estoque = cursor.fetchone() #retorna um registro
                 
-                if not estoque:
-                    conexao.rollback()
+                if not estoque: #se não encontrar registro de estoque daquele produto
+                    conexao.rollback() #desfaz alterações não confirmadas pela transação
                     return "Produto não encontrado no pedido."
 
-                #Verificar se há estoque suficiente
-                
+                #verifica se há estoque suficiente para a retirada de produto                
                 if estoque["estoque_quantidade"] < item["detalhe_saida_quantidade"]:
-                    conexao.rollback()
+                    conexao.rollback() #desfaz alterações não confirmadas pela transação
                     return f"Estoque insuficiente para o item ID {item['produto_id']}."
                 
 
-                
+                #cálculo da nova quantidade
                 nova_quantidade = estoque["estoque_quantidade"] - item["detalhe_saida_quantidade"]
-
+                #executa comando sql de atualização de quantidade em estoque
                 cursor.execute(
                     """ 
                     UPDATE estoque
@@ -150,27 +165,26 @@ class Pedido_saida(CrudBase):
                     (datetime.now(), item["id"], pedido_saida_id)
                 )
 
-            conexao.commit()
+            conexao.commit()#confirma alterações feitas do banco de dados
 
             return "Pedido de saída atualizado com sucesso."
 
         except ValueError:
-            conexao.rollback()
-            raise
+            conexao.rollback() #desfaz alterações não confirmadas pela transação
+            raise #gera erros para uma situação que não deveria acontecer
 
-        finally:
+        finally: #encerra cursor e conexão com o banco
             cursor.close()
             conexao.close()
 
-    
-
-    
+    #método que busca um pedido de saída pelo id
     @classmethod
     def find_by_id(cls, pedido_saida_id):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
+        conexao = Database.connect() #conexão com o banco de dados
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
 
         try:
+            #seleciona dados, relaciona com a tabela cliente
             sql = """SELECT 
                         p.id, 
                         p.status_pedido_saida,
@@ -180,38 +194,42 @@ class Pedido_saida(CrudBase):
                     FROM pedido_saida p
                     INNER JOIN cliente c ON p.cliente_id = c.id
                     WHERE p.id = %s"""
-            cursor.execute(sql, (pedido_saida_id,))
-            return cursor.fetchone()
-        finally:
+            cursor.execute(sql, (pedido_saida_id,)) #executa comando sql
+            return cursor.fetchone() #retorna uma linha, o registro encontrado
+        finally: #encerra cursor e conexão com o banco
             cursor.close()
             conexao.close()
 
-
+    #método de processar pedido de saída 
     @classmethod
     def processar(cls, pedido_saida_id):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
+        conexao = Database.connect()#conexão com o banco de dados
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
         try:
+            #inicia uma transação no banco, ou seja, agrupa operações para que possam ser confirmadas ou desfeitas
             conexao.start_transaction()
-
+            
+            #executa comando sql de buscar pedido de saída 
+            #FOR UPDATE: bloqueia o registro durante a transação
             cursor.execute("SELECT * FROM pedido_saida WHERE id = %s FOR UPDATE", (pedido_saida_id,))
-            pedido = cursor.fetchone()
-            if not pedido:
+            pedido = cursor.fetchone() #retorna registro único
+            if not pedido: #se não encontrar pedido
                 raise ValueError("Pedido de saída não encontrado.")
 
-            if pedido["status_pedido_saida"] != "PENDENTE":
+            if pedido["status_pedido_saida"] != "PENDENTE": #se o status do pedido for diferente de pendente
                 raise ValueError("Somente pedidos pendentes podem ser processados.")
 
+            #executa comando sql
             cursor.execute("SELECT * FROM detalhe_saida WHERE pedido_saida_id = %s FOR UPDATE", (pedido_saida_id,))
 
-            detalhes = cursor.fetchall()
+            detalhes = cursor.fetchall() #retorna os itens do pedido
 
-            if not detalhes:
+            if not detalhes: #impede que um pedido sem itens seja processado
                 raise ValueError("Pedido sem itens.")
 
+            #percorre cada item do pedido
             for detalhe in detalhes:
-
-         
+                #executa comando sql de procurar estoque do produto
                 cursor.execute(
                     """
                     SELECT e.*,p.produto_nome
@@ -222,22 +240,25 @@ class Pedido_saida(CrudBase):
                     """,
                     (detalhe["produto_id"],)
                 )
-                estoque = cursor.fetchone()
+                estoque = cursor.fetchone() #retorna o registro do estoque
 
-                if not estoque:
+                if not estoque: #se não encontrar o estoque
                     raise ValueError(
                         f"Não existe estoque para o produto {detalhe['produto_id']}"
                     )
                 
-                if estoque['estoque_quantidade'] < detalhe["detalhe_saida_quantidade"]:
+                #se a quantidade em estoque for insuficiente para continuar o pedido
+                if estoque['estoque_quantidade'] < detalhe["detalhe_saida_quantidade"]: 
                     raise ValueError (
                         f"Estoque insuficiente para o produto {estoque['produto_nome']}"
                     )
-
+                
+                #cálcula da nova quantidade
                 nova_quantidade = (
                     estoque["estoque_quantidade"] - detalhe["detalhe_saida_quantidade"]
                 )                
-         
+
+                #executa comando sql de atualizar quantidade em estoque
                 cursor.execute(
                     """
                     UPDATE estoque
@@ -250,7 +271,7 @@ class Pedido_saida(CrudBase):
                         )
                 )
 
-            
+                #executa comando sql para inserir informação de data do processamento na tabela movimentacao_saisa
                 cursor.execute(
                     """
                     INSERT INTO movimentacao_saida
@@ -268,7 +289,7 @@ class Pedido_saida(CrudBase):
                     )
                 )
 
-    
+            #executa comando sql para atualização do status do pedido de saída
             cursor.execute(
                 """
                 UPDATE pedido_saida
@@ -278,29 +299,31 @@ class Pedido_saida(CrudBase):
                 ("CONCLUIDO", pedido_saida_id,)
             )
 
-            conexao.commit()
+            conexao.commit() #confirma alterações feitas do banco de dados
             return "Pedido de saída processado com sucesso."
         except Exception:
-            conexao.rollback()
+            conexao.rollback() #desfaz alterações não confirmadas pela transação
             raise
-        finally:
+        finally: #encerra cursor e conexao com o banco
             cursor.close()
             conexao.close()
 
-
+    #método para cancelar um pedido de saída
     @classmethod
     def cancelar(cls, pedido_saida_id):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
+        conexao = Database.connect() #conexão com o banco de dados
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
         try:
+            #executa comando sql para buscar pedido
             cursor.execute("SELECT * FROM pedido_saida WHERE id = %s", (pedido_saida_id,))
-            pedido = cursor.fetchone()
-            if not pedido:
+            pedido = cursor.fetchone()#retorna uma linha, o pedido
+            if not pedido:#se não encontrar pedido
                 raise ValueError("Pedido de saída não encontrado.")
-            if pedido["status_pedido_saida"] != "PENDENTE":
+            if pedido["status_pedido_saida"] != "PENDENTE":#se o status for diferente de pendente
                 raise ValueError("Somente pedidos pendentes podem ser cancelados.")
 
-            cursor = conexao.cursor()
+            cursor = conexao.cursor() #cria cursor para executar atualização
+            #executa comando sql de atualização de status de pedido de saída
             cursor.execute(
                 """
                 UPDATE pedido_saida
@@ -309,45 +332,53 @@ class Pedido_saida(CrudBase):
                 """,
                 ("CANCELADO", pedido_saida_id,)
             )
-            conexao.commit()
+            conexao.commit() #confirma alterações feitas do banco de dados
             return "Pedido de saída cancelado com sucesso."
         except Exception:
-            conexao.rollback()
+            conexao.rollback() #desfaz alterações não confirmadas pela transação
             raise
-        finally:
+        finally:#encerra cursor e conexão com o banco
             cursor.close()
             conexao.close()
 
+    #método para contar quantos pedidos de saída estão pendentes
     @classmethod
+     #função que conta quantos pedidos de saída estão pendentes
     def contar_pedidosaida(cls):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
+        conexao = Database.connect()#conexão com o banco de dados
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
         try:
+            #comando sql para contar
             sql = "SELECT COUNT(status_pedido_saida) as pedido_saida_total FROM pedido_saida WHERE status_pedido_saida = 'pendente';"
-            cursor.execute(sql)
-            return cursor.fetchone()
-        finally:
+            cursor.execute(sql) #executa comando sql
+            return cursor.fetchone() #retorna a quantidade
+        finally: #encerra cursor e conexão com o banco 
             cursor.close()
             conexao.close()
 
-
+    #método para verificar pedidos de saída pendentes
     @classmethod
+    #função que  busca pedidos de saída pendentes
     def pedidosaida_pendente(cls):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
+        conexao = Database.connect() #conexão com o banco de dados
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
         try:
+            #executa comando sql para verificar pedidos pendentes
             sql = "SELECT * FROM pedido_saida WHERE status_pedido_saida = 'pendente';"
             cursor.execute(sql)
-            return cursor.fetchall()
-        finally:
+            return cursor.fetchall() #retorna todos os pedidos
+        finally: #encerra cursor e conexão com o banco
             cursor.close()
             conexao.close()
+            
+    #método que conta a quantidade de produtos recebidos nos pedidos  
     @classmethod
     def total_saidas(cls):
-        conexao = Database.connect()
-        cursor = conexao.cursor(dictionary=True)
+        conexao = Database.connect() #conexão com o banco de dados
+        cursor = conexao.cursor(dictionary=True) #cursor executa comando SQL no banco e dictionary = True faz com que retorne em dicionario
 
         try:
+            #executa comando sql para contar quantidade de itens
             sql = """
                 SELECT SUM(ds.detalhe_saida_quantidade) AS total
                 FROM detalhe_saida ds
@@ -357,10 +388,10 @@ class Pedido_saida(CrudBase):
             """
 
             cursor.execute(sql)
-            resultado = cursor.fetchone()
+            resultado = cursor.fetchone()#retorna a quantidade
 
-            return resultado["total"] or 0
+            return resultado["total"] or 0 #retorna valor da soma ou 0 caso for None
 
-        finally:
+        finally: #encerra cursor e conexão com o banco
             cursor.close()
             conexao.close()
