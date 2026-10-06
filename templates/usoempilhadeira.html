@@ -4,15 +4,18 @@
 
 {% block conteudo %}
 
+<!-- Container principal da página -->
 <div id="template_uso_empilhadeira">
 
 
 <!--título-->
 
+<!-- Cabeçalho com título e botão de visualização -->
 <div class="d-flex justify-content-between align-items-center mb-4">
 
     <div>
 
+        <!-- Título da página -->
         <h2 class="titulo-pagina" id="titulo-uso-empilhadeira">
 
             <i class="bi bi-tools" aria-hidden="true"></i>
@@ -29,6 +32,7 @@
 
         <!--rota para ir visualizar as empilhadeiras já cadastradas-->
 
+        <!-- Botão para visualizar as empilhadeiras cadastradas -->
         <a href="{{ url_for('tabelaempilhadeira') }}"
             class="btn btn-success"
             aria-label="Visualizar empilhadeiras cadastradas">
@@ -41,20 +45,24 @@
 
 </div>
 
+<!-- Formulário para registrar o uso da empilhadeira -->
 <form action="{{ url_for('salvar_uso_empilhadeira')}}"
     method="POST"
     aria-labelledby="titulo-uso-empilhadeira">
 
     <!--Div pai-->
 
+    <!-- Área que organiza os campos do formulário -->
     <div class="row">
 
         <!--coluna-->
 
+        <!-- Campo para selecionar o funcionário -->
         <div class="col-md-6 mb-3" style="width: 50%;">
 
             <!--nome do campo option -->
 
+            <!-- Nome do campo -->
             <label for="funcionario_id" class="form-label">
                 Funcionário
             </label>
@@ -66,6 +74,7 @@
 
                     <!--icone BS-->
 
+                    <!-- Ícone do funcionário -->
                     <i class="bi bi-person-fill text-white"
                         aria-hidden="true"></i>
 
@@ -73,6 +82,7 @@
 
                 <!--campo option + importação do nome e id do funcionário existente-->
 
+                <!-- Seleção dos funcionários cadastrados -->
                 <select id="funcionario_id"
                     name="funcionario_id"
                     class="form-select"
@@ -81,6 +91,7 @@
 
                     <option value="">Selecione</option>
 
+                    <!-- Percorre os funcionários cadastrados -->
                     {% for funcionario in funcionarios %}
 
                     <option value="{{ funcionario.id }}">
@@ -99,6 +110,7 @@
 
         <!--coluna + noma do campo option-->
 
+        <!-- Campo para selecionar a empilhadeira -->
         <div class="col-md-6 mb-3 w-50">
 
             <label for="empilhadeira_id" class="form-label">
@@ -109,6 +121,7 @@
 
                 <!--icone BS-->
 
+                <!-- Ícone da empilhadeira -->
                 <span class="input-group-text bg-dark border-secondary"
                     aria-hidden="true">
 
@@ -119,6 +132,7 @@
 
                 <!--campo option + importação do chassi, marca, modelo e id de uma empilhadeira existente-->
 
+                <!-- Seleção das empilhadeiras cadastradas -->
                 <select id="empilhadeira_id"
                     name="empilhadeira_id"
                     class="form-select"
@@ -127,6 +141,7 @@
 
                     <option value="">Selecione</option>
 
+                    <!-- Percorre as empilhadeiras cadastradas -->
                     {% for empilhadeira in empilhadeiras %}
 
                     <option value="{{ empilhadeira.id }}">
@@ -147,8 +162,10 @@
 
         <!--Botao-->
 
+        <!-- Área do botão de registro -->
         <div class=" botao-direita">
 
+            <!-- Botão para registrar o uso -->
             <button type="submit"
                 class="btn botao-add"
                 aria-label="Registrar uso da empilhadeira">

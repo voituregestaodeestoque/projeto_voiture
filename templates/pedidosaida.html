@@ -4,149 +4,165 @@
 
 {% block conteudo %}
 
-<!--Topo-->
+<!-- TOPO DA PÁGINA -->
 
 <div class="container-fluid">
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- TÍTULO + BOTÃO -->
 
-    <div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <h2 class="titulo-pagina" id="titulo-movimentacoes-saida">
+        <div>
 
-            <i class="bi bi-arrow-left-square" aria-hidden="true"></i> Movimentações de Saída
+            <!-- TÍTULO -->
 
-        </h2>
+            <h2 class="titulo-pagina" id="titulo-movimentacoes-saida">
 
-        <p class="text-muted mb-0" id="descricao-movimentacoes-saida">Pedido de saída</p>
+                <i class="bi bi-arrow-left-square" aria-hidden="true"></i> Movimentações de Saída
+
+            </h2>
+
+            <!-- DESCRIÇÃO -->
+
+            <p class="text-muted mb-0" id="descricao-movimentacoes-saida">Pedido de saída</p>
+
+        </div>
+
+        <!-- NOVO PEDIDO -->
+
+        <a href="{{ url_for('nova_saida') }}" class="btn botao-add"
+            aria-label="Criar novo pedido de saída">
+
+            <i class="bi bi-plus-lg" aria-hidden="true"></i> Novo Pedido de Saída
+
+        </a>
 
     </div>
 
-    <a href="{{ url_for('nova_saida') }}" class="btn botao-add"
-        aria-label="Criar novo pedido de saída">
+    <!-- TABELA DE MOVIMENTAÇÕES -->
 
-        <i class="bi bi-plus-lg" aria-hidden="true"></i> Novo Pedido de Saída
+    <div class="table-responsive">
 
-    </a>
+        <table id="tabela-movimentacao" class="table table-hover align-middle"
+            aria-labelledby="titulo-movimentacoes-saida"
+            aria-describedby="descricao-movimentacoes-saida">
 
-</div>
+            <!-- CABEÇALHO DA TABELA -->
 
-<!--tabela que mostra os dados de id, produto, quantidade, status, data do pedido e data do processamento-->
+            <thead class="table-light">
 
-<div class="table-responsive">
+                <tr>
 
-    <table id="tabela-movimentacao" class="table table-hover align-middle"
-        aria-labelledby="titulo-movimentacoes-saida"
-        aria-describedby="descricao-movimentacoes-saida">
+                    <th scope="col">ID</th>
 
-        <thead class="table-light">
+                    <th scope="col">Produto</th>
 
-            <tr>
+                    <th scope="col">Quantidade</th>
 
-                <th scope="col">ID</th>
+                    <th scope="col">Status</th>
 
-                <th scope="col">Produto</th>
+                    <th scope="col">Data do pedido</th>
 
-                <th scope="col">Quantidade</th>
+                    <th scope="col">Data do processamento</th>
 
-                <th scope="col">Status</th>
+                    <th scope="col" class="text-end">Ações</th>
 
-                <th scope="col">Data do pedido</th>
+                </tr>
 
-                <th scope="col">Data do processamento</th>
+            </thead>
 
-                <th scope="col" class="text-end">Ações</th>
-                <!--nessa parte vão aparecer botões de ação dos pedidos-->
+            <!-- CORPO DA TABELA -->
 
-            </tr>
+            <tbody>
 
-        </thead>
+                <!-- RESGATA OS DADOS DO PEDIDO -->
 
-        <tbody>
+                {% for pedido in pedidos %}
 
-            <!--resgata os dados do pedido-->
+                <tr>
 
-            {% for pedido in pedidos %}
+                    <td>{{ pedido.pedido_saida_id }}</td>
 
-            <tr>
+                    <td>{{ pedido.produto_nome }}</td>
 
-                <td>{{ pedido.pedido_saida_id }}</td>
+                    <td>{{ pedido.detalhe_saida_quantidade }}</td>
 
-                <td>{{ pedido.produto_nome }}</td>
+                    <td>{{ pedido.status_pedido_saida }}</td>
 
-                <td>{{ pedido.detalhe_saida_quantidade }}</td>
+                    <td>{{ pedido.data_pedido_saida }}</td>
 
-                <td>{{ pedido.status_pedido_saida }}</td>
+                    <td>{{ pedido.data_processamento or '-' }}</td>
 
-                <td>{{ pedido.data_pedido_saida }}</td>
+                    <td class="text-end">
 
-                <td>{{ pedido.data_processamento or '-' }}</td>
+                        {% if pedido.status_pedido_saida == 'PENDENTE' %}
 
-                <!--aparece a data do processamento, mas se for cancelado aparece um - -->
+                        <!-- AÇÕES DO PEDIDO -->
 
-                <td class="text-end">
+                        <!-- PROCESSAR PEDIDO -->
 
-                    {% if pedido.status_pedido_saida == 'PENDENTE' %}
-                    <!--se o status do pedido for pendente vai aparecer os botões com a rota de processar, cancelar e editar-->
+                        <a href="{{ url_for('processar_pedido_saida', pedido_saida_id=pedido.pedido_saida_id) }}"
+                            class="btn btn-sm btn-success"
+                            aria-label="Processar pedido de saída número {{ pedido.pedido_saida_id }}">
+                            Processar
+                        </a>
 
-                    <!--Ação para processar o pedido-->
+                        <!-- CANCELAR PEDIDO -->
 
-                    <a href="{{ url_for('processar_pedido_saida', pedido_saida_id=pedido.pedido_saida_id) }}"
-                        class="btn btn-sm btn-success"
-                        aria-label="Processar pedido de saída número {{ pedido.pedido_saida_id }}">
-                        Processar
-                    </a>
+                        <button type="button" class="btn btn-sm btn-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#Modal{{pedido.id}}"
+                            aria-label="Cancelar pedido de saída número {{ pedido.pedido_saida_id }}"
+                            aria-controls="Modal{{pedido.id}}">
+                            Cancelar
+                        </button>
 
-                    <!--Botão de cancelar-->
+                        <!-- MODAL DE CANCELAMENTO -->
 
-                    <button type="button" class="btn btn-sm btn-danger"
-                        data-bs-toggle="modal"
-                        data-bs-target="#Modal{{pedido.id}}"
-                        aria-label="Cancelar pedido de saída número {{ pedido.pedido_saida_id }}"
-                        aria-controls="Modal{{pedido.id}}">
-                        Cancelar
-                    </button>
+                        <div class="modal fade" id="Modal{{pedido.id}}" tabindex="-1"
+                            aria-labelledby="tituloModal{{pedido.id}}"
+                            aria-hidden="true">
 
-                    <!-- Modal -->
+                            <div class="modal-dialog">
 
-                    <div class="modal fade" id="Modal{{pedido.id}}" tabindex="-1"
-                        aria-labelledby="tituloModal{{pedido.id}}"
-                        aria-hidden="true">
+                                <div class="modal-content">
 
-                        <div class="modal-dialog">
+                                    <!-- CABEÇALHO DO MODAL -->
 
-                            <div class="modal-content">
+                                    <div class="modal-header">
 
-                                <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="tituloModal{{pedido.id}}">
+                                            <strong>Deseja cancelar esse pedido?</strong>
+                                        </h1>
 
-                                    <h1 class="modal-title fs-5" id="tituloModal{{pedido.id}}">
-                                        <strong>Deseja cancelar esse pedido?</strong>
-                                    </h1>
+                                        <button type="button" class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Fechar janela de confirmação de cancelamento">
+                                        </button>
 
-                                    <button type="button" class="btn-close"
-                                        data-bs-dismiss="modal"
-                                        aria-label="Fechar janela de confirmação de cancelamento">
-                                    </button>
+                                    </div>
 
-                                </div>
+                                    <!-- AÇÕES DO MODAL -->
 
-                                <div class="modal-footer">
+                                    <div class="modal-footer">
 
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal"
-                                        aria-label="Sair da confirmação de cancelamento do pedido {{ pedido.pedido_saida_id }}">
-                                        Sair
-                                    </button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Sair da confirmação de cancelamento do pedido {{ pedido.pedido_saida_id }}">
+                                            Sair
+                                        </button>
 
-                                    <!--Ação para cancelar o pedido-->
+                                        <!-- CONFIRMAR CANCELAMENTO -->
 
-                                    <a href="{{ url_for('cancelar_pedido_saida', pedido_saida_id= pedido.pedido_saida_id) }}"
-                                        class="btn btn-danger"
-                                        aria-label="Confirmar cancelamento do pedido de saída número {{ pedido.pedido_saida_id }}">
+                                        <a href="{{ url_for('cancelar_pedido_saida', pedido_saida_id= pedido.pedido_saida_id) }}"
+                                            class="btn btn-danger"
+                                            aria-label="Confirmar cancelamento do pedido de saída número {{ pedido.pedido_saida_id }}">
 
-                                        <strong>Cancelar</strong>
+                                            <strong>Cancelar</strong>
 
-                                    </a>
+                                        </a>
+
+                                    </div>
 
                                 </div>
 
@@ -154,36 +170,31 @@
 
                         </div>
 
-                    </div>
+                        <!-- EDITAR PEDIDO -->
 
-                    <!--Ação para editar o pedido-->
+                        <a href="{{ url_for('editar_saida', pedido_saida_id=pedido.pedido_saida_id) }}"
+                            class="btn btn-sm btn-warning"
+                            aria-label="Editar pedido de saída número {{ pedido.pedido_saida_id }}">
+                            Editar
+                        </a>
 
-                    <a href="{{ url_for('editar_saida', pedido_saida_id=pedido.pedido_saida_id) }}"
-                        class="btn btn-sm btn-warning"
-                        aria-label="Editar pedido de saída número {{ pedido.pedido_saida_id }}">
-                        Editar
-                    </a>
+                        {% else %}
 
-                    {% else %}
+                        -
 
-                    -
+                        {% endif %}
 
-                    {% endif %}
-                    <!--fecha o if-->
+                    </td>
 
-                </td>
+                </tr>
 
-            </tr>
+                {% endfor %}
 
-            {% endfor %}
-            <!--fecha o for-->
+            </tbody>
 
-        </tbody>
+        </table>
 
-    </table>
-
-</div>
-
+    </div>
 
 </div>
 

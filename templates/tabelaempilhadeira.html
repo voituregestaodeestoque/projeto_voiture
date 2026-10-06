@@ -4,12 +4,15 @@
 
 {% block conteudo %}
 
+<!-- Container principal da página -->
 <div class="container-fluid">
 
     <!-- TÍTULO + BOTÕES -->
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
+
+            <!-- Título da página -->
             <h2 class="titulo-pagina"
                 id="titulo-empilhadeiras">
 
@@ -19,6 +22,7 @@
                 Empilhadeiras
             </h2>
 
+            <!-- Descrição da página -->
             <p class="text-muted mb-0"
                id="descricao-empilhadeiras">
 
@@ -29,7 +33,6 @@
         <div class="d-flex gap-2">
 
             <!-- BOTÃO QUE ABRE O MODAL DE CADASTRO -->
-
             <button type="button"
                     class="botao-add btn"
                     data-bs-toggle="modal"
@@ -46,7 +49,6 @@
 
 
             <!-- BOTÃO QUE ABRE O MODAL DE USO -->
-
             <button type="button"
                     class="botao-add btn"
                     data-bs-toggle="modal"
@@ -67,13 +69,13 @@
 
 
     <!-- CARD DA TABELA -->
-
     <div class="card shadow-sm">
 
         <div class="card-body">
 
             {% if uso or empilhadeiras %}
 
+            <!-- Área responsiva da tabela -->
             <div class="table-responsive">
 
                 <table class="table table-hover align-middle"
@@ -81,7 +83,6 @@
                        aria-describedby="descricao-empilhadeiras">
 
                     <!-- CABEÇALHO DA TABELA -->
-
                     <thead class="table-light">
 
                         <tr>
@@ -131,11 +132,9 @@
 
 
                     <!-- CORPO DA TABELA -->
-
                     <tbody>
 
                         <!-- EMPILHADEIRAS QUE ESTÃO SENDO UTILIZADAS -->
-
                         {% for uso in uso %}
 
                         <tr>
@@ -178,6 +177,7 @@
 
                                 {% if uso.empilhadeira_status == "ATIVA" %}
 
+                                <!-- Link para alterar a empilhadeira para inativa -->
                                 <a href="{{ url_for('alternar_status_empilhadeira', id=uso.empilhadeira_id_real) }}"
                                    class="badge bg-success text-decoration-none"
                                    style="cursor: pointer;"
@@ -190,6 +190,7 @@
 
                                 {% else %}
 
+                                <!-- Link para alterar a empilhadeira para ativa -->
                                 <a href="{{ url_for('alternar_status_empilhadeira', id=uso.empilhadeira_id_real) }}"
                                    class="badge bg-secondary text-decoration-none"
                                    style="cursor: pointer;"
@@ -213,7 +214,6 @@
                             <td class="text-end">
 
                                 <!-- BOTÃO PARA DESOCUPAR -->
-
                                 <button type="button"
                                         class="btn btn-sm btn-outline-danger"
                                         data-bs-toggle="modal"
@@ -228,7 +228,6 @@
 
 
                                 <!-- MODAL DE DESOCUPAÇÃO -->
-
                                 <div class="modal fade"
                                      id="ModalUso{{ uso.uso_id }}"
                                      tabindex="-1"
@@ -239,6 +238,7 @@
 
                                         <div class="modal-content">
 
+                                            <!-- Cabeçalho do modal -->
                                             <div class="modal-header">
 
                                                 <h1 class="modal-title fs-5"
@@ -258,6 +258,7 @@
 
                                             </div>
 
+                                            <!-- Botões do modal -->
                                             <div class="modal-footer">
 
                                                 <button type="button"
@@ -271,7 +272,6 @@
 
 
                                                 <!-- AÇÃO PARA DESOCUPAR -->
-
                                                 <a href="{{ url_for('desocupar_empilhadeira', id=uso.uso_id) }}"
                                                    class="btn btn-danger"
                                                    aria-label="Confirmar desocupação da empilhadeira {{ uso.empilhadeira_chassi }}">
@@ -298,7 +298,6 @@
 
 
                         <!-- EMPILHADEIRAS QUE NÃO ESTÃO SENDO UTILIZADAS -->
-
                         {% for empilhadeira in empilhadeiras %}
 
                         <tr>
@@ -341,6 +340,7 @@
 
                                 {% if empilhadeira.empilhadeira_status == "ATIVA" %}
 
+                                <!-- Link para alterar a empilhadeira para inativa -->
                                 <a href="{{ url_for('alternar_status_empilhadeira', id=empilhadeira.id) }}"
                                    class="badge bg-success text-decoration-none"
                                    style="cursor: pointer;"
@@ -353,6 +353,7 @@
 
                                 {% else %}
 
+                                <!-- Link para alterar a empilhadeira para ativa -->
                                 <a href="{{ url_for('alternar_status_empilhadeira', id=empilhadeira.id) }}"
                                    class="badge bg-secondary text-decoration-none"
                                    style="cursor: pointer;"
@@ -377,11 +378,9 @@
 
 
                             <!-- AÇÕES -->
-
                             <td class="text-end">
 
                                 <!-- EDITAR -->
-
                                 <a href="{{ url_for('editar_empilhadeira', id=empilhadeira.id) }}"
                                    class="btn btn-sm btn-outline-primary"
                                    aria-label="Editar empilhadeira {{ empilhadeira.empilhadeira_chassi }}">
@@ -393,7 +392,6 @@
 
 
                                 <!-- EXCLUIR -->
-
                                 <button type="button"
                                         class="btn btn-sm btn-outline-danger"
                                         data-bs-toggle="modal"
@@ -408,7 +406,6 @@
 
 
                                 <!-- MODAL DE EXCLUSÃO -->
-
                                 <div class="modal fade"
                                      id="ModalExcluir{{ empilhadeira.id }}"
                                      tabindex="-1"
@@ -419,6 +416,7 @@
 
                                         <div class="modal-content">
 
+                                            <!-- Cabeçalho do modal -->
                                             <div class="modal-header">
 
                                                 <h1 class="modal-title fs-5"
@@ -438,6 +436,7 @@
 
                                             </div>
 
+                                            <!-- Botões do modal -->
                                             <div class="modal-footer">
 
                                                 <button type="button"
@@ -451,7 +450,6 @@
 
 
                                                 <!-- AÇÃO PARA EXCLUIR -->
-
                                                 <a href="{{ url_for('deletar_empilhadeira', id=empilhadeira.id) }}"
                                                    class="btn btn-danger"
                                                    aria-label="Confirmar exclusão da empilhadeira {{ empilhadeira.empilhadeira_chassi }}">
@@ -484,9 +482,9 @@
 
 
             <!-- NENHUMA EMPILHADEIRA -->
-
             {% else %}
 
+            <!-- Aviso exibido quando não existem empilhadeiras -->
             <div class="alert alert-info mb-0"
                  role="status"
                  aria-label="Aviso">
@@ -509,6 +507,7 @@
     <!-- MODAL - CADASTRAR EMPILHADEIRA -->
     <!-- ====================================================== -->
 
+    <!-- Modal utilizado para cadastrar uma nova empilhadeira -->
     <div class="modal fade"
          id="ModalCadastroEmpilhadeira"
          tabindex="-1"
@@ -520,7 +519,6 @@
             <div class="modal-content">
 
                 <!-- CABEÇALHO DO MODAL -->
-
                 <div class="modal-header"
                      style="background-color: #08617f; color: white;">
 
@@ -544,7 +542,6 @@
 
 
                 <!-- FORMULÁRIO DE CADASTRO -->
-
                 <form action="{{ url_for('salvar_empilhadeira') }}"
                       method="POST"
                       aria-labelledby="tituloModalCadastroEmpilhadeira">
@@ -554,7 +551,6 @@
 
 
                         <!-- NÚMERO DO CHASSI -->
-
                         <div class="mb-4">
 
                             <label for="modal_empilhadeira_chassi"
@@ -588,7 +584,6 @@
 
 
                         <!-- MARCA -->
-
                         <div class="mb-4">
 
                             <label for="modal_empilhadeira_marca"
@@ -622,7 +617,6 @@
 
 
                         <!-- MODELO -->
-
                         <div class="mb-2">
 
                             <label for="modal_empilhadeira_modelo"
@@ -658,7 +652,6 @@
 
 
                     <!-- RODAPÉ DO MODAL -->
-
                     <div class="modal-footer"
                          style="padding: 22px 40px;">
 
@@ -694,6 +687,7 @@
     <!-- MODAL - USO DE EMPILHADEIRA -->
     <!-- ====================================================== -->
 
+    <!-- Modal utilizado para registrar o uso de uma empilhadeira -->
     <div class="modal fade"
          id="ModalUsoEmpilhadeira"
          tabindex="-1"
@@ -706,7 +700,6 @@
 
 
                 <!-- CABEÇALHO DO MODAL -->
-
                 <div class="modal-header"
                      style="background-color: #08617f; color: white;">
 
@@ -732,7 +725,6 @@
 
 
                 <!-- FORMULÁRIO -->
-
                 <form action="{{ url_for('salvar_uso_empilhadeira') }}"
                       method="POST"
                       aria-labelledby="tituloModalUsoEmpilhadeira">
@@ -744,7 +736,6 @@
 
 
                             <!-- FUNCIONÁRIO -->
-
                             <div class="col-md-6">
 
                                 <label for="funcionario_id"
@@ -797,7 +788,6 @@
 
 
                             <!-- EMPILHADEIRA -->
-
                             <div class="col-md-6">
 
                                 <label for="empilhadeira_id"
@@ -857,7 +847,6 @@
 
 
                     <!-- RODAPÉ DO MODAL -->
-
                     <div class="modal-footer"
                          style="padding: 22px 40px;">
 

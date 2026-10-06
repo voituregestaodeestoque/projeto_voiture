@@ -4,14 +4,17 @@
 
 {% block conteudo %}
 
-<!--Topo-->
+<!-- TOPO DA PÁGINA -->
 
+<!-- CONTAINER PRINCIPAL DA PÁGINA -->
 <div class="container-fluid">
 
+    <!-- TÍTULO + BOTÃO -->
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
 
+            <!-- TÍTULO -->
             <h2 class="titulo-pagina" id="titulo-movimentacoes">
 
                 <i class="bi bi-arrow-right-square" aria-hidden="true"></i>
@@ -19,12 +22,14 @@
 
             </h2>
 
+            <!-- DESCRIÇÃO -->
             <p class="text-muted mb-0" id="descricao-movimentacoes">
                 Pedido de entrada
             </p>
 
         </div>
 
+        <!-- NOVO PEDIDO -->
         <a href="{{ url_for('nova_entrada') }}"
             class="btn botao-add"
             aria-label="Criar novo pedido de entrada">
@@ -36,8 +41,9 @@
 
     </div>
 
-    <!--tabela que mostra os dados de id, produto, quantidade, status, data do pedido e data do processamento-->
+    <!-- TABELA DE MOVIMENTAÇÕES -->
 
+    <!-- TABELA -->
     <div class="table-responsive">
 
         <table id="tabela-movimentacao"
@@ -45,6 +51,7 @@
             aria-labelledby="titulo-movimentacoes"
             aria-describedby="descricao-movimentacoes">
 
+            <!-- CABEÇALHO DA TABELA -->
             <thead class="table-light">
 
                 <tr>
@@ -61,9 +68,10 @@
 
             </thead>
 
+            <!-- CORPO DA TABELA -->
             <tbody>
 
-                <!--resgata os dados do pedido-->
+                <!-- RESGATA OS DADOS DO PEDIDO -->
 
                 {% for pedido in pedidos %}
 
@@ -83,9 +91,12 @@
                         {{ pedido.data_processamento or '-' }}
                     </td>
 
+                    <!-- AÇÕES -->
                     <td class="text-end">
 
                         {% if pedido.status_pedido_entrada == 'PENDENTE' %}
+
+                        <!--AÇÕES DO PEDIDO-->
 
                         <!--Ação para processar o pedido-->
 
@@ -110,7 +121,7 @@
 
                         </button>
 
-                        <!-- Modal -->
+                        <!--MODAL DE CANCELAMENTO-->
 
                         <div class="modal fade"
                             id="Modal{{pedido.id}}"
@@ -121,6 +132,8 @@
                             <div class="modal-dialog">
 
                                 <div class="modal-content">
+
+                                    <!--CABEÇALHO DO MODAL-->
 
                                     <div class="modal-header">
 
@@ -140,6 +153,8 @@
                                         </button>
 
                                     </div>
+
+                                    <!--AÇÕES DO MODAL-->
 
                                     <div class="modal-footer">
 
@@ -201,4 +216,3 @@
 </div>
 
 {% endblock %}
-
