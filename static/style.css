@@ -425,3 +425,14 @@ select#funcionario_id {
     color: white;
     transform: translateY(-1px);
 }
+
+#btnLimpar{
+    background-color: rgba(193, 193, 193, 0.262);
+    color: rgb(47, 47, 47);
+    margin: 5px;
+}
+
+#btnLimpar:hover{
+    background-color: rgba(162, 162, 162, 0.666);
+    transition:  0.3s; 
+}
