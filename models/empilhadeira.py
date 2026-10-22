@@ -133,13 +133,13 @@ WHERE u.funcionario_id IS NOT NULL
     def empilhadeira_listagem(cls):
         return cls.find_all()
 
+
     @classmethod
     def alternar_status(cls, id):
         conexao = Database.connect()
         cursor = conexao.cursor()
 
         try:
-            # Busca o status atual
             sql = """
                 SELECT empilhadeira_status
                 FROM empilhadeira
@@ -154,13 +154,26 @@ WHERE u.funcionario_id IS NOT NULL
 
             status_atual = resultado[0]
 
-            # Alterna o status
+            sql = """
+                SELECT id
+                FROM uso_empilhadeira
+                WHERE empilhadeira_id = %s
+                LIMIT 1
+            """
+
+            cursor.execute(sql, (id,))
+            uso = cursor.fetchone()
+
+            if uso:
+                raise ValueError(
+                    "Não é possível alterar o status de uma empilhadeira em uso. Desocupe-a primeiro."
+                )
+
             if status_atual == "ATIVA":
                 novo_status = "INATIVA"
             else:
                 novo_status = "ATIVA"
 
-            # Atualiza o banco
             sql = """
                 UPDATE empilhadeira
                 SET empilhadeira_status = %s
