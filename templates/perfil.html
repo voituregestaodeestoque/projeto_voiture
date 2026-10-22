@@ -1,29 +1,30 @@
+
 <!--Editado por Lipe em 29/09/2026 às 9h27-->
 
 {% extends 'base.html' %}
 
 {% block conteudo %}
 
+<!-- Bloco principal que organiza o conteúdo da página de perfil -->
 <div class="container-fluid py-4">
 
+    <!-- Título e descrição da página -->
     <div class="mb-4">
 
         <h2 id="titulo-perfil">
-
             <i class="bi bi-person-badge" aria-hidden="true"></i> Meu Perfil
-
         </h2>
 
         <p class="text-secondary" id="descricao-perfil">
-
             Gerencie suas informações pessoais e de contato.
-
         </p>
 
     </div>
 
+    <!-- Card que contém o formulário completo do perfil -->
     <div class="card shadow-sm border-0">
 
+        <!-- Formulário para atualizar os dados do funcionário -->
         <form action="{{ url_for('atualizar_perfil') }}" method="POST"
             enctype="multipart/form-data"
             aria-labelledby="titulo-perfil"
@@ -31,12 +32,12 @@
 
             <div class="row">
 
-                <!-- FOTO -->
-
+                <!-- Bloco responsável pela foto de perfil -->
                 <div class="col-md-4 border-end text-center p-4">
 
                     <h5 id="titulo-foto-perfil">Foto de perfil</h5>
 
+                    <!-- Área que exibe a foto atual ou o ícone padrão -->
                     <div class="bg-light rounded-circle mx-auto"
                         style="
                             width: 160px;
@@ -47,8 +48,10 @@
                         role="img"
                         aria-label="Foto de perfil do funcionário">
 
+                        <!-- Verifica se o funcionário possui uma foto cadastrada -->
                         {% if funcionario and funcionario.imagem_base64 %}
 
+                        <!-- Exibe a foto de perfil cadastrada -->
                         <img src="data:{{ funcionario.imagem_tipo }};base64,{{ funcionario.imagem_base64 }}"
                             alt="Imagem do perfil"
                             style="
@@ -62,6 +65,7 @@
 
                         {% else %}
 
+                        <!-- Exibe um ícone quando não existe foto cadastrada -->
                         <i class="bi bi-person-fill text-secondary"
                             aria-hidden="true"
                             style="font-size: 70px; line-height: 160px;">
@@ -71,23 +75,22 @@
 
                     </div>
 
+                    <!-- Informa os formatos e tamanho permitidos para a foto -->
                     <p class="text-secondary" id="descricao-foto">
-
                         PNG .<br>
-
                         Máximo 2MB.
-
                     </p>
 
+                    <!-- Botão que permite selecionar uma nova foto -->
                     <label for="foto_perfil" class="btn btn-outline-primary"
                         aria-label="Alterar foto de perfil">
 
                         <i class="bi bi-camera" aria-hidden="true"></i>
-
                         Alterar foto
 
                     </label>
 
+                    <!-- Campo usado para selecionar o arquivo da foto -->
                     <input type="file"
                         id="foto_perfil"
                         name="foto_perfil"
@@ -99,8 +102,7 @@
                 </div>
 
 
-                <!-- INFORMAÇÕES -->
-
+                <!-- Bloco que contém as informações pessoais do funcionário -->
                 <div class="col-md-8 p-4">
 
                     <h5 class="text-primary border-bottom pb-3 mb-4"
@@ -112,22 +114,17 @@
 
                     <div class="row">
 
-                        <!-- NOME -->
-
+                        <!-- Campo para informar o nome -->
                         <div class="col-md-6 mb-3">
 
                             <label for="funcionario_nome" class="form-label">
-
                                 Nome
-
                             </label>
 
                             <div class="input-group">
 
                                 <span class="input-group-text" aria-hidden="true">
-
                                     <i class="bi bi-person-fill"></i>
-
                                 </span>
 
                                 <input type="text"
@@ -144,22 +141,17 @@
                         </div>
 
 
-                        <!-- EMAIL -->
-
+                        <!-- Campo para informar o e-mail -->
                         <div class="col-md-6 mb-3">
 
                             <label for="funcionario_email" class="form-label">
-
                                 E-mail
-
                             </label>
 
                             <div class="input-group">
 
                                 <span class="input-group-text" aria-hidden="true">
-
                                     <i class="bi bi-envelope-fill"></i>
-
                                 </span>
 
                                 <input type="email"
@@ -177,22 +169,17 @@
                         </div>
 
 
-                        <!-- SENHA -->
-
+                        <!-- Campo para informar ou alterar a senha -->
                         <div class="col-md-6 mb-3">
 
                             <label for="funcionario_senha" class="form-label">
-
                                 Senha
-
                             </label>
 
                             <div class="input-group">
 
                                 <span class="input-group-text" aria-hidden="true">
-
                                     <i class="bi bi-lock-fill"></i>
-
                                 </span>
 
                                 <input type="password"
@@ -206,6 +193,7 @@
 
                             </div>
 
+                            <!-- Exibe uma orientação quando o funcionário já existe -->
                             {% if funcionario %}
 
                             <p class="text-secondary"
@@ -220,22 +208,17 @@
                         </div>
 
 
-                        <!-- CPF -->
-
+                        <!-- Campo para informar o CPF -->
                         <div class="col-md-6 mb-3">
 
                             <label for="funcionario_cpf" class="form-label">
-
                                 CPF
-
                             </label>
 
                             <div class="input-group">
 
                                 <span class="input-group-text" aria-hidden="true">
-
                                     <i class="bi bi-person-vcard-fill"></i>
-
                                 </span>
 
                                 <input type="text"
@@ -252,22 +235,17 @@
                         </div>
 
 
-                        <!-- CEP -->
-
+                        <!-- Campo para informar o CEP -->
                         <div class="col-md-6 mb-3">
 
                             <label for="funcionario_cep" class="form-label">
-
                                 CEP
-
                             </label>
 
                             <div class="input-group">
 
                                 <span class="input-group-text" aria-hidden="true">
-
                                     <i class="bi bi-geo-alt-fill"></i>
-
                                 </span>
 
                                 <input type="text"
@@ -284,22 +262,17 @@
                         </div>
 
 
-                        <!-- CARGO -->
-
+                        <!-- Campo para informar o cargo -->
                         <div class="col-md-6 mb-3">
 
                             <label for="funcionario_cargo" class="form-label">
-
                                 Cargo
-
                             </label>
 
                             <div class="input-group">
 
                                 <span class="input-group-text" aria-hidden="true">
-
                                     <i class="bi bi-briefcase-fill"></i>
-
                                 </span>
 
                                 <input type="text"
@@ -316,14 +289,11 @@
                         </div>
 
 
-                        <!-- DDI -->
-
+                        <!-- Campo para informar o DDI -->
                         <div class="col-md-3 mb-3">
 
                             <label for="funcionario_ddi" class="form-label">
-
                                 DDI
-
                             </label>
 
                             <input type="text"
@@ -338,14 +308,11 @@
                         </div>
 
 
-                        <!-- DDD -->
-
+                        <!-- Campo para informar o DDD -->
                         <div class="col-md-3 mb-3">
 
                             <label for="funcionario_ddd" class="form-label">
-
                                 DDD
-
                             </label>
 
                             <input type="text"
@@ -360,14 +327,11 @@
                         </div>
 
 
-                        <!-- TELEFONE -->
-
+                        <!-- Campo para informar o telefone -->
                         <div class="col-md-6 mb-3">
 
                             <label for="funcionario_telefone" class="form-label">
-
                                 Telefone
-
                             </label>
 
                             <input type="text"
@@ -384,10 +348,10 @@
                     </div>
 
 
-                    <!-- BOTÕES -->
-
+                    <!-- Bloco com os botões de sair e salvar -->
                     <div class="border-top pt-3 mt-3 text-end">
 
+                        <!-- Botão para sair do sistema -->
                         <a href="{{ url_for('logout') }}"
                             class="logout btn"
                             style="border-color: rgb(0, 0, 0);"
@@ -398,6 +362,7 @@
 
                         </a>
 
+                        <!-- Botão para salvar ou cadastrar o funcionário -->
                         <button type="submit"
                             class="btn btn-primary"
                             aria-label="{{ 'Salvar alterações do perfil' if funcionario and funcionario.id else 'Cadastrar funcionário' }}">
