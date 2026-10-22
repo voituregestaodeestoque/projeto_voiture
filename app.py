@@ -97,9 +97,9 @@ def pagina_nao_encontrada(error):
 # -----> Início: Landing Page
 
 #Rota para a Landing Page do Sistema
-@app.route('/landingpage')
+@app.route('/')
 def landingpage():
-    return render_template('landing_page.html')
+    return render_template('index.html')
 
 @app.route("/enviar_contato", methods=["POST"])
 #Envia os dados do cliente interessado para o email da empresa
@@ -129,7 +129,9 @@ def enviar_contato():
 # -----> Início: Login
 
 #entra no sistema e já vai na primeira tela do sistema, LOGIN
-@app.route("/")
+
+
+@app.route("/login")
 def inicio():
     if "usuario_id" in session: #se já estiver logado, não precisa de login
         return redirect(url_for("base"))
