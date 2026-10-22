@@ -559,6 +559,16 @@ def api_listagem_produto():
     produtos = Estoque.produtos_mobile()
     return jsonify(produtos), 200
 
+@app.route("/api/produtos/code/<codigo>", methods=["GET"])
+def api_produto_por_codigo(codigo):
+    produtos = Estoque.produtos_mobile()
+
+    for produto in produtos:
+        if str(produto.get("id")) == str(codigo):
+            return jsonify(produto), 200
+
+    return jsonify({"erro": "Produto não encontrado."}), 404
+
 #Registra os dados do produto
 @app.route("/salvar_produto", methods=["POST"])
 @login_obrigatorio
