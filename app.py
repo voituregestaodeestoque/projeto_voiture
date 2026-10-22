@@ -559,6 +559,16 @@ def api_listagem_produto():
     produtos = Estoque.produtos_mobile()
     return jsonify(produtos), 200
 
+@app.route("/api/produtos/code/<codigo>", methods=["GET"])
+def api_produto_por_codigo(codigo):
+    produtos = Estoque.produtos_mobile()
+
+    for produto in produtos:
+        if str(produto.get("id")) == str(codigo):
+            return jsonify(produto), 200
+
+    return jsonify({"erro": "Produto não encontrado."}), 404
+
 #Registra os dados do produto
 @app.route("/salvar_produto", methods=["POST"])
 @login_obrigatorio
@@ -1729,42 +1739,47 @@ def get_uso_empilhadeira_form():
     }
 
 
-@app.route(
-    "/salvar_uso_empilhadeira",
-    methods=["POST"]
-)
+
+@app.route("/salvar_uso_empilhadeira", methods=["POST"])
 @login_obrigatorio
 def salvar_uso_empilhadeira():
 
     dados = get_uso_empilhadeira_form()
 
-    print("empilhadeira", dados)
-
     if not dados["empilhadeira_id"]:
-
         flash(
             "Selecione uma empilhadeira.",
             "erro"
         )
-
-        return redirect(
-            url_for("tabelaempilhadeira")
-        )
+        return redirect(url_for("tabelaempilhadeira"))
 
     if not dados["funcionario_id"]:
-
         flash(
             "Selecione um funcionário.",
             "erro"
         )
-
-        return redirect(
-            url_for("tabelaempilhadeira")
-        )
-
-    uso_empilhadeira = Uso_empilhadeira(**dados)
+        return redirect(url_for("tabelaempilhadeira"))
 
     try:
+        empilhadeira = Empilhadeira.find_by_id(
+            dados["empilhadeira_id"]
+        )
+
+        if not empilhadeira:
+            flash(
+                "Empilhadeira não encontrada.",
+                "erro"
+            )
+            return redirect(url_for("tabelaempilhadeira"))
+
+        if empilhadeira["empilhadeira_status"].upper() == "INATIVA":
+            flash(
+                "Não é possível utilizar uma empilhadeira inativa.",
+                "erro"
+            )
+            return redirect(url_for("tabelaempilhadeira"))
+
+        uso_empilhadeira = Uso_empilhadeira(**dados)
 
         uso_empilhadeira.insert()
 
@@ -1773,20 +1788,14 @@ def salvar_uso_empilhadeira():
             "sucesso"
         )
 
-        return redirect(
-            url_for("tabelaempilhadeira")
-        )
-
     except Exception as e:
-
         flash(
             f"Erro ao cadastrar uso de empilhadeira: {e}",
             "erro"
         )
 
-        return redirect(
-            url_for("tabelaempilhadeira")
-        )
+    return redirect(url_for("tabelaempilhadeira"))
+
 
 # -----> Fim: Uso de Empilhadeira
 ############################################################################################################
