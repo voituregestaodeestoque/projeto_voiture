@@ -3,7 +3,7 @@
 ambiente_voiture/
 
 *.pyc
-pycache/
+__pycache__/
 
 .env
 .env.*
