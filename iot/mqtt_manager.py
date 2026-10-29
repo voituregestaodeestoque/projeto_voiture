@@ -257,52 +257,11 @@ class MQTTManager:
                 sensor
             )
 
-
-            # =================================================
-            # DHT11
-            # =================================================
-
-            if sensor == "DHT11":
-
-                temperatura = dados.get(
-                    "temperatura"
-                )
-
-                umidade = dados.get(
-                    "umidade"
-                )
-
-
-                print(
-                    "Temperatura:",
-                    temperatura,
-                    "C"
-                )
-
-                print(
-                    "Umidade:",
-                    umidade,
-                    "%"
-                )
-
-
-                sucesso = salvar_leitura(
-
-                    device_id=device_id,
-
-                    sensor="DHT11",
-
-                    temperatura=temperatura,
-
-                    umidade=umidade
-                )
-
-
             # =================================================
             # HC-SR04
             # =================================================
 
-            elif sensor == "HC-SR04":
+            if sensor == "HC-SR04":
 
                 distancia = dados.get(
                     "distancia"

@@ -102,7 +102,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
 
-    title="API IoT SENAI",
+    title="API IoT VOITURE",
 
     description=(
         "API para monitoramento dos sensores "
@@ -126,7 +126,7 @@ def root():
 
         "status": "online",
 
-        "projeto": "IoT SENAI",
+        "projeto": "IoT VOITURE",
 
         "mqtt": "ativo",
 
