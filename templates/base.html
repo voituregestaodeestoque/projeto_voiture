@@ -74,7 +74,7 @@
             </a>
             <!--botão/rota dashboard-iot-->
             <a href="{{ url_for('dashboardiot') }}"
-                class="{% if request.endpoint == 'fornecedor' or request.endpoint == 'listagem_fornecedor'  %}active{% endif %}">
+                class="{% if request.endpoint == 'dashboardiot' %}active{% endif %}">
                 <i class="bi bi-briefcase"></i> Sensores
             </a>
             <!--botão/rota que leva pra tela de listagem de funcionario-->
