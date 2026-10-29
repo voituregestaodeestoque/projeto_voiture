@@ -309,7 +309,18 @@ CREATE TABLE IF NOT EXISTS notificacao (
     UNIQUE KEY uq_notif (notificacao, referencia_id)
 ) ENGINE = InnoDB;
 
- 
+ -- -----------------------------------------------------
+-- Table iot
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS leituras (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    device_id VARCHAR(50) NOT NULL,
+    sensor VARCHAR(30) NOT NULL,
+    distancia FLOAT NULL,
+    rfid_uid VARCHAR(50) NULL,
+    data_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+	);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
