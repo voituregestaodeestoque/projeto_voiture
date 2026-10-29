@@ -41,7 +41,16 @@ def to_int(value, default=0):
 
 def imagem_permitida(tipo_arquivo):
     return tipo_arquivo in EXTENSOES_PERMITIDAS
+#####################################################
+# -----> Início: dashboard-iot
 
+@app.route('/dashboard-iot')
+@login_obrigatorio
+def dashboardiot():
+
+    return render_template(
+        'dashboard-iot.html'
+    )
 
 #######################################################################
 # -----> Início: Notificações
