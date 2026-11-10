@@ -1,4 +1,5 @@
 # Editado por Ryan em 11/08/2026 às 10h12
+import base64
 from apscheduler.schedulers.background import BackgroundScheduler
 from models.notificacao import Notificacao
 from core.database import Database
@@ -24,7 +25,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 
-CORS(app)
+CORS(app, supports_credentials=True)
 
 app.secret_key = "chave_secreta"
 
@@ -395,43 +396,43 @@ def loginfuncionario():
         return redirect(url_for("base"))
     return render_template('loginfuncionario.html')
 
-# Login Mobile
+
+#Login Mobile
 @app.route('/api/login_mobile', methods=['POST'])
 def login_mobile():
 
     try:
-
-        # Recebe os dados enviados pelo React Native
         dados = request.get_json()
 
         email = dados.get('email')
         senha = dados.get('senha')
 
-        # Verifica se os campos foram preenchidos
         if not email or not senha:
             return jsonify({
                 "sucesso": False,
                 "mensagem": "Preencha o e-mail e a senha."
             }), 400
 
-        # Autentica o funcionário
         funcionario = Funcionario.autenticar(email, senha)
 
-        # E-mail e/ou senha incorretos
         if not funcionario:
             return jsonify({
                 "sucesso": False,
                 "mensagem": "E-mail e/ou senha inválidos."
             }), 401
 
-        # Verifica se o funcionário possui acesso ao sistema
         if not funcionario.get('funcionario_acesso'):
             return jsonify({
                 "sucesso": False,
                 "mensagem": "Seu acesso ao sistema está bloqueado."
             }), 403
 
-        # Remove informações que não devem ser enviadas para o aplicativo
+        # CRIA A SESSÃO DO FUNCIONÁRIO
+        session['usuario_id'] = funcionario.get('id')
+        print('FUNCIONÁRIO AUTENTICADO:', funcionario.get('id'))
+        print('ID SALVO NA SESSÃO:', session.get('usuario_id'))
+
+        # Remove informações sensíveis
         funcionario.pop('funcionario_senha', None)
         funcionario.pop('imagem_blob', None)
 
@@ -444,6 +445,9 @@ def login_mobile():
     except Exception as e:
 
         print("ERRO LOGIN MOBILE:", e)
+
+        print('COOKIE DA SESSÃO:', request.cookies)
+        print('SESSÃO ATUAL:', dict(session))
 
         return jsonify({
             "sucesso": False,
@@ -2572,6 +2576,51 @@ def deletar_funcionario(id):
 
 # -----> Fim: Funcionário
 ############################################################################################################
+
+#Imagem - perfil mobile
+@app.route('/api/perfil/imagem', methods=['GET'])
+def api_imagem_perfil():
+
+    funcionario_id = session.get('usuario_id')
+    print('ID RECEBIDO NA IMAGEM:', funcionario_id)
+
+    if not funcionario_id:
+        print('ERRO: SESSÃO NÃO ENCONTRADA')
+        return jsonify({
+            'sucesso': False,
+            'mensagem': 'Usuário não autenticado.'
+        }), 401
+
+    funcionario = Funcionario.find_by_id(funcionario_id)
+    print('FUNCIONÁRIO ENCONTRADO:', funcionario is not None)
+
+    if not funcionario:
+        return jsonify({
+            'sucesso': False,
+            'mensagem': 'Funcionário não encontrado.'
+        }), 404
+
+    imagem_blob = funcionario.get('imagem_blob')
+    imagem_tipo = funcionario.get('imagem_tipo')
+
+    print('IMAGEM ENCONTRADA:', bool(imagem_blob))
+    print('TIPO:', imagem_tipo)
+
+    if not imagem_blob:
+        return jsonify({
+            'sucesso': True,
+            'imagem_base64': None,
+            'imagem_tipo': None,
+            'mensagem': 'Funcionário não possui foto de perfil.'
+        }), 200
+
+    imagem_base64 = base64.b64encode(imagem_blob).decode('utf-8')
+
+    return jsonify({
+        'sucesso': True,
+        'imagem_base64': imagem_base64,
+        'imagem_tipo': imagem_tipo
+    }), 200
 
 
 #Fim      
