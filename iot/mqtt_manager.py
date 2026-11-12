@@ -58,7 +58,7 @@ MQTT_PORT = 8883
 MQTT_USER = "IOT-SENAI"
 MQTT_PASSWORD = "12345678"
 
-MQTT_TOPIC = "sensores/leitura"
+MQTT_TOPIC = "sensores/leitura/voiture"
 
 MQTT_CLIENT_ID = f"fastapi-backend-{uuid.uuid4().hex[:8]}"
 
