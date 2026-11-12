@@ -299,6 +299,8 @@ def dashboardiot():
 # Rota responsável por buscar as notificações
 @app.route('/api/notificacoes')
 def api_notificacoes():
+    # Verifica e gera as notificações necessárias
+    Notificacao.verificar_e_gerar()
     # Busca todas as notificações no banco de dados
     notificacoes = Notificacao.listar()
     # Retorna as notificações em formato JSON
@@ -439,7 +441,11 @@ def login_mobile():
         return jsonify({
             "sucesso": True,
             "mensagem": "Login realizado com sucesso.",
-            "funcionario": funcionario
+            "funcionario": {
+                **funcionario,
+                "nome": funcionario.get('nome') or funcionario.get('funcionario_nome'),
+                "cargo": funcionario.get('cargo') or funcionario.get('funcionario_cargo')
+            }
         }), 200
 
     except Exception as e:
