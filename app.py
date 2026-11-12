@@ -439,7 +439,11 @@ def login_mobile():
         return jsonify({
             "sucesso": True,
             "mensagem": "Login realizado com sucesso.",
-            "funcionario": funcionario
+            "funcionario": {
+                **funcionario,
+                "nome": funcionario.get('nome') or funcionario.get('funcionario_nome'),
+                "cargo": funcionario.get('cargo') or funcionario.get('funcionario_cargo')
+            }
         }), 200
 
     except Exception as e:
