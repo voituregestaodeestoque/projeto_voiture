@@ -9,7 +9,6 @@
      O CSS abaixo deixa o modal menor, organizado e alinhado.
 ========================================================= -->
 <style>
-
     /* =========================================================
        MODAL PRINCIPAL
     ========================================================= */
@@ -413,7 +412,6 @@
             font-size: 1rem;
         }
     }
-
 </style>
 
 
@@ -433,10 +431,7 @@
         <h2 class="titulo-pagina">
 
             <!-- Ícone do estoque -->
-            <i
-                class="bi bi-box-seam"
-                aria-hidden="true"
-            ></i>
+            <i class="bi bi-box-seam" aria-hidden="true"></i>
 
             Estoque
 
@@ -449,44 +444,25 @@
          PESQUISA, FILTRO E NOVO PRODUTO
     ========================================================== -->
 
-    <div
-        style="width: 99%; margin-left: 10px; max-height: 37.6px;"
-        class="d-flex"
-    >
+    <div style="width: 99%; margin-left: 10px; max-height: 37.6px;" class="d-flex">
 
 
         <!-- =====================================================
              BARRA DE PESQUISA
         ====================================================== -->
 
-        <form
-            action="{{ url_for('listagem_estoque') }}"
-            style="width:95%;"
-            class="input-group form-card"
-            aria-label="Pesquisar produtos no estoque"
-        >
+        <form action="{{ url_for('listagem_estoque') }}" style="width:95%;" class="input-group form-card"
+            aria-label="Pesquisar produtos no estoque">
 
             <!-- Campo de pesquisa -->
-            <input
-                name="chave_pesquisa"
-                type="text"
-                class="form-control"
-                placeholder="Pesquisa"
-                aria-label="Pesquisar produto"
-            >
+            <input name="chave_pesquisa" type="text" class="form-control" placeholder="Pesquisa"
+                aria-label="Pesquisar produto">
 
 
             <!-- Botão de pesquisa -->
-            <button
-                type="submit"
-                class="input-group-text bg-dark border-secondary"
-                aria-label="Pesquisar"
-            >
+            <button type="submit" class="input-group-text bg-dark border-secondary" aria-label="Pesquisar">
 
-                <i
-                    class="bi bi-search text-white"
-                    aria-hidden="true"
-                ></i>
+                <i class="bi bi-search text-white" aria-hidden="true"></i>
 
             </button>
 
@@ -497,26 +473,15 @@
              FILTRO DE ORDENAÇÃO
         ====================================================== -->
 
-        <form
-            method="GET"
-            class="form-card ms-3"
-            style="width: 35%; margin-right: 10px;"
-            aria-label="Ordenar produtos do estoque"
-        >
+        <form method="GET" class="form-card ms-3" style="width: 35%; margin-right: 10px;"
+            aria-label="Ordenar produtos do estoque">
 
-            <select
-                name="filtro"
-                class="filtrar form-select"
-                onchange="this.form.submit()"
-                aria-label="Ordenar produtos por"
-            >
+            <select name="filtro" class="filtrar form-select" onchange="this.form.submit()"
+                aria-label="Ordenar produtos por">
 
 
                 <!-- Adicionados recentemente -->
-                <option
-                    value="adc-recente"
-                    {{ 'selected' if filtro == 'adc-recente' else '' }}
-                >
+                <option value="adc-recente" {{ 'selected' if filtro=='adc-recente' else '' }}>
 
                     Adicionados recentemente
 
@@ -524,10 +489,7 @@
 
 
                 <!-- Ordenar por nome -->
-                <option
-                    value="nome"
-                    {{ 'selected' if filtro == 'nome' else '' }}
-                >
+                <option value="nome" {{ 'selected' if filtro=='nome' else '' }}>
 
                     Ordenar por nome
 
@@ -535,10 +497,7 @@
 
 
                 <!-- Maior quantidade -->
-                <option
-                    value="maior"
-                    {{ 'selected' if filtro == 'maior' else '' }}
-                >
+                <option value="maior" {{ 'selected' if filtro=='maior' else '' }}>
 
                     Quantidade: Maior ao menor
 
@@ -546,10 +505,7 @@
 
 
                 <!-- Menor quantidade -->
-                <option
-                    value="menor"
-                    {{ 'selected' if filtro == 'menor' else '' }}
-                >
+                <option value="menor" {{ 'selected' if filtro=='menor' else '' }}>
 
                     Quantidade: Menor ao maior
 
@@ -557,10 +513,7 @@
 
 
                 <!-- Maior preço -->
-                <option
-                    value="preco-maior"
-                    {{ 'selected' if filtro == 'preco-maior' else '' }}
-                >
+                <option value="preco-maior" {{ 'selected' if filtro=='preco-maior' else '' }}>
 
                     Preço: Maior ao menor
 
@@ -568,10 +521,7 @@
 
 
                 <!-- Menor preço -->
-                <option
-                    value="preco-menor"
-                    {{ 'selected' if filtro == 'preco-menor' else '' }}
-                >
+                <option value="preco-menor" {{ 'selected' if filtro=='preco-menor' else '' }}>
 
                     Preço: Menor ao maior
 
@@ -586,16 +536,9 @@
              BOTÃO NOVO PRODUTO
         ====================================================== -->
 
-        <a
-            href="{{ url_for('produtos') }}"
-            class="botao-add btn"
-            style="width: 25%;"
-        >
+        <a href="{{ url_for('produtos') }}" class="botao-add btn" style="width: 25%;">
 
-            <i
-                class="bi bi-plus-lg"
-                aria-hidden="true"
-            ></i>
+            <i class="bi bi-plus-lg" aria-hidden="true"></i>
 
             Novo Produto
 
@@ -608,10 +551,7 @@
          ESTOQUE
     ========================================================== -->
 
-    <section
-        class="container mt-5"
-        aria-label="Lista de produtos em estoque"
-    >
+    <section class="container mt-5" aria-label="Lista de produtos em estoque">
 
 
         <!-- Verifica se existem produtos -->
@@ -640,11 +580,7 @@
                      CARD DO PRODUTO
                 ================================================== -->
 
-                <div
-                    class="card mb-4"
-                    style="max-width: 100%;"
-                    aria-label="Produto {{ estoque_produto.produto_nome }}"
-                >
+                <div class="card mb-4" style="max-width: 100%;" aria-label="Produto {{ estoque_produto.produto_nome }}">
 
 
                     <!-- =================================================
@@ -655,24 +591,19 @@
 
 
                     <!-- Imagem cadastrada -->
-                    <img
-                        class="card-img-top"
+                    <img class="card-img-top"
                         src="data:{{ estoque_produto.imagem_tipo }};base64,{{ estoque_produto.imagem_base64 }}"
                         alt="Imagem do produto {{ estoque_produto.produto_nome }}"
-                        style="width: 100%; height: 180px; object-fit: cover;"
-                    >
+                        style="width: 100%; height: 180px; object-fit: cover;">
 
 
                     {% else %}
 
 
                     <!-- Imagem padrão -->
-                    <img
-                        class="card-img-top"
-                        src="{{ url_for('static', filename='images/produto-sem-imagem.png') }}"
+                    <img class="card-img-top" src="{{ url_for('static', filename='images/produto-sem-imagem.png') }}"
                         alt="Produto {{ estoque_produto.produto_nome }} sem imagem"
-                        style="width: 100%; height: 180px; object-fit: cover;"
-                    >
+                        style="width: 100%; height: 180px; object-fit: cover;">
 
 
                     {% endif %}
@@ -742,13 +673,9 @@
                                  BOTÃO MAIS DETALHES
                             ================================================== -->
 
-                            <button
-                                type="button"
-                                class="botao-detalhes"
-                                data-bs-toggle="modal"
+                            <button type="button" class="botao-detalhes" data-bs-toggle="modal"
                                 data-bs-target="#modal{{ estoque_produto.id }}"
-                                aria-label="Mais detalhes do produto {{ estoque_produto.produto_nome }}"
-                            >
+                                aria-label="Mais detalhes do produto {{ estoque_produto.produto_nome }}">
 
                                 Mais detalhes
 
@@ -759,13 +686,8 @@
                                  MODAL DE DETALHES DO PRODUTO
                             ================================================== -->
 
-                            <div
-                                class="modal fade modal-produto"
-                                id="modal{{ estoque_produto.id }}"
-                                tabindex="-1"
-                                aria-labelledby="modalLabel{{ estoque_produto.id }}"
-                                aria-hidden="true"
-                            >
+                            <div class="modal fade modal-produto" id="modal{{ estoque_produto.id }}" tabindex="-1"
+                                aria-labelledby="modalLabel{{ estoque_produto.id }}" aria-hidden="true">
 
 
                                 <!--
@@ -773,9 +695,7 @@
                                     modal-dialog-centered mantém o modal centralizado.
                                 -->
 
-                                <div
-                                    class="modal-dialog modal-lg modal-dialog-centered"
-                                >
+                                <div class="modal-dialog modal-lg modal-dialog-centered">
 
 
                                     <div class="modal-content">
@@ -788,17 +708,11 @@
                                         <div class="modal-header">
 
 
-                                            <h5
-                                                class="modal-title"
-                                                id="modalLabel{{ estoque_produto.id }}"
-                                            >
+                                            <h5 class="modal-title" id="modalLabel{{ estoque_produto.id }}">
 
 
                                                 <!-- Ícone -->
-                                                <i
-                                                    class="bi bi-box-seam icone-titulo"
-                                                    aria-hidden="true"
-                                                ></i>
+                                                <i class="bi bi-box-seam icone-titulo" aria-hidden="true"></i>
 
 
                                                 <!-- Nome do produto -->
@@ -813,12 +727,8 @@
 
 
                                             <!-- Botão fechar -->
-                                            <button
-                                                type="button"
-                                                class="btn-close"
-                                                data-bs-dismiss="modal"
-                                                aria-label="Fechar janela de detalhes do produto {{ estoque_produto.produto_nome }}"
-                                            ></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Fechar janela de detalhes do produto {{ estoque_produto.produto_nome }}"></button>
 
 
                                         </div>
@@ -836,10 +746,8 @@
                                                 em duas colunas.
                                             -->
 
-                                            <section
-                                                class="detalhes-produto"
-                                                aria-label="Detalhes do produto {{ estoque_produto.produto_nome }}"
-                                            >
+                                            <section class="detalhes-produto"
+                                                aria-label="Detalhes do produto {{ estoque_produto.produto_nome }}">
 
 
                                                 <!-- =================================================
@@ -865,10 +773,8 @@
                                                             O CSS mantém a proporção.
                                                         -->
 
-                                                        <img
-                                                            src="data:{{ estoque_produto.imagem_tipo }};base64,{{ estoque_produto.imagem_base64 }}"
-                                                            alt="Imagem do produto {{ estoque_produto.produto_nome }}"
-                                                        >
+                                                        <img src="data:{{ estoque_produto.imagem_tipo }};base64,{{ estoque_produto.imagem_base64 }}"
+                                                            alt="Imagem do produto {{ estoque_produto.produto_nome }}">
 
 
                                                         {% else %}
@@ -879,10 +785,8 @@
                                                             mostra a imagem padrão.
                                                         -->
 
-                                                        <img
-                                                            src="{{ url_for('static', filename='images/produto-sem-imagem.png') }}"
-                                                            alt="Produto {{ estoque_produto.produto_nome }} sem imagem"
-                                                        >
+                                                        <img src="{{ url_for('static', filename='images/produto-sem-imagem.png') }}"
+                                                            alt="Produto {{ estoque_produto.produto_nome }} sem imagem">
 
 
                                                         {% endif %}
@@ -902,10 +806,7 @@
                                                         <div class="produto-descricao-titulo">
 
 
-                                                            <i
-                                                                class="bi bi-file-text"
-                                                                aria-hidden="true"
-                                                            ></i>
+                                                            <i class="bi bi-file-text" aria-hidden="true"></i>
 
 
                                                             Descrição
@@ -926,10 +827,7 @@
                                                         <div class="produto-destaque">
 
 
-                                                            <i
-                                                                class="bi bi-wind"
-                                                                aria-hidden="true"
-                                                            ></i>
+                                                            <i class="bi bi-wind" aria-hidden="true"></i>
 
 
                                                             MAIS FLUXO, MAIS PERFORMANCE
@@ -950,7 +848,33 @@
                                                 ================================================== -->
 
                                                 <div class="produto-lado-direito">
+                                                    <!-- =================================================
+                                                    ID DO PRODUTO
+                                               ================================================== -->
 
+                                                    <div class="info-produto">
+
+                                                        <!-- Ícone -->
+                                                        <div class="info-produto-icone">
+
+                                                            <i class="bi bi-upc-scan" aria-hidden="true"></i>
+
+                                                        </div>
+
+                                                        <!-- Informação -->
+                                                        <div>
+
+                                                            <div class="info-produto-label">
+                                                                ID do Produto
+                                                            </div>
+
+                                                            <div class="info-produto-valor">
+                                                                #{{ estoque_produto.id }}
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
 
                                                     <!-- =================================================
                                                          CATEGORIA
@@ -962,10 +886,7 @@
                                                         <!-- Ícone -->
                                                         <div class="info-produto-icone">
 
-                                                            <i
-                                                                class="bi bi-grid-3x3-gap"
-                                                                aria-hidden="true"
-                                                            ></i>
+                                                            <i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>
 
                                                         </div>
 
@@ -1002,10 +923,7 @@
                                                         <!-- Ícone -->
                                                         <div class="info-produto-icone">
 
-                                                            <i
-                                                                class="bi bi-tag"
-                                                                aria-hidden="true"
-                                                            ></i>
+                                                            <i class="bi bi-tag" aria-hidden="true"></i>
 
                                                         </div>
 
@@ -1043,10 +961,7 @@
                                                         <!-- Ícone -->
                                                         <div class="info-produto-icone">
 
-                                                            <i
-                                                                class="bi bi-coin"
-                                                                aria-hidden="true"
-                                                            ></i>
+                                                            <i class="bi bi-coin" aria-hidden="true"></i>
 
                                                         </div>
 
@@ -1084,10 +999,7 @@
                                                         <!-- Ícone -->
                                                         <div class="info-produto-icone">
 
-                                                            <i
-                                                                class="bi bi-box-seam"
-                                                                aria-hidden="true"
-                                                            ></i>
+                                                            <i class="bi bi-box-seam" aria-hidden="true"></i>
 
                                                         </div>
 
@@ -1124,10 +1036,7 @@
                                                         <!-- Ícone -->
                                                         <div class="info-produto-icone">
 
-                                                            <i
-                                                                class="bi bi-speedometer2"
-                                                                aria-hidden="true"
-                                                            ></i>
+                                                            <i class="bi bi-speedometer2" aria-hidden="true"></i>
 
                                                         </div>
 
@@ -1175,17 +1084,11 @@
                                  BOTÃO EDITAR
                             ================================================== -->
 
-                            <a
-                                href="{{ url_for('editar_produto', id=estoque_produto.id) }}"
-                                class="botao-acao botao-editar"
-                                title="Editar produto"
-                                aria-label="Editar produto {{ estoque_produto.produto_nome }}"
-                            >
+                            <a href="{{ url_for('editar_produto', id=estoque_produto.id) }}"
+                                class="botao-acao botao-editar" title="Editar produto"
+                                aria-label="Editar produto {{ estoque_produto.produto_nome }}">
 
-                                <i
-                                    class="bi bi-pencil"
-                                    aria-hidden="true"
-                                ></i>
+                                <i class="bi bi-pencil" aria-hidden="true"></i>
 
                             </a>
 
@@ -1194,19 +1097,11 @@
                                  BOTÃO EXCLUIR
                             ================================================== -->
 
-                            <button
-                                type="button"
-                                class="botao-acao botao-excluir"
-                                data-bs-toggle="modal"
-                                data-bs-target="#Modal{{ estoque_produto.id }}"
-                                title="Excluir produto"
-                                aria-label="Excluir produto {{ estoque_produto.produto_nome }}"
-                            >
+                            <button type="button" class="botao-acao botao-excluir" data-bs-toggle="modal"
+                                data-bs-target="#Modal{{ estoque_produto.id }}" title="Excluir produto"
+                                aria-label="Excluir produto {{ estoque_produto.produto_nome }}">
 
-                                <i
-                                    class="bi bi-trash"
-                                    aria-hidden="true"
-                                ></i>
+                                <i class="bi bi-trash" aria-hidden="true"></i>
 
                             </button>
 
@@ -1215,13 +1110,8 @@
                                  MODAL DE CONFIRMAÇÃO DA EXCLUSÃO
                             ================================================== -->
 
-                            <div
-                                class="modal fade"
-                                id="Modal{{ estoque_produto.id }}"
-                                tabindex="-1"
-                                aria-labelledby="exampleModalLabel{{ estoque_produto.id }}"
-                                aria-hidden="true"
-                            >
+                            <div class="modal fade" id="Modal{{ estoque_produto.id }}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel{{ estoque_produto.id }}" aria-hidden="true">
 
 
                                 <div class="modal-dialog">
@@ -1234,10 +1124,7 @@
                                         <div class="modal-header">
 
 
-                                            <h1
-                                                class="modal-title fs-5"
-                                                id="exampleModalLabel{{ estoque_produto.id }}"
-                                            >
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel{{ estoque_produto.id }}">
 
                                                 <strong>
 
@@ -1249,12 +1136,8 @@
 
 
                                             <!-- Fechar -->
-                                            <button
-                                                type="button"
-                                                class="btn-close"
-                                                data-bs-dismiss="modal"
-                                                aria-label="Fechar janela de confirmação"
-                                            ></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Fechar janela de confirmação"></button>
 
 
                                         </div>
@@ -1265,11 +1148,7 @@
 
 
                                             <!-- Cancelar -->
-                                            <button
-                                                type="button"
-                                                class="btn btn-secondary"
-                                                data-bs-dismiss="modal"
-                                            >
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
 
                                                 Cancelar
 
@@ -1277,10 +1156,8 @@
 
 
                                             <!-- Excluir -->
-                                            <a
-                                                href="{{ url_for('deletar_produto', id=estoque_produto.id) }}"
-                                                class="btn btn-danger"
-                                            >
+                                            <a href="{{ url_for('deletar_produto', id=estoque_produto.id) }}"
+                                                class="btn btn-danger">
 
                                                 <strong>
 
@@ -1326,16 +1203,9 @@
              MENSAGEM QUANDO NÃO EXISTEM PRODUTOS
         ========================================================== -->
 
-        <div
-            class="alert alert-info mb-0"
-            role="status"
-            aria-live="polite"
-        >
+        <div class="alert alert-info mb-0" role="status" aria-live="polite">
 
-            <i
-                class="bi bi-info-circle"
-                aria-hidden="true"
-            ></i>
+            <i class="bi bi-info-circle" aria-hidden="true"></i>
 
             Nenhum produto encontrado.
 
