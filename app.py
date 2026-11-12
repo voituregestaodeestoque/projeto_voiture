@@ -299,6 +299,8 @@ def dashboardiot():
 # Rota responsável por buscar as notificações
 @app.route('/api/notificacoes')
 def api_notificacoes():
+    # Verifica e gera as notificações necessárias
+    Notificacao.verificar_e_gerar()
     # Busca todas as notificações no banco de dados
     notificacoes = Notificacao.listar()
     # Retorna as notificações em formato JSON
