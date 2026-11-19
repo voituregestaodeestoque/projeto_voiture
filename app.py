@@ -431,8 +431,6 @@ def login_mobile():
 
         # CRIA A SESSÃO DO FUNCIONÁRIO
         session['usuario_id'] = funcionario.get('id')
-        print('FUNCIONÁRIO AUTENTICADO:', funcionario.get('id'))
-        print('ID SALVO NA SESSÃO:', session.get('usuario_id'))
 
         # Remove informações sensíveis
         funcionario.pop('funcionario_senha', None)
@@ -449,11 +447,6 @@ def login_mobile():
         }), 200
 
     except Exception as e:
-
-        print("ERRO LOGIN MOBILE:", e)
-
-        print('COOKIE DA SESSÃO:', request.cookies)
-        print('SESSÃO ATUAL:', dict(session))
 
         return jsonify({
             "sucesso": False,
@@ -530,7 +523,6 @@ def perfil():
 
     #funcionario = Funcionario.find_by_id(session["usuario_id"])
     funcionario = Funcionario.funcionario_listagem_id(session["usuario_id"])
-    print(funcionario['funcionario_nome'])
     return render_template(
         'perfil.html',
         funcionario=funcionario
@@ -1139,8 +1131,6 @@ def nova_entrada():
                     detalhe_entrada_item = cont,
                     detalhe_entrada_quantidade=int(item["quantidade"])
                 )
-            
-                print("check", teste)
             #sucesso
             flash("Pedido de entrada criado com sucesso.","sucesso")
             return redirect(url_for("pedidoentrada", pedido_entrada_id=pedido_entrada_id))
@@ -1324,7 +1314,6 @@ def nova_saida():
             pedido_saida_id = pedido.insert()
             cont = 0
             teste = []
-            print("antes itens", pedido_saida_id)
             for item in itens:
                 cont += 1
                 Detalhe_saida.adicionar_item(
@@ -1335,12 +1324,10 @@ def nova_saida():
                     
                 )
             
-            print("check", teste)
             flash("Pedido de saída criado com sucesso.","sucesso")
             return redirect(url_for("pedidosaida", pedido_saida_id=pedido_saida_id))
 
         except Exception as e:
-            print("erro", e)
             flash("Erro ao criar pedido de saída.")
             return render_template(
                 "formulario_pedidosaida.html",
@@ -1365,7 +1352,6 @@ def processar_pedido_saida(pedido_saida_id):
         mensagem = Pedido_saida.processar(pedido_saida_id)
         flash(mensagem, "sucesso")
     except ValueError as e:
-        print("VALUE ERROR:", e)
         flash(str(e), "erro")
     except Exception as e:
         flash(f"Erro ao processar pedido: {e}", "erro")
@@ -2505,11 +2491,24 @@ def salvar_funcionario():
     dados["imagem_tipo"] = imagem_tipo
     dados["imagem_blob"] = imagem_blob
     funcionario = Funcionario(**dados)  #junta os dados com a classe formando a variavel com tudo certo para outros procedimentos
-    numeros_cpf = ""
-    for caractere in funcionario.funcionario_cpf:
-        if caractere.isdigit():
-            numeros_cpf = numeros_cpf + caractere
-    funcionario.funcionario_cpf = numeros_cpf
+    
+
+    # Remove a máscara do CPF
+    funcionario.funcionario_cpf = ''.join(
+        caractere for caractere in funcionario.funcionario_cpf
+        if caractere.isdigit()
+    )
+
+    # Remove a máscara do CEP
+    funcionario.funcionario_cep = ''.join(
+        caractere for caractere in funcionario.funcionario_cep
+        if caractere.isdigit()
+    )
+
+    # Atualiza os dados para manter os valores sem máscara
+    dados["funcionario_cpf"] = funcionario.funcionario_cpf
+    dados["funcionario_cep"] = funcionario.funcionario_cep
+
     #Validação
     erros = funcionario.validate() 
     if erros: #se tiver algum erro dentro do validate, ele cai nesse if
@@ -2620,17 +2619,16 @@ def deletar_funcionario(id):
 def api_imagem_perfil():
 
     funcionario_id = session.get('usuario_id')
-    print('ID RECEBIDO NA IMAGEM:', funcionario_id)
+
 
     if not funcionario_id:
-        print('ERRO: SESSÃO NÃO ENCONTRADA')
+
         return jsonify({
             'sucesso': False,
             'mensagem': 'Usuário não autenticado.'
         }), 401
 
     funcionario = Funcionario.find_by_id(funcionario_id)
-    print('FUNCIONÁRIO ENCONTRADO:', funcionario is not None)
 
     if not funcionario:
         return jsonify({
@@ -2640,9 +2638,6 @@ def api_imagem_perfil():
 
     imagem_blob = funcionario.get('imagem_blob')
     imagem_tipo = funcionario.get('imagem_tipo')
-
-    print('IMAGEM ENCONTRADA:', bool(imagem_blob))
-    print('TIPO:', imagem_tipo)
 
     if not imagem_blob:
         return jsonify({

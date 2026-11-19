@@ -86,12 +86,18 @@
                             <th scope="row">{{ fornecedor.id }}</th>
 
                             <td>{{ fornecedor.fornecedor_nome }}</td>
-                            <td>{{ fornecedor.fornecedor_cnpj }}</td>
-                            <td>{{ fornecedor.fornecedor_cep }}</td>
+                            <td>
+                                {{ fornecedor.fornecedor_cnpj[:2] }}.{{ fornecedor.fornecedor_cnpj[2:5] }}.{{ fornecedor.fornecedor_cnpj[5:8] }}/{{ fornecedor.fornecedor_cnpj[8:12] }}-{{ fornecedor.fornecedor_cnpj[12:14] }}
+                            </td>
+                            <td>
+                                {{ fornecedor.fornecedor_cep[:5] }}-{{ fornecedor.fornecedor_cep[5:8] }}
+                            </td>
                             <td>{{ fornecedor.fornecedor_email }}</td>
                             <td>{{ fornecedor.fornecedor_ddi }}</td>
                             <td>{{ fornecedor.fornecedor_ddd }}</td>
-                            <td>{{ fornecedor.fornecedor_telefone }}</td>
+                            <td>
+                                {{ fornecedor.fornecedor_telefone[:5] }}-{{ fornecedor.fornecedor_telefone[5:9] }}
+                            </td>
 
                             <td class="text-end">
 
