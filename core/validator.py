@@ -293,20 +293,24 @@ class Validator:
     @staticmethod
     def validar_peso(value, field_name):
 
-        #Não deve ter letras
-        tem_letra = False
-        for caractere in (value):
-            if caractere.isalpha():
-                tem_letra = True
-                break
-        if tem_letra:
-            return {"valida":False,"mensagem":f"O campo {field_name} não pode haver letras"}
-        
-        #Não pode ter valores negativos
-        if float(value) <= 0:
-            return {"valida":False,"mensagem":f"O campo {field_name} não aceita valores negativos"}
+        value = str(value).strip().replace(",", ".")
 
-        return {"valida":True}
+        # Não deve ter letras
+        for caractere in value:
+            if caractere.isalpha():
+                return {"valida": False, "mensagem": f"O campo {field_name} não pode haver letras"}
+
+        # Precisa ser um número válido
+        try:
+            numero = float(value)
+        except ValueError:
+            return {"valida": False, "mensagem": f"O campo {field_name} deve ser um número válido (ex: 3,4 ou 3.4)"}
+
+        # Não pode ser zero ou negativo
+        if numero <= 0:
+            return {"valida": False, "mensagem": f"O campo {field_name} deve ser maior que zero"}
+
+        return {"valida": True, "valor": numero}
 
     #Validações adicionadas dia 05/05/2026 ryan ribeiro
 
