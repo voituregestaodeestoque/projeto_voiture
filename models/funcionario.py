@@ -54,7 +54,6 @@ class Funcionario(CrudBase): #cria a classe empilhadeira
             Validator.validar_cpf(self.funcionario_cpf, "funcionario_cpf"),
             Validator.validar_cep(self.funcionario_cep, "funcionario_cep"),
             Validator.validar_email(self.funcionario_email, "funcionario_email"),
-            Validator.validar_email(self.funcionario_email, "funcionario_email"),
             Validator.validar_ddi_ddd(self.funcionario_ddi, "funcionario_ddi"),
             Validator.validar_ddi_ddd(self.funcionario_ddd, "funcionario_ddd"),
             Validator.validar_telefone(self.funcionario_telefone, "funcionario_telefone"),
