@@ -100,9 +100,10 @@
                     id="cliente_cnpj"
                     class="form-control"
                     maxlength="18"
-                    placeholder="Digite seu CNPJ"
+                    placeholder="00.000.000/0000-00"
                     required
                     value="{{ cliente.cliente_cnpj if cliente else '' }}"
+                    oninput="mascaraCNPJ(this)"
                 >
 
             </div>
@@ -130,9 +131,11 @@
                     name="cliente_cep"
                     id="cliente_cep"
                     class="form-control"
-                    placeholder="Digite seu CEP"
+                    placeholder="00000-000"
                     required
                     value="{{ cliente.cliente_cep if cliente else '' }}"
+                    maxlength="9"
+                    oninput="mascaraCEP(this)"
                 >
 
             </div>
@@ -251,28 +254,12 @@
                     id="cliente_telefone"
                     class="form-control"
                     placeholder="Telefone"
+                    maxlength="9"
                     required
                     value="{{ cliente.cliente_telefone if cliente else '' }}"
                 >
 
             </div>
-
-        </div>
-
-
-        <div class="mb-3">
-
-            <!--Campo Descrição-->
-
-            <label for="cliente_descricao" class="form-label">Descrição</label>
-
-            <textarea
-                name="cliente_descricao"
-                class="form-control"
-                id="cliente_descricao"
-                rows="3"
-                aria-label="Descrição do cliente"
-            ></textarea>
 
         </div>
 

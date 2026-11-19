@@ -194,6 +194,7 @@
                         required
                         value="{{ fornecedor.fornecedor_cnpj if fornecedor else '' }}"
                         maxlength="18"
+                        oninput="mascaraCNPJ(this)"
                     >
 
 
@@ -245,7 +246,8 @@
                         placeholder="00000-000"
                         required
                         value="{{ fornecedor.fornecedor_cep if fornecedor else '' }}"
-                        maxlength="8"
+                        maxlength="9"
+                        oninput="mascaraCEP(this)"
                     >
 
 
@@ -448,6 +450,7 @@
                         class="form-control"
                         id="fornecedor_telefone"
                         placeholder="Telefone de Contato"
+                        maxlength="9"
                         required
                         value="{{ fornecedor.fornecedor_telefone if fornecedor else '' }}"
                     >
@@ -457,31 +460,6 @@
 
 
             </div>
-
-
-
-            <!-- Área do campo Descrição -->
-            <div class="mb-3">
-
-
-                <!-- Campo Descrição -->
-
-
-                <!-- Texto que identifica o campo descrição -->
-                <label for="fornecedor_descricao" class="form-label">Descrição</label>
-
-
-                <!-- Campo de texto para descrição do fornecedor -->
-                <textarea
-                    name="fornecedor_descricao"
-                    class="form-control"
-                    id="fornecedor_descricao"
-                    rows="3"
-                ></textarea>
-
-
-            </div>
-
 
         </div>
 

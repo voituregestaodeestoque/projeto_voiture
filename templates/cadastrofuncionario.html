@@ -195,9 +195,11 @@
                         name="funcionario_cep"
                         id="funcionario_cep"
                         class="form-control"
-                        placeholder="Digite o CEP"
+                        placeholder="00000-000"
                         required
                         value="{{ funcionario.funcionario_cep if funcionario else '' }}"
+                        maxlength="9"
+                        oninput="mascaraCEP(this)"
                     >
 
                 </div>
@@ -232,10 +234,11 @@
                         name="funcionario_cpf"
                         id="funcionario_cpf"
                         class="form-control"
-                        placeholder="Digite o CPF"
+                        placeholder="000.000.000-00"
                         required
                         maxlength="14"
                         value="{{ funcionario.funcionario_cpf if funcionario else '' }}"
+                        oninput="mascaraCPF(this)"
                     >
 
                 </div>
