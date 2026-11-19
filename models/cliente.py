@@ -14,15 +14,14 @@ class Cliente(CrudBase):#cria a classe Cliente
         'cliente_email',
         'cliente_ddi',
         'cliente_ddd',
-        'cliente_telefone',
-        'cliente_descricao'
+        'cliente_telefone'
     ]
     #campos que existem na tabela
 
 
     # metodo que cria um objeto 
     #o self passa os dados de cada campo
-    def __init__(self, cliente_nome, cliente_cnpj, cliente_cep, cliente_email, cliente_ddi, cliente_ddd, cliente_telefone, cliente_descricao):
+    def __init__(self, cliente_nome, cliente_cnpj, cliente_cep, cliente_email, cliente_ddi, cliente_ddd, cliente_telefone):
         self.cliente_nome = cliente_nome
         self.cliente_cnpj = cliente_cnpj
         self.cliente_cep = cliente_cep
@@ -30,7 +29,6 @@ class Cliente(CrudBase):#cria a classe Cliente
         self.cliente_ddi = cliente_ddi
         self.cliente_ddd = cliente_ddd
         self.cliente_telefone = cliente_telefone
-        self.cliente_descricao = cliente_descricao
     
     #Função para validar os campos da tabela 
     def validate(self):
@@ -50,9 +48,7 @@ class Cliente(CrudBase):#cria a classe Cliente
             #ddd
             Validator.validar_ddi_ddd(self.cliente_ddd, "cliente_ddd"),
             #telefone
-            Validator.validar_telefone(self.cliente_telefone, "cliente_telefone"),
-            #decrição
-            Validator.validar_descricao(self.cliente_descricao, "cliente_descricao")
+            Validator.validar_telefone(self.cliente_telefone, "cliente_telefone")
         ]
 
         #Passa em cada item da lista com os retornos das validações

@@ -18,13 +18,12 @@ class Fornecedor(CrudBase):
         'fornecedor_email',
         'fornecedor_ddi',
         'fornecedor_ddd',
-        'fornecedor_telefone',
-        'fornecedor_descricao'
+        'fornecedor_telefone'
     ]
 
 
     #Definição dos valores para cada campo
-    def __init__(self, fornecedor_nome,fornecedor_cnpj,fornecedor_cep,fornecedor_email,fornecedor_ddi,fornecedor_ddd,fornecedor_telefone,fornecedor_descricao):
+    def __init__(self, fornecedor_nome,fornecedor_cnpj,fornecedor_cep,fornecedor_email,fornecedor_ddi,fornecedor_ddd,fornecedor_telefone):
         self.fornecedor_nome = fornecedor_nome
         self.fornecedor_cnpj = fornecedor_cnpj
         self.fornecedor_cep = fornecedor_cep
@@ -32,7 +31,6 @@ class Fornecedor(CrudBase):
         self.fornecedor_ddi = fornecedor_ddi
         self.fornecedor_ddd = fornecedor_ddd
         self.fornecedor_telefone = fornecedor_telefone
-        self.fornecedor_descricao = fornecedor_descricao
 
 
 ######################################################################################

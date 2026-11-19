@@ -830,34 +830,42 @@ def api_produto_por_codigo(codigo):
 
     return jsonify({"erro": "Produto não encontrado."}), 404
 
+
 #Registra os dados do produto
 @app.route("/salvar_produto", methods=["POST"])
 @login_obrigatorio
 def salvar_produto():
     arquivo = request.files.get("imagem")
 
+
     #Prepara a imagem
     imagem_nome = None
     imagem_tipo = None
     imagem_blob = None
+
 
     if arquivo and arquivo.filename != "":
         if not imagem_permitida(arquivo.content_type):
             flash("Formato de imagem inválido. Use PNG, JPG, JPEG ou WEBP.", "danger")
             return redirect(url_for("listagem_produto"))
 
+
         imagem_nome = arquivo.filename
         imagem_tipo = arquivo.content_type
         imagem_blob = arquivo.read()
 
+
     
     dados = get_produto_form()
+
 
     dados["imagem_nome"] = imagem_nome
     dados["imagem_tipo"] = imagem_tipo
     dados["imagem_blob"] = imagem_blob
 
+
     produto = Produto(**dados)
+
 
     #Valida erros
     erros = produto.validate()
@@ -865,15 +873,22 @@ def salvar_produto():
         for erro in erros:
             flash(erro, "erro")
         return render_template("cadastroproduto.html", produto=dados)
+    
+    for campo in ("produto_preco_custo", "produto_preco_venda", "produto_peso"):
+        valor = str(getattr(produto, campo)).replace(",", ".")
+        setattr(produto, campo, float(valor))
+
 
     quantidade = get_estoque_form()
     estoque = Estoque(**quantidade)
+
 
     erros = estoque.validate()
     if erros :
         for erro in erros:
             flash(erro, "erro")
         return render_template("cadastroproduto.html", estoque = quantidade)
+
 
     try:
         prod_id = produto.insert()
@@ -889,7 +904,6 @@ def salvar_produto():
         #Erro ao cadastrar
         flash(f"Erro ao cadastrar produto: {e}", "erro")
         return render_template("estoque.html", produto=dados)
-
 
 #Edição de dados do produto
 @app.route("/editar_produto/<int:id>")
@@ -2075,9 +2089,8 @@ def get_cliente_form():
         "cliente_cep": request.form.get("cliente_cep", "").strip(),
         "cliente_email": request.form.get("cliente_email", "").strip(),
         "cliente_ddi": request.form.get("cliente_ddi", "").strip(),
-        "cliente_ddd": request.form.get("cliente_ddi", "").strip(),
+        "cliente_ddd": request.form.get("cliente_ddd", "").strip(),
         "cliente_telefone": request.form.get("cliente_telefone", "").strip(),
-        "cliente_descricao": request.form.get("funcionario_descricao", "").strip(),
     }
 
 #Listagem de clientes
@@ -2102,11 +2115,21 @@ def salvar_cliente():
     dados = get_cliente_form()
     cliente = Cliente(**dados)
 
-    numeros_cnpj = ""
-    for caractere in cliente.cliente_cnpj:
-        if caractere.isdigit():
-            numeros_cnpj = numeros_cnpj + caractere
-    cliente.cliente_cnpj = numeros_cnpj
+     # Remove a máscara do CNPJ
+    cliente.cliente_cnpj = ''.join(
+        caractere for caractere in cliente.cliente_cnpj
+        if caractere.isdigit()
+    )
+
+    # Remove a máscara do CEP
+    cliente.cliente_cep = ''.join(
+        caractere for caractere in cliente.cliente_cep
+        if caractere.isdigit()
+    )
+
+    # Atualiza os dados para manter os valores sem máscara
+    dados["cliente_cnpj"] = cliente.cliente_cnpj
+    dados["cliente_cep"] = cliente.cliente_cep
 
     erros = cliente.validate()
     if erros :
@@ -2220,7 +2243,6 @@ def get_fornecedor_form():
         "fornecedor_ddi": request.form.get("fornecedor_ddi", "").strip(),
         "fornecedor_ddd": request.form.get("fornecedor_ddd", "").strip(),
         "fornecedor_telefone": request.form.get("fornecedor_telefone", "").strip(),
-        "fornecedor_descricao": request.form.get("fornecedor_descricao", "").strip(),
     }
 
 # Registro do fornecedor no banco de dados
@@ -2235,11 +2257,21 @@ def salvar_fornecedor():
     #Transforma as chaves em argumentos
     fornecedor = Fornecedor(**dados)
 
-    numeros_cnpj = ""
-    for caractere in fornecedor.fornecedor_cnpj:
-        if caractere.isdigit():
-            numeros_cnpj = numeros_cnpj + caractere
-    fornecedor.fornecedor_cnpj = numeros_cnpj
+    # Remove a máscara do CNPJ
+    fornecedor.fornecedor_cnpj = ''.join(
+        caractere for caractere in fornecedor.fornecedor_cnpj
+        if caractere.isdigit()
+    )
+
+    # Remove a máscara do CEP
+    fornecedor.fornecedor_cep = ''.join(
+        caractere for caractere in fornecedor.fornecedor_cep
+        if caractere.isdigit()
+    )
+
+    # Atualiza os dados para manter os valores sem máscara
+    dados["fornecedor_cnpj"] = fornecedor.fornecedor_cnpj
+    dados["fornecedor_cep"] = fornecedor.fornecedor_cep
 
     #Validação
     erros = fornecedor.validate()
