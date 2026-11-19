@@ -32,6 +32,13 @@
         </div>
 
         <nav>
+
+            <div class="sidebar-logo">
+                <img src="{{ url_for('static', filename='images/logo_lp.png') }}"
+                     alt="Voiture - Gestão de Estoque">
+            </div>
+            
+            <!-- aqui continua o link do Dashboard -->
             <!--botão/rota que leva pra tela de dashboard-->
             <a href="{{ url_for('dashboard') }}"
                 class="{% if request.endpoint == 'dashboard' or request.endpoint == 'dashboard' %}active{% endif %}">
@@ -107,8 +114,8 @@
                         <i class="bi bi-person-circle text-white"></i>
                     </a>
                 </h2>
-                <button id="btnNotificacoes">
-                    🔔
+                <button id="btnNotificacoes" class="btn">
+                    <i class="bi bi-bell-fill text-warning"></i>
                     <span id="contador"></span>
                 </button>
                 <div id="painelNotificacoes">

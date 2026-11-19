@@ -11,7 +11,7 @@
 
     <!-- Topo da página -->
     <div class="mb-4">
-
+        <img src="" alt="">
         <!-- Título principal da página -->
         <h2 class="titulo-pagina">
 
@@ -128,8 +128,7 @@
                         <!-- Se tiver um produto com a quantidade próxima do mínimo -->
 
                         <!-- Tabela -->
-                        <table class="table border-secondary"
-                            aria-label="Produtos com estoque baixo">
+                        <table class="table border-secondary" aria-label="Produtos com estoque baixo">
 
                             <!-- Cabeçalho da tabela -->
                             <thead>
@@ -203,8 +202,7 @@
                         {%else%}
 
                         <!-- Mensagem em caso de não ter produtos com estoque baixo -->
-                        <div class="alert alert-info mb-0"
-                            role="status">
+                        <div class="alert alert-info mb-0" role="status">
 
                             <!-- Ícone informativo -->
                             <i class="bi bi-info-circle" aria-hidden="true"></i>
@@ -236,8 +234,7 @@
                     <!-- Se tiver um pedido de entrada ou saída pendente -->
 
                     <!-- Área que apresenta a lista de pedidos -->
-                    <div style="overflow-x: hidden ; overflow-y:auto;"
-                        class="d-flex flex-column align-items-center"
+                    <div style="overflow-x: hidden ; overflow-y:auto;" class="d-flex flex-column align-items-center"
                         aria-label="Lista de pedidos pendentes">
 
                         <!-- Percorre os pedidos de entrada pendentes -->
@@ -246,8 +243,7 @@
                         <!-- Roda cada pedido de entrada pendente -->
 
                         <!-- CARD -->
-                        <div class="card mb-1 pedido-entrada-dashboard"
-                            style="width: 90%;height: 60px;">
+                        <div class="card mb-1 pedido-entrada-dashboard" style="width: 90%;height: 60px;">
 
                             <!-- Conteúdo do card do pedido -->
                             <div class="card-body d-flex justify-content-between align-items-top"
@@ -278,12 +274,10 @@
                         <!-- Roda cada pedido de saída pendente -->
 
                         <!-- CARD -->
-                        <div class="card mb-1 pedido-saida-dashboard"
-                            style="width: 90%;height: 60px;">
+                        <div class="card mb-1 pedido-saida-dashboard" style="width: 90%;height: 60px;">
 
                             <!-- Conteúdo do card do pedido -->
-                            <div class="card-body d-flex justify-content-between"
-                                style="margin-top: 5px;">
+                            <div class="card-body d-flex justify-content-between" style="margin-top: 5px;">
 
                                 <!-- Número do pedido -->
                                 <p class="card-text me-2">
@@ -309,8 +303,7 @@
                     {%else%}
 
                     <!-- Mensagem em caso de não ter pedidos pendentes -->
-                    <div class="alert alert-info mb-0"
-                        role="status">
+                    <div class="alert alert-info mb-0" role="status">
 
                         <!-- Ícone informativo -->
                         <i class="bi bi-info-circle" aria-hidden="true"></i>
@@ -332,8 +325,7 @@
                 <!-- Gráfico de movimentações -->
 
                 <!-- Card que contém o gráfico de movimentações -->
-                <div class="card shadow-sm p-3 mb-3"
-                    style="height: 430px; width: 600px;">
+                <div class="card shadow-sm p-3 mb-3" style="height: 430px; width: 600px;">
 
                     <!-- Título do gráfico -->
                     <h4 class="text-center">
@@ -344,8 +336,7 @@
                     <div style="height: 350px; display: flex; justify-content: center;">
 
                         <!-- Canvas utilizado para desenhar o gráfico -->
-                        <canvas id="graficoMovimentacao"
-                            role="img"
+                        <canvas id="graficoMovimentacao" role="img"
                             aria-label="Gráfico de movimentação de produtos mostrando entradas e saídas">
                         </canvas>
 
@@ -354,8 +345,7 @@
                     <!-- Texto alternativo para usuários de leitor de tela -->
 
                     <!-- Descrição acessível do gráfico -->
-                    <div class="visually-hidden"
-                        id="descricao-grafico-movimentacao">
+                    <div class="visually-hidden" id="descricao-grafico-movimentacao">
 
                         <!-- Descrição das informações apresentadas no gráfico -->
                         Gráfico de movimentação de produtos.
@@ -370,37 +360,37 @@
                     <!-- Script responsável pela criação do gráfico -->
                     <script>
 
-                       
+
                         const entrada = {{ entrada }};
 
-                        
+
                         const saida = {{ saida }};
 
-                        
+
                         const ctx = document
                             .getElementById('graficoMovimentacao');
 
-                        
+
                         new Chart(ctx, {
                             type: 'pie',
 
-                            
+
                             data: {
 
-                                
+
                                 labels: [
                                     'Entradas',
                                     'Saídas'
                                 ],
 
-                                
+
                                 datasets: [{
                                     data: [
                                         entrada,
                                         saida
                                     ],
 
-                                   
+
                                     backgroundColor: [
                                         '#28a745',
                                         '#dc3545'
@@ -410,10 +400,10 @@
                                 }]
                             },
 
-                            
+
                             options: {
 
-                                
+
                                 responsive: true,
 
                                 plugins: {
@@ -422,7 +412,7 @@
                                         position: 'bottom'
                                     },
 
-                                    
+
                                     title: {
                                         display: true,
                                         text: 'Movimentação de Produtos'
