@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS cliente (
   cliente_ddi VARCHAR(2) NOT NULL,
   cliente_ddd VARCHAR(2) NOT NULL,
   cliente_telefone VARCHAR(20) NOT NULL,
-  cliente_descricao VARCHAR(700) NOT NULL,
   PRIMARY KEY (id))
 ENGINE = InnoDB
 AUTO_INCREMENT = 11
@@ -75,7 +74,6 @@ CREATE TABLE IF NOT EXISTS fornecedor (
   fornecedor_ddi VARCHAR(2) NOT NULL,
   fornecedor_ddd VARCHAR(2) NOT NULL,
   fornecedor_telefone VARCHAR(20) NOT NULL,
-  fornecedor_descricao VARCHAR(700) NOT NULL,
   PRIMARY KEY (id))
 ENGINE = InnoDB
 AUTO_INCREMENT = 11
