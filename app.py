@@ -2602,8 +2602,11 @@ def atualizar_funcionario(id):
 def deletar_funcionario(id):
     #Tenta deletar
     try:
-        Funcionario.safe_delete(id) #deleta o funcionario com parametro do id
-        flash("Funcionário excluído com sucesso.", "sucesso")
+        if session["usuario_id"] == id:
+            flash("Proibido excluir a própria conta", "erro")
+        else:
+            Funcionario.safe_delete(id) #deleta o funcionario com parametro do id
+            flash("Funcionário excluído com sucesso.", "sucesso")
     #Tratativa de erro
     except ValueError as e:
         flash(str(e), "erro")
