@@ -53,12 +53,12 @@
             <!--botão/rota que leva pra tela de pedido de entrada-->
             <a href="{{ url_for('pedidoentrada') }}"
                 class="{% if request.endpoint == 'pedidoentrada' %}active{% endif %}">
-                <i class="bi bi-card-checklist"></i> Pedido de entrada
+                <i class="bi bi-card-checklist"></i> Pedidos de Entrada
             </a>
 
             <!--botão/rota que leva pra tela de pedido de saida-->
             <a href="{{ url_for('pedidosaida') }}" class="{% if request.endpoint == 'pedidosaida' %}active{% endif %}">
-                <i class="bi bi-box-seam-fill"></i> Pedido de Saída
+                <i class="bi bi-box-seam-fill"></i> Pedidos de Saída
             </a>
 
             <!--botão/rota que leva pra tela de listagem de empilhadeiras-->
