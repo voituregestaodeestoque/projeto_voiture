@@ -56,12 +56,12 @@
                 Dashboard IoT
             </h2>
             <p class="text-muted mb-0" id="descricao-clientes">
-                Monitoramento do ESP32 (HC-SR04 e MFRC522) a partir do banco voiture_estoque
+                Monitoramento do ESP32 - Sensor Ultrassônico(HC-SR04) e Sensor RFID(MFRC522)
             </p>
         </div>
         <div class="status" role="status" aria-live="polite">
             <span id="statusPonto" class="status-ponto offline"></span>
-            <span id="statusTexto">Conectando à API...</span>
+            <span id="statusTexto">Conectando...</span>
         </div>
     </header>
 
@@ -83,7 +83,7 @@
     <section class="sensores" aria-label="Sensores">
         <article class="card">
             <h2>Sensor ultrassônico HC-SR04</h2>
-            <p class="descricao">Últimas 100 leituras gravadas no banco. O limite de presença é definido em <code>LIMITE_PRESENCA_CM</code> no script.</p>
+            <p class="descricao">Últimas 100 leituras gravadas no banco.</p>
             <p>Estado: <span id="estadoUltrassonico" class="estado">Aguardando dados</span></p>
             <p class="descricao">Última atualização: <strong id="horaDistancia">--</strong></p>
             <div id="graficoDistancia" class="grafico"></div>
@@ -102,7 +102,7 @@
         <div class="tabela-wrapper">
             <table>
                 <thead>
-                    <tr><th>Data e hora</th><th>Dispositivo</th><th>UID da tag</th><th>Produto</th><th>Movimento</th></tr>
+                    <tr><th>Data e Hora</th><th>Dispositivo</th><th>UID da Tag</th><th>Produto</th><th>Movimento</th></tr>
                 </thead>
                 <tbody id="tabelaRFID">
                     <tr><td class="vazio" colspan="5">Aguardando leituras RFID...</td></tr>

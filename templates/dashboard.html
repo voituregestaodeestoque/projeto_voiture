@@ -54,7 +54,7 @@
                 <div class="card shadow-sm p-3">
 
                     <!-- Quantidade total de produtos em estoque -->
-                    <h6 class="text-muted">Total no estoque</h6>
+                    <h6 class="text-muted">Total no Estoque</h6>
 
                     <!-- Exibe a quantidade total de produtos no estoque -->
                     <h3 aria-label="Total de produtos no estoque">
@@ -72,7 +72,7 @@
                 <div class="card shadow-sm p-3">
 
                     <!-- Quantidade de pedidos de entrada -->
-                    <h6 class="text-muted">Pedidos de entradas</h6>
+                    <h6 class="text-muted">Pedidos de Entrada</h6>
 
                     <!-- Exibe a quantidade de pedidos de entrada -->
                     <h3 aria-label="Total de pedidos de entrada">
@@ -90,7 +90,7 @@
                 <div class="card shadow-sm p-3">
 
                     <!-- Quantidade de pedidos de saída -->
-                    <h6 class="text-muted">Pedidos de saída</h6>
+                    <h6 class="text-muted">Pedidos de Saída</h6>
 
                     <!-- Exibe a quantidade de pedidos de saída -->
                     <h3 aria-label="Total de pedidos de saída">
@@ -259,7 +259,7 @@
 
                                 <!-- Data do pedido -->
                                 <p class="card-text">
-                                    Data: {{pedido.data_pedido_entrada}}
+                                    Data: {{pedido.data_pedido_entrada.strftime('%d/%m/%y  %H:%M:%S')}}
                                 </p>
 
                             </div>
@@ -289,7 +289,7 @@
 
                                 <!-- Data do pedido -->
                                 <p class="card-text">
-                                    Data: {{pedido.data_pedido_saida}}
+                                    Data: {{pedido.data_pedido_saida.strftime('%d/%m/%y  %H:%M:%S')}}
                                 </p>
 
                             </div>

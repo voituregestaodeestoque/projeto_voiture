@@ -34,7 +34,7 @@
 
     <!-- Data em que o pedido foi realizado -->
 
-    <p><strong>Data:</strong> {{ pedido.data_pedido_entrada }}</p>
+    <p><strong>Data:</strong> {{ pedido.data_pedido_entrada.strftime('%d/%m/%y  %H:%M:%S') }}</p>
 
     <!-- Status atual do pedido -->
 

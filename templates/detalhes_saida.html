@@ -27,7 +27,7 @@
 
 <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
 
-<p><strong>Data:</strong> {{ pedido.data_pedido_saida }}</p>
+<p><strong>Data:</strong> {{ pedido.data_pedido_saida.strftime('%d/%m/%y  %H:%M:%S') }}</p>
 
 <p><strong>Status:</strong> {{ pedido.status_pedido_saida }}</p>
 
