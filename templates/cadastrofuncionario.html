@@ -85,7 +85,7 @@
                         name="funcionario_nome"
                         id="funcionario_nome"
                         class="form-control"
-                        placeholder="Digite o nome"
+                        placeholder="Nome Completo"
                         required
                         value="{{ funcionario.funcionario_nome if funcionario else '' }}"
                     >
@@ -122,7 +122,7 @@
                         name="funcionario_email"
                         id="funcionario_email"
                         class="form-control"
-                        placeholder="Digite o Email"
+                        placeholder="email@exemplo.com"
                         required
                         value="{{ funcionario.funcionario_email if funcionario else '' }}"
                     >
@@ -159,7 +159,7 @@
                         name="funcionario_senha"
                         id="funcionario_senha"
                         class="form-control"
-                        placeholder="Digite a senha"
+                        placeholder="Senha de Acesso"
                         value=""
                     >
 
@@ -273,7 +273,7 @@
                         name="funcionario_cargo"
                         id="funcionario_cargo"
                         class="form-control"
-                        placeholder="Digite o cargo"
+                        placeholder="Cargo"
                         required
                         value="{{ funcionario.funcionario_cargo if funcionario else '' }}"
                     >
@@ -367,7 +367,7 @@
                         name="funcionario_ddi"
                         id="funcionario_ddi"
                         class="form-control"
-                        placeholder="Código Internacional"
+                        placeholder="DDI"
                         required
                         value="{{ funcionario.funcionario_ddi if funcionario else '' }}"
                     >
@@ -404,7 +404,7 @@
                         name="funcionario_ddd"
                         id="funcionario_ddd"
                         class="form-control"
-                        placeholder="Código Regional"
+                        placeholder="DDD"
                         required
                         value="{{ funcionario.funcionario_ddd if funcionario else '' }}"
                     >
@@ -444,7 +444,7 @@
                         id="funcionario_telefone"
                         class="form-control"
                         maxlength="9"
-                        placeholder="Telefone de Contato"
+                        placeholder="Telefone"
                         required
                         value="{{ funcionario.funcionario_telefone if funcionario else '' }}"
                     >

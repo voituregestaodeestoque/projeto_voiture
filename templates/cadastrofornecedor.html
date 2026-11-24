@@ -139,7 +139,7 @@
                         type="text"
                         class="form-control"
                         id="fornecedor_nome"
-                        placeholder="Nome do Representante"
+                        placeholder="Nome Completo"
                         required
                         value="{{ fornecedor.fornecedor_nome if fornecedor else '' }}"
                     >
@@ -296,7 +296,7 @@
                         type="email"
                         class="form-control"
                         id="fornecedor_email"
-                        placeholder="Email de Contato"
+                        placeholder="email@exemplo.com"
                         required
                         value="{{ fornecedor.fornecedor_email if fornecedor else '' }}"
                     >
@@ -347,7 +347,7 @@
                         type="text"
                         class="form-control"
                         id="fornecedor_ddi"
-                        placeholder="Código Internacional"
+                        placeholder="DDI"
                         required
                         value="{{ fornecedor.fornecedor_ddi if fornecedor else '' }}"
                     >
@@ -398,7 +398,7 @@
                         type="text"
                         class="form-control"
                         id="fornecedor_ddd"
-                        placeholder="Código Regional"
+                        placeholder="DDD"
                         required
                         value="{{ fornecedor.fornecedor_ddd if fornecedor else '' }}"
                     >
@@ -449,7 +449,7 @@
                         type="tel"
                         class="form-control"
                         id="fornecedor_telefone"
-                        placeholder="Telefone de Contato"
+                        placeholder="Telefone"
                         maxlength="9"
                         required
                         value="{{ fornecedor.fornecedor_telefone if fornecedor else '' }}"
