@@ -89,9 +89,9 @@
 
                     <td>{{ pedido.status_pedido_saida }}</td>
 
-                    <td>{{ pedido.data_pedido_saida }}</td>
+                    <td>{{ pedido.data_pedido_saida.strftime('%d/%m/%y  %H:%M:%S')  }}</td>
 
-                    <td>{{ pedido.data_processamento or '-' }}</td>
+                    <td>{{ pedido.data_processamento.strftime('%d/%m/%y  %H:%M:%S') if pedido.data_processamento else '-'  }}</td>
 
                     <td class="text-end">
 

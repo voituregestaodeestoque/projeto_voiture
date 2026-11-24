@@ -296,7 +296,7 @@ class Pedido_saida(CrudBase):
                 SET status_pedido_saida = %s
                 WHERE id = %s
                 """,
-                ("CONCLUIDO", pedido_saida_id,)
+                ("CONCLUÍDO", pedido_saida_id,)
             )
 
             conexao.commit() #confirma alterações feitas do banco de dados
@@ -384,7 +384,7 @@ class Pedido_saida(CrudBase):
                 FROM detalhe_saida ds
                 INNER JOIN pedido_saida ps
                     ON ds.pedido_saida_id = ps.id
-                WHERE ps.status_pedido_saida = 'CONCLUIDO'
+                WHERE ps.status_pedido_saida = 'CONCLUÍDO'
             """
 
             cursor.execute(sql)
