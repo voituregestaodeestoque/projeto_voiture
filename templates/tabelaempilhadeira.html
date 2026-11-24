@@ -166,7 +166,7 @@
                             <!-- AÇÕES -->
                             <td class="text-end">
 
-                                <!-- BOTÃO PARA ALTERNAR STATUS -->
+                                <!-- BOTÃO PARA ALTERAR STATUS -->
                                 <a href="{{ url_for('alternar_status_empilhadeira', id=uso.empilhadeira_id_real) }}"
                                    class="btn btn-sm {% if uso.empilhadeira_status == 'ATIVA' %}btn-outline-secondary{% else %}btn-outline-success{% endif %}"
                                    title="{% if uso.empilhadeira_status == 'ATIVA' %}Desativar empilhadeira{% else %}Ativar empilhadeira{% endif %}"
